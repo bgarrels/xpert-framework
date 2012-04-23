@@ -1,0 +1,131 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="File Download" />
+    <ui:define name="body">
+
+         <div class="description">
+            #{msg['download.description']}<br/>
+            #{msg['download.description2']}
+            <br/>
+            <br/>
+            
+            <b>FacesUtils.download()</b> (com.xpert.faces.utils.FacesUtils);.<br/>
+        </div>
+        <p:separator/>
+        <script>
+            function begin(){
+                $('#buttonJSF').val('Downloading...');
+            }
+            function end(){
+                $('#buttonJSF').val('Complete');
+            }
+        </script>
+        <h:form prependId="false">
+
+            <h:panelGrid columns="2">
+
+                <h:outputText value="JSF commandButton:"/>
+                <h:commandButton id="buttonJSF" action="#{downloadMB.download}" value="Download">
+                    <x:download onstart="begin()" oncomplete="end()"/>
+                </h:commandButton>
+
+                <h:outputText value="JSF commandLink:"/>
+                <h:commandLink action="#{downloadMB.download}" value="Download">
+                    <x:download />
+                </h:commandLink>
+
+                <h:outputText value="Primefaces commandButton:"/>
+                <p:commandButton ajax="false" action="#{downloadMB.download}" value="Download">
+                    <x:download message="Loading file from database..." />
+                </p:commandButton>
+
+                <h:outputText value="Primefaces commandLink:"/>
+                <p:commandLink ajax="false" id="commandLinkPrime" action="#{downloadMB.download}" value="Download">
+                    <x:download oncomplete="alert('Download complete')"/>
+                </p:commandLink>
+
+            </h:panelGrid>
+
+        </h:form>
+        <h3>Source</h3>
+        <p:tabView>
+            <p:tab title="download.xhtml">
+                <pre name="code" class="xml">
+       
+                &lt;h:form prependId=&quot;false&quot;&gt;
+
+                    &lt;h:panelGrid columns=&quot;2&quot;&gt;
+
+                        &lt;h:outputText value=&quot;JSF commandButton:&quot;/&gt;
+                        &lt;h:commandButton id=&quot;buttonJSF&quot; action=&quot;\#{downloadMB.download}&quot; value=&quot;Download&quot;&gt;
+                            &lt;x:download onstart=&quot;begin()&quot; oncomplete=&quot;end()&quot;/&gt;
+                        &lt;/h:commandButton&gt;
+
+                        &lt;h:outputText value=&quot;JSF commandLink:&quot;/&gt;
+                        &lt;h:commandLink action=&quot;\#{downloadMB.download}&quot; value=&quot;Download&quot;&gt;
+                            &lt;x:download /&gt;
+                        &lt;/h:commandLink&gt;
+
+                        &lt;h:outputText value=&quot;Primefaces commandButton:&quot;/&gt;
+                        &lt;p:commandButton ajax=&quot;false&quot; action=&quot;\#{downloadMB.download}&quot; value=&quot;Download&quot;&gt;
+                            &lt;x:download message=&quot;Loading file from database...&quot; /&gt;
+                        &lt;/p:commandButton&gt;
+
+                        &lt;h:outputText value=&quot;Primefaces commandLink:&quot;/&gt;
+                        &lt;p:commandLink ajax=&quot;false&quot; id=&quot;commandLinkPrime&quot; action=&quot;\#{downloadMB.download}&quot; value=&quot;Download&quot;&gt;
+                            &lt;x:download oncomplete=&quot;alert('Download complete')&quot;/&gt;
+                        &lt;/p:commandLink&gt;
+
+                    &lt;/h:panelGrid&gt;
+
+                &lt;/h:form&gt;
+                </pre>
+
+                <pre name="code" class="javascript">
+                &lt;script&gt;
+                    function begin(){
+                        $('#buttonJSF').val('Downloading...');
+                    }
+                    function end(){
+                        $('#buttonJSF').val('Complete');
+                    }
+                &lt;/script&gt;
+                </pre>
+            </p:tab>
+            <p:tab title="DownloadMB.java">
+                <pre name="code" class="java">
+                    package com.xpert.showcase.mb;
+
+                    import com.xpert.faces.utils.FacesUtils;
+                    import java.io.BufferedWriter;
+                    import java.io.ByteArrayOutputStream;
+                    import java.io.IOException;
+                    import java.io.OutputStreamWriter;
+                    import javax.faces.bean.ManagedBean;
+
+                    public class DownloadMB {
+
+                        public void download() throws IOException, InterruptedException {
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream));
+                            //wait 5s
+                            Thread.sleep(5000);
+                            writer.close();
+                            FacesUtils.download(byteArrayOutputStream.toByteArray(), &quot;text/plain&quot;, &quot;arquivo.txt&quot;);
+                        }
+                    }
+                </pre>
+            </p:tab>
+        </p:tabView>
+
+
+
+    </ui:define>
+</ui:composition>

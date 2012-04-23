@@ -1,0 +1,77 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+                 xmlns:x="http://xpert.com/faces">
+
+    <p:tab title="Person.java">
+        <pre name="code" class="java">
+            import java.io.Serializable;
+            import java.math.BigDecimal;
+            import java.util.Date;
+            import java.util.List;
+            import javax.persistence.*;
+            import javax.validation.constraints.DecimalMin;
+            import javax.validation.constraints.Max;
+            import javax.validation.constraints.Min;
+            import javax.validation.constraints.NotNull;
+            import javax.validation.constraints.Size;
+            import org.hibernate.validator.constraints.Email;
+            import org.hibernate.validator.constraints.NotBlank;
+
+            @Entity
+            public class Person implements Serializable {
+
+                @Id
+                @GeneratedValue(strategy = GenerationType.AUTO)
+                private Long id;
+
+                @NotNull
+                @Min(value = 3)
+                @Max(value = 20)
+                private Long code;
+
+                @NotBlank
+                private String name;
+
+                @Email
+                private String email;
+
+                @DecimalMin(value = &quot;0.01&quot;)
+                private BigDecimal salary;
+
+                @NotBlank
+                private String cpf;
+
+                @NotNull
+                @Temporal(TemporalType.DATE)
+                private Date birthday;
+
+                @NotBlank
+                @Size(max=10)
+                private String rg;
+
+                @NotNull
+                @Enumerated(EnumType.STRING)
+                private Status status;
+
+                @NotNull
+                @ManyToOne(fetch = FetchType.LAZY)
+                private Group group;
+
+                @NotNull
+                @ManyToOne(fetch = FetchType.LAZY)
+                private Group group2;
+
+                @ManyToMany(targetEntity = Permission.class, fetch = FetchType.LAZY)
+                @JoinTable(name = &quot;person_permission&quot;, joinColumns = @JoinColumn(name = &quot;pessoa_id&quot;), inverseJoinColumns = @JoinColumn(name = &quot;permissao_id&quot;))
+                private List&lt;Permission&gt; permissions;
+
+                //getters and setters
+            }
+
+        </pre>
+    </p:tab>
+</ui:composition>

@@ -1,0 +1,95 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+                 >
+    <ui:param name="title" value="I18N Bean Validation (JSR 303)" />
+    <ui:define name="body">
+        <h:form>
+            <xc:modalMessages/>
+
+            <h:panelGrid columns="3">
+
+                <h:outputLabel value="#{msg['person.name']}:" />
+                <p:inputText value="#{personMB.entity.name}" size="40" maxlength="30"/>
+                <h:outputText value="@NotBlank" />
+
+                <h:outputLabel value="#{msg['person.rg']}:" />
+                <p:inputText value="#{personMB.entity.rg}" size="20" maxlength="30"/>
+                <h:outputText value="@NotBlank @Size(max=10)" />
+
+                <h:outputLabel value="#{msg['person.email']}:" />
+                <p:inputText value="#{personMB.entity.email}" size="40" maxlength="30"/>
+                <h:outputText value="@Email" />
+
+                <h:outputLabel value="#{msg['person.code']}:" />
+                <p:inputText value="#{personMB.entity.code}" size="20" maxlength="30"/>
+                <h:outputText value="@NotNull @Min(value = 3) @Max(value = 20)" />
+
+                <h:outputLabel value="#{msg['person.salary']}:" />
+                <xc:inputNumber value="#{personMB.entity.salary}"/>
+                <h:outputText value="@DecimalMin(value = '0.01')" />
+
+
+            </h:panelGrid>
+            <p:separator/>
+            <p:commandButton process="@form" update="@form" value="Save" />
+
+        </h:form>
+
+        <h3>Source</h3>
+        <p:tabView>
+            <p:tab title="i18nBeanValidation.xhtml">
+                <pre name="code" class="xml">
+                        &lt;h:form&gt;
+                            &lt;xc:modalMessages/&gt;
+
+                            &lt;h:panelGrid columns=&quot;3&quot;&gt;
+
+                                &lt;h:outputLabel value=&quot;\#{msg['person.name']}:&quot; /&gt;
+                                &lt;p:inputText value=&quot;\#{personMB.entity.name}&quot; size=&quot;40&quot; maxlength=&quot;30&quot;/&gt;
+                                &lt;h:outputText value=&quot;@NotBlank&quot; /&gt;
+
+                                &lt;h:outputLabel value=&quot;\#{msg['person.rg']}:&quot; /&gt;
+                                &lt;p:inputText value=&quot;\#{personMB.entity.rg}&quot; size=&quot;20&quot; maxlength=&quot;30&quot;/&gt;
+                                &lt;h:outputText value=&quot;@NotBlank @Size(max=10)&quot; /&gt;
+
+                                &lt;h:outputLabel value=&quot;\#{msg['person.email']}:&quot; /&gt;
+                                &lt;p:inputText value=&quot;\#{personMB.entity.email}&quot; size=&quot;40&quot; maxlength=&quot;30&quot;/&gt;
+                                &lt;h:outputText value=&quot;@Email&quot; /&gt;
+
+                                &lt;h:outputLabel value=&quot;\#{msg['person.code']}:&quot; /&gt;
+                                &lt;p:inputText value=&quot;\#{personMB.entity.code}&quot; size=&quot;20&quot; maxlength=&quot;30&quot;/&gt;
+                                &lt;h:outputText value=&quot;@NotNull @Min(value = 3) @Max(value = 20)&quot; /&gt;
+
+                                &lt;h:outputLabel value=&quot;\#{msg['person.salary']}:&quot; /&gt;
+                                &lt;xc:inputNumber value=&quot;\#{personMB.entity.salary}&quot;/&gt;
+                                &lt;h:outputText value=&quot;@DecimalMin(value = '0.01')&quot; /&gt;
+
+
+                            &lt;/h:panelGrid&gt;
+                            &lt;p:separator/&gt;
+                            &lt;p:commandButton process=&quot;@form&quot; update=&quot;@form&quot; value=&quot;Save&quot; /&gt;
+
+                        &lt;/h:form&gt;
+
+                </pre>
+            </p:tab>
+            <ui:include src="/views/common/java/person.xhtml"/>
+            <p:tab title="faces-config.xml">
+                <h3>Override Bean Validation</h3>
+                <pre name="code" class="xml">
+                    &lt;validator&gt;
+                        &lt;validator-class&gt;com.xpert.core.validation.BeanValidator&lt;/validator-class&gt;
+                        &lt;validator-id&gt;javax.faces.Bean&lt;/validator-id&gt;
+                    &lt;/validator&gt;
+                </pre>
+            </p:tab>
+        </p:tabView>
+
+    </ui:define>
+</ui:composition>

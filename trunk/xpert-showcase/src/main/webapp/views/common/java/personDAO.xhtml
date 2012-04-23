@@ -1,0 +1,39 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+                 xmlns:x="http://xpert.com/faces">
+
+    <p:tab title="PersonDAO.java / PersonDAOImpl">
+        <h3>PersonDAO.java</h3>
+        <pre name="code" class="java">
+            import com.xpert.persistence.dao.BaseDAO;
+            import com.xpert.showcase.model.Person;
+            import javax.ejb.Local;
+
+            @Local
+            public interface PersonDAO extends BaseDAO&lt;Person&gt; {
+                 public List&lt;Person&gt; getFromSQLFile();
+            }
+        </pre>
+        <h3>PersonDAOImpl</h3>
+        <pre name="code" class="java">
+            import com.xpert.showcase.dao.BaseDAOImpl;
+            import com.xpert.showcase.dao.PersonDAO;
+            import com.xpert.showcase.model.Person;
+            import javax.ejb.Stateless;
+
+            @Stateless
+            public class PersonDAOImpl extends BaseDAOImpl&lt;Person&gt; implements PersonDAO {
+                @Override
+                public List&lt;Person&gt; getFromSQLFile(){
+                    Query query = getNativeQueryFromFile(&quot;findAllPeople.sql&quot;, this.getClass(), Person.class);
+                    return query.getResultList();
+                }
+            }
+
+        </pre>
+    </p:tab>
+</ui:composition>

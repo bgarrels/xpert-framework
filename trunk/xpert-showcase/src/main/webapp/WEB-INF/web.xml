@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>index.jsf</welcome-file>
+    </welcome-file-list>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+
+
+<!--
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>redmond</param-value>
+    </context-param>
+    -->
+    
+    
+    <persistence-context-ref>
+        <persistence-context-ref-name>persistence/entityManager</persistence-context-ref-name>
+        <persistence-unit-name>xpertShowcasePU</persistence-unit-name>
+    </persistence-context-ref>
+    
+    <!-- Xpert framework configuration -->
+    
+    <!-- Bundle -->
+    <context-param>
+        <param-name>xpert.ENTITY_MANAGER_FACTORY</param-name>
+        <param-value>com.xpert.showcase.dao.EntityManagerFactoryImpl</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>xpert.BUNDLE_PATH</param-name>
+        <param-value>bundles.messages</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>xpert.USE_I18N</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    
+    <!-- Auditing -->
+    <context-param>
+        <param-name>xpert.AUDIT</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>xpert.AUDITING_IMPL</param-name>
+        <param-value>com.xpert.showcase.audit.Auditing</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>xpert.METADATA_IMPL</param-name>
+        <param-value>com.xpert.showcase.audit.Metadata</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>xpert.AUDITING_LISTENER</param-name>
+        <param-value>com.xpert.showcase.session.AuditingListenerImpl</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>com.xpert.core.filter.CharacterEncodingFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>XHTML</web-resource-name>
+            <url-pattern>*.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint/>
+    </security-constraint>
+
+</web-app>

@@ -1,0 +1,100 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+                 xmlns:x="http://xpert.com/faces">
+    <ui:param name="title" value="#{msg['person.search']}" />
+    <ui:define name="body">
+        <ui:include src="menuPerson.xhtml" />
+
+        <h:panelGroup id="panelFormPerson">
+            <h:form id="formSearchPerson">
+                <xc:modalMessages/>
+
+                <p:dataTable id="dataTablePerson"
+                             paginator="true" rows="5"
+                             var="person" value="#{personMB.dataModel}">
+                    <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">
+                        <h:outputText value="#{person.name}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['person.cpf']}" 
+                              sortBy="#{person.cpf}" filterBy="#{person.cpf}">
+                        <h:outputText value="#{person.cpf}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['person.code']}" sortBy="#{person.code}" filterBy="#{person.code}">
+                        <h:outputText value="#{person.code}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['person.status']}" sortBy="#{person.status}"
+                              filterBy="#{person.status}"
+                              filterOptions="#{findAllBean.getSelect(classMB.status)}">
+                        <h:outputText value="#{person.status.description}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['person.birthday']}" style="text-align: center;">
+                        <h:outputText value="#{person.birthday}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Actions" style="text-align: center;">
+                        <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":panelDetalhePerson" >
+                            <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}" />
+                        </p:commandButton>
+                        <p:button outcome="createPerson.jsf" icon="ui-icon-pencil" >
+                            <f:param name="id" value="#{person.id}" />
+                        </p:button>
+                        <p:commandButton  icon="ui-icon-trash" process="@this" update="@form" action="#{personMB.delete}">
+                            <f:setPropertyActionListener value="#{person.id}" target="#{personMB.id}" />
+                            <x:confirmation message="Person: #{person.name} will be removed. Confirm?"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <x:filterOnEnter target="dataTablePerson"/>
+            </h:form>
+        </h:panelGroup>
+
+
+        <p:dialog widgetVar="widgetPersonDetail" position="top" header="Detalhe Person" appendToBody="true" modal="true" width="800">
+            <h:panelGroup id="panelDetalhePerson">
+
+                <h:form>
+                    <h:panelGrid columns="2" rendered="#{not empty personMB.entity.id}" >
+
+                        <h:outputLabel value="#{msg['person.name']}:" />
+                        <h:outputText value="#{personMB.entity.name}"/>
+
+
+                        <h:outputLabel value="#{msg['group.statusGroup']}:" />
+                        <h:outputText value="#{personMB.entity.group.statusGroup.description}" >
+                            <x:initializer/>
+                        </h:outputText>
+
+                        <h:outputLabel value="#{msg['person.group']}:" />
+                        <h:outputText value="#{personMB.entity.group.description}" />
+
+                        <h:outputLabel value="#{msg['person.group2']}:" />
+                        <h:outputText value="#{personMB.entity.group2.description}">
+                            <x:initializer/>
+                        </h:outputText>
+
+                        <h:outputLabel value="#{msg['person.permissions']}:" />
+                        <p:dataTable var="permission" value="#{personMB.entity.permissions}">
+                            <x:initializer/>
+                            <p:column headerText="#{msg['id']}">
+                                <h:outputText value="#{permission.id}" />
+                            </p:column>
+                            <p:column headerText="#{msg['permission.description']}">
+                                <h:outputText value="#{permission.description}" />
+                            </p:column>
+                        </p:dataTable>
+
+                    </h:panelGrid>
+
+                    <xc:audit for="#{personMB.entity}" />
+                </h:form>
+            </h:panelGroup>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

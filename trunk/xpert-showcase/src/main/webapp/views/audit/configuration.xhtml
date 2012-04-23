@@ -1,0 +1,191 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Audit - Configuration" />
+    <ui:define name="body">
+        
+        <div class="description">
+             Audit hibernate mapped entities. Xpert-audit is part of xpert-persistence module.
+        </div>
+
+        <p:tabView>
+            <p:tab title="1 - Mapping Entities">
+                <h3>Auditing.java</h3>
+                Must extend <b>com.xpert.persistence.audit.model.AbstractAuditing</b>
+                <pre name="code" class="java">
+                    import com.xpert.persistence.audit.model.AbstractAuditing;
+                    import com.xpert.showcase.model.Person;
+                    import java.io.Serializable;
+                    import java.util.List;
+                    import javax.persistence.*;
+
+                    @Entity
+                    public class Auditing extends AbstractAuditing implements Serializable {
+
+                        @Id
+                        @GeneratedValue(strategy = GenerationType.AUTO)
+                        private Long id;
+
+                        //set custom object &quot;User&quot;
+                        @ManyToOne
+                        private Person user;
+
+                        @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = &quot;auditing&quot;)
+                        private List&lt;Metadata&gt; metadatas;
+
+                        @Override
+                        public Long getId() {
+                            return id;
+                        }
+
+                        @Override
+                        public Person getUser() {
+                            return user;
+                        }
+
+                        public void setId(Long id) {
+                            this.id = id;
+                        }
+
+                        @Override
+                        public void setUser(Object user) {
+                            this.user = (Person) user;
+                        }
+
+                        @Override
+                        public List getMetadatas() {
+                            return metadatas;
+                        }
+
+                        @Override
+                        public void setMetadatas(List metadatas) {
+                            this.metadatas = metadatas;
+                        }
+                    }
+                </pre>
+                
+                <h3>Metadata.java</h3>
+                Must extend <b>com.xpert.persistence.audit.model.AbstractMetadata</b>
+                <pre name="code" class="java">
+                    
+                    import com.xpert.persistence.audit.model.AbstractAuditing;
+                    import com.xpert.persistence.audit.model.AbstractMetadata;
+                    import javax.persistence.*;
+
+                    @Entity
+                    public class Metadata extends AbstractMetadata{
+
+                        @Id
+                        @GeneratedValue(strategy = GenerationType.AUTO)
+                        private Long id;
+
+                        @ManyToOne
+                        private Auditing auditing;
+
+                        @Override
+                        public Long getId() {
+                        return id;
+                        }
+
+                        @Override
+                        public AbstractAuditing getAuditing() {
+                            return auditing;
+                        }
+
+                        @Override
+                        public void setAuditing(AbstractAuditing auditing) {
+                            this.auditing = (Auditing) auditing;
+                        }
+                    }
+
+                </pre>
+            </p:tab> 
+            <p:tab title="2 - web.xml">
+                
+                Insert these parameters on <b>web.xml</b>:
+                <br/>
+                <pre name="code" class="xml">
+                    &lt;context-param&gt;
+                        &lt;param-name&gt;xpert.AUDIT&lt;/param-name&gt;
+                        &lt;param-value&gt;true&lt;/param-value&gt;
+                    &lt;/context-param&gt;
+
+                    &lt;context-param&gt;
+                        &lt;param-name&gt;xpert.AUDITING_IMPL&lt;/param-name&gt;
+                        &lt;param-value&gt;com.xpert.showcase.audit.Auditing&lt;/param-value&gt;
+                    &lt;/context-param&gt;
+
+                    &lt;context-param&gt;
+                        &lt;param-name&gt;xpert.METADATA_IMPL&lt;/param-name&gt;
+                        &lt;param-value&gt;com.xpert.showcase.audit.Metadata&lt;/param-value&gt;
+                    &lt;/context-param&gt;
+
+                    &lt;context-param&gt;
+                        &lt;param-name&gt;xpert.USER_FACTORY&lt;/param-name&gt;
+                        &lt;param-value&gt;com.xpert.showcase.session.UserSessionFactory&lt;/param-value&gt;
+                    &lt;/context-param&gt;
+                </pre>
+                
+                Create a class that implements <b>com.xpert.persistence.audit.UserFactory</b>
+                <br/>
+                This class is used to get the <b>user</b> of application
+                <pre name="code" class="xml">
+                    &lt;context-param&gt;
+                        &lt;param-name&gt;xpert.USER_FACTORY&lt;/param-name&gt;
+                        &lt;param-value&gt;com.xpert.showcase.session.UserSessionFactory&lt;/param-value&gt;
+                    &lt;/context-param&gt;
+                </pre>
+                
+                <ui:include src="/views/common/java/entityManagerFactory.xhtml"/>
+                
+            </p:tab>
+              <p:tab title="3 - BaseDAO">
+                
+                  Call <b>save(object)</b>,  <b>update(object)</b> or <b>saveOrUpdate(object)</b> from a DAO that extends 
+                  <b>com.xpert.persistence.dao.BaseDAOImpl</b>. 
+                  
+                  <br/><br/>
+                  
+                  The default is audit the entity, to prevent audit call <b>save(object, false)</b>, 
+                  the second parameter tells that is to audit or not.
+                <br/>
+                <pre name="code" class="java">
+                    import com.xpert.showcase.dao.PersonDAO;
+                    import com.xpert.showcase.model.Person;
+                    import javax.ejb.EJB;
+                    import javax.faces.bean.ManagedBean;
+
+                    @ManagedBean
+                    public class SavePerson {
+
+                        @EJB
+                        private PersonDAO personDAO;
+                        private Person person = new Person();
+
+
+                        public void saveWithAudit(){
+                            personDAO.saveOrUpdate(person);
+                        }
+
+                        public void saveNoAudit(){
+                            personDAO.saveOrUpdate(person, false);
+                        }
+
+                        //getters and setters
+
+                    }
+
+                </pre>
+              </p:tab>
+           
+
+        </p:tabView>
+
+
+    </ui:define>
+</ui:composition>

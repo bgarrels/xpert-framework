@@ -1,0 +1,53 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <ui:param name="title" value="Spread SelectManyCheckbox" />
+    <ui:define name="body">
+
+        <div class="description">
+            #{msg['spread.description']}<br/>
+            #{msg['spread.description2']}
+        </div>
+        <h:form>
+            
+            <p:panel header="3 Columns">
+                <h:selectManyCheckbox >
+                    <x:spread columns="3" highlight="true"/>
+                    <f:selectItems value="#{spreadMB.items}" />
+                </h:selectManyCheckbox>
+            </p:panel>
+            <p:spacer height="5"/>
+            <p:panel header="5 Columns (Highlight = false)">
+                <h:selectManyCheckbox >
+                    <x:spread columns="5" highlight="false"/>
+                    <f:selectItems value="#{spreadMB.items}" />
+                </h:selectManyCheckbox>
+            </p:panel>
+        </h:form>
+        <h3>Source</h3>
+        <pre name="code" class="xml">
+            &lt;p:panel header=&quot;3 Columns&quot;&gt;
+                &lt;h:selectManyCheckbox &gt;
+                    &lt;x:spread columns=&quot;3&quot;/&gt;
+                    &lt;f:selectItems value=&quot;\#{spreadMB.items}&quot; /&gt;
+                &lt;/h:selectManyCheckbox&gt;
+            &lt;/p:panel&gt;
+            &lt;p:spacer height=&quot;5&quot;/&gt;
+            &lt;p:panel header=&quot;5 Columns&quot;&gt;
+                &lt;h:selectManyCheckbox &gt;
+                    &lt;x:spread highlight=&quot;false&quot; columns=&quot;5&quot;/&gt;
+                    &lt;f:selectItems value=&quot;\#{spreadMB.items}&quot; /&gt;
+                &lt;/h:selectManyCheckbox&gt;
+            &lt;/p:panel&gt;
+        </pre>
+
+
+    </ui:define>
+</ui:composition>

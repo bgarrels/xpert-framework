@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      dir="ltr" lang="en-US" xml:lang="en"
+      xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <f:view locale="#{localeBean.locale}">
+        <h:head>
+            <title>Xpert - #{title}</title>
+            <link rel="stylesheet" href="#{request.contextPath}/css/style.css" type="text/css" media="screen" />
+            <script type="text/javascript" src="#{request.contextPath}/scripts/scripts.js"/>
+            <h:outputScript library="xpert" name="scripts/sh.js"/>
+            <h:outputScript library="xpert" name="scripts/core.js"/>
+            <h:outputStylesheet library="xpert" name="css/sh-style.css"/>
+            <h:outputStylesheet library="xpert" name="css/style.css"/>
+        </h:head>
+        <h:body style="font-size: 11px;">
+            <h:form/>
+            <ui:include src="ajaxStatus.xhtml" />
+            <p:layout style="min-width:400px; min-height:500px;" fullPage="true" >
+
+                <p:layoutUnit style="border: 0;" id="north" position="north" size="60">
+                    <div class="ui-widget-header ui-corner-all">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+                                    <h1 style="padding: 10px; font-size: 18px; margin: 0;">
+                                        <h:link outcome="/index.jsf" value="Xpert - Showcase"/>
+                                    </h1>
+                                </td>
+                                <td align="right">
+                                    <h:form>
+                                        <xc:localeSwitcher/>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </p:layoutUnit>
+                <p:layoutUnit id="west" position="west"  size="260" >
+                    <div class="sidebar">
+                        <p:panel header="Xpert-Faces" style="border: 0;">
+                            <h:panelGrid columns="2" columnClasses="center,center" style="width: 100%;">
+                                <h:link outcome="/views/components/confirmation.jsf" value="Confirmation" />
+                                <h:link outcome="/views/components/entityConverter.jsf" value="Entity Converter" />
+                                <h:link outcome="/views/components/download.jsf" value="File Download" />
+                                <h:link outcome="/views/components/filterOnEnter.jsf" value="Filter On Enter" />
+                                <h:link outcome="/views/components/findAllBean.jsf" value="Find All Bean" />
+                                <h:link outcome="/views/components/infoWarn.jsf" value="Info/Warn" />
+                                <h:link outcome="/views/components/initializer.jsf" value="Initializer" />
+                                <h:link outcome="/views/components/inputNumber.jsf" value="Input Number" />
+                                <h:link outcome="/views/components/lazyDataModel.jsf" value="LazyDataModel" />
+                                <h:link outcome="/views/components/localeSwitcher.jsf" value="Locale Switcher" />
+                                <h:link outcome="/views/components/modalMessages.jsf" value="Modal Messages" />
+                                <h:link outcome="/views/components/spread.jsf" value="Spread Checkbox" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Core" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/core/i18nBeanValidation.jsf" value="I18N Bean Validation (JSR 303)" />
+                                <h:link outcome="/views/person/searchPerson.jsf" value="Person CRUD" />
+                            </h:panelGrid>
+
+                        </p:panel>
+                        <p:panel header="Xpert-Maker" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/maker/maker.jsf" value="Bean Maker" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Persistence" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/persistence/configuration.jsf" value="Configuration" />
+                                <h:link outcome="/views/persistence/basic.jsf" value="Basic" />
+                                <h:link outcome="/views/persistence/attributes.jsf" value="Define Attributes in Result" />
+                                <h:link outcome="/views/persistence/queryFromFile.jsf" value="Native Query From File" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Audit" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/audit/configuration.jsf" value="Configuration" />
+                                <h:link outcome="/views/audit/auditing.jsf" value="Show auditing" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+                </p:layoutUnit>
+                <p:layoutUnit  style="border: 0;"   header="#{title}" id="center" position="center" size="900">
+                    <ui:insert name="body" />
+                </p:layoutUnit>
+
+            </p:layout>
+            <script type="text/javascript">
+                $(function() {$('.sidebar a').hover(function() {$(this).toggleClass('ui-state-hover');})});
+                Xpert.highlightCode("code");
+            </script>
+        </h:body>
+    </f:view>
+
+</html>

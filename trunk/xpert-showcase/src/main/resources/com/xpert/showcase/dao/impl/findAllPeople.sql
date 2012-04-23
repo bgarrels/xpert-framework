@@ -1,0 +1,1 @@
+SELECT * FROM person ORDER BY name

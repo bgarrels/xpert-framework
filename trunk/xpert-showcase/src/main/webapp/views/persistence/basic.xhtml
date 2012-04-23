@@ -1,0 +1,157 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Basic" />
+    <ui:define name="body">
+
+        <h:form>
+            <h:panelGrid columns="2" styleClass="table-td-top" style="width: 100%">
+                <p:fieldset legend="All">
+                    
+                    <h:outputText styleClass="bold" value="Count: "/>
+                    <h:outputText value="#{persistenceBasicMB.count}"/>
+                    
+                    <p:dataTable var="person" value="#{persistenceBasicMB.people}">
+                        <p:column headerText="#{msg['person.name']}">
+                            <h:outputText value="#{person.name}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.cpf']}">
+                            <h:outputText value="#{person.cpf}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.code']}">
+                            <h:outputText value="#{person.code}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.status']}">
+                            <h:outputText value="#{person.status.description}"/>
+                        </p:column>
+                    </p:dataTable>
+                    
+                </p:fieldset>
+                
+                <p:fieldset legend="With code greater than Five">
+                    <h:outputText styleClass="bold" value="Count With code greater than Five: "/>
+                    <h:outputText value="#{persistenceBasicMB.countPeopleWithCodeGreaterThanFive}"/>
+                    
+                    <p:dataTable var="person" value="#{persistenceBasicMB.peopleWithCodeGreaterThanFive}">
+                        <p:column headerText="#{msg['person.name']}">
+                            <h:outputText value="#{person.name}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.cpf']}">
+                            <h:outputText value="#{person.cpf}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.code']}">
+                            <h:outputText value="#{person.code}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.status']}">
+                            <h:outputText value="#{person.status.description}"/>
+                        </p:column>
+                    </p:dataTable>
+                    
+                </p:fieldset>
+            </h:panelGrid>
+        </h:form>
+
+
+        <p:tabView>
+            <p:tab title="basic.xhtml">
+                <pre name="code" class="xml">
+                  &lt;h:form&gt;
+                        &lt;h:panelGrid columns=&quot;2&quot; styleClass=&quot;table-td-top&quot; style=&quot;width: 100%&quot;&gt;
+                            &lt;p:fieldset legend=&quot;All&quot;&gt;
+
+                                &lt;h:outputText styleClass=&quot;bold&quot; value=&quot;Count: &quot;/&gt;
+                                &lt;h:outputText value=&quot;\#[persistenceBasicMB.count}&quot;/&gt;
+
+                                &lt;p:dataTable var=&quot;person&quot; value=&quot;\#[persistenceBasicMB.people}&quot;&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.name']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.name}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.cpf']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.cpf}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.code']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.code}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.status']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.status.description}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                &lt;/p:dataTable&gt;
+
+                            &lt;/p:fieldset&gt;
+
+                            &lt;p:fieldset legend=&quot;With code greater than Five&quot;&gt;
+
+                                &lt;h:outputText styleClass=&quot;bold&quot; value=&quot;Count With code greater than Five: &quot;/&gt;
+                                &lt;h:outputText value=&quot;\#[persistenceBasicMB.countPeopleWithCodeGreaterThanFive}&quot;/&gt;
+
+                                &lt;p:dataTable var=&quot;person&quot; value=&quot;\#[persistenceBasicMB.peopleWithCodeGreaterThanFive}&quot;&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.name']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.name}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.cpf']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.cpf}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.code']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.code}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;\#[msg['person.status']}&quot;&gt;
+                                        &lt;h:outputText value=&quot;\#[person.status.description}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                &lt;/p:dataTable&gt;
+
+                            &lt;/p:fieldset&gt;
+                        &lt;/h:panelGrid&gt;
+                    &lt;/h:form&gt;
+                </pre>
+            </p:tab> 
+            <p:tab title="PersistenceBasicMB.java">
+                <pre name="code" class="java">
+                    import com.xpert.persistence.query.Restriction;
+                    import com.xpert.persistence.query.RestrictionType;
+                    import com.xpert.showcase.dao.PersonDAO;
+                    import com.xpert.showcase.model.Person;
+                    import java.util.ArrayList;
+                    import java.util.List;
+                    import javax.annotation.PostConstruct;
+                    import javax.ejb.EJB;
+                    import javax.faces.bean.ManagedBean;
+
+                    @ManagedBean
+                    public class PersistenceBasicMB {
+
+                        @EJB
+                        private PersonDAO personDAO;
+                        private Long count;
+                        private List&lt;Person&gt; people;
+                        private Long countPeopleWithCodeGreaterThanFive;
+                        private List&lt;Person&gt; peopleWithCodeGreaterThanFive;
+
+                        @PostConstruct
+                        public void init(){
+                            count = personDAO.count();
+                            people = personDAO.listAll();
+
+                            Restriction restriction = new Restriction(&quot;code&quot;, RestrictionType.GREATER_THAN, 5L);
+
+                            countPeopleWithCodeGreaterThanFive = personDAO.count(restriction);
+                            peopleWithCodeGreaterThanFive = personDAO.list(restriction);
+
+                        }
+
+                        //getters and setters
+                    }
+                </pre>
+            </p:tab>
+            <ui:include src="/views/common/java/person.xhtml"/>
+            <ui:include src="/views/common/java/personDAO.xhtml"/>
+
+        </p:tabView>
+
+
+    </ui:define>
+</ui:composition>

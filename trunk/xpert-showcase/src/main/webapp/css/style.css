@@ -1,0 +1,8 @@
+.description{padding: 20px 3px;}
+.center{text-align: center;}
+.table-td-top{}
+.table-td-top td{vertical-align: top;}
+.bold{font-weight: bold;}
+h1 a{text-decoration: none;}
+.sidebar a{text-decoration: none; border: 0; font-weight: normal;}
+.sidebar a.ui-state-hover{border: 0; font-weight: normal;}

@@ -1,0 +1,20 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Generic DAO" />
+    <ui:define name="body">
+        
+        <h:form>
+            
+            <p:commandButton action="#{persistenceBasicMB.findAttributes}"
+                value="Test" process="@form" update="@form"/>
+            
+        </h:form>
+        
+    </ui:define>
+</ui:composition>

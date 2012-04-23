@@ -1,0 +1,39 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <ui:param name="title" value="Bean Maker" />
+    <ui:define name="body">
+
+        <div class="description">
+            Component to create java classes and XHTML for simple CRUD.<br/>
+            Needs <b>xpert-maker.jar</b>.
+        </div>
+
+        <xc:maker managedBean="com.xpert.showcase.mb" 
+                  businessObject="com.xpert.showcase.bo" 
+                  dao="com.xpert.showcase.dao" 
+                  daoImpl="com.xpert.showcase.dao.impl" 
+                  baseDAO="com.xpert.showcase.dao.BaseDAOImpl" 
+                  resourceBundle="msg" />
+       
+        <h3>Source</h3>
+         
+        <pre name="code" class="xml">
+
+            &lt;xc:maker managedBean=&quot;com.xpert.showcase.mb&quot; 
+                      businessObject=&quot;com.xpert.showcase.bo&quot; 
+                      dao=&quot;com.xpert.showcase.dao&quot; 
+                      daoImpl=&quot;com.xpert.showcase.dao.impl&quot; 
+                      baseDAO=&quot;com.xpert.showcase.dao.BaseDAOImpl&quot; 
+                      resourceBundle=&quot;msg&quot; /&gt;
+
+         </pre>
+
+    </ui:define>
+</ui:composition>

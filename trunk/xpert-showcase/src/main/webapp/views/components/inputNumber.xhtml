@@ -1,0 +1,64 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <ui:param name="title" value="Input Number" />
+    <ui:define name="body">
+
+        <h:form prependId="false" id="formInputNumber">
+            <h:panelGrid columns="2">
+
+                <h:outputText value="Default:" />
+                <xc:inputNumber/>
+
+                <h:outputText value="Allow Negative (Press '-'):" />
+                <xc:inputNumber allowNegative="true"/>
+
+                <h:outputText value="Limited:" />
+                <xc:inputNumber limit="7"/>
+
+                <h:outputText value="With Ajax:" />
+                <h:panelGroup>
+                    <xc:inputNumber value="#{requestScope.inputNumber}">
+                        <p:ajax event="blur" global="false" update=":formInputNumber:numberValue" process="@this"/>
+                    </xc:inputNumber>
+                    <h:outputText id="numberValue" value="#{requestScope.inputNumber}" />
+                </h:panelGroup>
+
+            </h:panelGrid>
+        </h:form>
+
+        <h3>Source</h3>
+        <pre name="code" class="xml">
+        &lt;h:form prependId=&quot;false&quot; id=&quot;formInputNumber&quot;&gt;
+            &lt;h:panelGrid columns=&quot;2&quot;&gt;
+
+                &lt;h:outputText value=&quot;Default:&quot; /&gt;
+                &lt;xc:inputNumber/&gt;
+
+                &lt;h:outputText value=&quot;Allow Negative (Press '-'):&quot; /&gt;
+                &lt;xc:inputNumber allowNegative=&quot;true&quot;/&gt;
+
+                &lt;h:outputText value=&quot;Limited:&quot; /&gt;
+                &lt;xc:inputNumber limit=&quot;7&quot;/&gt;
+
+                &lt;h:outputText value=&quot;With Ajax:&quot; /&gt;
+                &lt;h:panelGroup&gt;
+                    &lt;xc:inputNumber value=&quot;\#{requestScope.inputNumber}&quot;&gt;
+                        &lt;p:ajax event=&quot;blur&quot; global=&quot;false&quot; update=&quot;:formInputNumber:numberValue&quot; process=&quot;@this&quot;/&gt;
+                    &lt;/xc:inputNumber&gt;
+                    &lt;h:outputText id=&quot;numberValue&quot; value=&quot;\#{requestScope.inputNumber}&quot; /&gt;
+                &lt;/h:panelGroup&gt;
+                
+            &lt;/h:panelGrid&gt;
+        &lt;/h:form&gt;
+        </pre>
+       
+
+    </ui:define>
+</ui:composition>

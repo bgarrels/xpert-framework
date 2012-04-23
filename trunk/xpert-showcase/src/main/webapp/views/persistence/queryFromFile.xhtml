@@ -1,0 +1,100 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Native Query from File" />
+    <ui:define name="body">
+
+        
+        <div class="description">
+           Creates a Native Query from a SQL file. Useful to read a very long query.
+        </div>
+        
+        <h:form>
+            <p:messages/>
+            <p:spacer height="5"/>
+            <p:dataTable var="person" value="#{persistenceQueryFromFileMB.people}">
+                <p:column headerText="ID">  
+                    <h:outputText value="#{person.id}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.name']}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.code']}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+
+        <br/>
+
+        <p:tabView>
+            <p:tab title="queryFromFile.xhtml">
+                <pre name="code" class="xml">
+                  &lt;h:form&gt;
+                    &lt;p:messages/&gt;
+                    &lt;p:spacer height=&quot;5&quot;/&gt;
+                    &lt;p:dataTable var=&quot;person&quot; value=&quot;\#{persistenceQueryFromFileMB.people}&quot;&gt;
+                        &lt;p:column headerText=&quot;ID&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.id}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.name']}&quot;&gt;
+                            &lt;h:outputText value=&quot;#{person.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.cpf']}&quot;&gt;
+                            &lt;h:outputText value=&quot;#{person.cpf}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.code']}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.code}&quot;/&gt;
+                        &lt;/p:column&gt;
+                    &lt;/p:dataTable&gt;
+                  &lt;/h:form&gt;
+                </pre>
+            </p:tab> 
+            <p:tab title="PersistenceQueryFromFileMB.java">
+                <pre name="code" class="java">
+                    import com.xpert.showcase.dao.PersonDAO;
+                    import com.xpert.showcase.model.Person;
+                    import java.util.List;
+                    import javax.annotation.PostConstruct;
+                    import javax.ejb.EJB;
+                    import javax.faces.bean.ManagedBean;
+
+                    @ManagedBean
+                    public class PersistenceQueryFromFileMB {
+
+                        @EJB
+                        private PersonDAO personDAO;
+                        private List&lt;Person&gt; people;
+
+                        @PostConstruct
+                        public void init(){
+                            people = personDAO.getFromSQLFile();
+                        }
+
+
+                     //getters and setters
+                    }
+                </pre>
+            </p:tab>
+            <p:tab title="findAllPeople.sql">
+                 <pre name="code" class="plsql">
+                    SELECT * FROM person ORDER BY name
+                 </pre>
+            </p:tab>
+            <ui:include src="/views/common/java/person.xhtml"/>
+            <ui:include src="/views/common/java/personDAO.xhtml"/>
+
+        </p:tabView>
+
+
+    </ui:define>
+</ui:composition>
