@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:x="http://xpert.com/faces"
+      xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="managedBean"/>
+        <cc:attribute name="dao"/>
+        <cc:attribute name="daoImpl"/>
+        <cc:attribute name="businessObject"/>
+        <cc:attribute name="baseDAO"/>
+        <cc:attribute name="resourceBundle"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:outputScript library="xpert" name="scripts/core.js" target="head" />
+        <h:outputScript library="xpert" name="scripts/sh.js" target="head" />
+        <h:outputStylesheet library="xpert" name="css/sh-style.css" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setManagedBean(cc.attrs.managedBean)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setDao(cc.attrs.dao)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setDaoImpl(cc.attrs.daoImpl)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setBusinessObject(cc.attrs.businessObject)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setBaseDAO(cc.attrs.baseDAO)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.setResourceBundle(cc.attrs.resourceBundle)}" />
+        <h:form prependId="false">
+            <p:messages/>
+            <p:tabView>
+                <p:ajax event="tabChange" update="@none" process="@this" global="false"/>
+                <p:tab title="1 - Configuration">
+                    <h:panelGroup  id="configuration">
+                        <p:fieldset legend="Package Configuration">
+                            <xc:info value="Insert the packages name"/>
+                            <h:panelGrid columns="2">
+
+                                <h:outputLabel value="Managed Bean:"/>
+                                <p:inputText value="#{beanMaker.packageInfo.managedBean}" size="50"/>
+
+                                <h:outputLabel value="DAO:"/>
+                                <p:inputText  value="#{beanMaker.packageInfo.dao}" size="50"/>
+
+                                <h:outputLabel value="DAO Impl:"/>
+                                <p:inputText value="#{beanMaker.packageInfo.daoImpl}" size="50"/>
+
+                                <h:outputLabel value="Business Object:"/>
+                                <p:inputText value="#{beanMaker.packageInfo.businessObject}" size="50"/>
+
+                            </h:panelGrid>
+                        </p:fieldset>
+                        <p:spacer height="2"/>
+                        <p:fieldset legend="Others">
+                            <h:panelGrid columns="3">
+                                <h:outputLabel value="BaseDAOImpl Class:"/>
+                                <p:inputText value="#{beanMaker.packageInfo.baseDAO}" size="50"/>
+                                <h:panelGroup>
+                                    <h:outputText style="font-weight: bold;" value="The BaseDAO class of your Project"/>
+                                    <br/>
+                                    <h:outputText value="(Must extend com.xpert.persistence.dao.BaseDAOImpl)"/>
+                                </h:panelGroup>
+
+                                <h:outputLabel value="Faces Resource Bundle:"/>
+                                <p:inputText value="#{beanMaker.resourceBundle}" size="50"/>
+                                <h:panelGroup/>
+
+                                <h:outputLabel value="Author:"/>
+                                <p:inputText value="#{beanMaker.author}" size="50"/>
+                                <h:panelGroup/>
+
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </h:panelGroup>
+                </p:tab>
+                <p:tab title="2 - Create Classes">
+                    <p:fieldset legend="Mapped Entities #{beanMaker.classes.size() gt 0 ? '('.concat(beanMaker.classes.size()).concat(')') : '' }"
+                                rendered="#{not empty beanMaker.classes}" toggleable="true">
+
+                        <h:selectManyCheckbox value="#{beanMaker.nameSelectedClasses}" id="selectClasses">
+                            <x:spread columns="3"/>
+                            <f:selectItems value="#{beanMaker.classes}" var="clazz" itemLabel="#{clazz.name}" itemValue="#{clazz.name}"  />
+                        </h:selectManyCheckbox>
+                        <p:spacer height="5"/>
+                        <p:commandButton process="configuration selectClasses @this" update="@form" value="Make Selected"
+                                         action="#{beanMaker.make}" />
+                        <p:commandButton process="@this configuration" update="@form" value="Make All"
+                                         action="#{beanMaker.makeAll}" />
+                        <p:commandButton process="@this" update="@form" value="Reset"
+                                         action="#{beanMaker.reset}" />
+                        <p:commandButton ajax="false" immediate="true" icon="ui-icon-disk" rendered="#{not empty beanMaker.mappedBeans}"
+                                         value="Download" action="#{beanMaker.download}">
+                            <x:download/>
+                        </p:commandButton>
+
+                    </p:fieldset>
+                    <p:spacer height="5"/>
+                    <p:tabView>
+                        <p:tab title="I18N">
+                            <h:panelGroup rendered="#{not empty beanMaker.mappedBeans}">
+                                <a href="javascript:void(0)" style="font-size: 11px; color: #3366BB;"
+                                   onclick="Xpert.popupTextArea('#i18nContent')">Open Code</a>
+                            </h:panelGroup>
+                            <pre style="margin: 0; padding: 0;" id="i18nContent">
+                                    <ui:repeat var="mappedBean" value="#{beanMaker.mappedBeans}">
+                                            <h:outputText value="#{mappedBean.i18n}"/>
+                                    </ui:repeat>
+                            </pre>
+                        </p:tab>
+                        <p:tab title="DAO">
+                            <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                <p:tab title="#{mappedBean.className}">
+                                    <pre name="code-maker" class="java">
+                                                 <h:outputText value="#{mappedBean.dao}"/>
+                                    </pre>
+                                    <pre name="code-maker" class="java">
+                                                <h:outputText value="#{mappedBean.daoImpl}"/>
+                                    </pre>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </p:tab>
+                        <p:tab title="Bussiness Object">
+                            <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                <p:tab title="#{mappedBean.className}">
+                                    <pre name="code-maker" class="java">
+                                                <h:outputText value="#{mappedBean.businnesObject}"/>
+                                    </pre>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </p:tab>
+                        <p:tab title="Managed Bean">
+                            <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                <p:tab title="#{mappedBean.className}">
+                                    <pre name="code-maker" class="java">
+                                                 <h:outputText value="#{mappedBean.managedBean}"/>
+                                    </pre>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </p:tab>
+                        <p:tab title="View">
+                            <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                <p:tab title="#{mappedBean.className}">
+                                    <pre name="code-maker" class="xml">
+                                            <h:outputText value="#{mappedBean.view}"/>
+                                    </pre>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </p:tab>
+                        <p:tab title="Class Bean">
+                            Managed Bean to acess the mapped classes.
+                            <pre name="code-maker" class="java">
+                                    <h:outputText value="#{beanMaker.classBean}"/>
+                            </pre>
+                        </p:tab>
+                    </p:tabView>
+                </p:tab>
+            </p:tabView>
+            <script type="text/javascript">Xpert.highlightCode("code-maker");</script>
+        </h:form>
+    </cc:implementation>
+</html>
