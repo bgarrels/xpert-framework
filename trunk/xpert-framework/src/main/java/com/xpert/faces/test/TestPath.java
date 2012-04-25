@@ -4,9 +4,9 @@
  */
 package com.xpert.faces.test;
 
-import com.xpert.maker.bean.Bean;
-import com.xpert.maker.bean.BeanType;
-import com.xpert.maker.freemarker.BeanCreator;
+import com.xpert.maker.Bean;
+import com.xpert.maker.BeanType;
+import com.xpert.maker.BeanCreator;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

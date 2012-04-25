@@ -1,6 +1,6 @@
 package com.xpert.i18n;
 
-import com.xpert.core.utils.StringUtils;
+import com.xpert.utils.StringUtils;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;

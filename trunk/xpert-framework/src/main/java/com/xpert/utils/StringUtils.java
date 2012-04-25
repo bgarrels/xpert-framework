@@ -1,4 +1,4 @@
-package com.xpert.core.utils;
+package com.xpert.utils;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

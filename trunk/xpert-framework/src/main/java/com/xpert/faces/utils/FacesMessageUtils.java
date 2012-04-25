@@ -1,6 +1,6 @@
 package com.xpert.faces.utils;
 
-import com.xpert.configuration.Configuration;
+import com.xpert.Configuration;
 import com.xpert.core.exception.StackException;
 import com.xpert.i18n.XpertResourceBundle;
 import com.xpert.i18n.I18N;

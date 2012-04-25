@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xpert.maker.test;
+package com.xpert.maker;
 
 import java.io.File;
 import java.io.IOException;

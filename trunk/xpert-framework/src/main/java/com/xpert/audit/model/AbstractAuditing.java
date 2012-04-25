@@ -24,10 +24,6 @@ public abstract class AbstractAuditing {
 
     public abstract Object getId();
 
-    public abstract Object getUser();
-    
-    public abstract void setUser(Object user);
-    
     public abstract List getMetadatas();
     
     public abstract void setMetadatas(List metadatas);

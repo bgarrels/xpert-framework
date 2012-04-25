@@ -3,7 +3,7 @@ package com.xpert.audit;
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.audit.model.AbstractMetadata;
 import com.xpert.audit.model.AuditingType;
-import com.xpert.configuration.Configuration;
+import com.xpert.Configuration;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;

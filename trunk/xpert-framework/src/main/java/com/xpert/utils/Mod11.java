@@ -1,4 +1,4 @@
-package com.xpert.core.utils;
+package com.xpert.utils;
 
 /**
  *

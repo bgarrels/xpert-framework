@@ -5,7 +5,7 @@ import com.xpert.faces.utils.FacesMessageUtils;
 import com.xpert.faces.primefaces.PrimeFacesUtils;
 import com.xpert.i18n.XpertResourceBundle;
 import com.xpert.faces.primefaces.LazyDataModelImpl;
-import com.xpert.core.utils.StringUtils;
+import com.xpert.utils.StringUtils;
 import com.xpert.faces.utils.FacesUtils;
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.exception.DeleteException;

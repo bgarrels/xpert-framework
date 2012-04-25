@@ -1,6 +1,5 @@
-package com.xpert.maker.freemarker;
+package com.xpert.maker;
 
-import com.xpert.maker.bean.*;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;

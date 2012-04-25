@@ -1,10 +1,11 @@
 package com.xpert.faces.bean;
 
+import com.xpert.Configuration;
 import com.xpert.faces.utils.FacesUtils;
-import com.xpert.maker.bean.MappedBean;
-import com.xpert.maker.bean.PackageInfo;
-import com.xpert.maker.bean.PersistenceMappedBean;
-import com.xpert.maker.freemarker.BeanCreator;
+import com.xpert.maker.MappedBean;
+import com.xpert.maker.PackageInfo;
+import com.xpert.maker.PersistenceMappedBean;
+import com.xpert.maker.BeanCreator;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class BeanMaker implements Serializable {
 
     @PostConstruct
     public void init() {
-        entityManager = EntityManagerHandler.getEntityManager();
+        entityManager = Configuration.getEntityManager();
         persistenceMappedBean = new PersistenceMappedBean(entityManager);
         classes = persistenceMappedBean.getMappedClasses();
         classBean = persistenceMappedBean.getClassBean("");

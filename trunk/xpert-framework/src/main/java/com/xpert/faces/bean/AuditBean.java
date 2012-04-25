@@ -2,16 +2,14 @@ package com.xpert.faces.bean;
 
 import com.xpert.DAO;
 import com.xpert.faces.primefaces.LazyDataModelImpl;
-import com.xpert.audit.Audit;
 import com.xpert.audit.model.AbstractAuditing;
-import com.xpert.configuration.Configuration;
+import com.xpert.Configuration;
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.query.JoinBuilder;
 import com.xpert.persistence.query.Restriction;
 import com.xpert.persistence.utils.EntityUtils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;

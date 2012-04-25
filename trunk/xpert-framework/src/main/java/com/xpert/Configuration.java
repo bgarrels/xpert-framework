@@ -1,13 +1,13 @@
-package com.xpert.configuration;
+package com.xpert;
 
 import com.xpert.audit.AbstractAuditingListener;
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.audit.model.AbstractMetadata;
-import com.xpert.faces.bean.EntityManagerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
@@ -31,6 +31,19 @@ public class Configuration {
     public static Class AUDITING_LISTENER;
     public static Class ENTITY_MANAGER_FACTORY;
     public static String BUNDLE;
+
+    public static EntityManager getEntityManager() {
+        try {
+            EntityManagerFactory entityManagerFactory = getEntityManagerFactory();
+            if (entityManagerFactory == null) {
+                throw new RuntimeException("No EntityManagerFactory defined in xpert-config.xml");
+            }
+            return entityManagerFactory.getEntityManager();
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        return null;
+    }
 
     public static boolean isAudit() {
         if (AUDITING_IMPL != null && METADATA_IMPL != null) {

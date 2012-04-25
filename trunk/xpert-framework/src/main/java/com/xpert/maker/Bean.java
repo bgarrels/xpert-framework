@@ -1,4 +1,4 @@
-package com.xpert.maker.bean;
+package com.xpert.maker;
 
 /**
  *

@@ -1,4 +1,4 @@
-package com.xpert.configuration;
+package com.xpert;
 
 /**
  *

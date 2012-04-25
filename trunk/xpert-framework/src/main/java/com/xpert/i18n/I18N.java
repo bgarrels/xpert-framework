@@ -1,6 +1,6 @@
 package com.xpert.i18n;
 
-import com.xpert.configuration.Configuration;
+import com.xpert.Configuration;
 import java.util.Locale;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;

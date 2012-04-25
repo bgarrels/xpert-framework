@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xpert.maker.bean;
+package com.xpert.maker;
 
-import com.xpert.core.utils.HumaniseCamelCase;
-import com.xpert.maker.freemarker.BeanCreator;
+import com.xpert.maker.BeanCreator;
+import com.xpert.utils.HumaniseCamelCase;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;

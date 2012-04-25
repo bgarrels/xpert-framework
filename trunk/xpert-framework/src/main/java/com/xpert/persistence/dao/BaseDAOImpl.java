@@ -1,7 +1,7 @@
 package com.xpert.persistence.dao;
 
 import com.xpert.audit.Audit;
-import com.xpert.configuration.Configuration;
+import com.xpert.Configuration;
 import com.xpert.persistence.exception.DeleteException;
 import com.xpert.persistence.query.QueryBuilderOld;
 import com.xpert.persistence.query.QueryBuilder;

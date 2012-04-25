@@ -1,4 +1,4 @@
-package com.xpert.faces.bean;
+package com.xpert;
 
 import javax.persistence.EntityManager;
 

@@ -1,6 +1,5 @@
 package com.xpert;
 
-import com.xpert.faces.bean.EntityManagerHandler;
 import com.xpert.persistence.dao.BaseDAOImpl;
 
 /**
@@ -11,11 +10,11 @@ public class DAO extends BaseDAOImpl {
 
     public DAO(Class entityClass) {
         super.setEntityClass(entityClass);
-        super.setEntityManager(EntityManagerHandler.getEntityManager());
+        super.setEntityManager(Configuration.getEntityManager());
     }
 
     public DAO() {
-        super.setEntityManager(EntityManagerHandler.getEntityManager());
+        super.setEntityManager(Configuration.getEntityManager());
     }
 
     @Override

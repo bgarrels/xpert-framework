@@ -1,4 +1,4 @@
-package com.xpert.configuration;
+package com.xpert;
 
 import com.xpert.faces.utils.FacesUtils;
 import java.util.logging.Level;
