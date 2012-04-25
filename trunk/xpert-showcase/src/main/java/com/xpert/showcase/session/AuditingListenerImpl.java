@@ -4,25 +4,20 @@
  */
 package com.xpert.showcase.session;
 
-import com.xpert.annotation.AuditingListener;
 import com.xpert.audit.AbstractAuditingListener;
 import com.xpert.audit.model.AbstractAuditing;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Ayslan
  */
-@AuditingListener
-public class AuditingListenerImpl implements AbstractAuditingListener{
+public class AuditingListenerImpl implements AbstractAuditingListener {
 
-    @Override
-    public Object getUser() {
-        return null;
-    }
-
+    private static final Logger logger = Logger.getLogger(AuditingListenerImpl.class.getName());
+    
     @Override
     public void onSave(AbstractAuditing abstractAuditing) {
-        System.out.println("on save");
+        logger.info("on save @Entity");
     }
-    
 }

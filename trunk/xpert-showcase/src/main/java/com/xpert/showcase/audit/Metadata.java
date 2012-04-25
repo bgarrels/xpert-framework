@@ -1,6 +1,5 @@
 package com.xpert.showcase.audit;
 
-import com.xpert.annotation.MetadataEntity;
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.audit.model.AbstractMetadata;
 import javax.persistence.*;
@@ -9,7 +8,6 @@ import javax.persistence.*;
  *
  * @author Ayslan
  */
-@MetadataEntity
 @Entity
 public class Metadata extends AbstractMetadata{
     

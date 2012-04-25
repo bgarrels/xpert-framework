@@ -1,6 +1,5 @@
 package com.xpert.showcase.audit;
 
-import com.xpert.annotation.AuditingEntity;
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.showcase.model.Person;
 import java.io.Serializable;
@@ -11,7 +10,6 @@ import javax.persistence.*;
  *
  * @author Ayslan
  */
-@AuditingEntity
 @Entity
 public class Auditing extends AbstractAuditing implements Serializable {
 
