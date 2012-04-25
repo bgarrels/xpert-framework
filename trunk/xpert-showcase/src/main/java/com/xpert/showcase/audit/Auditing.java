@@ -16,12 +16,11 @@ public class Auditing extends AbstractAuditing implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-   
-    //set custom object "User"
+    
     @ManyToOne
     private Person user;
     
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "auditing")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "auditing")
     private List<Metadata> metadatas;
 
     @Override
@@ -29,7 +28,6 @@ public class Auditing extends AbstractAuditing implements Serializable {
         return id;
     }
 
-    @Override
     public Person getUser() {
         return user;
     }
@@ -38,9 +36,8 @@ public class Auditing extends AbstractAuditing implements Serializable {
         this.id = id;
     }
 
-    @Override
-    public void setUser(Object user) {
-        this.user = (Person) user;
+    public void setUser(Person user) {
+        this.user = user;
     }
 
     @Override

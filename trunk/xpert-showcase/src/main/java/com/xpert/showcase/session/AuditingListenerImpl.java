@@ -6,6 +6,7 @@ package com.xpert.showcase.session;
 
 import com.xpert.audit.AbstractAuditingListener;
 import com.xpert.audit.model.AbstractAuditing;
+import com.xpert.showcase.audit.Auditing;
 import java.util.logging.Logger;
 
 /**

@@ -1,6 +1,6 @@
 package com.xpert.showcase.dao;
 
-import com.xpert.faces.bean.EntityManagerFactory;
+import com.xpert.EntityManagerFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
