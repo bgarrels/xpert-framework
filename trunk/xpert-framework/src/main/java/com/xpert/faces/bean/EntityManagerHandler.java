@@ -1,8 +1,8 @@
 package com.xpert.faces.bean;
 
+import com.xpert.configuration.Configuration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
 /**
@@ -11,14 +11,11 @@ import javax.persistence.EntityManager;
  */
 public class EntityManagerHandler {
 
-    private static String FACTORY_NAME = "xpert.ENTITY_MANAGER_FACTORY";
     private static final Logger logger = Logger.getLogger(EntityManagerHandler.class.getName());
 
     public static EntityManager getEntityManager() {
-        String classFactory = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(FACTORY_NAME);
         try {
-            Class clazz = Class.forName(classFactory, true, Thread.currentThread().getContextClassLoader());
-            EntityManagerFactory entityManagerFactory = (EntityManagerFactory) clazz.newInstance();
+            EntityManagerFactory entityManagerFactory = Configuration.getEntityManagerFactory();
             return entityManagerFactory.getEntityManager();
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);

@@ -10,6 +10,4 @@ public interface AbstractAuditingListener {
     
     public void onSave(AbstractAuditing abstractAuditing);
     
-    public Object getUser();
-    
 }

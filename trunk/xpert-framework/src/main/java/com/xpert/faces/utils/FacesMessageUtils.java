@@ -1,6 +1,6 @@
 package com.xpert.faces.utils;
 
-import com.xpert.core.config.CoreProperties;
+import com.xpert.configuration.Configuration;
 import com.xpert.core.exception.StackException;
 import com.xpert.i18n.XpertResourceBundle;
 import com.xpert.i18n.I18N;
@@ -74,12 +74,10 @@ public class FacesMessageUtils {
 
     public static void getMessage(FacesContext facesContext, FacesMessage.Severity severity, String summary, String... parameters) {
 
-        if (parameters != null && parameters.length > 0) {
-            if (CoreProperties.USE_I18N) {
+        if (Configuration.BUNDLE != null) {
+            if (parameters != null && parameters.length > 0) {
                 summary = I18N.get(summary, parameters);
-            }
-        } else {
-            if (CoreProperties.USE_I18N) {
+            } else {
                 summary = I18N.get(summary);
             }
         }

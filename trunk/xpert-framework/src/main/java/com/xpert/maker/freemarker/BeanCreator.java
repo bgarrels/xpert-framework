@@ -18,8 +18,10 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.io.IOUtils;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -103,6 +105,10 @@ public class BeanCreator {
             boolean hasSelectItem = false;
             boolean hasEmptySelect = false;
             Integer maxlength = null;
+            boolean required = false;
+            if (field.isAnnotationPresent(NotNull.class) || field.isAnnotationPresent(NotBlank.class)) {
+                required = true;
+            }
             if (field.getType().equals(Date.class)) {
                 tag = "p:calendar";
             } else if (field.getType().equals(BigDecimal.class)) {
@@ -128,7 +134,7 @@ public class BeanCreator {
                 }
                 tag = "p:inputText";
             }
-            appendTagValue(view, tag, field, managedBean, converter, resourceBundle, hasSelectItem, hasEmptySelect, maxlength);
+            appendTagValue(view, tag, field, managedBean, converter, resourceBundle, hasSelectItem, hasEmptySelect, maxlength, required);
         }
         view.append("       </h:panelGrid>\n");
         view.append("       <p:separator/>\n");
@@ -162,7 +168,8 @@ public class BeanCreator {
         return false;
     }
 
-    public static void appendTagValue(StringBuilder view, String tag, Field field, String managedBean, String converter, String resourceBundle, boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength) {
+    public static void appendTagValue(StringBuilder view, String tag, Field field, String managedBean, String converter, String resourceBundle,
+            boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required) {
         String type;
         if (field.getType().equals(Collection.class) || field.getType().equals(List.class) || field.getType().equals(Set.class)) {
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
@@ -173,7 +180,7 @@ public class BeanCreator {
         }
         String propertyPath = getNameLower(field.getDeclaringClass()) + "." + field.getName();
         view.append("\n");
-        view.append("           <h:outputLabel value=\"#{").append(resourceBundle).append("['").append(propertyPath).append("']\" />\n");
+        view.append("           <h:outputLabel value=\"").append(required ? "* " : "").append("#{").append(resourceBundle).append("['").append(propertyPath).append("']\" />\n");
         view.append("           <").append(tag).append(" value=\"#{").append(managedBean).append(".entity.").append(field.getName()).append("}\"");
         if (converter != null && !converter.trim().isEmpty()) {
             view.append(" converter=\"").append(converter).append("\" ");
@@ -220,7 +227,7 @@ public class BeanCreator {
             //DAO Impl
             putEntry(out, "dao/impl/" + classSimpleName + "DAOImpl.java", mappedBean.getDaoImpl());
             //form
-            putEntry(out, "views/" +getNameLower(mappedBean.getEntityClass()) + "/form" + classSimpleName + ".xhtml", mappedBean.getView());
+            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/form" + classSimpleName + ".xhtml", mappedBean.getView());
         }
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);

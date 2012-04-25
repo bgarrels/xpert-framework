@@ -4,6 +4,7 @@ import com.xpert.DAO;
 import com.xpert.faces.primefaces.LazyDataModelImpl;
 import com.xpert.audit.Audit;
 import com.xpert.audit.model.AbstractAuditing;
+import com.xpert.configuration.Configuration;
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.query.JoinBuilder;
 import com.xpert.persistence.query.Restriction;
@@ -32,11 +33,7 @@ public class AuditBean {
 
     @PostConstruct
     public void init() {
-        try {
-            baseDAO = new DAO(Audit.getAuditingClass());
-        } catch (ClassNotFoundException ex) {
-            logger.log(Level.SEVERE, null, ex);
-        }
+        baseDAO = new DAO(Configuration.AUDITING_IMPL);
     }
 
     public void detail(Object object) {

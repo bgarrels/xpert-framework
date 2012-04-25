@@ -1,7 +1,7 @@
 package com.xpert.persistence.dao;
 
 import com.xpert.audit.Audit;
-import com.xpert.audit.AuditConfiguration;
+import com.xpert.configuration.Configuration;
 import com.xpert.persistence.exception.DeleteException;
 import com.xpert.persistence.query.QueryBuilderOld;
 import com.xpert.persistence.query.QueryBuilder;
@@ -109,7 +109,7 @@ public abstract class BaseDAOImplOld<T> implements BaseDAO<T> {
 
     @Override
     public void save(T object) {
-        save(object, AuditConfiguration.isAudit());
+        save(object, Configuration.isAudit());
     }
 
     @Override
@@ -122,7 +122,7 @@ public abstract class BaseDAOImplOld<T> implements BaseDAO<T> {
 
     @Override
     public void update(T object) {
-        update(object, AuditConfiguration.isAudit());
+        update(object, Configuration.isAudit());
     }
 
     @Override
@@ -135,7 +135,7 @@ public abstract class BaseDAOImplOld<T> implements BaseDAO<T> {
 
     @Override
     public void saveOrUpdate(T object) {
-        saveOrUpdate(object, AuditConfiguration.isAudit());
+        saveOrUpdate(object, Configuration.isAudit());
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.xpert.audit;
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.audit.model.AbstractMetadata;
 import com.xpert.audit.model.AuditingType;
+import com.xpert.configuration.Configuration;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -24,9 +25,6 @@ import org.hibernate.proxy.HibernateProxy;
  */
 public class Audit {
 
-    public static String AUDITING_IMPL = "xpert.AUDITING_IMPL";
-    public static String METADATA_IMPL = "xpert.METADATA_IMPL";
-    public static String AUDITING_LISTENER = "xpert.AUDITING_LISTENER";
     private static final Logger logger = Logger.getLogger(Audit.class.getName());
     private static final String[] EXCLUDED_FIELDS = {"notifyAll", "notify", "getClass", "wait", "hashCode", "toString", "equals"};
     private static final SimpleDateFormat AUDIT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -35,43 +33,6 @@ public class Audit {
 
     public Audit(EntityManager entityManager) {
         this.entityManager = entityManager;
-    }
-
-    public static Class getAuditingClass() throws ClassNotFoundException {
-        String classFactory = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(AUDITING_IMPL);
-        return Class.forName(classFactory, true, Thread.currentThread().getContextClassLoader());
-    }
-
-    public static AbstractAuditing getAuditingInstance() {
-        try {
-            Class clazz = getAuditingClass();
-            return (AbstractAuditing) clazz.newInstance();
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return null;
-    }
-
-    public static AbstractMetadata getMetadataInstance() {
-        String classFactory = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(METADATA_IMPL);
-        try {
-            Class clazz = Class.forName(classFactory, true, Thread.currentThread().getContextClassLoader());
-            return (AbstractMetadata) clazz.newInstance();
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return null;
-    }
-
-    public Object getUser() {
-        String classFactory = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(AUDITING_LISTENER);
-        try {
-            Class clazz = Class.forName(classFactory, true, Thread.currentThread().getContextClassLoader());
-            return ((AbstractAuditingListener) clazz.newInstance()).getUser();
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return null;
     }
 
     public Object getId(Object object) {
@@ -175,12 +136,16 @@ public class Audit {
                 Method.setAccessible(methods, true);
                 Field.setAccessible(fields, true);
 
-                AbstractAuditing auditing = getAuditingInstance();
-                auditing.setUser(getUser());
+                AbstractAuditing auditing = Configuration.getAbstractAuditing();
                 auditing.setIdentifier(Long.valueOf(getId(object).toString()));
                 auditing.setEntity(object.getClass().getName());
                 auditing.setAuditingType(auditingType);
                 auditing.setEventDate(new Date());
+                
+                AbstractAuditingListener listener = Configuration.getAuditingListener();
+                if(listener != null){
+                    listener.onSave(auditing);
+                }
 
                 List<AbstractMetadata> metadatas = null;
                 if (auditingType.equals(AuditingType.INSERT) || auditingType.equals(AuditingType.DELETE)) {
@@ -216,14 +181,14 @@ public class Audit {
                 if (persisted != null) {
                     fieldOld = method.invoke(persisted);
                 }
-                AbstractMetadata metadata = getMetadataInstance();
+                AbstractMetadata metadata = Configuration.getAbstractMetadata();
                 if (fieldValue != null && fieldValue.getClass().isAnnotationPresent(Embeddable.class)) {
                     List<AbstractMetadata> embedableMetadata = getMetadata(fieldValue, persisted, auditing);
                     if (embedableMetadata != null && embedableMetadata.isEmpty()) {
                         metadatas.addAll(embedableMetadata);
                     }
                 } else {
-                    boolean addMetadata = fieldOld == null;
+                    boolean addMetadata = persisted == null;
                     if (fieldValue instanceof Collection) { //para as coleções
                         Collection collectionNew = (Collection<Object>) fieldValue;
                         Collection collectionOld = (Collection<Object>) fieldOld;
