@@ -83,18 +83,23 @@ public class PersistenceMappedBean {
     }
 
     public List<Class> getMappedClasses() {
+        return getMappedClasses(false);
+    }
+
+    public List<Class> getMappedClasses(boolean includeEnum) {
         SessionFactory sessionFactory = getSessionFactory();
         Map<String, ClassMetadata> map = (Map<String, ClassMetadata>) sessionFactory.getAllClassMetadata();
         SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) sessionFactory;
         List<Class> classes = new ArrayList<Class>();
-        List<Class> enumarations = new ArrayList<Class>();
         for (String entityName : map.keySet()) {
             Class entity = ((AbstractEntityPersister) sessionFactoryImpl.getEntityPersister(entityName)).getConcreteProxyClass();
             classes.add(entity);
             //add enum
-            for (Field field : entity.getDeclaredFields()) {
-                if (field.getType().isEnum() && !classes.contains(field.getType())) {
-                    classes.add(field.getType());
+            if (includeEnum) {
+                for (Field field : entity.getDeclaredFields()) {
+                    if (field.getType().isEnum() && !classes.contains(field.getType())) {
+                        classes.add(field.getType());
+                    }
                 }
             }
         }
@@ -109,7 +114,7 @@ public class PersistenceMappedBean {
             Template template = BeanCreator.getTemplate("class-bean.ftl");
             StringWriter writer = new StringWriter();
             Map attributes = new HashMap();
-            attributes.put("classes", getMappedClasses());
+            attributes.put("classes", getMappedClasses(true));
             attributes.put("package", beanPackage == null ? "" : beanPackage);
             template.process(attributes, writer);
 
