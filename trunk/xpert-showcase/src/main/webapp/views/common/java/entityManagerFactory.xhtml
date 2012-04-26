@@ -6,22 +6,22 @@
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
                  xmlns:x="http://xpert.com/faces">
 
-    Xpert-framework must get EntityManager, so create a class that implements <b>com.xpert.faces.bean.EntityManagerFactory</b> and define it in <b>web.xml</b>
+    Xpert-framework must get EntityManager, so create a class that implements <b>com.xpert.EntityManagerFactory</b> and define it in <b>xpert-config.xml</b> (must be located in WEB-INF)
     
     <br/>
-    This factory is used in <h:link outcome="/views/components/initializer.jsf" value="initializer"/> 
-    and  <h:link outcome="/views/audit/auditing.jsf" value="audit"/> component.
+    This factory is used in <h:link outcome="/views/components/initializer.jsf" value="initializer"/>, <h:link outcome="/views/components/findAllBean.jsf" value="FindAllBean"/>
+    and  <h:link outcome="/views/audit/auditing.jsf" value="audit"/> components.
     <pre name="code" class="xml">
-        &lt;context-param&gt;
-            &lt;param-name&gt;xpert.ENTITY_MANAGER_FACTORY&lt;/param-name&gt;
-            &lt;param-value&gt;com.xpert.showcase.dao.EntityManagerFactoryImpl&lt;/param-value&gt;
-        &lt;/context-param&gt;
+    &lt;xpert-config xmlns=&quot;http://ocpsoft.com/prettyfaces/3.2.0&quot;
+                xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+        &lt;entity-manager-factory&gt;com.xpert.showcase.dao.EntityManagerFactoryImpl&lt;/entity-manager-factory&gt;
+    &lt;/xpert-config&gt;    
     </pre>
 
     Here is the <b>EntityManagerFactory</b> of this showcase
 
     <pre name="code" class="java">
-        import com.xpert.faces.bean.EntityManagerFactory;
+        import com.xpert.EntityManagerFactory;
         import java.util.logging.Level;
         import java.util.logging.Logger;
         import javax.naming.InitialContext;

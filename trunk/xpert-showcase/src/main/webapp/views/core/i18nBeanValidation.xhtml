@@ -80,6 +80,15 @@
                 </pre>
             </p:tab>
             <ui:include src="/views/common/java/person.xhtml"/>
+            <p:tab title="xpert-config.xml">
+                Create <b>xpert-config.xml</b> in WEB-INF and define your resource-bundle path:
+                <pre name="code" class="xml">
+                &lt;xpert-config xmlns=&quot;http://ocpsoft.com/prettyfaces/3.2.0&quot;
+                            xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+                    &lt;resource-bundle&gt;bundles.messages&lt;/resource-bundle&gt;
+                &lt;/xpert-config&gt;
+                </pre>
+            </p:tab>
             <p:tab title="faces-config.xml">
                 <h3>Override Bean Validation</h3>
                 <pre name="code" class="xml">
@@ -87,6 +96,38 @@
                         &lt;validator-class&gt;com.xpert.core.validation.BeanValidator&lt;/validator-class&gt;
                         &lt;validator-id&gt;javax.faces.Bean&lt;/validator-id&gt;
                     &lt;/validator&gt;
+                </pre>
+            </p:tab>
+            <p:tab title="messages.properties">
+                <h3>en - English</h3>
+                <pre name="code" class="java">
+                person.search=Search Person
+                person.create=Create Person
+                person.name=Name
+                person.cpf=CPF
+                person.code=Code
+                person.status=Status
+                person.group=Group
+                person.group2=Group 2
+                person.birthday=Birthday
+                person.rg=RG
+                person.salary=Salary
+                person.email=Email
+                person.permissions=Permissions
+                </pre>
+                <h3>pt_BR - Português</h3>
+                <pre name="code" class="java">
+                person.name=Nome
+                person.cpf=CPF
+                person.code=Código
+                person.status=Status
+                person.group=Grupo
+                person.group2=Grupo 2
+                person.birthday=Data de Nascimento
+                person.rg=RG
+                person.salary=Salário
+                person.email=Email
+                person.permissions=Permissões
                 </pre>
             </p:tab>
         </p:tabView>

@@ -1,0 +1,58 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+                 xmlns:x="http://xpert.com/faces">
+
+    <p:tab title="Country.java">
+        <pre name="code" class="java">
+        package com.xpert.showcase.model;
+
+        import java.io.Serializable;
+        import java.util.List;
+        import javax.persistence.Entity;
+        import javax.persistence.GeneratedValue;
+        import javax.persistence.GenerationType;
+        import javax.persistence.Id;
+        import javax.persistence.OneToMany;
+
+        @Entity
+        public class Country implements Serializable {
+
+            @Id
+            @GeneratedValue(strategy = GenerationType.AUTO)
+            private Long id;
+            private String name;
+            @OneToMany(mappedBy = &quot;country&quot;)
+            private List&lt;State&gt; states;
+
+            public List&lt;State&gt; getStates() {
+                return states;
+            }
+
+            public void setStates(List&lt;State&gt; states) {
+                this.states = states;
+            }
+
+            public Long getId() {
+                return id;
+            }
+
+            public void setId(Long id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+        }
+
+        </pre>
+    </p:tab>
+</ui:composition>

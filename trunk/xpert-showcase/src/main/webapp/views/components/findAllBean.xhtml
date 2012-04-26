@@ -11,11 +11,11 @@
     <ui:define name="body">
 
         <div class="description">
-            #{msg['initializer.description']}
+            #{msg['findAll.description']}
         </div>
 
         <h:form>
-            <p:panel header="#{msg['initializer.combo']}">
+            <p:panel header="#{msg['findAll.default']}">
                 <h:panelGrid columns="2">
 
                     <h:outputLabel value="#{msg['country']}:" />
@@ -27,7 +27,7 @@
                 </h:panelGrid>
             </p:panel>
             <p:spacer height="3"/>
-            <p:panel header="#{msg['initializer.combo']}">
+            <p:panel header="#{msg['findAll.selectItem']}">
                 <h:panelGrid columns="2">
 
                     <p:dataTable value="#{findAllBean.get(classMB.state)}" var="state">
@@ -43,80 +43,121 @@
                 </h:panelGrid>
             </p:panel>
         </h:form>
-        <p:spacer height="3"/>
         <h3>Source</h3>
         <p:tabView>
-            <p:tab title="initializer.xhtml">
+            <p:tab title="findAllBean.xhtml">
                 <pre name="code" class="xml">
-                &lt;h:panelGroup id=&quot;panelFormPerson&quot;&gt;
+                &lt;h:form&gt;
+                    &lt;p:panel header=&quot;#{msg['initializer.combo']}&quot;&gt;
+                        &lt;h:panelGrid columns=&quot;2&quot;&gt;
 
-                    &lt;h:form&gt;
+                            &lt;h:outputLabel value=&quot;#{msg['country']}:&quot; /&gt;
+                            &lt;h:selectOneMenu value=&quot;\#{viewScope.country}&quot; converter=&quot;entityConverter&quot; &gt;
+                                &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
+                                &lt;f:selectItems value=&quot;\#{findAllBean.get(classMB.country)}&quot; var=&quot;country&quot; itemLabel=&quot;#{country.name}&quot; /&gt;
+                            &lt;/h:selectOneMenu&gt;
 
-                        &lt;p:dataTable id=&quot;dataTablePerson&quot; 
-                                    paginator=&quot;true&quot; rows=&quot;5&quot;
-                                    var=&quot;person&quot; value=&quot;\#{personMB.dataModel}&quot;&gt;
-                            &lt;p:column headerText=&quot;\#{msg['person.name']}&quot; sortBy=&quot;\#{person.name}&quot; filterBy=&quot;\#{person.name}&quot;&gt;
-                                &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
-                            &lt;/p:column&gt;
-                            &lt;p:column headerText=&quot;\#{msg['person.cpf']}&quot; 
-                                    sortBy=&quot;\#{person.cpf}&quot; filterBy=&quot;\#{person.cpf}&quot;&gt;
-                                &lt;h:outputText value=&quot;\#{person.cpf}&quot;/&gt;
-                            &lt;/p:column&gt;
-                            &lt;p:column headerText=&quot;\#{msg['person.code']}&quot; sortBy=&quot;\#{person.code}&quot; filterBy=&quot;\#{person.code}&quot;&gt;
-                                &lt;h:outputText value=&quot;\#{person.code}&quot;/&gt;
-                            &lt;/p:column&gt;
-                            &lt;p:column headerText=&quot;\#{msg['person.group']}&quot; sortBy=&quot;\#{person.group.description}&quot; filterBy=&quot;\#{person.group.description}&quot;&gt;
-                            &lt;h:outputText value=&quot;\#{person.group.description}&quot;&gt;
-                                &lt;x:initializer/&gt;
-                            &lt;/h:outputText&gt;
-                            &lt;/p:column&gt;
-                            &lt;p:column style=&quot;text-align: center;&quot;&gt;
-                                &lt;p:commandButton oncomplete=&quot;widgetPersonDetail.show();&quot;  icon=&quot;ui-icon-zoomin&quot; process=&quot;@this&quot; update=&quot;:panelPersonDetail&quot; &gt;
-                                    &lt;f:setPropertyActionListener value=&quot;\#{person}&quot; target=&quot;\#{personMB.entity}&quot; /&gt;
-                                &lt;/p:commandButton&gt;
-                            &lt;/p:column&gt;
+                        &lt;/h:panelGrid&gt;
+                    &lt;/p:panel&gt;
+                    &lt;p:spacer height=&quot;3&quot;/&gt;
+                    &lt;p:panel header=&quot;#{msg['initializer.combo']}&quot;&gt;
+                        &lt;h:panelGrid columns=&quot;2&quot;&gt;
 
-                        &lt;/p:dataTable&gt;
+                            &lt;p:dataTable value=&quot;\#{findAllBean.get(classMB.state)}&quot; var=&quot;state&quot;&gt;
+                                &lt;p:column headerText=&quot;#{msg['state']}&quot;&gt;
+                                    &lt;h:outputText value=&quot;#{state.name}&quot;/&gt;
+                                &lt;/p:column&gt;
+                                &lt;p:column headerText=&quot;#{msg['country']}&quot; filterBy=&quot;\#{state.country.id}&quot; 
+                                        filterOptions=&quot;\#{findAllBean.getSelect(classMB.country)}&quot;&gt;
+                                    &lt;h:outputText value=&quot;\#{state.country.name}&quot;/&gt;
+                                &lt;/p:column&gt;
+                            &lt;/p:dataTable&gt;
 
-
-                    &lt;/h:form&gt;
-                &lt;/h:panelGroup&gt;
-
-                &lt;p:dialog widgetVar=&quot;widgetPersonDetail&quot; header=&quot;Detalhe Person&quot; appendToBody=&quot;true&quot; modal=&quot;true&quot; width=&quot;600&quot;&gt;
-                    &lt;h:panelGroup id=&quot;panelPersonDetail&quot;&gt;
-                        &lt;h:form&gt;
-                            &lt;h:panelGrid columns=&quot;2&quot; style=&quot;width: 450px;&quot; &gt;
-
-                                &lt;h:outputLabel value=&quot;\#{msg['person.name']}:&quot; /&gt;
-                                &lt;h:outputText value=&quot;\#{personMB.entity.name}&quot;/&gt;
-
-                                &lt;h:outputLabel value=&quot;\#{msg['group.statusGroup']}:&quot; /&gt;
-                                &lt;h:outputText value=&quot;\#{personMB.entity.group.statusGroup.description}&quot; &gt;
-                                    &lt;x:initializer/&gt;
-                                &lt;/h:outputText&gt;
-
-                                &lt;h:outputLabel value=&quot;\#{msg['person.grupo']}:&quot; /&gt;
-                                &lt;h:outputText value=&quot;\#{personMB.entity.group.description}&quot; /&gt;
-
-                                &lt;h:outputLabel value=&quot;\#{msg['person.permissions']}:&quot; /&gt;
-                                &lt;p:dataTable var=&quot;permissao&quot; value=&quot;\#{personMB.entity.permissions}&quot;&gt;
-                                    &lt;x:initializer/&gt;
-                                    &lt;p:column headerText=&quot;\#{msg['id']}&quot;&gt;
-                                        &lt;h:outputText value=&quot;\#{permissao.id}&quot; /&gt;
-                                    &lt;/p:column&gt;
-                                    &lt;p:column headerText=&quot;\#{msg['permission.description']}&quot;&gt;
-                                        &lt;h:outputText value=&quot;\#{permissao.description}&quot; /&gt;
-                                    &lt;/p:column&gt;
-                                &lt;/p:dataTable&gt;
-
-                            &lt;/h:panelGrid&gt;
-                        &lt;/h:form&gt;
-                    &lt;/h:panelGroup&gt;
-                &lt;/p:dialog&gt;
-
+                        &lt;/h:panelGrid&gt;
+                    &lt;/p:panel&gt;
+                &lt;/h:form&gt;
                 </pre>
             </p:tab>
-            <ui:include src="/views/common/java/person.xhtml"/>
+            <ui:include src="/views/common/java/country.xhtml"/>
+            <p:tab title="FindAllBean.java">
+
+                <h:outputText value="#{msg['findAll.findAllBean']}"/>
+                <br/>
+                <pre name="code" class="java">
+                package com.xpert.showcase.mb;
+
+                import com.xpert.faces.bean.ClassModel;
+                import com.xpert.showcase.model.*;
+                import java.util.HashMap;
+                import java.util.Map;
+                import javax.faces.bean.ManagedBean;
+                import javax.faces.bean.ViewScoped;
+
+                @ManagedBean
+                @ViewScoped
+                public class FindAllBean extends com.xpert.faces.bean.FindAllBean {
+
+                    private static final Map&lt;Class, ClassModel&gt; MODEL = new HashMap&lt;Class, ClassModel&gt;();
+
+                    static {
+                        MODEL.put(Group.class, new ClassModel(&quot;description&quot;));
+                        MODEL.put(Permission.class, new ClassModel(&quot;description&quot;));
+                        MODEL.put(Status.class, new ClassModel(&quot;description&quot;));
+                        MODEL.put(Country.class, new ClassModel(&quot;name&quot;));
+                        MODEL.put(State.class, new ClassModel(&quot;name&quot;));
+                        MODEL.put(City.class, new ClassModel(&quot;name&quot;));
+                    }
+
+                    @Override
+                    public Map&lt;Class, ClassModel&gt; getClassModel() {
+                        return MODEL;
+                    }
+                }
+                </pre>
+            </p:tab>
+            <p:tab title="ClassMB.java">
+
+                <h:outputText value="#{msg['findAll.classMB']}"/>
+                <br/>
+                <h:outputText value="#{msg['findAll.classMB2']} "/>
+                <h:link outcome="/views/maker/maker.jsf" value="Bean Maker" />
+
+                <br/>
+                <pre name="code" class="java">
+                package com.xpert.showcase.mb;
+
+                import com.xpert.showcase.model.*;
+                import javax.faces.bean.ManagedBean;
+
+                @ManagedBean
+                public class ClassMB {
+
+                    public Class getGroup() {
+                        return Group.class;
+                    }
+
+                    public Class getPermission() {
+                        return Permission.class;
+                    }
+
+                    public Class getPerson() {
+                        return Person.class;
+                    }
+
+                    public Class getStatus() {
+                        return Status.class;
+                    }
+
+                    public Class getCountry() {
+                        return Country.class;
+                    }
+                    public Class getState() {
+                        return State.class;
+                    }
+                }
+                </pre>
+
+            </p:tab>
             <p:tab title="Configuration">
                 <ui:include src="/views/common/java/entityManagerFactory.xhtml"/>
             </p:tab>
