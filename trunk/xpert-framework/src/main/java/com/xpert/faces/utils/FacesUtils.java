@@ -1,7 +1,11 @@
 package com.xpert.faces.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -26,52 +30,52 @@ import javax.servlet.http.HttpSession;
  * @author Ayslan
  */
 public class FacesUtils {
-
+    
     public static Object getFromSession(String attributeName) {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession) externalContext.getSession(true);
         return session.getAttribute(attributeName);
     }
-
+    
     public static String getParameter(String parameterName) {
         HttpServletRequest request = getRequest();
         return request.getParameter(parameterName);
     }
-
+    
     public static void addToSession(String attributeName, Object value) {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession) externalContext.getSession(false);
         session.setAttribute(attributeName, value);
     }
-
+    
     public static void removeFromSession(String attributeName) {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         HttpSession session = (HttpSession) externalContext.getSession(false);
         session.removeAttribute(attributeName);
     }
-
+    
     public static void invalidateSession() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         ((HttpSession) externalContext.getSession(true)).invalidate();
     }
-
+    
     public static HttpServletRequest getRequest() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
         return request;
     }
-
+    
     public static HttpServletResponse getResponse() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
         return response;
     }
-
+    
     public static ServletContext getServletContext() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         return (ServletContext) externalContext.getContext();
     }
-
+    
     public static void redirect(String url) {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -95,7 +99,7 @@ public class FacesUtils {
         FacesContext context = FacesContext.getCurrentInstance();
         return (T) context.getApplication().evaluateExpressionGet(context, beanName, Object.class);
     }
-
+    
     public static void setValueEl(String expression, Object newValue) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Application app = facesContext.getApplication();
@@ -107,7 +111,7 @@ public class FacesUtils {
             valueExp.setValue(elContext, newValue);
         }
     }
-
+    
     public static void setNewValueBean(String beanName, String attribute, Object newValue) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getApplication().getELResolver().setValue(context.getELContext(), beanName, attribute, newValue);
@@ -130,12 +134,12 @@ public class FacesUtils {
             clearComponent(child);
         }
     }
-
+    
     public static String getRealPath(String caminho) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ServletContext scontext = (ServletContext) facesContext.getExternalContext().getContext();
         String realPath = scontext.getRealPath(caminho);
-
+        
         return realPath;
     }
 
@@ -154,11 +158,11 @@ public class FacesUtils {
         HttpServletResponse response = getResponse();
         response.addCookie(cookie);
     }
-
+    
     public static String getBrowser() {
         return getRequest().getHeader("User-Agent");
     }
-
+    
     public static Cookie getCookie(String cookieName) {
         HttpServletRequest request = getRequest();
         Cookie[] cookies = request.getCookies();
@@ -172,7 +176,7 @@ public class FacesUtils {
         }
         return null;
     }
-
+    
     public static String getCookieValue(String cookieName) {
         Cookie cookie = getCookie(cookieName);
         if (cookie != null) {
@@ -188,14 +192,14 @@ public class FacesUtils {
      * @return
      */
     public static void removeCookie(String nomeCookie) {
-
+        
         Cookie cookie = getCookie(nomeCookie);
         if (cookie != null) {
             HttpServletResponse response = getResponse();
             cookie.setMaxAge(0);
             response.addCookie(cookie);
         }
-
+        
     }
 
     /**
@@ -207,21 +211,21 @@ public class FacesUtils {
      */
     public static UIComponent findComponentInRoot(String id) {
         UIComponent component = null;
-
+        
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext != null) {
             UIComponent root = facesContext.getViewRoot();
             component = findComponent(root, id);
         }
-
+        
         return component;
     }
-
+    
     public static UIComponent findComponent(UIComponent base, String id) {
         if (id.equals(base.getId())) {
             return base;
         }
-
+        
         UIComponent kid = null;
         UIComponent result = null;
         Iterator kids = base.getFacetsAndChildren();
@@ -253,7 +257,7 @@ public class FacesUtils {
      * @param nomeArquivo
      */
     public static void download(byte[] bytes, String contentType, String fileName) {
-
+        
         FacesContext.getCurrentInstance().responseComplete();
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
@@ -267,10 +271,28 @@ public class FacesUtils {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
-
     }
-
+    
+    public static void download(InputStream inputStream, String contentType, String fileName) {
+        download(inputStreamToByte(inputStream), contentType, fileName);
+    }
+    
+    private static byte[] inputStreamToByte(InputStream inputStream) {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[16384];
+        
+        try {
+            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            buffer.flush();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        return buffer.toByteArray();
+    }
+    
     public static String getIP() {
         String ipAddress = getRequest().getHeader("X-Forwarded-For");
         if (ipAddress == null || ipAddress.isEmpty()) {
@@ -291,11 +313,11 @@ public class FacesUtils {
     public static FacesContext getFacesContext(HttpServletRequest request, HttpServletResponse response) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext == null) {
-
+            
             FacesContextFactory contextFactory = (FacesContextFactory) FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
             LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
             Lifecycle lifecycle = lifecycleFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-
+            
             facesContext = contextFactory.getFacesContext(request.getSession().getServletContext(), request, response, lifecycle);
             // Set using our inner class
             InnerFacesContext.setFacesContextAsCurrentInstance(facesContext);
@@ -306,9 +328,9 @@ public class FacesUtils {
         }
         return facesContext;
     }
-
+    
     private abstract static class InnerFacesContext extends FacesContext {
-
+        
         protected static void setFacesContextAsCurrentInstance(FacesContext facesContext) {
             FacesContext.setCurrentInstance(facesContext);
         }
