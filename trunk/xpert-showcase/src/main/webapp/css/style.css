@@ -6,3 +6,14 @@
 h1 a{text-decoration: none;}
 .sidebar a{text-decoration: none; border: 0; font-weight: normal;}
 .sidebar a.ui-state-hover{border: 0; font-weight: normal;}
+#north { margin-bottom: 3px; position: relative;}
+#north .ui-panel-content{ padding: 0 10px ;}
+#title{ padding: 5px; font-size: 20px; margin: 0;}
+#west{float: left;width: 250px;}
+#west .ui-panel-content{ padding: 5px ;}
+#center{float: left;width: 100%;}
+.header-detail{font-size: 10px;}
+.header-detail b{font-size: 11px;}
+.grid-template{width: 100%;}
+.grid-template td{vertical-align: top;}
+.w-260{width: 260px;}

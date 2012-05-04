@@ -17,7 +17,7 @@ public class DownloadMB {
     public void download() throws IOException, InterruptedException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream));
-        writer.write("Xpert-faces download");
+        writer.write("xpert-framework");
         //wait 5s
         Thread.sleep(5000);
         writer.close();

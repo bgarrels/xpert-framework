@@ -11,5 +11,34 @@
         <h:form>
             <p:messages/>
         </h:form>
+        <h2><h:outputText value="#{msg['showcase.welcome']}"/></h2>
+        <br/>
+        <br/>
+        <div style="width: 700px">
+            <h:outputText value="#{msg['showcase.description']}"/>
+        </div>
+        <br/>
+        <br/>
+        <h:outputText value="#{msg['showcase.openSource']}"/>
+        <br/>
+        <br/>
+        <h:outputText value="#{msg['showcase.download']} "/>
+        <h:outputLink target="_blank" value="http://code.google.com/p/xpert-framework/downloads/list" >code.google.com/p/xpert-framework/downloads/list</h:outputLink>
+        <br/>
+        <h:outputText value="#{msg['showcase.source']} "/>
+        <h:outputLink target="_blank" value="http://code.google.com/p/xpert-framework/source/browse/" >code.google.com/p/xpert-framework/source/browse/</h:outputLink>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <h:outputText value="#{msg['showcase.namespace']}"/>
+
+        <pre name="code" class="xml">
+            xmlns:xc=&quot;http://java.sun.com/jsf/composite/xpert/components&quot;
+            xmlns:x=&quot;http://xpert.com/faces&quot;
+        </pre>
+        <br/>
+
     </ui:define>
 </ui:composition>

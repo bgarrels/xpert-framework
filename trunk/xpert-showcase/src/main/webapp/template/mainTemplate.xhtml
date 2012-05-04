@@ -20,28 +20,37 @@
         <h:body style="font-size: 11px;">
             <h:form/>
             <ui:include src="ajaxStatus.xhtml" />
-            <p:layout style="min-width:400px; min-height:500px;" fullPage="true" >
 
-                <p:layoutUnit style="border: 0;" id="north" position="north" size="60">
-                    <div class="ui-widget-header ui-corner-all">
-                        <table style="width: 100%">
-                            <tr>
-                                <td>
-                                    <h1 style="padding: 10px; font-size: 18px; margin: 0;">
-                                        <h:link outcome="/index.jsf" value="Xpert - Showcase"/>
-                                    </h1>
-                                </td>
-                                <td align="right">
-                                    <h:form>
-                                        <xc:localeSwitcher/>
-                                    </h:form>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </p:layoutUnit>
-                <p:layoutUnit id="west" position="west"  size="260" >
+            <p:panel id="north" styleClass="ui-widget-header">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <h1 class="title">
+                                <h:link outcome="/index.jsf" value="Xpert - Showcase"/>
+                            </h1>
+                        </td>
+                        <td align="right">
+                            <div class="header-detail">
+                                <b>Powered by</b><br/>
+                                JSF API 2.0.0, Xpert-Framework 0.3,<br/> PrimeFaces 3.2, Glassfish 3.1
+                            </div>
+                            <h:form>
+                                <xc:localeSwitcher/>
+                            </h:form>
+                        </td>
+                    </tr>
+                </table>
+            </p:panel>
+            <h:panelGrid columns="2" columnClasses="w-260" styleClass="grid-template" cellpadding="0" cellspacing="0">
+                <p:panel id="west">
                     <div class="sidebar">
+                        <p:panel header="Xpert-Framework" style="border: 0;">
+                            <h:panelGrid columns="1" style="width: 100%;" >
+                                <h:link outcome="/index.jsf" value="Showcase Homepage" />
+                                <h:outputLink target="_blank" value="https://code.google.com/p/xpert-framework/" >Project Homepage</h:outputLink>
+                                <h:outputLink target="_blank" value="https://code.google.com/p/xpert-framework/downloads/list" >Download</h:outputLink>
+                            </h:panelGrid>
+                        </p:panel>
                         <p:panel header="Xpert-Faces" style="border: 0;">
                             <h:panelGrid columns="2" columnClasses="center,center" style="width: 100%;">
                                 <h:link outcome="/views/components/confirmation.jsf" value="Confirmation" />
@@ -85,16 +94,33 @@
                             </h:panelGrid>
                         </p:panel>
                     </div>
-                </p:layoutUnit>
-                <p:layoutUnit  style="border: 0;"   header="#{title}" id="center" position="center" size="900">
+                </p:panel>
+                <p:panel style="border: 0;" header="#{title}" id="center" >
                     <ui:insert name="body" />
-                </p:layoutUnit>
+                </p:panel>
 
-            </p:layout>
+            </h:panelGrid>
+
             <script type="text/javascript">
                 $(function() {$('.sidebar a').hover(function() {$(this).toggleClass('ui-state-hover');})});
                 Xpert.highlightCode("code");
             </script>
+            
+            
+           <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-31152587-2']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+            </script>
+            
         </h:body>
     </f:view>
 
