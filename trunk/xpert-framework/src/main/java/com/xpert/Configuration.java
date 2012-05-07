@@ -120,19 +120,19 @@ public class Configuration {
                     if (children.item(temp).getNodeName().equals("auditing")) {
                         Element element = (Element) node;
                         try {
-                            AUDITING_IMPL = Class.forName(getTagValue("auditing-impl", element));
+                            AUDITING_IMPL = Class.forName(getTagValue("auditing-impl", element), true, Thread.currentThread().getContextClassLoader());
                             logger.log(Level.INFO, "Found AuditingImpl: {0}", AUDITING_IMPL.getName());
                         } catch (ClassNotFoundException ex) {
                             logger.log(Level.SEVERE, null, ex);
                         }
                         try {
-                            METADATA_IMPL = Class.forName(getTagValue("metadata-impl", element));
+                            METADATA_IMPL = Class.forName(getTagValue("metadata-impl", element), true, Thread.currentThread().getContextClassLoader());
                             logger.log(Level.INFO, "Found MetadataImpl: {0}", METADATA_IMPL.getName());
                         } catch (ClassNotFoundException ex) {
                             logger.log(Level.SEVERE, null, ex);
                         }
                         try {
-                            AUDITING_LISTENER = Class.forName(getTagValue("auditing-listener", element));
+                            AUDITING_LISTENER = Class.forName(getTagValue("auditing-listener", element), true, Thread.currentThread().getContextClassLoader());
                             logger.log(Level.INFO, "Found AuditingListener: {0}", AUDITING_LISTENER.getName());
                         } catch (ClassNotFoundException ex) {
                             logger.log(Level.SEVERE, null, ex);
@@ -140,7 +140,7 @@ public class Configuration {
                     }
                     if (children.item(temp).getNodeName().equals("entity-manager-factory")) {
                         try {
-                            ENTITY_MANAGER_FACTORY = Class.forName(children.item(temp).getTextContent());
+                            ENTITY_MANAGER_FACTORY = Class.forName(children.item(temp).getTextContent(), true, Thread.currentThread().getContextClassLoader());
                             logger.log(Level.INFO, "Found EntityManagerFactory: {0}", ENTITY_MANAGER_FACTORY.getName());
                         } catch (ClassNotFoundException ex) {
                             logger.log(Level.SEVERE, null, ex);

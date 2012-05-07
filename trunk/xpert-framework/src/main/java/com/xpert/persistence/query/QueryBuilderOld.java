@@ -42,7 +42,6 @@ public class QueryBuilderOld {
         queryBuilder.add(new Restriction("cpf", RestrictionType.NOT_IN, "FULANO"));
         queryBuilder.add(new Restriction("cpf", RestrictionType.NOT_LIKE, "FULANO"));
 
-        System.out.println(queryBuilder.getQueryString());
     }
 
     public QueryBuilderOld(Class entity, EntityManager entityManager) {

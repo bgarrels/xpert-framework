@@ -242,7 +242,6 @@ public class QueryBuilder {
     public Query createQuery(Integer firstResult, Integer maxResults) {
 
         String queryString = getQueryString();
-        System.out.println(queryString);
         Query query = entityManager.createQuery(queryString);
 
         int parameter = 1;
@@ -287,6 +286,5 @@ public class QueryBuilder {
 
         builder.add(new Restriction("nome", null));
 
-        System.out.println(builder.getQueryString());
     }
 }
