@@ -1,6 +1,5 @@
 
-<xpert-config xmlns="http://ocpsoft.com/prettyfaces/3.2.0"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<xpert-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <auditing>
         <auditing-impl>com.xpert.showcase.audit.Auditing</auditing-impl>

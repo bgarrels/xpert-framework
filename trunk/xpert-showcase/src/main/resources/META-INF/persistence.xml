@@ -3,7 +3,6 @@
     <persistence-unit name="xpertShowcasePU" transaction-type="JTA">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>jdbc/xpertShowCaseDS</jta-data-source>
-        <jar-file>../xpert-showcase-ejb.jar</jar-file>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
