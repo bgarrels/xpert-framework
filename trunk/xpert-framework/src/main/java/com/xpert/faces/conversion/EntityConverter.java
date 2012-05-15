@@ -46,7 +46,7 @@ public class EntityConverter implements Converter {
     }
 
     public void putInViewMap(String id, FacesContext context, UIComponent component, Object object) {
-        if (object != null && !object.toString().trim().isEmpty()) {
+        if (object != null) {
             Map objectsFromClass = (Map) context.getViewRoot().getViewMap().get(ID_PREFIX + component.getId());
             if (objectsFromClass == null) {
                 objectsFromClass = new HashMap();
