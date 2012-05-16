@@ -4,6 +4,7 @@ import com.xpert.DAO;
 import com.xpert.faces.utils.FacesUtils;
 import com.xpert.persistence.dao.BaseDAO;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.el.ELException;
@@ -12,12 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import org.hibernate.Hibernate;
 import org.hibernate.LazyInitializationException;
-import org.hibernate.collection.internal.PersistentBag;
-import org.hibernate.collection.internal.PersistentSet;
 import org.hibernate.collection.spi.PersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
@@ -33,13 +29,26 @@ public class InitilizerBean {
     private Map<ClassIdentifier, Object> cache = new HashMap<ClassIdentifier, Object>();
     private BaseDAO baseDAO;
 
+    public InitilizerBean() {
+        logger.info("Cosntructor InitilizerBean.");
+        try {
+            baseDAO = new DAO();
+        } catch (Throwable t) {
+            logger.log(Level.SEVERE, "Error on InitilizerBean Cosntructor.", t);
+        }
+    }
+
     @PostConstruct
     public void init() {
-        baseDAO = new DAO();
+        logger.info("@PostConstruct InitilizerBean.");
     }
 
     public void initialize(ComponentSystemEvent event) {
-        initialize(event.getComponent(), FacesContext.getCurrentInstance());
+        try {
+            initialize(event.getComponent(), FacesContext.getCurrentInstance());
+        } catch (Throwable t) {
+            logger.log(Level.SEVERE, null, t);
+        }
     }
 
     public String getParentExpression(String expression) {

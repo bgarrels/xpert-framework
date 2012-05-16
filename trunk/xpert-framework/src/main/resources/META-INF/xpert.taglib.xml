@@ -6,7 +6,7 @@
     <namespace>http://xpert.com/faces</namespace>
     <tag>
         <tag-name>initializer</tag-name>
-        <source>/META-INF/resources/xpert/components/initializer.xhtml</source>
+        <source>resources/xpert/components/initializer.xhtml</source>
     </tag>
     <tag>
         <tag-name>filterOnEnter</tag-name>
