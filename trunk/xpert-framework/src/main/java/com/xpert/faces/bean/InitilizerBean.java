@@ -30,7 +30,6 @@ public class InitilizerBean {
     private BaseDAO baseDAO;
 
     public InitilizerBean() {
-        logger.info("Cosntructor InitilizerBean.");
         try {
             baseDAO = new DAO();
         } catch (Throwable t) {
@@ -40,7 +39,6 @@ public class InitilizerBean {
 
     @PostConstruct
     public void init() {
-        logger.info("@PostConstruct InitilizerBean.");
     }
 
     public void initialize(ComponentSystemEvent event) {
