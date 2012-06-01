@@ -146,10 +146,8 @@ Xpert.behavior = {
      },
     
      confirmation: function(confirmLabel, cancelLabel, message, onclick) {
-        console.log("confirmation inicio");
         //create dialog
         var id = "idWidgetConfirmationDialog";
-         console.log("onclick: "+onclick);
         //create only one time
         var $createdDialog = $("#"+id);
         if($createdDialog != null && $createdDialog.length > 0){
