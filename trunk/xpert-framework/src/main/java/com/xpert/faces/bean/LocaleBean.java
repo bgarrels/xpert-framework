@@ -17,13 +17,16 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @SessionScoped
-public class LocaleBean implements Serializable{
+public class LocaleBean implements Serializable {
 
     private Locale locale;
     private List<Locale> locales = new ArrayList<Locale>();
 
     public LocaleBean() {
         locale = FacesContext.getCurrentInstance().getApplication().getDefaultLocale();
+        if (locale == null) {
+            locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+        }
         locales = new ArrayList<Locale>();
         Iterator<Locale> it = FacesContext.getCurrentInstance().getApplication().getSupportedLocales();
         while (it.hasNext()) {
@@ -37,7 +40,7 @@ public class LocaleBean implements Serializable{
     }
 
     public DecimalFormatSymbols getDecimalFormatSymbols() {
-        return new DecimalFormatSymbols(locale);
+        return new DecimalFormatSymbols(FacesContext.getCurrentInstance().getViewRoot().getLocale());
     }
 
     public char getDecimalSeparator() {
