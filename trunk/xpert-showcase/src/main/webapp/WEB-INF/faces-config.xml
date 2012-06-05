@@ -7,7 +7,7 @@
 
     <application>
         <locale-config>
-            <default-locale>pt_BR</default-locale>
+            <default-locale>en</default-locale>
             <supported-locale>en</supported-locale>
             <supported-locale>es</supported-locale>
             <supported-locale>pt_BR</supported-locale>
@@ -17,11 +17,6 @@
             <var>msg</var>
         </resource-bundle>
     </application>
-    <lifecycle>
-        <!--
-        <phase-listener>com.xpert.showcase.listener.LazyInitializerPhaseListener</phase-listener>
-        -->
-    </lifecycle>
     <validator>
         <validator-class>com.xpert.core.validation.BeanValidator</validator-class>
         <validator-id>javax.faces.Bean</validator-id>
