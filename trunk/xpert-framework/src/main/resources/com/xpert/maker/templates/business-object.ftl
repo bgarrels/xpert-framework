@@ -14,7 +14,7 @@ import javax.ejb.Stateless;
  * @author ${author}
  */
 @Stateless
-public class ${name}BO extends AbstractBusinessObject {
+public class ${name}BO extends AbstractBusinessObject<${name}> {
 
     @EJB
     private ${name}DAO ${nameLower}DAO;
@@ -27,6 +27,15 @@ public class ${name}BO extends AbstractBusinessObject {
     @Override
     public List<UniqueField> getUniqueFields() {
         return null;
+    }
+
+    @Override
+    public void validate(${name} ${nameLower}) throws BusinessException {
+    }
+
+    @Override
+    public boolean isAudit() {
+        return true;
     }
 
 }
