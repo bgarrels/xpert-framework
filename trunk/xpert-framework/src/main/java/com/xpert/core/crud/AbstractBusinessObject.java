@@ -15,30 +15,34 @@ import java.util.List;
  *
  * @author Ayslan
  */
-public abstract class AbstractBusinessObject {
+public abstract class AbstractBusinessObject<T> {
 
     public abstract BaseDAO getDAO();
 
     public abstract List<UniqueField> getUniqueFields();
 
-    public abstract Boolean isAudit();
+    public abstract boolean isAudit();
 
+    public abstract void validate(T object) throws BusinessException;
+    
     public void validateUniqueFields(Object object) throws BusinessException {
         if (getUniqueFields() != null && !getUniqueFields().isEmpty()) {
             UniqueFieldsValidation.validateUniqueFields(getUniqueFields(), object, getDAO());
         }
     }
 
-    public void save(Object object) throws BusinessException {
+
+    public void save(T object) throws BusinessException {
 
         BusinessException exception = new BusinessException();
         try {
+            validate(object);
             validateUniqueFields(object);
         } catch (BusinessException ex) {
             exception.add(ex);
         }
         exception.check();
-        getDAO().saveOrUpdate(object);
+        getDAO().saveOrUpdate(object, isAudit());
     }
 
     public void delete(Long id) throws DeleteException {
