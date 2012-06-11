@@ -14,7 +14,7 @@ public class SpreadMB {
     public List<String> getItems() {
         List<String> itens = new ArrayList<String>();
         for (int i = 0; i < 10; i++) {
-            itens.add("Item " + i + 1);
+            itens.add("Item " + (i + 1));
         }
         return itens;
     }
