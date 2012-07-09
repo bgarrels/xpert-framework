@@ -6,7 +6,7 @@
                  template="/template/mainTemplate.xhtml"
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
                  xmlns:x="http://xpert.com/faces">
-    <ui:param name="title" value="#{msg['person.search']}" />
+    <ui:param name="title" value="#{msg['person.list']}" />
     <ui:define name="body">
         <ui:include src="menuPerson.xhtml" />
 
@@ -15,7 +15,7 @@
                 <xc:modalMessages/>
 
                 <p:dataTable id="dataTablePerson"
-                             paginator="true" rows="5"
+                             paginator="true" rows="5" 
                              var="person" value="#{personMB.dataModel}">
                     <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">
                         <h:outputText value="#{person.name}"/>
@@ -41,7 +41,7 @@
                         <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":panelDetalhePerson" >
                             <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}" />
                         </p:commandButton>
-                        <p:button outcome="createPerson.jsf" icon="ui-icon-pencil" >
+                        <p:button outcome="createPerson" icon="ui-icon-pencil" >
                             <f:param name="id" value="#{person.id}" />
                         </p:button>
                         <p:commandButton  icon="ui-icon-trash" process="@this" update="@form" action="#{personMB.delete}">
