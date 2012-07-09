@@ -1,11 +1,11 @@
-package ${packageInfo.managedBean};
+package ${configuration.managedBean};
 
 import com.xpert.core.crud.AbstractBaseBean;
 import com.xpert.core.crud.AbstractBusinessObject;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import ${packageInfo.businessObject}.${name}BO;
+import ${configuration.businessObject}.${name}BO;
 import ${entity.name};
 
 /**

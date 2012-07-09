@@ -5,7 +5,7 @@ package com.xpert.maker;
  * @author Ayslan
  */
 public class MappedBean {
-    
+
     private Class entityClass;
     private String className;
     private String i18n;
@@ -13,19 +13,42 @@ public class MappedBean {
     private String businnesObject;
     private String dao;
     private String daoImpl;
-    private String view;
+    //XHTML
+    private String createView;
+    private String formCreateView;
+    private String listView;
 
     public MappedBean() {
     }
 
-    public String getView() {
-        return view;
+    public MappedBean(Class entityClass) {
+        this.entityClass = entityClass;
     }
 
-    public void setView(String view) {
-        this.view = view;
+    public String getCreateView() {
+        return createView;
     }
-    
+
+    public void setCreateView(String createView) {
+        this.createView = createView;
+    }
+
+    public String getFormCreateView() {
+        return formCreateView;
+    }
+
+    public void setFormCreateView(String formCreateView) {
+        this.formCreateView = formCreateView;
+    }
+
+    public String getListView() {
+        return listView;
+    }
+
+    public void setListView(String listView) {
+        this.listView = listView;
+    }
+
     public String getDaoImpl() {
         return daoImpl;
     }
@@ -33,7 +56,7 @@ public class MappedBean {
     public void setDaoImpl(String daoImpl) {
         this.daoImpl = daoImpl;
     }
-    
+
     public String getBusinnesObject() {
         return businnesObject;
     }
@@ -49,7 +72,7 @@ public class MappedBean {
     public void setDao(String dao) {
         this.dao = dao;
     }
-    
+
     public String getManagedBean() {
         return managedBean;
     }
@@ -57,14 +80,9 @@ public class MappedBean {
     public void setManagedBean(String managedBean) {
         this.managedBean = managedBean;
     }
-    
-    
-    public MappedBean(Class entityClass) {
-        this.entityClass = entityClass;
-    }
-    
+
     public String getClassName() {
-        if(entityClass != null){
+        if (entityClass != null) {
             return entityClass.getName();
         }
         return className;
@@ -85,5 +103,4 @@ public class MappedBean {
     public void setI18n(String i18n) {
         this.i18n = i18n;
     }
-    
 }

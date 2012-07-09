@@ -8,9 +8,12 @@ public enum BeanType {
 
     MANAGED_BEAN("managed-bean.ftl", "java"),
     BUSINESS_OBJECT("business-object.ftl", "java"),
-    VIEW("view.ftl", "xhtml"),
     DAO("dao.ftl", "java"),
-    DAO_IMPL("dao-impl.ftl", "java");
+    DAO_IMPL("dao-impl.ftl", "java"),
+    //xhtml
+    FORM(null, "xhtml"),
+    CREATE(null, "xhtml"),
+    LIST(null, "xhtml");
     
     private String template;
     private String extension;

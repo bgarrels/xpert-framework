@@ -3,7 +3,7 @@ package com.xpert.faces.bean;
 import com.xpert.Configuration;
 import com.xpert.faces.utils.FacesUtils;
 import com.xpert.maker.MappedBean;
-import com.xpert.maker.PackageInfo;
+import com.xpert.maker.BeanConfiguration;
 import com.xpert.maker.PersistenceMappedBean;
 import com.xpert.maker.BeanCreator;
 import java.io.Serializable;
@@ -35,9 +35,8 @@ public class BeanMaker implements Serializable {
     private List<Class> classes;
     private List<String> nameSelectedClasses = new ArrayList<String>();
     private PersistenceMappedBean persistenceMappedBean;
-    private PackageInfo packageInfo = new PackageInfo();
+    private BeanConfiguration configuration = new BeanConfiguration();
     private String author;
-    private String resourceBundle;
     private String classBean;
 
     @PostConstruct
@@ -57,13 +56,13 @@ public class BeanMaker implements Serializable {
                 logger.log(Level.SEVERE, null, ex);
             }
         }
-        classBean = persistenceMappedBean.getClassBean(packageInfo.getManagedBean());
-        mappedBeans = persistenceMappedBean.getMappedBeans(selectedClasses, packageInfo, author, resourceBundle);
+        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
+        mappedBeans = persistenceMappedBean.getMappedBeans(selectedClasses, configuration);
     }
 
     public void makeAll() {
-        classBean = persistenceMappedBean.getClassBean(packageInfo.getManagedBean());
-        mappedBeans = persistenceMappedBean.getMappedBeans(packageInfo, author, resourceBundle);
+        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
+        mappedBeans = persistenceMappedBean.getMappedBeans(configuration);
         for (Class clazz : classes) {
             nameSelectedClasses.add(clazz.getName());
         }
@@ -85,14 +84,6 @@ public class BeanMaker implements Serializable {
     public void reset() {
         nameSelectedClasses = new ArrayList<String>();
         mappedBeans = new ArrayList<MappedBean>();
-    }
-
-    public String getResourceBundle() {
-        return resourceBundle;
-    }
-
-    public void setResourceBundle(String resourceBundle) {
-        this.resourceBundle = resourceBundle;
     }
 
     public List<Class> getClasses() {
@@ -119,12 +110,12 @@ public class BeanMaker implements Serializable {
         this.mappedBeans = mappedBeans;
     }
 
-    public PackageInfo getPackageInfo() {
-        return packageInfo;
+    public BeanConfiguration getConfiguration() {
+        return configuration;
     }
 
-    public void setPackageInfo(PackageInfo packageInfo) {
-        this.packageInfo = packageInfo;
+    public void setConfiguration(BeanConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     public String getAuthor() {

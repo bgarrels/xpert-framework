@@ -1,8 +1,8 @@
-package ${packageInfo.businessObject};
+package ${configuration.businessObject};
 
 import com.xpert.core.crud.AbstractBusinessObject;
 import com.xpert.persistence.dao.BaseDAO;
-import ${packageInfo.dao}.${name}DAO;
+import ${configuration.dao}.${name}DAO;
 import com.xpert.core.validation.UniqueField;
 import java.util.ArrayList;
 import java.util.List;

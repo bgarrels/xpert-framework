@@ -8,7 +8,7 @@ public class Bean {
 
     private Class entity;
     private BeanType beanType;
-    private PackageInfo packageInfo;
+    private BeanConfiguration configuration;
     private String author;
     private String resourceBundle;
     
@@ -41,15 +41,14 @@ public class Bean {
         this.author = author;
     }
 
-    public PackageInfo getPackageInfo() {
-        return packageInfo;
+    public BeanConfiguration getConfiguration() {
+        return configuration;
     }
 
-    public void setPackageInfo(PackageInfo packageInfo) {
-        this.packageInfo = packageInfo;
+    public void setConfiguration(BeanConfiguration configuration) {
+        this.configuration = configuration;
     }
 
-    
     public BeanType getBeanType() {
         return beanType;
     }

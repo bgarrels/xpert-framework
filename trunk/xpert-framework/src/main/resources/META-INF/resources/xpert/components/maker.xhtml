@@ -17,6 +17,7 @@
         <cc:attribute name="businessObject"/>
         <cc:attribute name="baseDAO"/>
         <cc:attribute name="resourceBundle"/>
+        <cc:attribute name="template"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -24,12 +25,13 @@
         <h:outputScript library="xpert" name="scripts/core.js" target="head" />
         <h:outputScript library="xpert" name="scripts/sh.js" target="head" />
         <h:outputStylesheet library="xpert" name="css/sh-style.css" />
-        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setManagedBean(cc.attrs.managedBean)}" />
-        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setDao(cc.attrs.dao)}" />
-        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setDaoImpl(cc.attrs.daoImpl)}" />
-        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setBusinessObject(cc.attrs.businessObject)}" />
-        <f:event type="preRenderComponent" listener="#{beanMaker.packageInfo.setBaseDAO(cc.attrs.baseDAO)}" />
-        <f:event type="preRenderComponent" listener="#{beanMaker.setResourceBundle(cc.attrs.resourceBundle)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setManagedBean(cc.attrs.managedBean)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setDao(cc.attrs.dao)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setDaoImpl(cc.attrs.daoImpl)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setBusinessObject(cc.attrs.businessObject)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setBaseDAO(cc.attrs.baseDAO)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setResourceBundle(cc.attrs.resourceBundle)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setTemplate(cc.attrs.template)}" />
         <h:form prependId="false">
             <p:messages/>
             <p:tabView>
@@ -41,16 +43,17 @@
                             <h:panelGrid columns="2">
 
                                 <h:outputLabel value="Managed Bean:"/>
-                                <p:inputText value="#{beanMaker.packageInfo.managedBean}" size="50"/>
+                                <p:inputText value="#{beanMaker.configuration.managedBean}" size="50"/>
 
                                 <h:outputLabel value="DAO:"/>
-                                <p:inputText  value="#{beanMaker.packageInfo.dao}" size="50"/>
+                                <p:inputText  value="#{beanMaker.configuration.dao}" size="50"/>
 
                                 <h:outputLabel value="DAO Impl:"/>
-                                <p:inputText value="#{beanMaker.packageInfo.daoImpl}" size="50"/>
+                                <p:inputText value="#{beanMaker.configuration.daoImpl}" size="50"/>
 
                                 <h:outputLabel value="Business Object:"/>
-                                <p:inputText value="#{beanMaker.packageInfo.businessObject}" size="50"/>
+                                <p:inputText value="#{beanMaker.configuration.businessObject}" size="50"/>
+
 
                             </h:panelGrid>
                         </p:fieldset>
@@ -58,7 +61,7 @@
                         <p:fieldset legend="Others">
                             <h:panelGrid columns="3">
                                 <h:outputLabel value="BaseDAOImpl Class:"/>
-                                <p:inputText value="#{beanMaker.packageInfo.baseDAO}" size="50"/>
+                                <p:inputText value="#{beanMaker.configuration.baseDAO}" size="50"/>
                                 <h:panelGroup>
                                     <h:outputText style="font-weight: bold;" value="The BaseDAO class of your Project"/>
                                     <br/>
@@ -66,7 +69,12 @@
                                 </h:panelGroup>
 
                                 <h:outputLabel value="Faces Resource Bundle:"/>
-                                <p:inputText value="#{beanMaker.resourceBundle}" size="50"/>
+                                <p:inputText value="#{beanMaker.configuration.resourceBundle}" size="50"/>
+                                <h:panelGroup/>
+
+
+                                <h:outputLabel value="Template (XHTML):"/>
+                                <p:inputText value="#{beanMaker.configuration.template}" size="50"/>
                                 <h:panelGroup/>
 
                                 <h:outputLabel value="Author:"/>
@@ -115,10 +123,10 @@
                             <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
                                 <p:tab title="#{mappedBean.className}">
                                     <pre name="code-maker" class="java">
-                                                 <h:outputText value="#{mappedBean.dao}"/>
+                                          <h:outputText value="#{mappedBean.dao}"/>
                                     </pre>
                                     <pre name="code-maker" class="java">
-                                                <h:outputText value="#{mappedBean.daoImpl}"/>
+                                          <h:outputText value="#{mappedBean.daoImpl}"/>
                                     </pre>
                                 </p:tab>
                             </p:accordionPanel>
@@ -136,19 +144,35 @@
                             <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
                                 <p:tab title="#{mappedBean.className}">
                                     <pre name="code-maker" class="java">
-                                                 <h:outputText value="#{mappedBean.managedBean}"/>
+                                          <h:outputText value="#{mappedBean.managedBean}"/>
                                     </pre>
                                 </p:tab>
                             </p:accordionPanel>
                         </p:tab>
                         <p:tab title="View">
-                            <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
-                                <p:tab title="#{mappedBean.className}">
-                                    <pre name="code-maker" class="xml">
-                                            <h:outputText value="#{mappedBean.view}"/>
-                                    </pre>
+                            <p:tabView>
+                                <p:tab title="Create">
+                                    <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                        <p:tab title="#{mappedBean.className}">
+                                            <pre name="code-maker" class="xml">
+                                                 <h:outputText value="#{mappedBean.createView}"/>
+                                            </pre>
+                                            <pre name="code-maker" class="xml">
+                                                 <h:outputText value="#{mappedBean.formCreateView}"/>
+                                            </pre>
+                                        </p:tab>
+                                    </p:accordionPanel>
                                 </p:tab>
-                            </p:accordionPanel>
+                                <p:tab title="List">
+                                    <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                        <p:tab title="#{mappedBean.className}">
+                                            <pre name="code-maker" class="xml">
+                                                <h:outputText value="#{mappedBean.listView}"/>
+                                            </pre>
+                                        </p:tab>
+                                    </p:accordionPanel>
+                                </p:tab>
+                            </p:tabView>
                         </p:tab>
                         <p:tab title="Class Bean">
                             Managed Bean to acess the mapped classes.

@@ -1,7 +1,7 @@
-package ${packageInfo.daoImpl};
+package ${configuration.daoImpl};
 
-import ${packageInfo.baseDAO};
-import ${packageInfo.dao}.${name}DAO;
+import ${configuration.baseDAO};
+import ${configuration.dao}.${name}DAO;
 import ${entity.name};
 import javax.ejb.Stateless;
 
@@ -10,5 +10,5 @@ import javax.ejb.Stateless;
  * @author ${author}
  */
 @Stateless
-public class ${name}DAOImpl extends ${packageInfo.baseDAOSimpleName}<${name}> implements ${name}DAO {
+public class ${name}DAOImpl extends ${configuration.baseDAOSimpleName}<${name}> implements ${name}DAO {
 }

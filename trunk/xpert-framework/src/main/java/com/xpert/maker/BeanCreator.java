@@ -1,5 +1,7 @@
 package com.xpert.maker;
 
+import com.xpert.persistence.utils.EntityUtils;
+import com.xpert.utils.HumaniseCamelCase;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -29,6 +31,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class BeanCreator {
 
     private static final Configuration CONFIG = new Configuration();
+    private static final String AUTHOR = "#Author";
 
     static {
         try {
@@ -38,20 +41,25 @@ public class BeanCreator {
         }
     }
 
-    public static String createBean(Bean bean, PackageInfo packageInfo, String author, String resourceBundle) throws IOException, TemplateException {
+    public static String createBean(Bean bean, BeanConfiguration configuration) throws IOException, TemplateException {
 
-        if (bean.getBeanType().equals(BeanType.VIEW)) {
-            return getView(bean.getEntity(), resourceBundle);
+        if (bean.getBeanType().equals(BeanType.FORM)) {
+            return getCreateForm(bean.getEntity(), configuration.getResourceBundle());
         }
-
+        if (bean.getBeanType().equals(BeanType.CREATE)) {
+            return getCreate(bean.getEntity(), configuration.getTemplate(), configuration.getResourceBundle());
+        }
+        if (bean.getBeanType().equals(BeanType.LIST)) {
+            return getList(bean.getEntity(), configuration.getTemplate(), configuration.getResourceBundle());
+        }
 
         Template template = getTemplate(bean.getBeanType().getTemplate());
         StringWriter writer = new StringWriter();
-        bean.setPackageInfo(packageInfo);
-        if (author == null || author.trim().isEmpty()) {
-            author = "#Author";
+        bean.setConfiguration(configuration);
+        if (configuration.getAuthor() == null || configuration.getAuthor().trim().isEmpty()) {
+            configuration.setAuthor(AUTHOR);
         }
-        bean.setAuthor(author);
+        bean.setAuthor(AUTHOR);
         template.process(bean, writer);
 
         writer.flush();
@@ -68,7 +76,49 @@ public class BeanCreator {
         return new Template(template, new StringReader(templateString), CONFIG);
     }
 
-    public static String getHeader() {
+    public static String getLowerFirstLetter(String string) {
+        if (string.length() == 1) {
+            return string.toLowerCase();
+        }
+        if (string.length() > 1) {
+            return string.substring(0, 1).toLowerCase() + "" + string.substring(1, string.length());
+        }
+        return "";
+    }
+
+    public static String getI18N(Class clazz) {
+
+        Field[] fields = clazz.getDeclaredFields();
+        StringBuilder builder = new StringBuilder();
+        String className = getLowerFirstLetter(clazz.getSimpleName());
+        String humanName = new HumaniseCamelCase().humanise(clazz.getSimpleName());
+        builder.append("\n\n#").append(clazz.getSimpleName()).append("\n");
+        builder.append(className).append("=").append(humanName).append("\n");
+
+        //create CRUD i18n, like: person.create, person.list, person.detail
+        builder.append(className).append(".create").append("=").append("Create ").append(humanName).append("\n");
+        builder.append(className).append(".list").append("=").append("List ").append(humanName).append("\n");
+        builder.append(className).append(".detail").append("=").append(humanName).append(" Detail").append("\n");
+        boolean first = false;
+        for (Field field : fields) {
+            if (!first) {
+                builder.append("\n");
+            } else {
+                first = true;
+            }
+            builder.append(className);
+            builder.append(".");
+            builder.append(field.getName());
+            builder.append("=");
+            builder.append(new HumaniseCamelCase().humanise(field.getName()));
+        }
+
+
+        return builder.toString();
+
+    }
+
+    public static String getHeader(String template) {
 
         StringBuilder builder = new StringBuilder();
         builder.append("<ui:composition  xmlns=\"http://www.w3.org/1999/xhtml\"\n");
@@ -76,13 +126,112 @@ public class BeanCreator {
         builder.append("                 xmlns:f=\"http://java.sun.com/jsf/core\"\n");
         builder.append("                 xmlns:ui=\"http://java.sun.com/jsf/facelets\"\n");
         builder.append("                 xmlns:p=\"http://primefaces.org/ui\"\n");
+        if (template != null && !template.isEmpty()) {
+            builder.append("                 template=\"").append(template).append("\"\n");
+        }
         builder.append("                 xmlns:x=\"http://xpert.com/faces\"\n");
         builder.append("                 xmlns:xc=\"http://java.sun.com/jsf/composite/xpert/components\">\n");
 
         return builder.toString();
     }
 
-    public static String getView(Class clazz, String resourceBundle) {
+    public static String getCreate(Class clazz, String template, String resourceBundle) {
+        StringBuilder view = new StringBuilder();
+        view.append(getHeader(template));
+
+
+        view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".create']}\" />\n");
+        view.append("   <ui:define name=\"body\">\n");
+        view.append("       <ui:include src=\"formCreate").append(clazz.getSimpleName()).append(".xhtml\" />\n");
+        view.append("   </ui:define>\n");
+        view.append("</ui:composition>");
+
+        return view.toString();
+    }
+
+    public static String getList(Class clazz, String template, String resourceBundle) {
+        Field[] fields = clazz.getDeclaredFields();
+        String managedBean = getNameManagedBean(clazz);
+        String varName = getLowerFirstLetter(clazz.getSimpleName());
+        String idExpression = "#{" + varName + "." + EntityUtils.getIdFieldName(clazz) + "}";
+        String dialogWidget = "widget" + clazz.getSimpleName() + "Detail";
+        StringBuilder view = new StringBuilder();
+        view.append(getHeader(template));
+        view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".list']}\" />\n");
+        view.append("   <ui:define name=\"body\">\n");
+        view.append("       <h:form id=\"formList").append(clazz.getSimpleName()).append("\">\n");
+        view.append("           <xc:modalMessages/>\n");
+        view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\"\n");
+        view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\">\n");
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(ManyToMany.class) || field.isAnnotationPresent(OneToMany.class)) {
+                continue;
+            }
+            String fieldName = varName + "." + field.getName();
+            String varExpression = "#{" + fieldName + "}";
+            view.append("               <p:column headerText=\"#{").append(resourceBundle).append("['").append(fieldName).append("']}\" sortBy=\"").append(varExpression).append("\"");
+            if (field.getType().equals(String.class) || field.getType().equals(Integer.class) || field.getType().equals(Long.class) || field.getType().isEnum()) {
+                view.append("\n").append("                      filterBy=\"").append(varExpression).append("\"");
+            }
+            if (field.getType().isEnum()) {
+                view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(getLowerFirstLetter(field.getDeclaringClass().getSimpleName())).append(")}\"");
+            }
+            //align Date on center
+            if (field.getType().equals(Date.class)) {
+                view.append("\n").append("                                   style=\"text-align: center;\"");
+                //align Number on right
+            } else if (field.getType().equals(BigDecimal.class)) {
+                view.append("\n").append("                                   style=\"text-align: right;\"");
+            }
+            view.append(">\n");
+            view.append(getText(field, resourceBundle, varExpression, "                   "));
+            view.append("               </p:column>\n");
+        }
+        //actions column
+        view.append("               <p:column style=\"text-align: center;\">\n");
+        view.append("                   <p:commandButton oncomplete=\"").append(dialogWidget).append(".show();\"  icon=\"ui-icon-zoomin\" process=\"@this\" update=\":formDetail").append(clazz.getSimpleName()).append("\" >\n");
+        view.append("                       <f:setPropertyActionListener value=\"#{").append(varName).append("}\" target=\"#{").append(managedBean).append(".entity}\" />\n");
+        view.append("                   </p:commandButton>\n");
+        view.append("                   <p:button icon=\"ui-icon-pencil\" outcome=\"create").append(clazz.getSimpleName()).append("\" >\n");
+        view.append("                       <f:param name=\"id\" value=\"").append(idExpression).append("\" />\n");
+        view.append("                   </p:button>\n");
+        view.append("                   <p:commandButton icon=\"ui-icon-trash\" process=\"@this\" update=\"@form\" action=\"#{").append(managedBean).append(".delete}\" >\n");
+        view.append("                       <f:setPropertyActionListener value=\"").append(idExpression).append("\" target=\"#{").append(managedBean).append(".id}\" />\n");
+        view.append("                       <x:confirmation />\n");
+        view.append("                   </p:commandButton>\n");
+        view.append("               </p:column>\n");
+        view.append("           </p:dataTable>\n");
+        view.append("       </h:form>\n\n");
+        view.append("       <p:dialog widgetVar=\"").append(dialogWidget).append("\" header=\"#{").append(resourceBundle).append("['").append(varName).append(".detail']}\" appendToBody=\"true\" modal=\"true\" width=\"800\">\n");
+        view.append("           <h:form id=\"formDetail").append(clazz.getSimpleName()).append("\">\n");
+        view.append("               <h:panelGrid columns=\"4\">\n");
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(ManyToMany.class) || field.isAnnotationPresent(OneToMany.class)) {
+                continue;
+            }
+            String varExpression = "#{" + managedBean + ".entity." + field.getName() + "}";
+            view.append("\n");
+            view.append("                   ").append(getLabel(field, false, resourceBundle));
+            view.append(getText(field, resourceBundle, varExpression, "                   "));
+        }
+        view.append("               </h:panelGrid>\n");
+        view.append("               <div style=\"text-align: center;\">\n");
+        view.append("                   <p:separator/>\n");
+        view.append("                   <p:commandButton type=\"button\" value=\"#{xmsg['close']}\" onclick=\"").append(dialogWidget).append(".hide()\" />\n");
+        view.append("               </div>\n");
+        view.append("           </h:form>\n");
+        view.append("       </p:dialog>\n");
+        view.append("   </ui:define>\n");
+        view.append("</ui:composition>");
+
+        return view.toString();
+    }
+
+    public static String getNameManagedBean(Class clazz) {
+        return getNameLower(clazz) + "MB";
+    }
+
+    public static String getCreateForm(Class clazz, String resourceBundle) {
 
         if (resourceBundle == null || resourceBundle.trim().isEmpty()) {
             resourceBundle = "msg";
@@ -90,8 +239,8 @@ public class BeanCreator {
 
         Field[] fields = clazz.getDeclaredFields();
         StringBuilder view = new StringBuilder();
-        String managedBean = getNameLower(clazz) + "MB";
-        view.append(getHeader());
+        String managedBean = getNameManagedBean(clazz);
+        view.append(getHeader(null));
         view.append("   <h:form>\n");
         view.append("       <xc:modalMessages/>\n");
         view.append("       <h:panelGrid columns=\"2\">\n");
@@ -140,7 +289,7 @@ public class BeanCreator {
         view.append("       <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
         view.append(managedBean).append(".save}\" value=\"#{");
         view.append(resourceBundle).append("['save']}\" />\n");
-        view.append("   <h:form>\n");
+        view.append("   </h:form>\n");
         view.append("</ui:composition>");
         return view.toString();
     }
@@ -167,6 +316,39 @@ public class BeanCreator {
         return false;
     }
 
+    public static String getText(Field field, String resourceBundle, String varExpression, String ident) {
+
+        StringBuilder text = new StringBuilder();
+        boolean hasContent = false;
+        text.append(ident).append("<h:outputText value=\"").append(varExpression).append("\"");
+        if (field.getType().equals(Date.class)) {
+            text.append(">\n").append(ident).append("   <f:convertDateTime />\n");
+            hasContent = true;
+        } else if (field.getType().equals(BigDecimal.class)) {
+            text.append(">\n").append(ident).append("   <f:convertNumber />\n");
+            hasContent = true;
+        } else if (isLazy(field)) {
+            text.append(">\n").append(ident).append("   <x:initializer/>\n");
+            hasContent = true;
+        }
+        if (hasContent) {
+            text.append(ident).append("</h:outputText>\n");
+        } else {
+            text.append("/>\n");
+        }
+
+        return text.toString();
+    }
+
+    public static String getLabel(Field field, boolean required, String resourceBundle) {
+
+        StringBuilder label = new StringBuilder();
+        label.append("<h:outputLabel value=\"").append(required ? "* " : "").append("#{").append(resourceBundle);
+        label.append("['").append(getNameLower(field.getDeclaringClass())).append(".").append(field.getName()).append("']}:\" />\n");
+
+        return label.toString();
+    }
+
     public static void appendTagValue(StringBuilder view, String tag, Field field, String managedBean, String converter, String resourceBundle,
             boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required) {
         String type;
@@ -177,9 +359,8 @@ public class BeanCreator {
         } else {
             type = getNameLower(field.getType());
         }
-        String propertyPath = getNameLower(field.getDeclaringClass()) + "." + field.getName();
         view.append("\n");
-        view.append("           <h:outputLabel value=\"").append(required ? "* " : "").append("#{").append(resourceBundle).append("['").append(propertyPath).append("']\" />\n");
+        view.append("           ").append(getLabel(field, required, resourceBundle));
         view.append("           <").append(tag).append(" value=\"#{").append(managedBean).append(".entity.").append(field.getName()).append("}\"");
         if (converter != null && !converter.trim().isEmpty()) {
             view.append(" converter=\"").append(converter).append("\" ");
@@ -195,7 +376,7 @@ public class BeanCreator {
                 view.append("\n");
             }
             if (hasEmptySelect) {
-                view.append("               <f:selectItem itemLabel=\"#{").append(resourceBundle).append("['select']}\" />");
+                view.append("               <f:selectItem itemLabel=\"#{xmsg['select']}\" />");
                 view.append("\n");
 
             }
@@ -225,8 +406,12 @@ public class BeanCreator {
             putEntry(out, "dao/" + classSimpleName + "DAO.java", mappedBean.getDao());
             //DAO Impl
             putEntry(out, "dao/impl/" + classSimpleName + "DAOImpl.java", mappedBean.getDaoImpl());
+            //create
+            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
             //form
-            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/form" + classSimpleName + ".xhtml", mappedBean.getView());
+            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
+            //list
+            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/list" + classSimpleName + ".xhtml", mappedBean.getListView());
         }
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);

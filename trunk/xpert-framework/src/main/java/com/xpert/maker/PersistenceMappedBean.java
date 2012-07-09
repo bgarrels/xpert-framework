@@ -4,6 +4,8 @@
  */
 package com.xpert.maker;
 
+import com.xpert.audit.model.AbstractAuditing;
+import com.xpert.audit.model.AbstractMetadata;
 import com.xpert.maker.BeanCreator;
 import com.xpert.utils.HumaniseCamelCase;
 import freemarker.template.Template;
@@ -36,17 +38,19 @@ public class PersistenceMappedBean {
         this.entityManager = entityManager;
     }
 
-    public List<MappedBean> getMappedBeans(List<Class> classes, PackageInfo packageInfo, String author, String resourceBundle) {
+    public List<MappedBean> getMappedBeans(List<Class> classes, BeanConfiguration beanConfiguration) {
         List<MappedBean> mappedBeans = new ArrayList<MappedBean>();
         for (Class clazz : classes) {
             try {
                 MappedBean mappedBean = new MappedBean(clazz);
-                mappedBean.setI18n(getI18N(clazz));
-                mappedBean.setManagedBean(BeanCreator.createBean(new Bean(clazz, BeanType.MANAGED_BEAN), packageInfo, author, resourceBundle));
-                mappedBean.setBusinnesObject(BeanCreator.createBean(new Bean(clazz, BeanType.BUSINESS_OBJECT), packageInfo, author, resourceBundle));
-                mappedBean.setDao(BeanCreator.createBean(new Bean(clazz, BeanType.DAO), packageInfo, author, resourceBundle));
-                mappedBean.setDaoImpl(BeanCreator.createBean(new Bean(clazz, BeanType.DAO_IMPL), packageInfo, author, resourceBundle));
-                mappedBean.setView(BeanCreator.createBean(new Bean(clazz, BeanType.VIEW), packageInfo, author, resourceBundle));
+                mappedBean.setI18n(BeanCreator.getI18N(clazz));
+                mappedBean.setManagedBean(BeanCreator.createBean(new Bean(clazz, BeanType.MANAGED_BEAN), beanConfiguration));
+                mappedBean.setBusinnesObject(BeanCreator.createBean(new Bean(clazz, BeanType.BUSINESS_OBJECT), beanConfiguration));
+                mappedBean.setDao(BeanCreator.createBean(new Bean(clazz, BeanType.DAO), beanConfiguration));
+                mappedBean.setDaoImpl(BeanCreator.createBean(new Bean(clazz, BeanType.DAO_IMPL), beanConfiguration));
+                mappedBean.setFormCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.FORM), beanConfiguration));
+                mappedBean.setCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.CREATE), beanConfiguration));
+                mappedBean.setListView(BeanCreator.createBean(new Bean(clazz, BeanType.LIST), beanConfiguration));
                 mappedBeans.add(mappedBean);
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
@@ -78,12 +82,22 @@ public class PersistenceMappedBean {
         });
     }
 
-    public List<MappedBean> getMappedBeans(PackageInfo packageInfo, String author, String resourceBundle) {
-        return getMappedBeans(getMappedClasses(), packageInfo, author, resourceBundle);
+    public List<MappedBean> getMappedBeans(BeanConfiguration beanConfiguration) {
+        return getMappedBeans(getMappedClasses(), beanConfiguration);
     }
 
     public List<Class> getMappedClasses() {
         return getMappedClasses(false);
+    }
+
+    public boolean extendsAuditClasses(Class entity) {
+        if (entity.getSuperclass().equals(AbstractAuditing.class) || entity.getSuperclass().equals(AbstractMetadata.class)) {
+            return true;
+        }
+        if (!entity.getSuperclass().equals(Object.class)) {
+            return extendsAuditClasses(entity.getSuperclass());
+        }
+        return false;
     }
 
     public List<Class> getMappedClasses(boolean includeEnum) {
@@ -93,7 +107,10 @@ public class PersistenceMappedBean {
         List<Class> classes = new ArrayList<Class>();
         for (String entityName : map.keySet()) {
             Class entity = ((AbstractEntityPersister) sessionFactoryImpl.getEntityPersister(entityName)).getConcreteProxyClass();
-            classes.add(entity);
+            //do not include Audit classes
+            if (!extendsAuditClasses(entity)) {
+                classes.add(entity);
+            }
             //add enum
             if (includeEnum) {
                 for (Field field : entity.getDeclaredFields()) {
@@ -130,42 +147,6 @@ public class PersistenceMappedBean {
 
         return "";
 
-    }
-
-    public String getI18N(Class clazz) {
-
-        Field[] fields = clazz.getDeclaredFields();
-        StringBuilder builder = new StringBuilder();
-        String className = getLowerFirstLetter(clazz.getSimpleName());
-        builder.append("\n\n#").append(clazz.getSimpleName());
-        builder.append("\n").append(className).append("=").append(new HumaniseCamelCase().humanise(clazz.getSimpleName()));
-        boolean first = false;
-        for (Field field : fields) {
-            if (!first) {
-                builder.append("\n");
-            } else {
-                first = true;
-            }
-            builder.append(className);
-            builder.append(".");
-            builder.append(field.getName());
-            builder.append("=");
-            builder.append(new HumaniseCamelCase().humanise(field.getName()));
-        }
-
-
-        return builder.toString();
-
-    }
-
-    public static String getLowerFirstLetter(String string) {
-        if (string.length() == 1) {
-            return string.toLowerCase();
-        }
-        if (string.length() > 1) {
-            return string.substring(0, 1).toLowerCase() + "" + string.substring(1, string.length());
-        }
-        return "";
     }
 
     public SessionFactory getSessionFactory() {

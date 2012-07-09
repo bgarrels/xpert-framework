@@ -119,10 +119,10 @@ public abstract class AbstractBaseBean<T> {
         dataModel = new LazyDataModelImpl<T>(getDataModelOrder(), getDataModelRestrictions(), getDAO());
     }
 
-    public void loadSearchPage() {
+    public void onLoadList() {
     }
 
-    public void loadCreatePage() {
+    public void onLoadCreate() {
     }
 
     public void delete() {

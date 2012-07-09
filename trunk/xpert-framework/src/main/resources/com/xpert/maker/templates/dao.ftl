@@ -1,4 +1,4 @@
-package ${packageInfo.dao};
+package ${configuration.dao};
 
 import com.xpert.persistence.dao.BaseDAO;
 import ${entity.name};
