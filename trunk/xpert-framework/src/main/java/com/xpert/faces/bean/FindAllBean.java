@@ -37,13 +37,6 @@ public abstract class FindAllBean {
         baseDAO = new DAO();
     }
     
-    @PreDestroy
-    public void destroy(){
-        if(baseDAO !=null && baseDAO.getEntityManager() != null){
-            baseDAO.getEntityManager().close();
-        }
-    }
-
     public List get(Class clazz, String order) {
 
         List objects = values.get(clazz);
@@ -67,7 +60,7 @@ public abstract class FindAllBean {
         if (getClassModel() != null) {
             ClassModel classModel = getClassModel().get(clazz);
             if (classModel != null) {
-                return get(clazz, getClassModel().get(clazz).getOrder());
+                return get(clazz, classModel.getOrder());
             } else {
                 return get(clazz, null);
             }
@@ -78,16 +71,8 @@ public abstract class FindAllBean {
 
     public SelectItem[] getSelect(Class clazz) {
 
-        List objects = values.get(clazz);
+        List objects = get(clazz);
         ClassModel classModel = getClassModel().get(clazz);
-        String order = null;
-        if (classModel.getOrder() != null) {
-            order = getClassModel().get(clazz).getOrder();
-        }
-        if (objects == null || objects.isEmpty() || reload) {
-            objects = get(clazz);
-        }
-
         SelectItem[] options = new SelectItem[objects.size() + 1];
 
         Integer count = 1;
@@ -112,6 +97,9 @@ public abstract class FindAllBean {
     }
 
     private String getItemLabel(ClassModel classModel, Object bean) throws Exception {
+        if(classModel == null){
+            return bean.toString();
+        }
         //ClassModel itemLabel null then use order
         if (classModel.getItemLabel() != null && !classModel.getItemLabel().isEmpty()) {
             return (String) PropertyUtils.getProperty(bean, classModel.getItemLabel());

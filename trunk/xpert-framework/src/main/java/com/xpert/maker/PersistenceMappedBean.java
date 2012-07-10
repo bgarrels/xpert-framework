@@ -51,6 +51,7 @@ public class PersistenceMappedBean {
                 mappedBean.setFormCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.FORM), beanConfiguration));
                 mappedBean.setCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.CREATE), beanConfiguration));
                 mappedBean.setListView(BeanCreator.createBean(new Bean(clazz, BeanType.LIST), beanConfiguration));
+                mappedBean.setMenu(BeanCreator.createBean(new Bean(clazz, BeanType.MENU), beanConfiguration));
                 mappedBeans.add(mappedBean);
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);

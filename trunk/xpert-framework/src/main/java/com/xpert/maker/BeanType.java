@@ -13,7 +13,8 @@ public enum BeanType {
     //xhtml
     FORM(null, "xhtml"),
     CREATE(null, "xhtml"),
-    LIST(null, "xhtml");
+    LIST(null, "xhtml"),
+    MENU(null, "xhtml");
     
     private String template;
     private String extension;

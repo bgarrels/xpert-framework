@@ -52,6 +52,9 @@ public class BeanCreator {
         if (bean.getBeanType().equals(BeanType.LIST)) {
             return getList(bean.getEntity(), configuration.getTemplate(), configuration.getResourceBundle());
         }
+        if (bean.getBeanType().equals(BeanType.MENU)) {
+            return getMenu(bean.getEntity());
+        }
 
         Template template = getTemplate(bean.getBeanType().getTemplate());
         StringWriter writer = new StringWriter();
@@ -135,6 +138,20 @@ public class BeanCreator {
         return builder.toString();
     }
 
+    public static String getMenu(Class clazz) {
+        StringBuilder view = new StringBuilder();
+        view.append(getHeader(null));
+        view.append("   <p:toolbar>\n");
+        view.append("       <p:toolbarGroup align=\"left\">  \n");
+        view.append("           <p:button icon=\"ui-icon-search\" value=\"#{xmsg['list']}\" outcome=\"list").append(clazz.getSimpleName()).append("\" />\n");
+        view.append("           <p:button icon=\"ui-icon-search\" value=\"#{xmsg['create']}\" outcome=\"create").append(clazz.getSimpleName()).append("\" />\n");
+        view.append("       </p:toolbarGroup>\n");
+        view.append("   </p:toolbar>\n");
+        view.append("</ui:composition>");
+
+        return view.toString();
+    }
+
     public static String getCreate(Class clazz, String template, String resourceBundle) {
         StringBuilder view = new StringBuilder();
         view.append(getHeader(template));
@@ -142,6 +159,7 @@ public class BeanCreator {
 
         view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".create']}\" />\n");
         view.append("   <ui:define name=\"body\">\n");
+        view.append("       <ui:include src=\"menu").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("       <ui:include src=\"formCreate").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("   </ui:define>\n");
         view.append("</ui:composition>");
@@ -159,6 +177,7 @@ public class BeanCreator {
         view.append(getHeader(template));
         view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".list']}\" />\n");
         view.append("   <ui:define name=\"body\">\n");
+        view.append("       <ui:include src=\"menu").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("       <h:form id=\"formList").append(clazz.getSimpleName()).append("\">\n");
         view.append("           <xc:modalMessages/>\n");
         view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\"\n");
@@ -174,7 +193,7 @@ public class BeanCreator {
                 view.append("\n").append("                      filterBy=\"").append(varExpression).append("\"");
             }
             if (field.getType().isEnum()) {
-                view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(getLowerFirstLetter(field.getDeclaringClass().getSimpleName())).append(")}\"");
+                view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(getLowerFirstLetter(field.getType().getSimpleName())).append(")}\"");
             }
             //align Date on center
             if (field.getType().equals(Date.class)) {
@@ -202,7 +221,7 @@ public class BeanCreator {
         view.append("               </p:column>\n");
         view.append("           </p:dataTable>\n");
         view.append("       </h:form>\n\n");
-        view.append("       <p:dialog widgetVar=\"").append(dialogWidget).append("\" header=\"#{").append(resourceBundle).append("['").append(varName).append(".detail']}\" appendToBody=\"true\" modal=\"true\" width=\"800\">\n");
+        view.append("       <p:dialog widgetVar=\"").append(dialogWidget).append("\" header=\"#{").append(resourceBundle).append("['").append(varName).append(".detail']}\" appendToBody=\"true\" modal=\"true\" height=\"500\" width=\"800\">\n");
         view.append("           <h:form id=\"formDetail").append(clazz.getSimpleName()).append("\">\n");
         view.append("               <h:panelGrid columns=\"4\">\n");
         for (Field field : fields) {
@@ -215,9 +234,10 @@ public class BeanCreator {
             view.append(getText(field, resourceBundle, varExpression, "                   "));
         }
         view.append("               </h:panelGrid>\n");
+        view.append("               <p:separator/>\n");
         view.append("               <div style=\"text-align: center;\">\n");
-        view.append("                   <p:separator/>\n");
         view.append("                   <p:commandButton type=\"button\" value=\"#{xmsg['close']}\" onclick=\"").append(dialogWidget).append(".hide()\" />\n");
+        view.append("                   <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
         view.append("               </div>\n");
         view.append("           </h:form>\n");
         view.append("       </p:dialog>\n");
@@ -286,9 +306,13 @@ public class BeanCreator {
         }
         view.append("       </h:panelGrid>\n");
         view.append("       <p:separator/>\n");
-        view.append("       <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
+        view.append("       <h:outputText value=\"#{xmsg['requiredFieldsForm']}\"/>\n");
+        view.append("       <div style=\"text-align: center;\">\n");
+        view.append("           <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
         view.append(managedBean).append(".save}\" value=\"#{");
         view.append(resourceBundle).append("['save']}\" />\n");
+        view.append("            <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
+        view.append("        </div>\n");
         view.append("   </h:form>\n");
         view.append("</ui:composition>");
         return view.toString();
@@ -412,6 +436,8 @@ public class BeanCreator {
             putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
             //list
             putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/list" + classSimpleName + ".xhtml", mappedBean.getListView());
+            //menu
+            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
         }
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);

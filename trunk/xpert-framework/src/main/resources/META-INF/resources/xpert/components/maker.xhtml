@@ -135,7 +135,7 @@
                             <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
                                 <p:tab title="#{mappedBean.className}">
                                     <pre name="code-maker" class="java">
-                                                <h:outputText value="#{mappedBean.businnesObject}"/>
+                                         <h:outputText value="#{mappedBean.businnesObject}"/>
                                     </pre>
                                 </p:tab>
                             </p:accordionPanel>
@@ -168,6 +168,15 @@
                                         <p:tab title="#{mappedBean.className}">
                                             <pre name="code-maker" class="xml">
                                                 <h:outputText value="#{mappedBean.listView}"/>
+                                            </pre>
+                                        </p:tab>
+                                    </p:accordionPanel>
+                                </p:tab>
+                                <p:tab title="Menu">
+                                    <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                        <p:tab title="#{mappedBean.className}">
+                                            <pre name="code-maker" class="xml">
+                                                <h:outputText value="#{mappedBean.menu}"/>
                                             </pre>
                                         </p:tab>
                                     </p:accordionPanel>
