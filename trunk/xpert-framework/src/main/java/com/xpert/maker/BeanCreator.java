@@ -84,12 +84,18 @@ public class BeanCreator {
         return new Template(template, new StringReader(templateString), CONFIG);
     }
 
+    public static Map<String, Object> getDefaultParameters() {
+        Map parameters = new HashMap();
+        parameters.put("sharp", "#");
+        return parameters;
+    }
+
     public static String getViewTemplate() {
 
         try {
             Template template = BeanCreator.getTemplate("view-template.ftl");
             StringWriter writer = new StringWriter();
-            template.process(null, writer);
+            template.process(getDefaultParameters(), writer);
             writer.flush();
             writer.close();
             return writer.toString();
@@ -158,7 +164,7 @@ public class BeanCreator {
         view.append("   <p:toolbar>\n");
         view.append("       <p:toolbarGroup align=\"left\">  \n");
         view.append("           <p:button icon=\"ui-icon-search\" value=\"#{xmsg['list']}\" outcome=\"list").append(clazz.getSimpleName()).append("\" />\n");
-        view.append("           <p:button icon=\"ui-icon-search\" value=\"#{xmsg['create']}\" outcome=\"create").append(clazz.getSimpleName()).append("\" />\n");
+        view.append("           <p:button icon=\"ui-icon-plus\" value=\"#{xmsg['create']}\" outcome=\"create").append(clazz.getSimpleName()).append("\" />\n");
         view.append("       </p:toolbarGroup>\n");
         view.append("   </p:toolbar>\n");
         view.append("</ui:composition>");
@@ -259,9 +265,9 @@ public class BeanCreator {
             String varExpression = "#{" + managedBean + ".entity." + field.getName() + "}";
             view.append("\n");
             view.append("           ").append(getLabel(field, false, resourceBundle));
-            view.append(getText(field, resourceBundle, varExpression, "         "));
+            view.append(getText(field, resourceBundle, varExpression, "           "));
         }
-        view.append("       </h:panelGrid>\n");
+        view.append("\n").append("       </h:panelGrid>\n");
         view.append("       <p:separator/>\n");
         view.append("       <div style=\"text-align: center;\">\n");
         view.append("           <p:commandButton type=\"button\" value=\"#{xmsg['close']}\" onclick=\"").append(dialogWidget).append(".hide()\" />\n");
@@ -341,8 +347,8 @@ public class BeanCreator {
         view.append("           <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
         view.append(managedBean).append(".save}\" value=\"#{");
         view.append(resourceBundle).append("['save']}\" />\n");
-        view.append("            <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
-        view.append("        </div>\n");
+        view.append("           <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
+        view.append("       </div>\n");
         view.append("   </h:form>\n");
         view.append("</ui:composition>");
         return view.toString();
@@ -359,21 +365,47 @@ public class BeanCreator {
     public static boolean isLazy(Field field) {
 
         Annotation annotation = field.getAnnotation(ManyToOne.class);
-        //search in method
+        //ManyToOne
         if (annotation == null) {
             Method method = getMethod(field);
-            annotation = method.getAnnotation(ManyToOne.class);
+            if (method != null) {
+                annotation = method.getAnnotation(ManyToOne.class);
+            }
         }
         if (annotation != null && ((ManyToOne) annotation).fetch() != null && ((ManyToOne) annotation).fetch().equals(FetchType.LAZY)) {
             return true;
         }
         annotation = field.getAnnotation(ManyToMany.class);
-         //search in method
+        //ManyToMany
         if (annotation == null) {
             Method method = getMethod(field);
-            annotation = method.getAnnotation(ManyToOne.class);
+            if (method != null) {
+                annotation = method.getAnnotation(ManyToMany.class);
+            }
         }
         if (annotation != null && ((((ManyToMany) annotation).fetch() == null) || ((ManyToMany) annotation).fetch().equals(FetchType.LAZY))) {
+            return true;
+        }
+        //OneToMany
+        annotation = field.getAnnotation(OneToMany.class);
+        if (annotation == null) {
+            Method method = getMethod(field);
+            if (method != null) {
+                annotation = method.getAnnotation(OneToMany.class);
+            }
+        }
+        if (annotation != null && ((((OneToMany) annotation).fetch() == null) || ((OneToMany) annotation).fetch().equals(FetchType.LAZY))) {
+            return true;
+        }
+        //OneToOne
+        annotation = field.getAnnotation(OneToOne.class);
+        if (annotation == null) {
+            Method method = getMethod(field);
+            if (method != null) {
+                annotation = method.getAnnotation(OneToOne.class);
+            }
+        }
+        if (annotation != null && ((OneToOne) annotation).fetch() != null && ((OneToOne) annotation).fetch().equals(FetchType.LAZY)) {
             return true;
         }
 
@@ -495,7 +527,7 @@ public class BeanCreator {
 
     public static String getViewTemplatePath(BeanConfiguration configuration) {
         if (configuration.getTemplate() != null && !configuration.getTemplate().isEmpty()) {
-            return configuration.getTemplate();
+            return configuration.getTemplate().startsWith("/") ? configuration.getTemplate().substring(1, configuration.getTemplate().length()) : configuration.getTemplate();
         } else {
             return "template/mainTemplate.xhtml";
         }
@@ -524,10 +556,10 @@ public class BeanCreator {
 
     /**
      * Verify annotation in field and in method get equivalent to field
-     * 
+     *
      * @param field
      * @param annotation
-     * @return 
+     * @return
      */
     public static boolean isAnnotationPresent(Field field, Class annotation) {
         if (field.isAnnotationPresent(annotation)) {
@@ -542,11 +574,11 @@ public class BeanCreator {
     }
 
     /**
-     * Return equivalent method Get to a field.
-     * Example: field: name, try to find method getName()
-     * 
+     * Return equivalent method Get to a field. Example: field: name, try to
+     * find method getName()
+     *
      * @param field
-     * @return 
+     * @return
      */
     public static Method getMethod(Field field) {
         try {

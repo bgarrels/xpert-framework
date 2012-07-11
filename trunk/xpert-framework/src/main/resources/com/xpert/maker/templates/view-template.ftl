@@ -8,9 +8,9 @@
       xmlns:x="http://xpert.com/faces"
       xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
 
-    <f:view locale="#{localeBean.locale}">
+    <f:view locale="${sharp}{localeBean.locale}">
         <h:head>
-             <title>New Project<h:outputText rendered="#{not empty title}" value=" - #{title}"/></title>
+             <title>New Project<h:outputText rendered="${sharp}{not empty title}" value=" - ${sharp}{title}"/></title>
         </h:head>
         <h:body>
              <ui:insert name="body" />

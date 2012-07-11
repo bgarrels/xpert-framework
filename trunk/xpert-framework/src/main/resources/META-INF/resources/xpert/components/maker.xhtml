@@ -172,6 +172,15 @@
                                         </p:tab>
                                     </p:accordionPanel>
                                 </p:tab>
+                                <p:tab title="Detail">
+                                    <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
+                                        <p:tab title="#{mappedBean.className}">
+                                            <pre name="code-maker" class="xml">
+                                                <h:outputText value="#{mappedBean.detail}"/>
+                                            </pre>
+                                        </p:tab>
+                                    </p:accordionPanel>
+                                </p:tab>
                                 <p:tab title="Menu">
                                     <p:accordionPanel value="#{beanMaker.mappedBeans}" var="mappedBean" multiple="true">
                                         <p:tab title="#{mappedBean.className}">
