@@ -28,6 +28,7 @@ public class Audit {
     private static final Logger logger = Logger.getLogger(Audit.class.getName());
     private static final String[] EXCLUDED_FIELDS = {"notifyAll", "notify", "getClass", "wait", "hashCode", "toString", "equals"};
     private static final SimpleDateFormat AUDIT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static Map<Class, String> MAPPED_NAME = new HashMap<Class, String>();
     private Session session;
     private EntityManager entityManager;
 
@@ -125,6 +126,31 @@ public class Audit {
         audit(getPersistedById(id, clazz), null, AuditingType.DELETE);
     }
 
+    public static String getEntityName(Class entity) {
+
+        if (MAPPED_NAME.get(entity) != null) {
+            return MAPPED_NAME.get(entity);
+        }
+
+        String name = null;
+
+        Table table = (Table) entity.getAnnotation(Table.class);
+        if (table != null && table.name() != null && !table.name().isEmpty()) {
+            name = table.name();
+        } else {
+            Entity entityAnnotation = (Entity) entity.getAnnotation(Entity.class);
+            if (entityAnnotation != null && entityAnnotation.name() != null && !entityAnnotation.name().isEmpty()) {
+                name = entityAnnotation.name();
+            } else {
+                name = entity.getSimpleName();
+            }
+        }
+
+        MAPPED_NAME.put(entity, name);
+
+        return name;
+    }
+
     public void audit(Object object, Object persisted, AuditingType auditingType) {
 
         try {
@@ -138,12 +164,12 @@ public class Audit {
 
                 AbstractAuditing auditing = Configuration.getAbstractAuditing();
                 auditing.setIdentifier(Long.valueOf(getId(object).toString()));
-                auditing.setEntity(object.getClass().getName());
+                auditing.setEntity(getEntityName(object.getClass()));
                 auditing.setAuditingType(auditingType);
                 auditing.setEventDate(new Date());
-                
+
                 AbstractAuditingListener listener = Configuration.getAuditingListener();
-                if(listener != null){
+                if (listener != null) {
                     listener.onSave(auditing);
                 }
 

@@ -142,18 +142,19 @@ Xpert.behavior = {
             return false;
         });
 
-        $element.removeAttr("onmouseover");
      },
     
      confirmation: function(confirmLabel, cancelLabel, message, onclick) {
         //create dialog
         var id = "idWidgetConfirmationDialog";
+        var confirmClick = "widgetConfirmationDialog.hide();"+onclick+";return false;";
         //create only one time
         var $createdDialog = $("#"+id);
         if($createdDialog != null && $createdDialog.length > 0){
             $createdDialog.find(".dialog-confirm-button span").html(confirmLabel);
             $createdDialog.find(".dialog-cancel-button span").html(cancelLabel);
             $createdDialog.find(".dialog-confirm-message").html(message);
+            $createdDialog.find("#xpertCofirmationButton").attr("onclick", confirmClick);
         }else{
             var html =  '<div style="visibility: visible;" class="ui-confirm-dialog ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow" id="'+id+'" >'
                             +'<div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top">'
@@ -165,7 +166,7 @@ Xpert.behavior = {
                             +'</div>'
                             +'<div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'
                                 +'<form>'
-                                    +'<button id="cofirmationButton" type="submit" onclick="widgetConfirmationDialog.hide();'+onclick+';return false;" class="dialog-confirm-button ui-state-default ui-button ui-widget ui-corner-all ui-button-text-only" role="button" aria-disabled="false">'
+                                    +'<button id="xpertCofirmationButton" type="submit" onclick="'+confirmClick+'" class="dialog-confirm-button ui-state-default ui-button ui-widget ui-corner-all ui-button-text-only" role="button" aria-disabled="false">'
                                         +'<span class="ui-button-text">'+confirmLabel+'</span>'
                                     +'</button>'
                                     +'<button type="button" onclick="widgetConfirmationDialog.hide()" class="dialog-cancel-button ui-state-default ui-button ui-widget ui-corner-all ui-button-text-only" role="button" aria-disabled="false">'
