@@ -9,7 +9,7 @@ import javax.persistence.Id;
  *
  * @author Ayslan
  */
-@Entity
+@Entity(name="tab_company_type")
 public class CompanyType {
 
     @Id
