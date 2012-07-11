@@ -1,31 +1,31 @@
-package com.xpert.showcase.mb;
+package com.xpert.showcase.mb.crud;
 
 import com.xpert.core.crud.AbstractBaseBean;
 import com.xpert.core.crud.AbstractBusinessObject;
-import com.xpert.showcase.bo.PersonBO;
-import com.xpert.showcase.model.Person;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import com.xpert.showcase.bo.ProfileBO;
+import com.xpert.showcase.model.Profile;
 
 /**
  *
- * @author Ayslan
+ * @author #Author
  */
 @ManagedBean
 @ViewScoped
-public class PersonMB extends AbstractBaseBean<Person> {
+public class ProfileMB extends AbstractBaseBean<Profile> {
 
     @EJB
-    private PersonBO personBO;
+    private ProfileBO profileBO;
 
     @Override
     public AbstractBusinessObject getBO() {
-        return personBO;
+        return profileBO;
     }
 
     @Override
     public String getDataModelOrder() {
-        return "name";
+        return "id";
     }
 }

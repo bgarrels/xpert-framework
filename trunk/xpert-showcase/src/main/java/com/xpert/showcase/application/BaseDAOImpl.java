@@ -1,4 +1,4 @@
-package com.xpert.showcase.dao;
+package com.xpert.showcase.application;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;

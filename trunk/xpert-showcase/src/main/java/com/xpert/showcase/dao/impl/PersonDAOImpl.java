@@ -1,6 +1,6 @@
 package com.xpert.showcase.dao.impl;
 
-import com.xpert.showcase.dao.BaseDAOImpl;
+import com.xpert.showcase.application.BaseDAOImpl;
 import com.xpert.showcase.dao.PersonDAO;
 import com.xpert.showcase.model.Person;
 import java.util.List;

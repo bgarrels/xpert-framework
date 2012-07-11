@@ -4,7 +4,7 @@
  */
 package com.xpert.showcase.dao.impl;
 
-import com.xpert.showcase.dao.BaseDAOImpl;
+import com.xpert.showcase.application.BaseDAOImpl;
 import com.xpert.showcase.dao.GroupDAO;
 import com.xpert.showcase.model.Group;
 import javax.ejb.Stateless;

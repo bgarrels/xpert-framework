@@ -34,6 +34,11 @@ public class StatusGroup {
     }
 
     @Override
+    public String toString() {
+        return description;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;

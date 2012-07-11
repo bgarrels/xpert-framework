@@ -34,6 +34,11 @@ public class PersonType {
     }
 
     @Override
+    public String toString() {
+        return description;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -54,6 +59,4 @@ public class PersonType {
         hash = 41 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
-
-    
 }

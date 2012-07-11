@@ -1,4 +1,4 @@
-package com.xpert.showcase.mb;  
+package com.xpert.showcase.mb.crud;  
   
 import com.xpert.core.crud.AbstractBaseBean;  
 import com.xpert.core.crud.AbstractBusinessObject;  

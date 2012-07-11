@@ -1,4 +1,4 @@
-package com.xpert.showcase.dao;
+package com.xpert.showcase.application;
 
 import com.xpert.EntityManagerFactory;
 import java.util.logging.Level;

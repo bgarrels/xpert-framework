@@ -7,7 +7,7 @@
         <auditing-listener>com.xpert.showcase.session.AuditingListenerImpl</auditing-listener>
     </auditing>
     
-    <entity-manager-factory>com.xpert.showcase.dao.EntityManagerFactoryImpl</entity-manager-factory>
+    <entity-manager-factory>com.xpert.showcase.application.EntityManagerFactoryImpl</entity-manager-factory>
     <resource-bundle>bundles.messages</resource-bundle>
 
 </xpert-config>

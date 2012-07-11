@@ -32,6 +32,11 @@ public class Profile {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    @Override
+    public String toString() {
+        return description;
+    }
 
     @Override
     public boolean equals(Object obj) {

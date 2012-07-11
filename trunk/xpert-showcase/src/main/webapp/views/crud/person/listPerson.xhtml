@@ -1,0 +1,60 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <ui:param name="title" value="#{msg['person.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuPerson.xhtml" />
+        <h:form id="formListPerson">
+            <xc:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30"
+                         var="person" value="#{personMB.dataModel}">
+                <p:column headerText="#{msg['person.code']}" sortBy="#{person.code}"
+                          filterBy="#{person.code}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}"
+                          filterBy="#{person.name}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}" sortBy="#{person.cpf}"
+                          filterBy="#{person.cpf}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.status']}" sortBy="#{person.status}"
+                          filterBy="#{person.status}"
+                          filterOptions="#{findAllBean.getSelect(classMB.status)}">
+                    <h:outputText value="#{person.status}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.group']}" sortBy="#{person.group}">
+                    <h:outputText value="#{person.group}">
+                        <x:initializer/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="text-align: center;">
+                    <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailPerson" >
+                        <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}" />
+                    </p:commandButton>
+                    <p:button icon="ui-icon-pencil" outcome="createPerson" >
+                        <f:param name="id" value="#{person.id}" />
+                    </p:button>
+                    <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{personMB.delete}" >
+                        <f:setPropertyActionListener value="#{person.id}" target="#{personMB.id}" />
+                        <x:confirmation />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetPersonDetail" header="#{msg['person.detail']}" appendToBody="true" modal="true" height="500" width="800">
+            <ui:include src="detailPerson.xhtml" />
+        </p:dialog>
+
+        <ui:include src="personSource.xhtml"/>
+
+    </ui:define>
+</ui:composition>

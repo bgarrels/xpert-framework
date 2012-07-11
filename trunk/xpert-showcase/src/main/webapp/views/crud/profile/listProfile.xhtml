@@ -1,0 +1,39 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <ui:param name="title" value="#{msg['profile.list']}" />
+   <ui:define name="body">
+       <ui:include src="menuProfile.xhtml" />
+       <h:form id="formListProfile">
+           <xc:modalMessages/>
+           <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30"
+                   var="profile" value="#{profileMB.dataModel}">
+               <p:column headerText="#{msg['profile.description']}" sortBy="#{profile.description}"
+                      filterBy="#{profile.description}">
+                   <h:outputText value="#{profile.description}"/>
+               </p:column>
+               <p:column style="text-align: center;">
+                   <p:commandButton oncomplete="widgetProfileDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailProfile" >
+                       <f:setPropertyActionListener value="#{profile}" target="#{profileMB.entity}" />
+                   </p:commandButton>
+                   <p:button icon="ui-icon-pencil" outcome="createProfile" >
+                       <f:param name="id" value="#{profile.id}" />
+                   </p:button>
+                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{profileMB.delete}" >
+                       <f:setPropertyActionListener value="#{profile.id}" target="#{profileMB.id}" />
+                       <x:confirmation />
+                   </p:commandButton>
+               </p:column>
+           </p:dataTable>
+       </h:form>
+
+       <p:dialog widgetVar="widgetProfileDetail" header="#{msg['profile.detail']}" appendToBody="true" modal="true" height="500" width="800">
+           <ui:include src="detailProfile.xhtml" />
+       </p:dialog>
+   </ui:define>
+</ui:composition>

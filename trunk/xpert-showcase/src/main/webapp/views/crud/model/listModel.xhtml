@@ -1,0 +1,39 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <ui:param name="title" value="#{msg['model.list']}" />
+   <ui:define name="body">
+       <ui:include src="menuModel.xhtml" />
+       <h:form id="formListModel">
+           <xc:modalMessages/>
+           <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30"
+                   var="model" value="#{modelMB.dataModel}">
+               <p:column headerText="#{msg['model.description']}" sortBy="#{model.description}"
+                      filterBy="#{model.description}">
+                   <h:outputText value="#{model.description}"/>
+               </p:column>
+               <p:column style="text-align: center;">
+                   <p:commandButton oncomplete="widgetModelDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailModel" >
+                       <f:setPropertyActionListener value="#{model}" target="#{modelMB.entity}" />
+                   </p:commandButton>
+                   <p:button icon="ui-icon-pencil" outcome="createModel" >
+                       <f:param name="id" value="#{model.id}" />
+                   </p:button>
+                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{modelMB.delete}" >
+                       <f:setPropertyActionListener value="#{model.id}" target="#{modelMB.id}" />
+                       <x:confirmation />
+                   </p:commandButton>
+               </p:column>
+           </p:dataTable>
+       </h:form>
+
+       <p:dialog widgetVar="widgetModelDetail" header="#{msg['model.detail']}" appendToBody="true" modal="true" height="500" width="800">
+           <ui:include src="detailModel.xhtml" />
+       </p:dialog>
+   </ui:define>
+</ui:composition>
