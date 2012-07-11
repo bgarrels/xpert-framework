@@ -9,12 +9,12 @@ import freemarker.template.TemplateException;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -85,6 +85,16 @@ public class BeanCreator {
         }
         if (string.length() > 1) {
             return string.substring(0, 1).toLowerCase() + "" + string.substring(1, string.length());
+        }
+        return "";
+    }
+
+    public static String getUpperFirstLetter(String string) {
+        if (string.length() == 1) {
+            return string.toUpperCase();
+        }
+        if (string.length() > 1) {
+            return string.substring(0, 1).toUpperCase() + "" + string.substring(1, string.length());
         }
         return "";
     }
@@ -168,7 +178,7 @@ public class BeanCreator {
     }
 
     public static String getList(Class clazz, String template, String resourceBundle) {
-        Field[] fields = clazz.getDeclaredFields();
+        List<Field> fields = getFields(clazz);
         String managedBean = getNameManagedBean(clazz);
         String varName = getLowerFirstLetter(clazz.getSimpleName());
         String idExpression = "#{" + varName + "." + EntityUtils.getIdFieldName(clazz) + "}";
@@ -257,7 +267,7 @@ public class BeanCreator {
             resourceBundle = "msg";
         }
 
-        Field[] fields = clazz.getDeclaredFields();
+        List<Field> fields = getFields(clazz);
         StringBuilder view = new StringBuilder();
         String managedBean = getNameManagedBean(clazz);
         view.append(getHeader(null));
@@ -461,27 +471,33 @@ public class BeanCreator {
         out.closeEntry();
     }
 
-    public static void main(String[] args) {
-        //  System.out.println(getView(Person.class));
+    public static List<Field> getFields(Class entity) {
+        List<Field> fields = new ArrayList<Field>();
+        fields.addAll(Arrays.asList(entity.getDeclaredFields()));
+        if (entity.getSuperclass() != null && !entity.getSuperclass().equals(Object.class)) {
+            fields.addAll(getFields(entity.getSuperclass()));
+        }
+        return fields;
     }
-    /*
-     * public static void main(String[] args) throws IOException {
-     *
-     *
-     * PackageInfo packageInfo = new PackageInfo();
-     * packageInfo.setManagedBean("com.mb");
-     * packageInfo.setBusinessObject("com.bo"); packageInfo.setDao("com.dao");
-     * packageInfo.setDaoImpl("com.dao.impl");
-     * packageInfo.setBaseDAO("com.dao.BaseDAOImpl");
-     *
-     * Bean bean = new Bean(Bean.class, BeanType.DAO_IMPL);
-     * bean.setPackageInfo(packageInfo); try {
-     * System.out.println(createBean(bean, packageInfo, "Ayslan")); } catch
-     * (IOException ex) {
-     * Logger.getLogger(BeanCreator.class.getName()).log(Level.SEVERE, null,
-     * ex); } catch (TemplateException ex) {
-     * Logger.getLogger(BeanCreator.class.getName()).log(Level.SEVERE, null,
-     * ex); } }
-     *
-     */
+
+    public static boolean isAnnotationPresent(Field field, Class annotation) {
+        if (field.isAnnotationPresent(annotation)) {
+            return true;
+        }
+        //annotation can be found in Method Get
+        Method method = getMethod(field);
+        if (method != null && method.isAnnotationPresent(annotation)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static Method getMethod(Field field) {
+        try {
+            return field.getDeclaringClass().getMethod("get" + getUpperFirstLetter(field.getName()));
+        } catch (Exception ex) {
+            //nothing
+            return null;
+        }
+    }
 }
