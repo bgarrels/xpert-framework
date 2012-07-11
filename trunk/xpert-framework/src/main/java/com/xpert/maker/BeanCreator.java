@@ -30,8 +30,10 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class BeanCreator {
 
+    private static final Logger logger = Logger.getLogger(BeanCreator.class.getName());
     private static final Configuration CONFIG = new Configuration();
     private static final String AUTHOR = "#Author";
+    private static final String GET_PREFIX = "get";
 
     static {
         try {
@@ -54,6 +56,9 @@ public class BeanCreator {
         }
         if (bean.getBeanType().equals(BeanType.MENU)) {
             return getMenu(bean.getEntity());
+        }
+        if (bean.getBeanType().equals(BeanType.DETAIL)) {
+            return getDetail(bean.getEntity(), configuration.getResourceBundle());
         }
 
         Template template = getTemplate(bean.getBeanType().getTemplate());
@@ -79,24 +84,23 @@ public class BeanCreator {
         return new Template(template, new StringReader(templateString), CONFIG);
     }
 
-    public static String getLowerFirstLetter(String string) {
-        if (string.length() == 1) {
-            return string.toLowerCase();
-        }
-        if (string.length() > 1) {
-            return string.substring(0, 1).toLowerCase() + "" + string.substring(1, string.length());
-        }
-        return "";
-    }
+    public static String getViewTemplate() {
 
-    public static String getUpperFirstLetter(String string) {
-        if (string.length() == 1) {
-            return string.toUpperCase();
+        try {
+            Template template = BeanCreator.getTemplate("view-template.ftl");
+            StringWriter writer = new StringWriter();
+            template.process(null, writer);
+            writer.flush();
+            writer.close();
+            return writer.toString();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        } catch (TemplateException ex) {
+            logger.log(Level.SEVERE, null, ex);
         }
-        if (string.length() > 1) {
-            return string.substring(0, 1).toUpperCase() + "" + string.substring(1, string.length());
-        }
+
         return "";
+
     }
 
     public static String getI18N(Class clazz) {
@@ -182,7 +186,7 @@ public class BeanCreator {
         String managedBean = getNameManagedBean(clazz);
         String varName = getLowerFirstLetter(clazz.getSimpleName());
         String idExpression = "#{" + varName + "." + EntityUtils.getIdFieldName(clazz) + "}";
-        String dialogWidget = "widget" + clazz.getSimpleName() + "Detail";
+        String dialogWidget = getDialogWidget(clazz);
         StringBuilder view = new StringBuilder();
         view.append(getHeader(template));
         view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".list']}\" />\n");
@@ -193,7 +197,7 @@ public class BeanCreator {
         view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\"\n");
         view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\">\n");
         for (Field field : fields) {
-            if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(ManyToMany.class) || field.isAnnotationPresent(OneToMany.class)) {
+            if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
                 continue;
             }
             String fieldName = varName + "." + field.getName();
@@ -232,29 +236,45 @@ public class BeanCreator {
         view.append("           </p:dataTable>\n");
         view.append("       </h:form>\n\n");
         view.append("       <p:dialog widgetVar=\"").append(dialogWidget).append("\" header=\"#{").append(resourceBundle).append("['").append(varName).append(".detail']}\" appendToBody=\"true\" modal=\"true\" height=\"500\" width=\"800\">\n");
-        view.append("           <h:form id=\"formDetail").append(clazz.getSimpleName()).append("\">\n");
-        view.append("               <h:panelGrid columns=\"4\">\n");
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(ManyToMany.class) || field.isAnnotationPresent(OneToMany.class)) {
-                continue;
-            }
-            String varExpression = "#{" + managedBean + ".entity." + field.getName() + "}";
-            view.append("\n");
-            view.append("                   ").append(getLabel(field, false, resourceBundle));
-            view.append(getText(field, resourceBundle, varExpression, "                   "));
-        }
-        view.append("               </h:panelGrid>\n");
-        view.append("               <p:separator/>\n");
-        view.append("               <div style=\"text-align: center;\">\n");
-        view.append("                   <p:commandButton type=\"button\" value=\"#{xmsg['close']}\" onclick=\"").append(dialogWidget).append(".hide()\" />\n");
-        view.append("                   <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
-        view.append("               </div>\n");
-        view.append("           </h:form>\n");
+        view.append("           <ui:include src=\"detail").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("       </p:dialog>\n");
         view.append("   </ui:define>\n");
         view.append("</ui:composition>");
 
         return view.toString();
+    }
+
+    public static String getDetail(Class clazz, String resourceBundle) {
+        List<Field> fields = getFields(clazz);
+        String managedBean = getNameManagedBean(clazz);
+        String dialogWidget = getDialogWidget(clazz);
+        StringBuilder view = new StringBuilder();
+        view.append(getHeader(null));
+        view.append("   <h:form id=\"formDetail").append(clazz.getSimpleName()).append("\">\n");
+        view.append("       <h:panelGrid columns=\"4\">\n");
+        for (Field field : fields) {
+            if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
+                continue;
+            }
+            String varExpression = "#{" + managedBean + ".entity." + field.getName() + "}";
+            view.append("\n");
+            view.append("           ").append(getLabel(field, false, resourceBundle));
+            view.append(getText(field, resourceBundle, varExpression, "         "));
+        }
+        view.append("       </h:panelGrid>\n");
+        view.append("       <p:separator/>\n");
+        view.append("       <div style=\"text-align: center;\">\n");
+        view.append("           <p:commandButton type=\"button\" value=\"#{xmsg['close']}\" onclick=\"").append(dialogWidget).append(".hide()\" />\n");
+        view.append("           <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
+        view.append("       </div>\n");
+        view.append("   </h:form>\n");
+        view.append("</ui:composition>");
+
+        return view.toString();
+    }
+
+    public static String getDialogWidget(Class clazz) {
+        return "widget" + clazz.getSimpleName() + "Detail";
     }
 
     public static String getNameManagedBean(Class clazz) {
@@ -284,21 +304,21 @@ public class BeanCreator {
             boolean hasEmptySelect = false;
             Integer maxlength = null;
             boolean required = false;
-            if (field.isAnnotationPresent(NotNull.class) || field.isAnnotationPresent(NotBlank.class)) {
+            if (isAnnotationPresent(field, NotNull.class) || isAnnotationPresent(field, NotBlank.class)) {
                 required = true;
             }
             if (field.getType().equals(Date.class)) {
                 tag = "p:calendar";
             } else if (field.getType().equals(BigDecimal.class)) {
                 tag = "xc:inputNumber";
-            } else if (field.isAnnotationPresent(ManyToOne.class) || field.getType().isEnum()) {
+            } else if (isAnnotationPresent(field, ManyToOne.class) || field.getType().isEnum()) {
                 tag = "h:selectOneMenu";
                 if (!field.getType().isEnum()) {
                     converter = "entityConverter";
                 }
                 hasSelectItem = true;
                 hasEmptySelect = true;
-            } else if (field.isAnnotationPresent(OneToMany.class) || field.isAnnotationPresent(ManyToMany.class)) {
+            } else if (isAnnotationPresent(field, OneToMany.class) || isAnnotationPresent(field, ManyToMany.class)) {
                 tag = "h:selectManyCheckbox";
                 converter = "entityConverter";
                 hasSelectItem = true;
@@ -339,10 +359,20 @@ public class BeanCreator {
     public static boolean isLazy(Field field) {
 
         Annotation annotation = field.getAnnotation(ManyToOne.class);
+        //search in method
+        if (annotation == null) {
+            Method method = getMethod(field);
+            annotation = method.getAnnotation(ManyToOne.class);
+        }
         if (annotation != null && ((ManyToOne) annotation).fetch() != null && ((ManyToOne) annotation).fetch().equals(FetchType.LAZY)) {
             return true;
         }
         annotation = field.getAnnotation(ManyToMany.class);
+         //search in method
+        if (annotation == null) {
+            Method method = getMethod(field);
+            annotation = method.getAnnotation(ManyToOne.class);
+        }
         if (annotation != null && ((((ManyToMany) annotation).fetch() == null) || ((ManyToMany) annotation).fetch().equals(FetchType.LAZY))) {
             return true;
         }
@@ -426,7 +456,7 @@ public class BeanCreator {
         view.append("\n");
     }
 
-    public static byte[] createBeanZipFile(List<MappedBean> mappedBeans, String classBean) throws IOException, TemplateException {
+    public static byte[] createBeanZipFile(List<MappedBean> mappedBeans, String classBean, String viewTemplate, BeanConfiguration configuration) throws IOException, TemplateException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream out = new ZipOutputStream(baos);
         out.setLevel(Deflater.DEFAULT_COMPRESSION);
@@ -446,9 +476,13 @@ public class BeanCreator {
             putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
             //list
             putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/list" + classSimpleName + ".xhtml", mappedBean.getListView());
+            //detail
+            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
             //menu
             putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
         }
+        //template
+        putEntry(out, getViewTemplatePath(configuration), viewTemplate);
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);
 
@@ -457,6 +491,14 @@ public class BeanCreator {
         out.close();
 
         return baos.toByteArray();
+    }
+
+    public static String getViewTemplatePath(BeanConfiguration configuration) {
+        if (configuration.getTemplate() != null && !configuration.getTemplate().isEmpty()) {
+            return configuration.getTemplate();
+        } else {
+            return "template/mainTemplate.xhtml";
+        }
     }
 
     public static void putEntry(ZipOutputStream out, String fileName, String content) throws IOException {
@@ -480,6 +522,13 @@ public class BeanCreator {
         return fields;
     }
 
+    /**
+     * Verify annotation in field and in method get equivalent to field
+     * 
+     * @param field
+     * @param annotation
+     * @return 
+     */
     public static boolean isAnnotationPresent(Field field, Class annotation) {
         if (field.isAnnotationPresent(annotation)) {
             return true;
@@ -492,12 +541,39 @@ public class BeanCreator {
         return false;
     }
 
+    /**
+     * Return equivalent method Get to a field.
+     * Example: field: name, try to find method getName()
+     * 
+     * @param field
+     * @return 
+     */
     public static Method getMethod(Field field) {
         try {
-            return field.getDeclaringClass().getMethod("get" + getUpperFirstLetter(field.getName()));
+            return field.getDeclaringClass().getMethod(GET_PREFIX + getUpperFirstLetter(field.getName()));
         } catch (Exception ex) {
             //nothing
             return null;
         }
+    }
+
+    public static String getLowerFirstLetter(String string) {
+        if (string.length() == 1) {
+            return string.toLowerCase();
+        }
+        if (string.length() > 1) {
+            return string.substring(0, 1).toLowerCase() + "" + string.substring(1, string.length());
+        }
+        return "";
+    }
+
+    public static String getUpperFirstLetter(String string) {
+        if (string.length() == 1) {
+            return string.toUpperCase();
+        }
+        if (string.length() > 1) {
+            return string.substring(0, 1).toUpperCase() + "" + string.substring(1, string.length());
+        }
+        return "";
     }
 }

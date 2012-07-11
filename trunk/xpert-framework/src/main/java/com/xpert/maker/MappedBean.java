@@ -18,6 +18,7 @@ public class MappedBean {
     private String formCreateView;
     private String listView;
     private String menu;
+    private String detail;
 
     public MappedBean() {
     }
@@ -26,6 +27,14 @@ public class MappedBean {
         this.entityClass = entityClass;
     }
 
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+    
     public String getMenu() {
         return menu;
     }

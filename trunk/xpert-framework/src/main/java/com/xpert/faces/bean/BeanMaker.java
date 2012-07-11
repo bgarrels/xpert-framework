@@ -38,13 +38,15 @@ public class BeanMaker implements Serializable {
     private BeanConfiguration configuration = new BeanConfiguration();
     private String author;
     private String classBean;
+    private String viewTemplate;
 
     @PostConstruct
     public void init() {
         entityManager = Configuration.getEntityManager();
         persistenceMappedBean = new PersistenceMappedBean(entityManager);
         classes = persistenceMappedBean.getMappedClasses();
-        classBean = persistenceMappedBean.getClassBean("");
+        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
+        viewTemplate = BeanCreator.getViewTemplate();
     }
 
     public void make() {
@@ -70,7 +72,7 @@ public class BeanMaker implements Serializable {
 
     public void download() {
         try {
-            FacesUtils.download(BeanCreator.createBeanZipFile(mappedBeans, classBean), "application/zip", getDownloadFileName());
+            FacesUtils.download(BeanCreator.createBeanZipFile(mappedBeans, classBean, viewTemplate, configuration), "application/zip", getDownloadFileName());
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_FATAL, ex.getMessage(), null));
@@ -133,4 +135,13 @@ public class BeanMaker implements Serializable {
     public void setClassBean(String classBean) {
         this.classBean = classBean;
     }
+
+    public String getViewTemplate() {
+        return viewTemplate;
+    }
+
+    public void setViewTemplate(String viewTemplate) {
+        this.viewTemplate = viewTemplate;
+    }
+    
 }

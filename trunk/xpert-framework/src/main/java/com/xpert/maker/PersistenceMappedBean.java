@@ -6,8 +6,6 @@ package com.xpert.maker;
 
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.audit.model.AbstractMetadata;
-import com.xpert.maker.BeanCreator;
-import com.xpert.utils.HumaniseCamelCase;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;
@@ -52,6 +50,7 @@ public class PersistenceMappedBean {
                 mappedBean.setCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.CREATE), beanConfiguration));
                 mappedBean.setListView(BeanCreator.createBean(new Bean(clazz, BeanType.LIST), beanConfiguration));
                 mappedBean.setMenu(BeanCreator.createBean(new Bean(clazz, BeanType.MENU), beanConfiguration));
+                mappedBean.setDetail(BeanCreator.createBean(new Bean(clazz, BeanType.DETAIL), beanConfiguration));
                 mappedBeans.add(mappedBean);
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
