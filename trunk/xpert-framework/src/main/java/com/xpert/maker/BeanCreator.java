@@ -19,6 +19,8 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.persistence.*;
+
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.io.IOUtils;
@@ -34,6 +36,7 @@ public class BeanCreator {
     private static final Configuration CONFIG = new Configuration();
     private static final String AUTHOR = "#Author";
     private static final String GET_PREFIX = "get";
+    private static final String[] LOCALES_MAKER = {"pt_BR", "en", "es"};
 
     static {
         try {
@@ -492,8 +495,10 @@ public class BeanCreator {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream out = new ZipOutputStream(baos);
         out.setLevel(Deflater.DEFAULT_COMPRESSION);
+        StringBuilder i18n = new StringBuilder();
         for (MappedBean mappedBean : mappedBeans) {
             String classSimpleName = mappedBean.getEntityClass().getSimpleName();
+            String nameLower = getNameLower(mappedBean.getEntityClass());
             //Managed bean
             putEntry(out, "mb/" + classSimpleName + "MB.java", mappedBean.getManagedBean());
             //BO
@@ -503,20 +508,26 @@ public class BeanCreator {
             //DAO Impl
             putEntry(out, "dao/impl/" + classSimpleName + "DAOImpl.java", mappedBean.getDaoImpl());
             //create
-            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
+            putEntry(out, "views/" + nameLower + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
             //form
-            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
+            putEntry(out, "views/" + nameLower + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
             //list
-            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/list" + classSimpleName + ".xhtml", mappedBean.getListView());
+            putEntry(out, "views/" + nameLower + "/list" + classSimpleName + ".xhtml", mappedBean.getListView());
             //detail
-            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
+            putEntry(out, "views/" + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
             //menu
-            putEntry(out, "views/" + getNameLower(mappedBean.getEntityClass()) + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
+            putEntry(out, "views/" + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
+
+            i18n.append(mappedBean.getI18n());
         }
         //template
         putEntry(out, getViewTemplatePath(configuration), viewTemplate);
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);
+        //i18n
+        for (String locale : LOCALES_MAKER) {
+            putEntry(out, "messages_" + locale, i18n.toString());
+        }
 
         out.finish();
         out.flush();
