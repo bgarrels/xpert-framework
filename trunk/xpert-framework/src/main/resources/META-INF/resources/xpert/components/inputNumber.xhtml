@@ -12,6 +12,8 @@
         <cc:attribute name="centsSeparator" type="String"/>
         <cc:attribute name="thousandsSeparator" type="String" />
         <cc:attribute name="centsLimit" type="int" default="2"/>
+        <cc:attribute name="requiredMessage" />
+        <cc:attribute name="required" default="false"/>
         <cc:attribute name="value"/>
         <cc:attribute name="readonly"/>
         <cc:attribute name="disabled"/>
@@ -35,6 +37,7 @@
         <p:inputText  readonly="#{cc.attrs.readonly}" id="input" style="#{cc.attrs.style}"  
                       styleClass="#{cc.attrs.styleClass}" value="#{cc.attrs.value}"
                       disabled="#{cc.attrs.disabled}"
+                      required="#{cc.attrs.required}" requiredMessage="#{cc.attrs.requiredMessage}"
                       size="#{cc.attrs.size}" converterMessage="#{cc.attrs.converterMessage}" >
             <f:convertNumber maxFractionDigits="#{cc.attrs.centsLimit}" locale="#{view.locale}"
                              minFractionDigits="#{cc.attrs.centsLimit}" />
