@@ -211,7 +211,7 @@ public class QueryBuilder {
                     queryString.append(" IS NOT NULL ");
                 }
             } else {
-                queryString.append(restriction.getRestrictionType().getSymbol()).append(" ");
+                queryString.append(" ").append(restriction.getRestrictionType().getSymbol()).append(" ");
                 if (restriction.getRestrictionType().equals(RestrictionType.LIKE) || restriction.getRestrictionType().equals(RestrictionType.NOT_LIKE)) {
                     queryString.append("UPPER(?").append(currentParameter).append(")");
                 } else if (restriction.getRestrictionType().equals(RestrictionType.IN) || restriction.getRestrictionType().equals(RestrictionType.NOT_IN)) {

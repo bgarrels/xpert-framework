@@ -37,12 +37,14 @@ public class Restriction {
         this.property = property;
         this.value = value;
         this.temporalType = temporalType;
+        this.restrictionType = restrictionType;
     }
 
     public Restriction(String property, RestrictionType restrictionType, Calendar value, TemporalType temporalType) {
         this.property = property;
         this.value = value;
         this.temporalType = temporalType;
+        this.restrictionType = restrictionType;
     }
 
     public Restriction(String property, RestrictionType restrictionType, Object value) {
