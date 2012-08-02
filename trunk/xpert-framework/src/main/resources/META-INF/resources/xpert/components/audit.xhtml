@@ -15,7 +15,6 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <h:outputScript library="xpert" name="scripts/core.js" target="head" />
-        <h:outputStylesheet library="xpert" name="css/sh-style.css" />
         <span id="#{cc.attrs.clientId}">
             <h:panelGroup rendered="#{auditBean.isPersisted(cc.attrs.for)}" id="auditingPanel">
                 <p:spacer height="3" />
@@ -60,7 +59,7 @@
                                         <h:outputText value="#{xmsg[audit.auditingType.description]}" />
                                     </p:column>
                                     <p:column headerText="#{xmsg['user']}">
-                                        <h:outputText value="#{audit.user}" />
+                                        <h:outputText value="#{audit.userName}" />
                                     </p:column>
                                     <p:summaryRow>  
                                         <p:column colspan="4">  

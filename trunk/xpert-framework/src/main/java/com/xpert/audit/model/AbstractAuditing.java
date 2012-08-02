@@ -26,6 +26,8 @@ public abstract class AbstractAuditing {
 
     public abstract List getMetadatas();
     
+    public abstract String getUserName();
+    
     public abstract void setMetadatas(List metadatas);
     
     public Long getIdentifier() {

@@ -231,17 +231,20 @@ public class BeanCreator {
         }
         //actions column
         view.append("               <p:column style=\"text-align: center;\">\n");
-        view.append("                   <p:commandButton oncomplete=\"").append(dialogWidget).append(".show();\"  icon=\"ui-icon-zoomin\" process=\"@this\" update=\":formDetail").append(clazz.getSimpleName()).append("\" >\n");
+        view.append("                   <p:commandButton oncomplete=\"").append(dialogWidget).append(".show();\"  icon=\"ui-icon-zoomin\" process=\"@form\" update=\":formDetail").append(clazz.getSimpleName()).append("\" >\n");
         view.append("                       <f:setPropertyActionListener value=\"#{").append(varName).append("}\" target=\"#{").append(managedBean).append(".entity}\" />\n");
         view.append("                   </p:commandButton>\n");
         view.append("                   <p:button icon=\"ui-icon-pencil\" outcome=\"create").append(clazz.getSimpleName()).append("\" >\n");
         view.append("                       <f:param name=\"id\" value=\"").append(idExpression).append("\" />\n");
         view.append("                   </p:button>\n");
-        view.append("                   <p:commandButton icon=\"ui-icon-trash\" process=\"@this\" update=\"@form\" action=\"#{").append(managedBean).append(".delete}\" >\n");
+        view.append("                   <p:commandButton icon=\"ui-icon-trash\" process=\"@form\" update=\"@form\" action=\"#{").append(managedBean).append(".delete}\" >\n");
         view.append("                       <f:setPropertyActionListener value=\"").append(idExpression).append("\" target=\"#{").append(managedBean).append(".id}\" />\n");
         view.append("                       <x:confirmation ").append("message=\"#{xmsg['").append("confirmDelete").append("']} #{varName}\" />\n");
         view.append("                   </p:commandButton>\n");
         view.append("               </p:column>\n");
+        view.append("               <f:facet name=\"footer\">\n");
+        view.append("                   <xc:auditDelete for=\"#{classMB.").append(varName).append("}\"/>\n");
+        view.append("               </f:facet>\n");
         view.append("           </p:dataTable>\n");
         view.append("       </h:form>\n\n");
         view.append("       <p:dialog widgetVar=\"").append(dialogWidget).append("\" header=\"#{").append(resourceBundle).append("['").append(varName).append(".detail']}\" appendToBody=\"true\" modal=\"true\" height=\"500\" width=\"800\">\n");
