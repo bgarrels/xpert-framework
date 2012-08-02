@@ -21,17 +21,20 @@
                    <h:outputText value="#{state.country}"/>
                </p:column>
                <p:column style="text-align: center;">
-                   <p:commandButton oncomplete="widgetStateDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailState" >
+                   <p:commandButton oncomplete="widgetStateDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailState" >
                        <f:setPropertyActionListener value="#{state}" target="#{stateMB.entity}" />
                    </p:commandButton>
                    <p:button icon="ui-icon-pencil" outcome="createState" >
                        <f:param name="id" value="#{state.id}" />
                    </p:button>
-                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{stateMB.delete}" >
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{stateMB.delete}" >
                        <f:setPropertyActionListener value="#{state.id}" target="#{stateMB.id}" />
-                       <x:confirmation />
+                       <x:confirmation message="#{xmsg['confirmDelete']} #{varName}" />
                    </p:commandButton>
                </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.state}"/>
+               </f:facet>
            </p:dataTable>
        </h:form>
 

@@ -47,7 +47,11 @@
                         <x:confirmation />
                     </p:commandButton>
                 </p:column>
+                <f:facet name="footer">
+                    <xc:auditDelete for="#{classMB.person}"/>
+                </f:facet>
             </p:dataTable>
+
         </h:form>
 
         <p:dialog widgetVar="widgetPersonDetail" header="#{msg['person.detail']}" appendToBody="true" modal="true" height="500" width="800">

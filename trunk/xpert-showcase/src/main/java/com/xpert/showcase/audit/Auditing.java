@@ -49,4 +49,12 @@ public class Auditing extends AbstractAuditing implements Serializable {
     public void setMetadatas(List metadatas) {
         this.metadatas = metadatas;
     }
+
+    @Override
+    public String getUserName() {
+        if(user != null){
+            return user.getName();
+        }
+        return "";
+    }
 }

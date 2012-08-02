@@ -18,17 +18,20 @@
                    <h:outputText value="#{statusGroup.description}"/>
                </p:column>
                <p:column style="text-align: center;">
-                   <p:commandButton oncomplete="widgetStatusGroupDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailStatusGroup" >
+                   <p:commandButton oncomplete="widgetStatusGroupDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailStatusGroup" >
                        <f:setPropertyActionListener value="#{statusGroup}" target="#{statusGroupMB.entity}" />
                    </p:commandButton>
                    <p:button icon="ui-icon-pencil" outcome="createStatusGroup" >
                        <f:param name="id" value="#{statusGroup.id}" />
                    </p:button>
-                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{statusGroupMB.delete}" >
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{statusGroupMB.delete}" >
                        <f:setPropertyActionListener value="#{statusGroup.id}" target="#{statusGroupMB.id}" />
-                       <x:confirmation />
+                       <x:confirmation message="#{xmsg['confirmDelete']} #{varName}" />
                    </p:commandButton>
                </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.statusGroup}"/>
+               </f:facet>
            </p:dataTable>
        </h:form>
 

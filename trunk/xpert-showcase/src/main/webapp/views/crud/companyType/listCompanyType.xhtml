@@ -18,17 +18,20 @@
                    <h:outputText value="#{companyType.description}"/>
                </p:column>
                <p:column style="text-align: center;">
-                   <p:commandButton oncomplete="widgetCompanyTypeDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailCompanyType" >
+                   <p:commandButton oncomplete="widgetCompanyTypeDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailCompanyType" >
                        <f:setPropertyActionListener value="#{companyType}" target="#{companyTypeMB.entity}" />
                    </p:commandButton>
                    <p:button icon="ui-icon-pencil" outcome="createCompanyType" >
                        <f:param name="id" value="#{companyType.id}" />
                    </p:button>
-                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{companyTypeMB.delete}" >
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{companyTypeMB.delete}" >
                        <f:setPropertyActionListener value="#{companyType.id}" target="#{companyTypeMB.id}" />
-                       <x:confirmation />
+                       <x:confirmation message="#{xmsg['confirmDelete']} #{varName}" />
                    </p:commandButton>
                </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.companyType}"/>
+               </f:facet>
            </p:dataTable>
        </h:form>
 

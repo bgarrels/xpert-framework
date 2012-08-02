@@ -21,17 +21,20 @@
                    <h:outputText value="#{city.name}"/>
                </p:column>
                <p:column style="text-align: center;">
-                   <p:commandButton oncomplete="widgetCityDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailCity" >
+                   <p:commandButton oncomplete="widgetCityDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailCity" >
                        <f:setPropertyActionListener value="#{city}" target="#{cityMB.entity}" />
                    </p:commandButton>
                    <p:button icon="ui-icon-pencil" outcome="createCity" >
                        <f:param name="id" value="#{city.id}" />
                    </p:button>
-                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{cityMB.delete}" >
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{cityMB.delete}" >
                        <f:setPropertyActionListener value="#{city.id}" target="#{cityMB.id}" />
-                       <x:confirmation />
+                       <x:confirmation message="#{xmsg['confirmDelete']} #{varName}" />
                    </p:commandButton>
                </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.city}"/>
+               </f:facet>
            </p:dataTable>
        </h:form>
 

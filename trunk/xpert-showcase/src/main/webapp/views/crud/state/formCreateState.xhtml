@@ -18,6 +18,11 @@
                <f:selectItems value="#{findAllBean.get(classMB.country)}" var="country" itemLabel="#{country}" />
            </h:selectOneMenu>
 
+           <h:outputLabel value="#{msg['state.cities']}:" />
+           <h:selectManyCheckbox value="#{stateMB.entity.cities}" converter="entityConverter" >
+               <x:initializer/>
+               <f:selectItems value="#{findAllBean.get(classMB.city)}" var="city" itemLabel="#{city}" />
+           </h:selectManyCheckbox>
        </h:panelGrid>
        <p:separator/>
        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>

@@ -16,7 +16,7 @@
        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
        <div style="text-align: center;">
            <p:commandButton process="@form" update="@form" action="#{permissionMB.save}" value="#{msg['save']}" />
-            <xc:audit for="#{permissionMB.entity}"/>
-        </div>
+           <xc:audit for="#{permissionMB.entity}"/>
+       </div>
    </h:form>
 </ui:composition>

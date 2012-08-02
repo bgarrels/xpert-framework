@@ -18,17 +18,20 @@
                    <h:outputText value="#{permission.description}"/>
                </p:column>
                <p:column style="text-align: center;">
-                   <p:commandButton oncomplete="widgetPermissionDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailPermission" >
+                   <p:commandButton oncomplete="widgetPermissionDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailPermission" >
                        <f:setPropertyActionListener value="#{permission}" target="#{permissionMB.entity}" />
                    </p:commandButton>
                    <p:button icon="ui-icon-pencil" outcome="createPermission" >
                        <f:param name="id" value="#{permission.id}" />
                    </p:button>
-                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{permissionMB.delete}" >
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{permissionMB.delete}" >
                        <f:setPropertyActionListener value="#{permission.id}" target="#{permissionMB.id}" />
-                       <x:confirmation />
+                       <x:confirmation message="#{xmsg['confirmDelete']} #{varName}" />
                    </p:commandButton>
                </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.permission}"/>
+               </f:facet>
            </p:dataTable>
        </h:form>
 

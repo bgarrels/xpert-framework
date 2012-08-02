@@ -12,12 +12,17 @@
            <h:outputLabel value="#{msg['country.name']}:" />
            <p:inputText value="#{countryMB.entity.name}" maxlength="255"  />
 
+           <h:outputLabel value="#{msg['country.states']}:" />
+           <h:selectManyCheckbox value="#{countryMB.entity.states}" converter="entityConverter" >
+               <x:initializer/>
+               <f:selectItems value="#{findAllBean.get(classMB.state)}" var="state" itemLabel="#{state}" />
+           </h:selectManyCheckbox>
        </h:panelGrid>
        <p:separator/>
        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
        <div style="text-align: center;">
            <p:commandButton process="@form" update="@form" action="#{countryMB.save}" value="#{msg['save']}" />
-            <xc:audit for="#{countryMB.entity}"/>
-        </div>
+           <xc:audit for="#{countryMB.entity}"/>
+       </div>
    </h:form>
 </ui:composition>

@@ -18,17 +18,20 @@
                    <h:outputText value="#{model.description}"/>
                </p:column>
                <p:column style="text-align: center;">
-                   <p:commandButton oncomplete="widgetModelDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailModel" >
+                   <p:commandButton oncomplete="widgetModelDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailModel" >
                        <f:setPropertyActionListener value="#{model}" target="#{modelMB.entity}" />
                    </p:commandButton>
                    <p:button icon="ui-icon-pencil" outcome="createModel" >
                        <f:param name="id" value="#{model.id}" />
                    </p:button>
-                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{modelMB.delete}" >
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{modelMB.delete}" >
                        <f:setPropertyActionListener value="#{model.id}" target="#{modelMB.id}" />
-                       <x:confirmation />
+                       <x:confirmation message="#{xmsg['confirmDelete']} #{varName}" />
                    </p:commandButton>
                </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.model}"/>
+               </f:facet>
            </p:dataTable>
        </h:form>
 

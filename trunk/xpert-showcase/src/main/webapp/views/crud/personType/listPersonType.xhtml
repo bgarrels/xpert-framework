@@ -18,17 +18,20 @@
                    <h:outputText value="#{personType.description}"/>
                </p:column>
                <p:column style="text-align: center;">
-                   <p:commandButton oncomplete="widgetPersonTypeDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailPersonType" >
+                   <p:commandButton oncomplete="widgetPersonTypeDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailPersonType" >
                        <f:setPropertyActionListener value="#{personType}" target="#{personTypeMB.entity}" />
                    </p:commandButton>
                    <p:button icon="ui-icon-pencil" outcome="createPersonType" >
                        <f:param name="id" value="#{personType.id}" />
                    </p:button>
-                   <p:commandButton icon="ui-icon-trash" process="@this" update="@form" action="#{personTypeMB.delete}" >
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{personTypeMB.delete}" >
                        <f:setPropertyActionListener value="#{personType.id}" target="#{personTypeMB.id}" />
-                       <x:confirmation />
+                       <x:confirmation message="#{xmsg['confirmDelete']} #{varName}" />
                    </p:commandButton>
                </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.personType}"/>
+               </f:facet>
            </p:dataTable>
        </h:form>
 

@@ -23,7 +23,7 @@
        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
        <div style="text-align: center;">
            <p:commandButton process="@form" update="@form" action="#{groupMB.save}" value="#{msg['save']}" />
-            <xc:audit for="#{groupMB.entity}"/>
-        </div>
+           <xc:audit for="#{groupMB.entity}"/>
+       </div>
    </h:form>
 </ui:composition>
