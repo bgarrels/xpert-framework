@@ -43,6 +43,8 @@ public interface BaseDAO<T> {
 
     public T merge(T object);
 
+    public T merge(T object, boolean audit);
+
     public List<T> listAll();
 
     public List<T> listAll(String order);
