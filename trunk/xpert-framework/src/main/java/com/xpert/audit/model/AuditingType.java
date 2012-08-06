@@ -19,4 +19,5 @@ public enum AuditingType {
     public String getDescription() {
         return description;
     }
+    
 }

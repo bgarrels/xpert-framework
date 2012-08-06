@@ -1,4 +1,4 @@
-package com.xpert.faces.bean;
+package com.xpert.audit;
 
 import com.xpert.Configuration;
 import com.xpert.DAO;
@@ -10,11 +10,18 @@ import com.xpert.faces.primefaces.LazyDataModelImpl;
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.query.JoinBuilder;
 import com.xpert.persistence.query.Restriction;
+import com.xpert.persistence.query.RestrictionType;
+import com.xpert.persistence.utils.EntityUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.primefaces.model.LazyDataModel;
 
 /**
@@ -25,9 +32,12 @@ import org.primefaces.model.LazyDataModel;
 @ViewScoped
 public class AuditDeleteBean {
 
+    private static final Logger logger= Logger.getLogger(AuditDeleteBean.class.getName());
+    
     private Class entity;
     private LazyDataModel<AbstractAuditing> auditings;
     private BaseDAO baseDAO;
+    private Map<Class, Object> renderHistory = new HashMap<Class, Object>();
 
     @PostConstruct
     public void init() {
@@ -46,6 +56,35 @@ public class AuditDeleteBean {
             restrictions.add(new Restriction("auditingType", AuditingType.DELETE));
             auditings = new LazyDataModelImpl<AbstractAuditing>("eventDate DESC", restrictions, baseDAO, new JoinBuilder("a").leftJoin("a.metadatas"));
         }
+    }
+
+    public List<AbstractAuditing> getInsertsAndUpdates(AbstractAuditing deleteAuditing) {
+
+        List<AuditingType> insertUpdateTypes = new ArrayList<AuditingType>();
+        insertUpdateTypes.add(AuditingType.INSERT);
+        insertUpdateTypes.add(AuditingType.UPDATE);
+
+        List<Restriction> restrictions = new ArrayList<Restriction>();
+        restrictions.add(new Restriction("entity", deleteAuditing.getEntity()));
+        restrictions.add(new Restriction("identifier", deleteAuditing.getIdentifier()));
+        restrictions.add(new Restriction("auditingType", RestrictionType.IN, insertUpdateTypes));
+
+        return baseDAO.list(restrictions, "eventDate DESC");
+    }
+    
+    public Object newBeanInstance(AbstractAuditing auditingDelete){
+        try {
+            Object newInstance = entity.newInstance();
+           
+            System.out.println("auditingDelete.getIdentifier() "+auditingDelete.getIdentifier());
+          
+            PropertyUtils.setProperty(newInstance, EntityUtils.getIdFieldName(entity), auditingDelete.getIdentifier());
+           
+            return newInstance;
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public String getObjectDescripton(List<AbstractMetadata> metadatas) {

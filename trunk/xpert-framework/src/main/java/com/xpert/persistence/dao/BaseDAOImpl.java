@@ -180,7 +180,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public void delete(Object id) throws DeleteException {
-        delete(id, true);
+        delete(id, Configuration.isAudit());
     }
 
     @Override

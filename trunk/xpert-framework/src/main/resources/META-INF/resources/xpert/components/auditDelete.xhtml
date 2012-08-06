@@ -5,6 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
       xmlns:h="http://java.sun.com/jsf/html">
 
     <!-- INTERFACE -->
@@ -21,8 +22,8 @@
 
                 <p:commandButton process="@this" action="#{auditDeleteBean.load}" icon="ui-icon-plus"
                                  rendered="#{cc.attrs.collapsed}"
-                                 styleClass="button-detail-auditing" style="margin-bottom: 2px;"
-                                 oncomplete="$(PrimeFaces.escapeClientId('#{cc.attrs.clientId}')).find('.button-detail-auditing').hide();$(PrimeFaces.escapeClientId('#{cc.attrs.clientId}')).find('.panel-detail-auditing').show()"
+                                 styleClass="button-detail-auditing-delete" style="margin-bottom: 2px;"
+                                 oncomplete="$(PrimeFaces.escapeClientId('#{cc.attrs.clientId}')).find('.button-detail-auditing-delete').hide();$(PrimeFaces.escapeClientId('#{cc.attrs.clientId}')).find('.panel-detail-auditing-delete').show()"
                                  update="accordionDetail" value="#{xmsg.listDeletions}" >
                     <f:setPropertyActionListener value="#{cc.attrs.for}" target="#{auditDeleteBean.entity}" />
                 </p:commandButton>
@@ -31,7 +32,7 @@
                     <f:event type="preRenderComponent" listener="#{auditDeleteBean.load(cc.attrs.for)}" />
                 </h:panelGroup>
 
-                <h:panelGroup styleClass="panel-detail-auditing" style="#{cc.attrs.collapsed ? 'display: none;' : ''}">
+                <h:panelGroup styleClass="panel-detail-auditing-delete" style="#{cc.attrs.collapsed ? 'display: none;' : ''}">
                     <p:accordionPanel id="accordionDetail" >
                         <p:tab title="#{xmsg.deletions}">
 
@@ -54,11 +55,11 @@
                                         <h:outputText value="#{empty metadata.newValue ? ' - ': metadata.newValue}"/>    
                                     </ui:repeat>
                                 </p:column>
-                                <p:column style="text-align: center;" sortBy="#{audit.auditingType}" headerText="#{xmsg.type}" >
-                                    <h:outputText value="#{xmsg[audit.auditingType.description]}" />
-                                </p:column>
                                 <p:column headerText="#{xmsg['user']}">
                                     <h:outputText value="#{audit.userName}" />
+                                </p:column>
+                                <p:column>  
+                                    <xc:audit for="#{audit}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
