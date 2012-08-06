@@ -17,8 +17,6 @@ import org.primefaces.model.LazyDataModel;
  *
  * @author Ayslan
  */
-@ManagedBean
-@ViewScoped
 public class DetailAuditBean {
 
     private static final Logger logger = Logger.getLogger(AuditBean.class.getName());
