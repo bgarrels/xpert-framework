@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
  * @author Ayslan
  */
 @Entity
-public class City implements Serializable {
+public class City extends Generic implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

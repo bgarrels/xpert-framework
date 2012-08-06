@@ -153,7 +153,7 @@
                 <ui:include src="/views/common/java/entityManagerFactory.xhtml"/>
 
             </p:tab>
-            <p:tab title="4 - BaseDAO">
+            <p:tab title="Using Xpert BaseDAO">
 
                 Call <b>save(object)</b>,  <b>update(object)</b> or <b>saveOrUpdate(object)</b> from a DAO that extends 
                 <b>com.xpert.persistence.dao.BaseDAOImpl</b>. 
@@ -190,6 +190,71 @@
                     }
 
                 </pre>
+            </p:tab>
+            <p:tab title="Using Custom Generic DAO">
+                  This is a example of a custom Generic DAO, so you don't need to extend/implement Xpert BaseDAO.
+                  <pre name="code" class="java">
+                        import com.xpert.audit.Audit
+                  </pre>
+                  
+                  <br/>
+                  <h3>Using JPA "Merge"</h3>
+                  <pre name="code" class="java">
+                    //merge can save or update a entity
+                    //for update
+                    boolean persisted = EntityUtils.getId(object) != null;
+                    Audit audit = new Audit(getEntityManager());
+                    if (persisted) {
+                        audit.update(object);
+                    }
+                    object = getEntityManager().merge(object);
+                    //for insert 
+                    if (!persisted) {
+                        audit.insert(object);
+                    }
+                  </pre>
+                  <h3>Using JPA "Persist"</h3>
+                  <pre name="code" class="java">
+                     getEntityManager().persist(object);
+                     new Audit(getEntityManager()).insert(object);
+                  </pre>
+            </p:tab>
+            <p:tab title="Ignore from Audit">
+                <h3>@NotAudited</h3>
+                Xpert-Audit will ignore fields/methods annotated with @NotAudited
+                <pre name="code" class="java">
+                    import com.xpert.audit.NotAudited;
+
+                    public class User {
+
+                        private String name;
+                        private String login;
+                        @NotAudited
+                        private String password;
+
+                    //getter and setters
+                    }
+                </pre>
+                <h3>@Transient</h3>
+                Also by the JPA specification will ignore fields/methods annotated with @Transient
+                <pre name="code" class="java">
+                    import javax.​persistence.Transient;
+
+                    public class User {
+
+                        private String name;
+                        private String login;
+                        @NotAudited
+                        private String password;
+                        
+                        //ignore
+                        @Transient
+                        public String getLoginAndName(){
+                            return login+" - "+name;
+                        }
+                    }
+                </pre>
+                
             </p:tab>
 
 
