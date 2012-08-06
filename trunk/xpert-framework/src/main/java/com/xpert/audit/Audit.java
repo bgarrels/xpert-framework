@@ -82,15 +82,6 @@ public class Audit {
         return null;
     }
 
-    public String getMethodName(Method method) {
-        if (method.getName().startsWith("is")) {
-            return method.getName().substring(2, 3).toLowerCase() + method.getName().substring(3);
-        } else if (method.getName().startsWith("get")) {
-            return method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
-        }
-        return null;
-    }
-
     public Session getSession() {
         if (session == null) {
             if (entityManager.getDelegate() instanceof EntityManagerImpl) {
@@ -317,7 +308,11 @@ public class Audit {
                         fieldName = getMethodName(methods[j]);
                     }
                     if (fieldName != null && !fieldName.equals("")) {
-                        field = getDeclaredField(objeto.getClass(), fieldName);
+                        try {
+                            field = getDeclaredField(methods[j].getDeclaringClass(), fieldName);
+                        } catch (NoSuchFieldException ex) {
+                            continue;
+                        }
                         if (field != null && !field.isAnnotationPresent(Transient.class) && !field.isAnnotationPresent(NotAudited.class)
                                 && !field.isAnnotationPresent(Id.class)) {
                             methodGet.add(methods[j]);
@@ -332,6 +327,15 @@ public class Audit {
         }
 
         return methodGet;
+    }
+
+    public String getMethodName(Method method) {
+        if (method.getName().startsWith("is")) {
+            return method.getName().substring(2, 3).toLowerCase() + method.getName().substring(3);
+        } else if (method.getName().startsWith("get")) {
+            return method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
+        }
+        return null;
     }
 
     public Field getDeclaredField(Class clazz, String fieldName) throws Exception {

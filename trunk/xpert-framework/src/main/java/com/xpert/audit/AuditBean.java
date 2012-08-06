@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.model.LazyDataModel;
 
 /**
  *
@@ -25,13 +24,15 @@ public class AuditBean {
     private Object object;
     private Map<BeanModel, DetailAuditBean> beans = new HashMap<BeanModel, DetailAuditBean>();
     private BaseDAO baseDAO;
+    private BeanModel lastBean;
+    private DetailAuditBean lastModel;
 
     @PostConstruct
     public void init() {
         baseDAO = new DAO(Configuration.AUDITING_IMPL);
     }
-    
-    public void detail(Object object){
+
+    public void detail(Object object) {
         this.object = object;
         detail();
     }
@@ -63,36 +64,26 @@ public class AuditBean {
     }
 
     public DetailAuditBean getDetailAuditBean(Object object) {
-        System.out.println("object; " + object);
         BeanModel beanModel = getBeanModel(object);
 
+        if (beanModel == null && lastBean != null) {
+            beanModel = lastBean;
+        }
+
+        if (lastBean != null && lastModel != null && beanModel != null && beanModel.equals(lastBean)) {
+            return lastModel;
+        }
+
         if (beanModel != null) {
-            System.out.println("beanModel != null");
             DetailAuditBean detail = getBeans().get(beanModel);
             if (detail != null) {
+                lastBean = beanModel;
+                lastModel = detail;
                 return detail;
             }
         }
-        System.out.println("return null");
-        //evict nullpointer
+        //prevent nullpointer
         return new DetailAuditBean();
-    }
-
-    public LazyDataModel<AbstractAuditing> getAuditing(Object object) {
-        System.out.println("object; " + object);
-        BeanModel beanModel = getBeanModel(object);
-
-        if (beanModel != null) {
-            System.out.println("beanModel != null");
-            DetailAuditBean detail = getBeans().get(beanModel);
-            if (detail != null) {
-                System.out.println("detail != null");
-                return detail.getAuditings();
-
-            }
-        }
-        System.out.println("return null");
-        return null;
     }
 
     public boolean isPersisted(Object object) {

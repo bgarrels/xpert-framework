@@ -2,7 +2,6 @@ package com.xpert.audit;
 
 import com.xpert.Configuration;
 import com.xpert.DAO;
-import com.xpert.audit.Audit;
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.audit.model.AbstractMetadata;
 import com.xpert.audit.model.AuditingType;
@@ -13,9 +12,7 @@ import com.xpert.persistence.query.Restriction;
 import com.xpert.persistence.query.RestrictionType;
 import com.xpert.persistence.utils.EntityUtils;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -37,7 +34,6 @@ public class AuditDeleteBean {
     private Class entity;
     private LazyDataModel<AbstractAuditing> auditings;
     private BaseDAO baseDAO;
-    private Map<Class, Object> renderHistory = new HashMap<Class, Object>();
 
     @PostConstruct
     public void init() {
@@ -74,10 +70,8 @@ public class AuditDeleteBean {
     
     public Object newBeanInstance(AbstractAuditing auditingDelete){
         try {
+            
             Object newInstance = entity.newInstance();
-           
-            System.out.println("auditingDelete.getIdentifier() "+auditingDelete.getIdentifier());
-          
             PropertyUtils.setProperty(newInstance, EntityUtils.getIdFieldName(entity), auditingDelete.getIdentifier());
            
             return newInstance;
