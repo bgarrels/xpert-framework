@@ -191,7 +191,7 @@
 
                 </pre>
             </p:tab>
-            <p:tab title="Using Custom Generic DAO">
+            <p:tab title="Using Custom DAO">
                   This is a example of a custom Generic DAO, so you don't need to extend/implement Xpert BaseDAO.
                   <pre name="code" class="java">
                         import com.xpert.audit.Audit
@@ -202,7 +202,7 @@
                   <pre name="code" class="java">
                     //merge can save or update a entity
                     //for update
-                    boolean persisted = EntityUtils.getId(object) != null;
+                    boolean persisted = EntityUtils.isPersisted(object);
                     Audit audit = new Audit(getEntityManager());
                     if (persisted) {
                         audit.update(object);

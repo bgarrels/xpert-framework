@@ -5,7 +5,6 @@ import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.showcase.dao.CityDAO;
 import com.xpert.core.validation.UniqueField;
 import com.xpert.core.exception.BusinessException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
