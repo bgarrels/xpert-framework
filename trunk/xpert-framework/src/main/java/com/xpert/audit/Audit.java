@@ -28,7 +28,8 @@ public class Audit {
     private static final Logger logger = Logger.getLogger(Audit.class.getName());
     private static final String[] EXCLUDED_FIELDS = {"notifyAll", "notify", "getClass", "wait", "hashCode", "toString", "equals"};
     private static final SimpleDateFormat AUDIT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static Map<Class, String> MAPPED_NAME = new HashMap<Class, String>();
+    private static Map<Class, String> mappedName = new HashMap<Class, String>();
+    private static Map<Class, List<Method>> mappedMethods = new HashMap<Class, List<Method>>();
     private Session session;
     private EntityManager entityManager;
 
@@ -119,8 +120,8 @@ public class Audit {
 
     public static String getEntityName(Class entity) {
 
-        if (MAPPED_NAME.get(entity) != null) {
-            return MAPPED_NAME.get(entity);
+        if (mappedName.get(entity) != null) {
+            return mappedName.get(entity);
         }
 
         String name = null;
@@ -137,7 +138,7 @@ public class Audit {
             }
         }
 
-        MAPPED_NAME.put(entity, name);
+        mappedName.put(entity, name);
 
         return name;
     }
@@ -189,7 +190,7 @@ public class Audit {
     }
 
     public List<AbstractMetadata> getMetadata(Object object, Object persisted, AbstractAuditing auditing) throws Exception {
-        ArrayList<Method> methodsGet = getMethods(object);
+        List<Method> methodsGet = getMethods(object);
         List<AbstractMetadata> metadatas = new ArrayList<AbstractMetadata>();
         for (Method method : methodsGet) {
             try {
@@ -288,9 +289,15 @@ public class Audit {
         }
     }
 
-    public ArrayList<Method> getMethods(Object objeto) {
+    public List<Method> getMethods(Object objeto) {
 
-        ArrayList<Method> methodGet = new ArrayList<Method>();
+        List<Method> methodGet = mappedMethods.get(objeto.getClass());
+        
+        if (methodGet != null) {
+            return methodGet;
+        }
+        
+        methodGet = new ArrayList<Method>();
         Method methods[] = objeto.getClass().getMethods();
 
         List exclude = Arrays.asList(EXCLUDED_FIELDS);
@@ -325,7 +332,7 @@ public class Audit {
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
-
+        mappedMethods.put(objeto.getClass(), methodGet);
         return methodGet;
     }
 

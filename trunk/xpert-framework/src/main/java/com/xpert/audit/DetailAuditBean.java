@@ -9,8 +9,6 @@ import com.xpert.persistence.utils.EntityUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import org.primefaces.model.LazyDataModel;
 
 /**

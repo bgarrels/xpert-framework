@@ -147,7 +147,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public void saveOrUpdate(T object, boolean audit) {
-        boolean persisted = EntityUtils.getId(object) != null;
+        boolean persisted = EntityUtils.isPersisted(object);
         if (persisted && audit) {
             getNewAudit().update(object);
         }

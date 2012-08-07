@@ -24,6 +24,10 @@ public class EntityUtils {
         return getId(object, object.getClass());
     }
 
+    public static boolean isPersisted(Object object) {
+        return getId(object) != null;
+    }
+
     public static Object getId(Object object, Class clazz) {
         Field[] fields = clazz.getDeclaredFields();
         Method[] methods = clazz.getDeclaredMethods();
