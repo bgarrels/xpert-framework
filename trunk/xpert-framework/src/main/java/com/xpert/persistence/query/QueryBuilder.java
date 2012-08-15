@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -30,6 +31,7 @@ public class QueryBuilder {
     public QueryBuilder(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
     public QueryBuilder(EntityManager entityManager, String alias) {
         this.entityManager = entityManager;
         this.alias = alias;
@@ -199,6 +201,9 @@ public class QueryBuilder {
             queryString.append(" ");
             if (restriction.getRestrictionType().equals(RestrictionType.LIKE) || restriction.getRestrictionType().equals(RestrictionType.NOT_LIKE)) {
                 queryString.append("UPPER(").append(propertyName).append(")").append(" ");
+            } else if (restriction.getTemporalType() != null && restriction.getTemporalType().equals(TemporalType.DATE)) {
+                //force Date
+                queryString.append("CAST(").append(propertyName).append(" AS date)").append(" ");
             } else {
                 queryString.append(propertyName);
             }
