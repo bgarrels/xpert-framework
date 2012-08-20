@@ -134,13 +134,16 @@ Xpert.behavior = {
      verifyConfirmation: function (element, confirmLabel, cancelLabel, message){
         var $element = $(element); 
         var onclick = $element.attr("onclick");
-        onclick = onclick.replace(/this/g,"'"+$(element).attr("id")+"'");
-      
-        $element.removeAttr("onclick");
-        $element.click(function () {
-            Xpert.behavior.confirmation(confirmLabel,cancelLabel, message, onclick);
-            return false;
-        });
+        
+        if(onclick != null && onclick != undefined && onclick.length > 0){
+            onclick = onclick.replace(/this/g,"'"+$(element).attr("id")+"'");
+
+            $element.removeAttr("onclick");
+            $element.click(function () {
+                Xpert.behavior.confirmation(confirmLabel,cancelLabel, message, onclick);
+                return false;
+            });
+        }
 
      },
     
@@ -157,7 +160,7 @@ Xpert.behavior = {
             $createdDialog.find("#xpertCofirmationButton").attr("onclick", confirmClick);
         }else{
             var html =  '<div style="visibility: visible;" class="ui-confirm-dialog ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow" id="'+id+'" >'
-                            +'<div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top">'
+                            +'<div style="height: auto;" class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top">'
                                 +'<span class="ui-dialog-title"></span><a class="ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all" href="#">'
                                 +'<span class="ui-icon ui-icon-closethick"></span></a>'
                             +'</div>'

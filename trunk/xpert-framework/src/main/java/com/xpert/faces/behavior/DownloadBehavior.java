@@ -5,6 +5,7 @@
 package com.xpert.faces.behavior;
 
 import com.xpert.i18n.XpertResourceBundle;
+import com.xpert.utils.StringEscapeUtils;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.behavior.ClientBehaviorBase;
@@ -45,7 +46,7 @@ public class DownloadBehavior extends ClientBehaviorBase {
         }
         script.append(",message:'");
         if (message != null && !message.isEmpty()) {
-            script.append(message);
+            script.append(StringEscapeUtils.escapeJavaScript(message));
         } else {
             script.append(XpertResourceBundle.get("loading"));
 

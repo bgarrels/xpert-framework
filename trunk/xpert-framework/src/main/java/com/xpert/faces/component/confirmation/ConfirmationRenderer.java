@@ -1,6 +1,7 @@
 package com.xpert.faces.component.confirmation;
 
 import com.xpert.i18n.XpertResourceBundle;
+import com.xpert.utils.StringEscapeUtils;
 import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -40,9 +41,9 @@ public class ConfirmationRenderer extends Renderer {
         StringBuilder script = new StringBuilder();
 
         script.append("$(function() {Xpert.behavior.verifyConfirmation($(PrimeFaces.escapeClientId('").append(target).append("'))");
-        script.append(",'").append(confirmation.getConfirmLabel()).append("'");
-        script.append(",'").append(confirmation.getCancelLabel()).append("'");
-        script.append(",'").append(confirmation.getMessage()).append("'");
+        script.append(",'").append(StringEscapeUtils.escapeJavaScript(confirmation.getConfirmLabel())).append("'");
+        script.append(",'").append(StringEscapeUtils.escapeJavaScript(confirmation.getCancelLabel())).append("'");
+        script.append(",'").append(StringEscapeUtils.escapeJavaScript(confirmation.getMessage())).append("'");
         script.append(");});");
 
 
