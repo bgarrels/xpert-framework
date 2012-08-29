@@ -39,6 +39,7 @@
                             <p:dataTable var="audit" value="#{auditDeleteBean.auditings}" styleClass="datatable-auditing"
                                          emptyMessage="#{xmsg.noRecordFound}"  
                                          rowsPerPageTemplate="10,20,30" rowIndexVar="index"
+                                         lazy="true"
                                          paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          currentPageReportTemplate=" "
                                          style="font-weight: normal;"

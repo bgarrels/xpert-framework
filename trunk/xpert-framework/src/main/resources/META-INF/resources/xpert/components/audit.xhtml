@@ -15,6 +15,7 @@
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
+        <h:outputStylesheet library="xpert" name="css/style.css" />
         <h:outputScript library="xpert" name="scripts/core.js" target="head" />
         <span id="#{cc.attrs.clientId}">
             <h:panelGroup rendered="#{auditBean.isPersisted(cc.attrs.for)}" id="auditingPanel">
@@ -40,6 +41,7 @@
                                 <p:dataTable var="audit" value="#{xpertAuditingDetail.auditings}" styleClass="datatable-auditing"
                                              rendered="#{not empty xpertAuditingDetail.auditings}"
                                              emptyMessage="#{xmsg.noRecordFound}"  
+                                             lazy="true"
                                              rowsPerPageTemplate="10,20,30" rowIndexVar="index"
                                              paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              currentPageReportTemplate=" "

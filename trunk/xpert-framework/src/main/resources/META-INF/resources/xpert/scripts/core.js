@@ -160,10 +160,6 @@ Xpert.behavior = {
             $createdDialog.find("#xpertCofirmationButton").attr("onclick", confirmClick);
         }else{
             var html =  '<div style="visibility: visible;" class="ui-confirm-dialog ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow" id="'+id+'" >'
-                            +'<div style="height: auto;" class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top">'
-                                +'<span class="ui-dialog-title"></span><a class="ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all" href="#">'
-                                +'<span class="ui-icon ui-icon-closethick"></span></a>'
-                            +'</div>'
                             +'<div class="ui-dialog-content ui-widget-content" style="height: auto;">'
                                     +'<p><span class="ui-icon ui-icon-alert ui-confirm-dialog-severity"></span><span class="dialog-confirm-message">'+message+'</span></p>'
                             +'</div>'

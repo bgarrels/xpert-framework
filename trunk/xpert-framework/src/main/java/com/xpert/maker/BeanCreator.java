@@ -203,8 +203,8 @@ public class BeanCreator {
         view.append("       <ui:include src=\"menu").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("       <h:form id=\"formList").append(clazz.getSimpleName()).append("\">\n");
         view.append("           <xc:modalMessages/>\n");
-        view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\"\n");
-        view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\">\n");
+        view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\"  emptyMessage=\"#{xmsg['noRecordFound']}\"\n");
+        view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\" lazy=\"true\" >\n");
         for (Field field : fields) {
             if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
                 continue;
@@ -263,7 +263,7 @@ public class BeanCreator {
         StringBuilder view = new StringBuilder();
         view.append(getHeader(null));
         view.append("   <h:form id=\"formDetail").append(clazz.getSimpleName()).append("\">\n");
-        view.append("       <h:panelGrid columns=\"4\">\n");
+        view.append("       <h:panelGrid columns=\"4\" styleClass=\"grid-detail\">\n");
         for (Field field : fields) {
             if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
                 continue;
@@ -305,7 +305,7 @@ public class BeanCreator {
         view.append(getHeader(null));
         view.append("   <h:form>\n");
         view.append("       <xc:modalMessages/>\n");
-        view.append("       <h:panelGrid columns=\"2\">\n");
+        view.append("       <h:panelGrid columns=\"2\" styleClass=\"grid-form\">\n");
         for (Field field : fields) {
             if (field.isAnnotationPresent(Id.class)) {
                 continue;
