@@ -239,7 +239,7 @@ public class BeanCreator {
         view.append("                   </p:button>\n");
         view.append("                   <p:commandButton icon=\"ui-icon-trash\" process=\"@form\" update=\"@form\" action=\"#{").append(managedBean).append(".delete}\" >\n");
         view.append("                       <f:setPropertyActionListener value=\"").append(idExpression).append("\" target=\"#{").append(managedBean).append(".id}\" />\n");
-        view.append("                       <x:confirmation ").append("message=\"#{xmsg['").append("confirmDelete").append("']} #{varName}\" />\n");
+        view.append("                       <x:confirmation ").append("message=\"#{xmsg['").append("confirmDelete").append("']} #{").append(varName).append("}\" />\n");
         view.append("                   </p:commandButton>\n");
         view.append("               </p:column>\n");
         view.append("               <f:facet name=\"footer\">\n");
