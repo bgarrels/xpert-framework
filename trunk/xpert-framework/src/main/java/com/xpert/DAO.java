@@ -1,6 +1,7 @@
 package com.xpert;
 
 import com.xpert.persistence.dao.BaseDAOImpl;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -8,16 +9,20 @@ import com.xpert.persistence.dao.BaseDAOImpl;
  */
 public class DAO extends BaseDAOImpl {
 
+    private EntityManager entityManager;
+    
     public DAO(Class entityClass) {
         super.setEntityClass(entityClass);
-        super.setEntityManager(Configuration.getEntityManager());
     }
 
     public DAO() {
-        super.setEntityManager(Configuration.getEntityManager());
     }
 
     @Override
-    public void init() {
+    public EntityManager getEntityManager() {
+        if(entityManager == null){
+            entityManager = Configuration.getEntityManager();
+        }
+        return entityManager;
     }
 }

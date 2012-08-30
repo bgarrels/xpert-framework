@@ -30,14 +30,13 @@ import org.hibernate.proxy.LazyInitializer;
 public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     private Class entityClass;
-    private EntityManager entityManager;
     private Session session;
     private static final Logger logger = Logger.getLogger(BaseDAOImpl.class.getName());
 
     /**
-     * Set here your EntityManager
+     * Set here your getEntityManager()
      */
-    public abstract void init();
+ //   public abstract void init();
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public BaseDAOImpl() {
@@ -73,22 +72,16 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     }
 
     @Override
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    public abstract EntityManager getEntityManager();
 
     @Override
     public Session getSession() {
         if (session == null) {
-            if (entityManager.getDelegate() instanceof EntityManagerImpl) {
-                EntityManagerImpl entityManagerImpl = (EntityManagerImpl) entityManager.getDelegate();
+            if (getEntityManager().getDelegate() instanceof EntityManagerImpl) {
+                EntityManagerImpl entityManagerImpl = (EntityManagerImpl) getEntityManager().getDelegate();
                 return entityManagerImpl.getSession();
             } else {
-                return (Session) entityManager.getDelegate();
+                return (Session) getEntityManager().getDelegate();
             }
         } else {
             return session;
@@ -97,17 +90,17 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public QueryBuilder getQueryBuilder() {
-        return new QueryBuilder(entityManager);
+        return new QueryBuilder(getEntityManager());
     }
 
     @Override
     public Query getNativeQueryFromFile(String path, Class daoClass, Class resultClass) {
-        return QueryBuilderOld.createNativeQueryFromFile(entityManager, path, daoClass, resultClass);
+        return QueryBuilderOld.createNativeQueryFromFile(getEntityManager(), path, daoClass, resultClass);
     }
 
     @Override
     public Query getNativeQueryFromFile(String path, Class daoClass) {
-        return QueryBuilderOld.createNativeQueryFromFile(entityManager, path, daoClass);
+        return QueryBuilderOld.createNativeQueryFromFile(getEntityManager(), path, daoClass);
     }
 
     private Audit getNewAudit() {
@@ -223,14 +216,14 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public List<T> listAll(Class clazz, String order) {
-        Query query = new QueryBuilder(entityManager).from(clazz).orderBy(order).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(clazz).orderBy(order).createQuery();
         return query.getResultList();
     }
 
     @Override
     public Object findAttribute(String attributeName, Long id) {
 
-        Query query = new QueryBuilder(entityManager).from(entityClass).type(QueryType.SELECT, attributeName).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).type(QueryType.SELECT, attributeName).createQuery();
 
         try {
             return query.getSingleResult();
@@ -246,7 +239,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public T unique(Map<String, Object> args) {
-        Query query = new QueryBuilder(entityManager).from(entityClass).add(args).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).add(args).createQuery();
         try {
             return (T) query.getSingleResult();
         } catch (NoResultException ex) {
@@ -271,7 +264,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public T unique(List<Restriction> restrictions, Class clazz) {
-        Query query = new QueryBuilder(entityManager).from(clazz).add(restrictions).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(clazz).add(restrictions).createQuery();
         query.setMaxResults(1);
         try {
             return (T) query.getSingleResult();
@@ -292,7 +285,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public List<T> list(Map<String, Object> restrictions, String order, Integer firstResult, Integer maxResults) {
-        Query query = new QueryBuilder(entityManager).from(entityClass).add(restrictions).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).add(restrictions).createQuery();
 
         if (firstResult != null) {
             query.setFirstResult(firstResult);
@@ -412,7 +405,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     @Override
     public List<T> list(Class clazz, List<Restriction> restrictions, String order, Integer firstResult, Integer maxResults, String attributes) {
 
-        QueryBuilder queryBuilder = new QueryBuilder(entityManager).from(clazz).type(QueryType.SELECT, attributes).orderBy(order).add(restrictions);
+        QueryBuilder queryBuilder = new QueryBuilder(getEntityManager()).from(clazz).type(QueryType.SELECT, attributes).orderBy(order).add(restrictions);
 
         Query query = queryBuilder.createQuery();
         if (maxResults != null) {
@@ -468,7 +461,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public Long count(Map<String, Object> restrictions) {
-        Query query = new QueryBuilder(entityManager).from(entityClass).type(QueryType.COUNT).add(restrictions).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).type(QueryType.COUNT).add(restrictions).createQuery();
         try {
             return (Long) query.getSingleResult();
         } catch (NoResultException ex) {
@@ -483,7 +476,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public Long count(List<Restriction> restrictions) {
-        Query query = new QueryBuilder(entityManager).from(entityClass).type(QueryType.COUNT).add(restrictions).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).type(QueryType.COUNT).add(restrictions).createQuery();
         try {
             return (Long) query.getSingleResult();
         } catch (NoResultException ex) {
