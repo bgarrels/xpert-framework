@@ -42,7 +42,7 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>cancelLabelid</name>
+            <name>cancelLabel</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
