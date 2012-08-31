@@ -351,8 +351,7 @@ public class BeanCreator {
         view.append("       <h:outputText value=\"#{xmsg['requiredFieldsForm']}\"/>\n");
         view.append("       <div style=\"text-align: center;\">\n");
         view.append("           <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
-        view.append(managedBean).append(".save}\" value=\"#{");
-        view.append(resourceBundle).append("['save']}\" />\n");
+        view.append(managedBean).append(".save}\" value=\"#{xmsg['save']}\" />\n");
         view.append("           <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
         view.append("       </div>\n");
         view.append("   </h:form>\n");
