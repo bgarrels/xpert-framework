@@ -36,6 +36,8 @@ public class BeanCreator {
     private static final Configuration CONFIG = new Configuration();
     private static final String AUTHOR = "#Author";
     private static final String GET_PREFIX = "get";
+    private static final int DEFAULT_SIZE = 70;
+    private static final int DEFAULT_MAX_LENGTH = 255;
     private static final String[] LOCALES_MAKER = {"pt_BR", "en", "es"};
 
     static {
@@ -203,7 +205,7 @@ public class BeanCreator {
         view.append("       <ui:include src=\"menu").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("       <h:form id=\"formList").append(clazz.getSimpleName()).append("\">\n");
         view.append("           <xc:modalMessages/>\n");
-        view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\"  emptyMessage=\"#{xmsg['noRecordFound']}\"\n");
+        view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\" paginatorPosition=\"bottom\" emptyMessage=\"#{xmsg['noRecordFound']}\"\n");
         view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\" lazy=\"true\" >\n");
         for (Field field : fields) {
             if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
@@ -336,7 +338,7 @@ public class BeanCreator {
                 hasSelectItem = true;
             } else {
                 if (field.getType().equals(String.class)) {
-                    maxlength = 255;
+                    maxlength = DEFAULT_MAX_LENGTH;
                     Size size = field.getAnnotation(Size.class);
                     if (size != null) {
                         maxlength = size.max();
@@ -468,6 +470,7 @@ public class BeanCreator {
         }
         if (maxlength != null && maxlength > 0) {
             view.append(" maxlength=\"").append(maxlength).append("\" ");
+            view.append(" size=\"").append(DEFAULT_SIZE).append("\" ");
         }
         if (hasSelectItem) {
             view.append(">");
