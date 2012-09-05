@@ -119,9 +119,7 @@
                                    onclick="Xpert.popupTextArea('#i18nContent')">Open Code</a>
                             </h:panelGroup>
                             <pre style="margin: 0; padding: 0;" id="i18nContent">
-                                    <ui:repeat var="mappedBean" value="#{beanMaker.mappedBeans}">
-                                            <h:outputText value="#{mappedBean.i18n}"/>
-                                    </ui:repeat>
+                                <h:outputText value="#{beanMaker.i18n}"/>
                             </pre>
                         </p:tab>
                         <p:tab title="DAO">
@@ -205,7 +203,7 @@
                         </p:tab>
                         <p:tab title="Menubar">
                             Menubar with url of the mapped classes.
-                            <pre name="code-maker" class="java">
+                            <pre name="code-maker" class="xml">
                                     <h:outputText value="#{beanMaker.menubar}"/>
                             </pre>
                         </p:tab>

@@ -40,15 +40,14 @@ public class BeanMaker implements Serializable {
     private String classBean;
     private String menubar;
     private String viewTemplate;
+    private String i18n;
 
     @PostConstruct
     public void init() {
         entityManager = Configuration.getEntityManager();
         persistenceMappedBean = new PersistenceMappedBean(entityManager);
         classes = persistenceMappedBean.getMappedClasses();
-        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
-        viewTemplate = BeanCreator.getViewTemplate();
-        menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
+        load();
     }
 
     public void make() {
@@ -60,18 +59,25 @@ public class BeanMaker implements Serializable {
                 logger.log(Level.SEVERE, null, ex);
             }
         }
-        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
         mappedBeans = persistenceMappedBean.getMappedBeans(selectedClasses, configuration);
-        menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
+        load();
     }
 
     public void makeAll() {
-        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
         mappedBeans = persistenceMappedBean.getMappedBeans(configuration);
         for (Class clazz : classes) {
             nameSelectedClasses.add(clazz.getName());
         }
-        menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
+        load();
+    }
+
+    private void load() {
+        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
+        if (mappedBeans != null) {
+            menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
+            i18n = BeanCreator.getI18N(mappedBeans);
+        }
+        viewTemplate = BeanCreator.getViewTemplate();
     }
 
     public void download() {
@@ -90,6 +96,14 @@ public class BeanMaker implements Serializable {
     public void reset() {
         nameSelectedClasses = new ArrayList<String>();
         mappedBeans = new ArrayList<MappedBean>();
+    }
+
+    public String getI18n() {
+        return i18n;
+    }
+
+    public void setI18n(String i18n) {
+        this.i18n = i18n;
     }
 
     public List<Class> getClasses() {

@@ -240,7 +240,7 @@ public class BeanCreator {
         view.append("                   </p:button>\n");
         view.append("                   <p:commandButton icon=\"ui-icon-trash\" process=\"@form\" update=\"@form\" action=\"#{").append(managedBean).append(".delete}\" >\n");
         view.append("                       <f:setPropertyActionListener value=\"").append(idExpression).append("\" target=\"#{").append(managedBean).append(".id}\" />\n");
-        view.append("                       <x:confirmation ").append("message=\"#{xmsg['").append("confirmDelete").append("']} #{").append(varName).append("}\" />\n");
+        view.append("                       <x:confirmation ").append("message=\"#{xmsg['").append("confirmDelete").append("']} - #{").append(varName).append("}\" />\n");
         view.append("                   </p:commandButton>\n");
         view.append("               </p:column>\n");
         view.append("               <f:facet name=\"footer\">\n");
@@ -492,11 +492,23 @@ public class BeanCreator {
         view.append("\n");
     }
 
+    public static String getI18N(List<MappedBean> mappedBeans) {
+        if (mappedBeans == null) {
+            return null;
+        }
+        StringBuilder i18n = new StringBuilder();
+        for (MappedBean mappedBean : mappedBeans) {
+            i18n.append(mappedBean.getI18n());
+        }
+        i18n.append(getMenuI18N(mappedBeans));
+        return i18n.toString();
+    }
+
     public static byte[] createBeanZipFile(List<MappedBean> mappedBeans, String classBean, String viewTemplate, BeanConfiguration configuration) throws IOException, TemplateException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream out = new ZipOutputStream(baos);
         out.setLevel(Deflater.DEFAULT_COMPRESSION);
-        StringBuilder i18n = new StringBuilder();
+        String i18n = getI18N(mappedBeans);
         String viewPath = getViewPath(configuration);
         for (MappedBean mappedBean : mappedBeans) {
             String classSimpleName = mappedBean.getEntityClass().getSimpleName();
@@ -514,13 +526,12 @@ public class BeanCreator {
             //form
             putEntry(out, viewPath + nameLower + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
             //list
-            putEntry(out, getUrlForList(nameLower, classSimpleName, configuration), mappedBean.getListView());
+            putEntry(out, getUrlForList(nameLower, classSimpleName, configuration) + ".xhtml", mappedBean.getListView());
             //detail
             putEntry(out, viewPath + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
             //menu
             putEntry(out, viewPath + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
 
-            i18n.append(mappedBean.getI18n());
         }
         //template
         putEntry(out, getViewTemplatePath(configuration), viewTemplate);
@@ -529,9 +540,8 @@ public class BeanCreator {
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);
         //i18n
-        i18n.append(getMenuI18N(mappedBeans));
         for (String locale : LOCALES_MAKER) {
-            putEntry(out, "messages_" + locale + ".properties", i18n.toString());
+            putEntry(out, "messages_" + locale + ".properties", i18n);
         }
 
         out.finish();
@@ -556,7 +566,7 @@ public class BeanCreator {
     }
 
     private static String getUrlForList(String nameLower, String classSimpleName, BeanConfiguration configuration) {
-        return getViewPath(configuration) + nameLower + "/list" + classSimpleName + ".xhtml";
+        return getViewPath(configuration) + nameLower + "/list" + classSimpleName;
     }
 
     private static String getResourceBundle(String resourceBundle) {
@@ -567,6 +577,9 @@ public class BeanCreator {
     }
 
     public static String getMenubar(List<MappedBean> mappedBeans, String resourceBundle, BeanConfiguration configuration) {
+        if (mappedBeans == null || mappedBeans.isEmpty()) {
+            return null;
+        }
         try {
 
             Template template = BeanCreator.getTemplate("menubar.ftl");
@@ -575,9 +588,10 @@ public class BeanCreator {
             List<MenuModel> menus = new ArrayList<MenuModel>();
             for (MappedBean mappedBean : mappedBeans) {
                 String nameLower = getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName());
-                menus.add(new MenuModel("#{" + resourceBundle + "['menu." + nameLower + "']}", getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName(), configuration)));
+                menus.add(new MenuModel("#{" + resourceBundle + "['menu." + nameLower + "']}",
+                        getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName(), configuration) + ".jsf"));
             }
-            attributes.put("menu", menus);
+            attributes.put("menus", menus);
             template.process(attributes, writer);
             writer.flush();
             writer.close();
@@ -596,7 +610,7 @@ public class BeanCreator {
         if (configuration != null && configuration.getViewPath() != null && !configuration.getViewPath().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             if (configuration.getViewPath().startsWith("/")) {
-                builder.append(configuration.getViewPath().substring(1, configuration.getTemplate().length()));
+                builder.append(configuration.getViewPath().substring(1, configuration.getViewPath().length()));
             } else {
                 builder.append(configuration.getViewPath());
             }

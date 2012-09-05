@@ -9,8 +9,8 @@
 
          <p:menubar>
             <p:submenu label="CRUD">
-                <#list menu as m>
-                    <p:menuitem url="${m.url}" value="${m.label}"/>
+                <#list menus as menu>
+                <p:menuitem url="${menu.url}" value="${menu.label}"/>
                 </#list>
             </p:submenu>
         </p:menubar>

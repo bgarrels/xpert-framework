@@ -4,7 +4,7 @@ package com.xpert.maker;
  *
  * @author ayslan
  */
-class MenuModel {
+public class MenuModel {
 
     private String label;
     private String url;
