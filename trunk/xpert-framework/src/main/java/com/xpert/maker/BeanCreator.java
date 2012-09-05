@@ -141,7 +141,6 @@ public class BeanCreator {
             builder.append(new HumaniseCamelCase().humanise(field.getName()));
         }
 
-
         return builder.toString();
 
     }
@@ -297,10 +296,7 @@ public class BeanCreator {
 
     public static String getCreateForm(Class clazz, String resourceBundle) {
 
-        if (resourceBundle == null || resourceBundle.trim().isEmpty()) {
-            resourceBundle = "msg";
-        }
-
+        resourceBundle = getResourceBundle(resourceBundle);
         List<Field> fields = getFields(clazz);
         StringBuilder view = new StringBuilder();
         String managedBean = getNameManagedBean(clazz);
@@ -513,25 +509,28 @@ public class BeanCreator {
             //DAO Impl
             putEntry(out, "dao/impl/" + classSimpleName + "DAOImpl.java", mappedBean.getDaoImpl());
             //create
-            putEntry(out, "views/" + nameLower + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
+            putEntry(out, "view/" + nameLower + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
             //form
-            putEntry(out, "views/" + nameLower + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
+            putEntry(out, "view/" + nameLower + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
             //list
-            putEntry(out, "views/" + nameLower + "/list" + classSimpleName + ".xhtml", mappedBean.getListView());
+            putEntry(out, getUrlForList(nameLower, classSimpleName), mappedBean.getListView());
             //detail
-            putEntry(out, "views/" + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
+            putEntry(out, "view/" + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
             //menu
-            putEntry(out, "views/" + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
+            putEntry(out, "view/" + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
 
             i18n.append(mappedBean.getI18n());
         }
         //template
         putEntry(out, getViewTemplatePath(configuration), viewTemplate);
+        //menubar
+        putEntry(out, "menu.xhtml", getMenubar(mappedBeans, getResourceBundle(configuration.getResourceBundle())));
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);
         //i18n
+        i18n.append(getMenuI18N(mappedBeans));
         for (String locale : LOCALES_MAKER) {
-            putEntry(out, "messages_" + locale, i18n.toString());
+            putEntry(out, "messages_" + locale + ".properties", i18n.toString());
         }
 
         out.finish();
@@ -539,6 +538,57 @@ public class BeanCreator {
         out.close();
 
         return baos.toByteArray();
+    }
+
+    public static String getMenuI18N(List<MappedBean> mappedBeans) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n\n#").append("menu").append("\n");
+        for (MappedBean mappedBean : mappedBeans) {
+            builder.append("menu.").append(getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName()));
+            builder.append("=");
+            builder.append(mappedBean.getHumanClassName());
+            builder.append("\n");
+        }
+
+
+        return builder.toString();
+    }
+
+    private static String getUrlForList(String nameLower, String classSimpleName) {
+        return "view/" + nameLower + "/menu" + classSimpleName + ".xhtml";
+    }
+
+    private static String getResourceBundle(String resourceBundle) {
+        if (resourceBundle == null || resourceBundle.trim().isEmpty()) {
+            return "msg";
+        }
+        return resourceBundle;
+    }
+
+    public static String getMenubar(List<MappedBean> mappedBeans, String resourceBundle) {
+        try {
+
+            Template template = BeanCreator.getTemplate("menubar.ftl");
+            StringWriter writer = new StringWriter();
+            Map attributes = new HashMap();
+            List<MenuModel> menus = new ArrayList<MenuModel>();
+            for (MappedBean mappedBean : mappedBeans) {
+                String nameLower = getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName());
+                menus.add(new MenuModel("#{" + resourceBundle + "['menu." + nameLower + "']}", getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName())));
+            }
+            attributes.put("menu", menus);
+            template.process(attributes, writer);
+            writer.flush();
+            writer.close();
+            return writer.toString();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        } catch (TemplateException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+
+        return "";
+
     }
 
     public static String getViewTemplatePath(BeanConfiguration configuration) {

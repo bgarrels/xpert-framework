@@ -1,5 +1,7 @@
 package com.xpert.maker;
 
+import com.xpert.utils.HumaniseCamelCase;
+
 /**
  *
  * @author Ayslan
@@ -23,6 +25,20 @@ public class MappedBean {
     public MappedBean() {
     }
 
+    public String getHumanClassName() {
+        if (entityClass != null) {
+            return new HumaniseCamelCase().humanise(entityClass.getSimpleName());
+        }
+        return null;
+    }
+
+    public String getClassName() {
+        if (entityClass != null) {
+            return entityClass.getName();
+        }
+        return className;
+    }
+
     public MappedBean(Class entityClass) {
         this.entityClass = entityClass;
     }
@@ -34,7 +50,7 @@ public class MappedBean {
     public void setDetail(String detail) {
         this.detail = detail;
     }
-    
+
     public String getMenu() {
         return menu;
     }
@@ -42,7 +58,7 @@ public class MappedBean {
     public void setMenu(String menu) {
         this.menu = menu;
     }
-    
+
     public String getCreateView() {
         return createView;
     }
@@ -97,13 +113,6 @@ public class MappedBean {
 
     public void setManagedBean(String managedBean) {
         this.managedBean = managedBean;
-    }
-
-    public String getClassName() {
-        if (entityClass != null) {
-            return entityClass.getName();
-        }
-        return className;
     }
 
     public Class getEntityClass() {

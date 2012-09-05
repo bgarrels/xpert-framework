@@ -148,6 +148,7 @@ public class PersistenceMappedBean {
         return "";
 
     }
+    
 
     public SessionFactory getSessionFactory() {
         return getSession().getSessionFactory();
