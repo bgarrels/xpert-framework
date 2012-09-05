@@ -38,6 +38,7 @@ public class BeanMaker implements Serializable {
     private BeanConfiguration configuration = new BeanConfiguration();
     private String author;
     private String classBean;
+    private String menubar;
     private String viewTemplate;
 
     @PostConstruct
@@ -47,6 +48,7 @@ public class BeanMaker implements Serializable {
         classes = persistenceMappedBean.getMappedClasses();
         classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
         viewTemplate = BeanCreator.getViewTemplate();
+        menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
     }
 
     public void make() {
@@ -60,6 +62,7 @@ public class BeanMaker implements Serializable {
         }
         classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
         mappedBeans = persistenceMappedBean.getMappedBeans(selectedClasses, configuration);
+        menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
     }
 
     public void makeAll() {
@@ -68,6 +71,7 @@ public class BeanMaker implements Serializable {
         for (Class clazz : classes) {
             nameSelectedClasses.add(clazz.getName());
         }
+        menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
     }
 
     public void download() {
@@ -143,5 +147,12 @@ public class BeanMaker implements Serializable {
     public void setViewTemplate(String viewTemplate) {
         this.viewTemplate = viewTemplate;
     }
-    
+
+    public String getMenubar() {
+        return menubar;
+    }
+
+    public void setMenubar(String menubar) {
+        this.menubar = menubar;
+    }
 }

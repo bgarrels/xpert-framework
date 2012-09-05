@@ -497,6 +497,7 @@ public class BeanCreator {
         ZipOutputStream out = new ZipOutputStream(baos);
         out.setLevel(Deflater.DEFAULT_COMPRESSION);
         StringBuilder i18n = new StringBuilder();
+        String viewPath = getViewPath(configuration);
         for (MappedBean mappedBean : mappedBeans) {
             String classSimpleName = mappedBean.getEntityClass().getSimpleName();
             String nameLower = getNameLower(mappedBean.getEntityClass());
@@ -509,22 +510,22 @@ public class BeanCreator {
             //DAO Impl
             putEntry(out, "dao/impl/" + classSimpleName + "DAOImpl.java", mappedBean.getDaoImpl());
             //create
-            putEntry(out, "view/" + nameLower + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
+            putEntry(out, viewPath + nameLower + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
             //form
-            putEntry(out, "view/" + nameLower + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
+            putEntry(out, viewPath + nameLower + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
             //list
-            putEntry(out, getUrlForList(nameLower, classSimpleName), mappedBean.getListView());
+            putEntry(out, getUrlForList(nameLower, classSimpleName, configuration), mappedBean.getListView());
             //detail
-            putEntry(out, "view/" + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
+            putEntry(out, viewPath + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
             //menu
-            putEntry(out, "view/" + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
+            putEntry(out, viewPath + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
 
             i18n.append(mappedBean.getI18n());
         }
         //template
         putEntry(out, getViewTemplatePath(configuration), viewTemplate);
         //menubar
-        putEntry(out, "menu.xhtml", getMenubar(mappedBeans, getResourceBundle(configuration.getResourceBundle())));
+        putEntry(out, "menu.xhtml", getMenubar(mappedBeans, getResourceBundle(configuration.getResourceBundle()), configuration));
         //class bean
         putEntry(out, "mb/ClassMB.java", classBean);
         //i18n
@@ -554,8 +555,8 @@ public class BeanCreator {
         return builder.toString();
     }
 
-    private static String getUrlForList(String nameLower, String classSimpleName) {
-        return "view/" + nameLower + "/menu" + classSimpleName + ".xhtml";
+    private static String getUrlForList(String nameLower, String classSimpleName, BeanConfiguration configuration) {
+        return getViewPath(configuration) + nameLower + "/list" + classSimpleName + ".xhtml";
     }
 
     private static String getResourceBundle(String resourceBundle) {
@@ -565,7 +566,7 @@ public class BeanCreator {
         return resourceBundle;
     }
 
-    public static String getMenubar(List<MappedBean> mappedBeans, String resourceBundle) {
+    public static String getMenubar(List<MappedBean> mappedBeans, String resourceBundle, BeanConfiguration configuration) {
         try {
 
             Template template = BeanCreator.getTemplate("menubar.ftl");
@@ -574,7 +575,7 @@ public class BeanCreator {
             List<MenuModel> menus = new ArrayList<MenuModel>();
             for (MappedBean mappedBean : mappedBeans) {
                 String nameLower = getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName());
-                menus.add(new MenuModel("#{" + resourceBundle + "['menu." + nameLower + "']}", getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName())));
+                menus.add(new MenuModel("#{" + resourceBundle + "['menu." + nameLower + "']}", getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName(), configuration)));
             }
             attributes.put("menu", menus);
             template.process(attributes, writer);
@@ -589,6 +590,22 @@ public class BeanCreator {
 
         return "";
 
+    }
+
+    public static String getViewPath(BeanConfiguration configuration) {
+        if (configuration != null && configuration.getViewPath() != null && !configuration.getViewPath().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            if (configuration.getViewPath().startsWith("/")) {
+                builder.append(configuration.getViewPath().substring(1, configuration.getTemplate().length()));
+            } else {
+                builder.append(configuration.getViewPath());
+            }
+            if (!configuration.getViewPath().endsWith("/")) {
+                builder.append("/");
+            }
+            return builder.toString();
+        }
+        return "view/";
     }
 
     public static String getViewTemplatePath(BeanConfiguration configuration) {

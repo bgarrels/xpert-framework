@@ -18,6 +18,7 @@
         <cc:attribute name="baseDAO"/>
         <cc:attribute name="resourceBundle"/>
         <cc:attribute name="template"/>
+        <cc:attribute name="viewPath"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -32,6 +33,7 @@
         <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setBaseDAO(cc.attrs.baseDAO)}" />
         <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setResourceBundle(cc.attrs.resourceBundle)}" />
         <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setTemplate(cc.attrs.template)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setViewPath(cc.attrs.viewPath)}" />
         <h:form prependId="false">
             <p:messages/>
             <p:tabView>
@@ -70,12 +72,15 @@
 
                                 <h:outputLabel value="Faces Resource Bundle:"/>
                                 <p:inputText value="#{beanMaker.configuration.resourceBundle}" size="50"/>
-                                <h:panelGroup/>
-
+                                <h:outputText value="(Default is 'msg', example: \#{msg['person.name']})"/>
 
                                 <h:outputLabel value="Template (XHTML):"/>
                                 <p:inputText value="#{beanMaker.configuration.template}" size="50"/>
-                                <h:panelGroup/>
+                                <h:outputText value="(Default is 'template/mainTemplate.xhtml')"/>
+
+                                <h:outputLabel value="View Path:"/>
+                                <p:inputText value="#{beanMaker.configuration.viewPath}" size="50"/>
+                                <h:outputText value="(Default is 'view/', example: 'view/person/createPerson.jsf')"/>
 
                                 <h:outputLabel value="Author:"/>
                                 <p:inputText value="#{beanMaker.author}" size="50"/>
@@ -196,6 +201,12 @@
                             Managed Bean to acess the mapped classes.
                             <pre name="code-maker" class="java">
                                     <h:outputText value="#{beanMaker.classBean}"/>
+                            </pre>
+                        </p:tab>
+                        <p:tab title="Menubar">
+                            Menubar with url of the mapped classes.
+                            <pre name="code-maker" class="java">
+                                    <h:outputText value="#{beanMaker.menubar}"/>
                             </pre>
                         </p:tab>
                         <p:tab title="Base Template">

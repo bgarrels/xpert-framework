@@ -18,6 +18,15 @@ public class BeanConfiguration {
     private String author;
     private String resourceBundle;
     private String template;
+    private String viewPath;
+
+    public String getViewPath() {
+        return viewPath;
+    }
+
+    public void setViewPath(String viewPath) {
+        this.viewPath = viewPath;
+    }
 
     public String getBaseDAO() {
         return baseDAO;
