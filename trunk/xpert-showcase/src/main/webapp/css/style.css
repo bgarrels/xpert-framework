@@ -18,8 +18,9 @@ h1 a{text-decoration: none;}
 .grid-template > tbody > tr > td{vertical-align: top;}
 .w-260{width: 260px;}
 .w-280{width: 280px;}
-.xpert-grid-detail{margin-top: 15px;}
-.xpert-grid-detail td{padding: 4px 0;}
-.xpert-grid-detail td label{font-weight: bold; margin: 0 5px 0 15px ; float: right;}
+.grid-detail, grid-form{margin-top: 15px;}
+.grid-detail td, grid-form td{padding: 4px 0;}
+.grid-detail td label, .grid-form td label{margin: 0 5px 0 15px ; float: right;}
+.grid-detail td label{font-weight: bold;}
 .ui-toolbar{margin: 2px 0;}
 .ui-datatable th input.ui-column-filter{width: 90%;}

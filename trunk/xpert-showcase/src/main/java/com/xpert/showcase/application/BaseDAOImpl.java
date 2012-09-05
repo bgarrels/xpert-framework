@@ -1,6 +1,5 @@
 package com.xpert.showcase.application;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -16,9 +15,8 @@ public class BaseDAOImpl<T> extends com.xpert.persistence.dao.BaseDAOImpl<T> {
     public BaseDAOImpl() {
     }
 
-    @PostConstruct
     @Override
-    public void init() {
-        super.setEntityManager(entityManager);
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }

@@ -97,6 +97,17 @@
                     &lt;/validator&gt;
                 </pre>
             </p:tab>
+            <p:tab title="validation.xml">
+                <h3>Create a Custom Interpolator in META-INF/validation.xml</h3>
+                <pre name="code" class="xml">
+                   &lt;validation-config
+                        xmlns=&quot;http://jboss.org/xml/ns/javax/validation/configuration&quot;
+                        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+                        xsi:schemaLocation=&quot;http://jboss.org/xml/ns/javax/validation/configuration validation-configuration-1.0.xsd&quot;&gt;
+                            &lt;message-interpolator&gt;com.xpert.i18n.CustomInterpolator&lt;/message-interpolator&gt;
+                    &lt;/validation-config&gt;  
+                </pre>
+            </p:tab>
             <p:tab title="messages.properties">
                 <h3>en - English</h3>
                 <pre name="code" class="java">

@@ -20,10 +20,13 @@
         <p:tabView>
             <p:tab title="BaseDAOImpl.java">
                 <pre name="code" class="java">
-                    import javax.annotation.PostConstruct;
                     import javax.persistence.EntityManager;
                     import javax.persistence.PersistenceContext;
 
+                    /**
+                    *
+                    * @author Ayslan
+                    */
                     public class BaseDAOImpl&lt;T&gt; extends com.xpert.persistence.dao.BaseDAOImpl&lt;T&gt; {
 
                         @PersistenceContext(unitName = &quot;xpertShowcasePU&quot;)
@@ -32,10 +35,9 @@
                         public BaseDAOImpl() {
                         }
 
-                        @PostConstruct
                         @Override
-                        public void init() {
-                            super.setEntityManager(entityManager);
+                        public EntityManager getEntityManager() {
+                            return entityManager;
                         }
                     }
                 </pre>
