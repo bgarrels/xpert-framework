@@ -239,7 +239,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public T unique(Map<String, Object> args) {
-        Query query = new QueryBuilder(getEntityManager()).from(entityClass).add(args).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).add(args).createQuery().setMaxResults(1);
         try {
             return (T) query.getSingleResult();
         } catch (NoResultException ex) {
@@ -264,7 +264,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public T unique(List<Restriction> restrictions, Class clazz) {
-        Query query = new QueryBuilder(getEntityManager()).from(clazz).add(restrictions).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(clazz).add(restrictions).createQuery().setMaxResults(1);
         query.setMaxResults(1);
         try {
             return (T) query.getSingleResult();
