@@ -78,6 +78,9 @@ public class EntityUtils {
                 }
             }
         }
+        if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
+            return getIdFieldName(clazz.getSuperclass());
+        }
         return null;
     }
 
