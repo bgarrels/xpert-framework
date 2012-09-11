@@ -117,6 +117,10 @@ public class Audit {
     public void delete(Object id, Class clazz) {
         audit(getPersistedById(id, clazz), null, AuditingType.DELETE);
     }
+    
+    public void delete(Object object) {
+        audit(object, null, AuditingType.DELETE);
+    }
 
     public static String getEntityName(Class entity) {
 

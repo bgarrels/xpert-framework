@@ -40,6 +40,10 @@ public interface BaseDAO<T> {
     public void delete(Object id) throws DeleteException;
 
     public void delete(Object id, boolean audit) throws DeleteException;
+    
+    public void remove(Object object) throws DeleteException;
+
+    public void remove(Object object, boolean audit) throws DeleteException;
 
     public T merge(T object);
 

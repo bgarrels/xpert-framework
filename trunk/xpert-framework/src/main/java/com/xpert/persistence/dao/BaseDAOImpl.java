@@ -193,6 +193,26 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
         }
 
     }
+    @Override
+    public void remove(Object object) throws DeleteException {
+        remove(object, Configuration.isAudit());
+    }
+
+    @Override
+    public void remove(Object object, boolean audit) throws DeleteException {
+        try {
+            if(!getEntityManager().contains(object)){
+                object = getEntityManager().merge(object);
+            }
+            if (audit) {
+                getNewAudit().delete(object);
+            }
+            getEntityManager().remove(object);
+        } catch (Throwable t) {
+            throw new DeleteException("Object from class " + getEntityClass() + " with ID: " + EntityUtils.getId(object) + " cannot be deleted");
+        }
+
+    }
 
     @Override
     public T find(Object id) {
