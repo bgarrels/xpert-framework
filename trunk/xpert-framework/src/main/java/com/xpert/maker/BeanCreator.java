@@ -359,10 +359,10 @@ public class BeanCreator {
 
     public static String getNameLower(Class clazz) {
         String name = clazz.getSimpleName();
-        if (name != null && name.length() > 2) {
+        if (name != null && name.length() > 1) {
             return name.substring(0, 2).toLowerCase() + "" + name.substring(2, name.length());
         }
-        return "";
+        return name.toLowerCase();
     }
 
     public static boolean isLazy(Field field) {
