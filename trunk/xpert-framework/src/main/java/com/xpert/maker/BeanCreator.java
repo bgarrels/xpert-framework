@@ -11,6 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
@@ -207,12 +208,13 @@ public class BeanCreator {
         view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\" paginatorPosition=\"bottom\" emptyMessage=\"#{xmsg['noRecordFound']}\"\n");
         view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\" lazy=\"true\" >\n");
         for (Field field : fields) {
+            String varFieldName = getLowerFirstLetter(field.getDeclaringClass().getSimpleName()) + "." + field.getName();
             if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
                 continue;
             }
             String fieldName = varName + "." + field.getName();
             String varExpression = "#{" + fieldName + "}";
-            view.append("               <p:column headerText=\"#{").append(resourceBundle).append("['").append(fieldName).append("']}\" sortBy=\"").append(varExpression).append("\"");
+            view.append("               <p:column headerText=\"#{").append(resourceBundle).append("['").append(varFieldName).append("']}\" sortBy=\"").append(varExpression).append("\"");
             if (field.getType().equals(String.class) || field.getType().equals(Integer.class) || field.getType().equals(Long.class) || field.getType().isEnum()) {
                 view.append("\n").append("                      filterBy=\"").append(varExpression).append("\"");
             }
@@ -220,14 +222,14 @@ public class BeanCreator {
                 view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(getLowerFirstLetter(field.getType().getSimpleName())).append(")}\"");
             }
             //align Date on center
-            if (field.getType().equals(Date.class)) {
+            if (field.getType().equals(Date.class) || field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
                 view.append("\n").append("                                   style=\"text-align: center;\"");
                 //align Number on right
             } else if (field.getType().equals(BigDecimal.class)) {
                 view.append("\n").append("                                   style=\"text-align: right;\"");
             }
             view.append(">\n");
-            view.append(getText(field, resourceBundle, varExpression, "                   "));
+            view.append(getText(field, varExpression, "                   "));
             view.append("               </p:column>\n");
         }
         //actions column
@@ -272,7 +274,7 @@ public class BeanCreator {
             String varExpression = "#{" + managedBean + ".entity." + field.getName() + "}";
             view.append("\n");
             view.append("           ").append(getLabel(field, false, resourceBundle));
-            view.append(getText(field, resourceBundle, varExpression, "           "));
+            view.append(getText(field, varExpression, "           "));
         }
         view.append("\n").append("       </h:panelGrid>\n");
         view.append("       <p:separator/>\n");
@@ -297,13 +299,31 @@ public class BeanCreator {
     public static String getCreateForm(Class clazz, String resourceBundle) {
 
         resourceBundle = getResourceBundle(resourceBundle);
-        List<Field> fields = getFields(clazz);
         StringBuilder view = new StringBuilder();
         String managedBean = getNameManagedBean(clazz);
         view.append(getHeader(null));
         view.append("   <h:form>\n");
         view.append("       <xc:modalMessages/>\n");
-        view.append("       <h:panelGrid columns=\"2\" styleClass=\"grid-form\">\n");
+        view.append(getInputsFromForm(clazz, resourceBundle, "          ", managedBean, ""));
+        view.append("       <p:separator/>\n");
+        view.append("       <h:outputText value=\"#{xmsg['requiredFieldsForm']}\"/>\n");
+        view.append("       <div style=\"text-align: center;\">\n");
+        view.append("           <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
+        view.append(managedBean).append(".save}\" value=\"#{xmsg['save']}\" />\n");
+        view.append("           <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
+        view.append("       </div>\n");
+        view.append("   </h:form>\n");
+        view.append("</ui:composition>");
+        return view.toString();
+    }
+
+    public static String getInputsFromForm(Class clazz, String resourceBundle, String ident, String managedBean, String extraField) {
+
+        StringBuilder view = new StringBuilder();
+        StringBuilder extraFieldSets = new StringBuilder();
+        view.append(ident).append("<h:panelGrid columns=\"2\" styleClass=\"grid-form\">\n");
+        List<Field> fields = getFields(clazz);
+
         for (Field field : fields) {
             if (field.isAnnotationPresent(Id.class)) {
                 continue;
@@ -321,6 +341,8 @@ public class BeanCreator {
                 tag = "p:calendar";
             } else if (field.getType().equals(BigDecimal.class)) {
                 tag = "xc:inputNumber";
+            } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
+                tag = "h:selectBooleanCheckbox";
             } else if (isAnnotationPresent(field, ManyToOne.class) || field.getType().isEnum()) {
                 tag = "h:selectOneMenu";
                 if (!field.getType().isEnum()) {
@@ -328,6 +350,12 @@ public class BeanCreator {
                 }
                 hasSelectItem = true;
                 hasEmptySelect = true;
+            } else if (isAnnotationPresent(field, OneToOne.class)) {
+                extraFieldSets.append("\n");
+                extraFieldSets.append(ident).append("<p:fieldset legend=\"#{").append(resourceBundle).append("['").append(getNameLower(field.getDeclaringClass())).append(".").append(field.getName()).append("']}\">\n");
+                extraFieldSets.append(getInputsFromForm(field.getType(), resourceBundle, ident + "     ", managedBean, field.getName()));
+                extraFieldSets.append(ident).append("</p:fieldset>\n");
+                continue;
             } else if (isAnnotationPresent(field, OneToMany.class) || isAnnotationPresent(field, ManyToMany.class)) {
                 tag = "h:selectManyCheckbox";
                 converter = "entityConverter";
@@ -342,27 +370,12 @@ public class BeanCreator {
                 }
                 tag = "p:inputText";
             }
-            appendTagValue(view, tag, field, managedBean, converter, resourceBundle, hasSelectItem, hasEmptySelect, maxlength, required);
+            appendTagValue(view, tag, field, managedBean, converter, resourceBundle, hasSelectItem, hasEmptySelect, maxlength, required, ident+"    ", extraField);
         }
-        view.append("       </h:panelGrid>\n");
-        view.append("       <p:separator/>\n");
-        view.append("       <h:outputText value=\"#{xmsg['requiredFieldsForm']}\"/>\n");
-        view.append("       <div style=\"text-align: center;\">\n");
-        view.append("           <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
-        view.append(managedBean).append(".save}\" value=\"#{xmsg['save']}\" />\n");
-        view.append("           <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
-        view.append("       </div>\n");
-        view.append("   </h:form>\n");
-        view.append("</ui:composition>");
-        return view.toString();
-    }
+        view.append(ident).append("</h:panelGrid>\n");
+        view.append(extraFieldSets);
 
-    public static String getNameLower(Class clazz) {
-        String name = clazz.getSimpleName();
-        if (name != null && name.length() > 1) {
-            return name.substring(0, 2).toLowerCase() + "" + name.substring(2, name.length());
-        }
-        return name.toLowerCase();
+        return view.toString();
     }
 
     public static boolean isLazy(Field field) {
@@ -415,7 +428,7 @@ public class BeanCreator {
         return false;
     }
 
-    public static String getText(Field field, String resourceBundle, String varExpression, String ident) {
+    public static String getText(Field field, String varExpression, String ident) {
 
         StringBuilder text = new StringBuilder();
         boolean hasContent = false;
@@ -423,6 +436,8 @@ public class BeanCreator {
         if (field.getType().equals(Date.class)) {
             text.append(">\n").append(ident).append("   <f:convertDateTime />\n");
             hasContent = true;
+        } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
+            text.append(" converter =\"yesNoConverter\" ");
         } else if (field.getType().equals(BigDecimal.class)) {
             text.append(">\n").append(ident).append("   <f:convertNumber />\n");
             hasContent = true;
@@ -449,7 +464,7 @@ public class BeanCreator {
     }
 
     public static void appendTagValue(StringBuilder view, String tag, Field field, String managedBean, String converter, String resourceBundle,
-            boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required) {
+            boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required, String ident, String extraField) {
         String type;
         if (field.getType().equals(Collection.class) || field.getType().equals(List.class) || field.getType().equals(Set.class)) {
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
@@ -459,8 +474,8 @@ public class BeanCreator {
             type = getNameLower(field.getType());
         }
         view.append("\n");
-        view.append("           ").append(getLabel(field, required, resourceBundle));
-        view.append("           <").append(tag).append(" value=\"#{").append(managedBean).append(".entity.").append(field.getName()).append("}\"");
+        view.append(ident).append(getLabel(field, required, resourceBundle));
+        view.append(ident).append("<").append(tag).append(" value=\"#{").append(managedBean).append(".entity.").append(extraField != null && !extraField.isEmpty() ? extraField + "." : "").append(field.getName()).append("}\"");
         if (converter != null && !converter.trim().isEmpty()) {
             view.append(" converter=\"").append(converter).append("\" ");
         }
@@ -472,20 +487,20 @@ public class BeanCreator {
             view.append(">");
             view.append("\n");
             if (isLazy(field)) {
-                view.append("               <x:initializer/>");
+                view.append(ident).append("     ").append("<x:initializer/>");
                 view.append("\n");
             }
             if (hasEmptySelect) {
-                view.append("               <f:selectItem itemLabel=\"#{xmsg['select']}\" />");
+                view.append(ident).append("     ").append("<f:selectItem itemLabel=\"#{xmsg['select']}\" />");
                 view.append("\n");
 
             }
-            view.append("               <f:selectItems value=\"#{findAllBean.get(").append("classMB.").append(type).append(")}\"");
+            view.append(ident).append("     ").append("<f:selectItems value=\"#{findAllBean.get(").append("classMB.").append(type).append(")}\"");
             view.append(" var=\"").append(type).append("\"");
             view.append(" itemLabel=\"#{").append(type).append("}\"");
             view.append(" />");
             view.append("\n");
-            view.append("           </").append(tag).append(">");
+            view.append(ident).append("</").append(tag).append(">");
         } else {
             view.append(" />");
         }
@@ -589,7 +604,7 @@ public class BeanCreator {
             for (MappedBean mappedBean : mappedBeans) {
                 String nameLower = getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName());
                 menus.add(new MenuModel("#{" + resourceBundle + "['menu." + nameLower + "']}",
-                        getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName(), configuration) + ".jsf"));
+                        "/" + getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName(), configuration) + ".jsf"));
             }
             attributes.put("menus", menus);
             template.process(attributes, writer);
@@ -684,6 +699,10 @@ public class BeanCreator {
             //nothing
             return null;
         }
+    }
+
+    public static String getNameLower(Class clazz) {
+        return getLowerFirstLetter(clazz.getSimpleName());
     }
 
     public static String getLowerFirstLetter(String string) {
