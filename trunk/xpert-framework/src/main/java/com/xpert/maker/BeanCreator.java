@@ -687,22 +687,16 @@ public class BeanCreator {
     }
 
     public static String getLowerFirstLetter(String string) {
-        if (string.length() == 1) {
-            return string.toLowerCase();
-        }
         if (string.length() > 1) {
             return string.substring(0, 1).toLowerCase() + "" + string.substring(1, string.length());
         }
-        return "";
+        return string.toLowerCase();
     }
 
     public static String getUpperFirstLetter(String string) {
-        if (string.length() == 1) {
-            return string.toUpperCase();
-        }
         if (string.length() > 1) {
             return string.substring(0, 1).toUpperCase() + "" + string.substring(1, string.length());
         }
-        return "";
+        return string.toUpperCase();
     }
 }
