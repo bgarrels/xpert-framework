@@ -2,6 +2,7 @@ package com.xpert.faces.utils;
 
 import com.xpert.Configuration;
 import com.xpert.core.exception.StackException;
+import com.xpert.core.exception.UniqueFieldException;
 import com.xpert.i18n.XpertResourceBundle;
 import com.xpert.i18n.I18N;
 import javax.faces.application.FacesMessage;
@@ -63,18 +64,38 @@ public class FacesMessageUtils {
     }
 
     public static void getStackExceptionMessage(StackException stackException, FacesMessage.Severity severity) {
+        boolean i18n = true;
+
+        if (stackException instanceof UniqueFieldException) {
+            if (((UniqueFieldException) stackException).isI18n() == false) {
+                i18n = false;
+            }
+        }
+
         if (stackException.getExceptions() == null || stackException.getExceptions().isEmpty()) {
-            getMessage(FacesContext.getCurrentInstance(), severity, stackException.getMessage(), stackException.getParametros());
+            getMessage(FacesContext.getCurrentInstance(), severity, stackException.getMessage(), i18n, stackException.getParametros());
         } else {
             for (StackException re : stackException.getExceptions()) {
-                getMessage(FacesContext.getCurrentInstance(), severity, re.getMessage(), re.getParametros());
+                getMessage(FacesContext.getCurrentInstance(), severity, re.getMessage(), i18n, re.getParametros());
             }
         }
     }
 
+    /**
+     * With I18N
+     *
+     * @param facesContext
+     * @param severity
+     * @param summary
+     * @param parameters
+     */
     public static void getMessage(FacesContext facesContext, FacesMessage.Severity severity, String summary, String... parameters) {
+        getMessage(facesContext, severity, summary, true, parameters);
+    }
 
-        if (Configuration.BUNDLE != null) {
+    public static void getMessage(FacesContext facesContext, FacesMessage.Severity severity, String summary, boolean i18n, String... parameters) {
+
+        if (Configuration.BUNDLE != null && i18n) {
             if (parameters != null && parameters.length > 0) {
                 summary = I18N.get(summary, parameters);
             } else {

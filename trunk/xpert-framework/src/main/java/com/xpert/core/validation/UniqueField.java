@@ -13,6 +13,10 @@ public class UniqueField {
     private String message;
     private String[] constraints;
 
+    public UniqueField(String field) {
+        this.constraints = new String[]{field};
+    }
+    
     public UniqueField(String message, String field) {
         this.message = message;
         this.constraints = new String[]{field};

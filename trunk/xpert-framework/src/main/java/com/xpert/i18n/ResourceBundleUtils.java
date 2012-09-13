@@ -1,9 +1,12 @@
 package com.xpert.i18n;
 
+import com.xpert.maker.BeanCreator;
 import com.xpert.utils.StringUtils;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +16,7 @@ import java.util.regex.Pattern;
  */
 public class ResourceBundleUtils {
 
+    private static final Logger logger = Logger.getLogger(ResourceBundleUtils.class.getName());
     public static final Locale PT_BR = new Locale("pt", "BR");
     private static final Pattern PATTERN_FIND_NUMBER = Pattern.compile("\\{[0-9]\\}");
 
@@ -42,10 +46,15 @@ public class ResourceBundleUtils {
      */
     public static String get(String key, String bundle, ClassLoader classLoader, Object... array) {
 
-        if(key == null || key.isEmpty()){
+        if (key == null || key.isEmpty()) {
+            try {
+                throw new IllegalArgumentException("ResourceBundle key is required");
+            } catch (IllegalArgumentException ex) {
+                logger.log(Level.WARNING, ex.getMessage(), ex);
+            }
             return "ResourceBundle key is required";
         }
-        
+
         Locale locale = I18N.getLocale();
 
         ResourceBundle resourceBundle = null;
