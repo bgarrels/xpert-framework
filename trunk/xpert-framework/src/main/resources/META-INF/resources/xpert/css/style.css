@@ -1,7 +1,7 @@
 .modal-messages{min-width: 500px;}
 .conteiner-message{margin: 3px 0;}
 .conteiner-message .info{background: #FFFFE0; border-color: #EEE8AA; color: #4F4F4F; border: 1px solid #CDAD00}
-.inner-conteiner-message{padding: 0 .7em;}
+.inner-conteiner-message{padding: 10px; margin: 10px 0;}
 .icon-conteiner-message{margin: 0 3px; float: left;}
 .overlay-download {position: absolute;left: 0px;top: 0px;width:100%;height:100%; text-align:center; z-index: 1000;}
 .overlay-download .content{font-size: 14px; width:150px; background-color: #fff; border:1px solid #9C9C9C; padding:15px; text-align:center;  position: fixed; top: 50%;left: 50%; margin-top: -50px; margin-left: -100px;}
