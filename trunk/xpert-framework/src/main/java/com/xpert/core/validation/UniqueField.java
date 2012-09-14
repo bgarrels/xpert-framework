@@ -13,18 +13,8 @@ public class UniqueField {
     private String message;
     private String[] constraints;
 
-    public UniqueField(String field) {
-        this.constraints = new String[]{field};
-    }
-    
-    public UniqueField(String message, String field) {
-        this.message = message;
-        this.constraints = new String[]{field};
-    }
-
-    public UniqueField(String message, String... constraints) {
-        this.message = message;
-        this.constraints = constraints;
+    public UniqueField(String... field) {
+        this.constraints = field;
     }
 
     public String[] getConstraints() {
@@ -38,8 +28,9 @@ public class UniqueField {
     public String getMessage() {
         return message;
     }
-
-    public void setMessage(String message) {
+    
+    public UniqueField setMessage(String message) {
         this.message = message;
+        return this;
     }
 }

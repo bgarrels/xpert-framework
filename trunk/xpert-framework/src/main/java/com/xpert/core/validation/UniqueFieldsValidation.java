@@ -12,6 +12,8 @@ import com.xpert.persistence.utils.EntityUtils;
 import com.xpert.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.beanutils.PropertyUtils;
 
 /**
@@ -20,7 +22,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  */
 public class UniqueFieldsValidation {
 
-    public static void validateUniqueFields(List<UniqueField> uniqueFields, Object object, BaseDAO baseDAO) throws BusinessException {
+    public static void validateUniqueFields(List<UniqueField> uniqueFields, Object object, BaseDAO baseDAO) throws UniqueFieldException {
 
         if (uniqueFields == null) {
             return;
@@ -59,7 +61,6 @@ public class UniqueFieldsValidation {
                 }
             }
         }
-
         exception.check();
     }
 
@@ -72,7 +73,7 @@ public class UniqueFieldsValidation {
             for (String fieldName : uniqueField.getConstraints()) {
                 if (it > 0) {
                     if (it + 1 == uniqueField.getConstraints().length) {
-                        properties.append(XpertResourceBundle.get("and"));
+                        properties.append(" ").append(XpertResourceBundle.get("and")).append(" ");
                     } else if (it > 0) {
                         properties.append(", ");
                     }
@@ -81,6 +82,6 @@ public class UniqueFieldsValidation {
                 it++;
             }
         }
-        return XpertResourceBundle.get("alreadyRegisteredWithField", lowerClassName, properties.toString());
+        return XpertResourceBundle.get("alreadyRegisteredWithField", I18N.get(lowerClassName), properties.toString());
     }
 }

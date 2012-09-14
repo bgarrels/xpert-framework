@@ -5,6 +5,7 @@
 package com.xpert.core.crud;
 
 import com.xpert.core.exception.BusinessException;
+import com.xpert.core.exception.UniqueFieldException;
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.exception.DeleteException;
 import com.xpert.core.validation.UniqueField;
@@ -25,7 +26,7 @@ public abstract class AbstractBusinessObject<T> {
 
     public abstract void validate(T object) throws BusinessException;
     
-    public void validateUniqueFields(Object object) throws BusinessException {
+    public void validateUniqueFields(Object object) throws UniqueFieldException {
         if (getUniqueFields() != null && !getUniqueFields().isEmpty()) {
             UniqueFieldsValidation.validateUniqueFields(getUniqueFields(), object, getDAO());
         }
