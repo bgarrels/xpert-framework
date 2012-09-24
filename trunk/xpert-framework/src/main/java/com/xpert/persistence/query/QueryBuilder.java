@@ -1,5 +1,10 @@
 package com.xpert.persistence.query;
 
+import com.xpert.persistence.exception.QueryFileNotFoundException;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -282,6 +287,45 @@ public class QueryBuilder {
             query.setFirstResult(firstResult);
         }
         return query;
+    }
+    
+     public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass) {
+        return createNativeQueryFromFile(entityManager, queryPath, daoClass, null);
+    }
+
+    public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass, Class resultClass) {
+
+        InputStream inputStream = daoClass.getResourceAsStream(queryPath);
+        if (inputStream == null) {
+            throw new QueryFileNotFoundException("Query File not found: " + queryPath + " in package: " + daoClass.getPackage());
+        }
+        try {
+            String queryString = readInputStreamAsString(inputStream);
+            if (resultClass != null) {
+                return entityManager.createNativeQuery(queryString, resultClass);
+            } else {
+                return entityManager.createNativeQuery(queryString);
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+
+    public static String readInputStreamAsString(InputStream inputStream)
+            throws IOException {
+
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        int result = bis.read();
+        while (result != -1) {
+            byte b = (byte) result;
+            buf.write(b);
+            result = bis.read();
+        }
+        bis.close();
+        buf.close();
+        return buf.toString();
     }
 
     public static void main(String[] args) {

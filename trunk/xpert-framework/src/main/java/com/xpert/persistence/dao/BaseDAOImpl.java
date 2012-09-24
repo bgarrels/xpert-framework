@@ -3,7 +3,6 @@ package com.xpert.persistence.dao;
 import com.xpert.audit.Audit;
 import com.xpert.Configuration;
 import com.xpert.persistence.exception.DeleteException;
-import com.xpert.persistence.query.QueryBuilderOld;
 import com.xpert.persistence.query.QueryBuilder;
 import com.xpert.persistence.query.QueryType;
 import com.xpert.persistence.query.Restriction;
@@ -95,12 +94,12 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public Query getNativeQueryFromFile(String path, Class daoClass, Class resultClass) {
-        return QueryBuilderOld.createNativeQueryFromFile(getEntityManager(), path, daoClass, resultClass);
+        return QueryBuilder.createNativeQueryFromFile(getEntityManager(), path, daoClass, resultClass);
     }
 
     @Override
     public Query getNativeQueryFromFile(String path, Class daoClass) {
-        return QueryBuilderOld.createNativeQueryFromFile(getEntityManager(), path, daoClass);
+        return QueryBuilder.createNativeQueryFromFile(getEntityManager(), path, daoClass);
     }
 
     private Audit getNewAudit() {
