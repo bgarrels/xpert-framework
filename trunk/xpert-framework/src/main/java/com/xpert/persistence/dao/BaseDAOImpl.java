@@ -280,6 +280,11 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     public T unique(Restriction restrictions, Class clazz) {
         return unique(getRestrictions(restrictions), clazz);
     }
+    
+    @Override
+    public T unique(String property, Object value) {
+        return unique(new Restriction(property, value), entityClass);
+    }
 
     @Override
     public T unique(List<Restriction> restrictions, Class clazz) {
@@ -332,8 +337,18 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     }
 
     @Override
+    public List<T> list(String property, Object value) {
+        return list(entityClass, new Restriction(property, value));
+    }
+    
+    @Override
+    public List<T> list(String property, Object value, String order) {
+        return list(entityClass, new Restriction(property, value), order);
+    }
+    
+    @Override
     public List<T> list(Restriction restriction) {
-        return list(entityClass, getRestrictions(restriction));
+        return list( entityClass, getRestrictions(restriction));
     }
 
     @Override
@@ -488,6 +503,11 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
         }
     }
 
+    @Override
+    public Long count(String property, Object value) {
+        return count(new Restriction(property, value));
+    }
+    
     @Override
     public Long count(Restriction restriction) {
         return count(getRestrictions(restriction));

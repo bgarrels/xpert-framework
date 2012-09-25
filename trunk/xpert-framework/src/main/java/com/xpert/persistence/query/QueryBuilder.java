@@ -288,8 +288,8 @@ public class QueryBuilder {
         }
         return query;
     }
-    
-     public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass) {
+
+    public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass) {
         return createNativeQueryFromFile(entityManager, queryPath, daoClass, null);
     }
 

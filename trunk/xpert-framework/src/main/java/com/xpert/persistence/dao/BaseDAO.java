@@ -40,7 +40,7 @@ public interface BaseDAO<T> {
     public void delete(Object id) throws DeleteException;
 
     public void delete(Object id, boolean audit) throws DeleteException;
-    
+
     public void remove(Object object) throws DeleteException;
 
     public void remove(Object object, boolean audit) throws DeleteException;
@@ -65,6 +65,8 @@ public interface BaseDAO<T> {
 
     public Long count(Restriction restriction);
 
+    public Long count(String property, Object value);
+
     public T find(Object id);
 
     public T find(Class entityClass, Object id);
@@ -78,6 +80,8 @@ public interface BaseDAO<T> {
     public T unique(Restriction restriction);
 
     public T unique(Restriction restriction, Class clazz);
+
+    public T unique(String property, Object value);
 
     public Object findAttribute(String attributeName, Long id);
 
@@ -117,11 +121,19 @@ public interface BaseDAO<T> {
 
     public List<T> list(List<Restriction> restrictions, String order, Integer firstResult, Integer maxResults);
 
+    public List<T> list(String property, Object value);
+    
+    public List<T> list(String property, Object value, String order);
+
     public Object getInitialized(Object object);
 
     public List<T> listAttributes(String attributes);
 
     public List<T> listAttributes(String attributes, String order);
+
+    public List<T> listAttributes(String property, Object value, String attributes);
+    
+    public List<T> listAttributes(String property, Object value, String attributes, String order);
 
     public List<T> listAttributes(Map<String, Object> args, String attributes, String order);
 
