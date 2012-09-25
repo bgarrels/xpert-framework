@@ -1,6 +1,7 @@
 package com.xpert;
 
 import com.xpert.persistence.dao.BaseDAOImpl;
+import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
@@ -25,4 +26,5 @@ public class DAO extends BaseDAOImpl {
         }
         return entityManager;
     }
+
 }

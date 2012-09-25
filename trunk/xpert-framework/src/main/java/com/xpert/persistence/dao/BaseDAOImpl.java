@@ -35,8 +35,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     /**
      * Set here your getEntityManager()
      */
- //   public abstract void init();
-
+    //   public abstract void init();
     @SuppressWarnings({"unchecked", "rawtypes"})
     public BaseDAOImpl() {
         try {
@@ -192,6 +191,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
         }
 
     }
+
     @Override
     public void remove(Object object) throws DeleteException {
         remove(object, Configuration.isAudit());
@@ -200,7 +200,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     @Override
     public void remove(Object object, boolean audit) throws DeleteException {
         try {
-            if(!getEntityManager().contains(object)){
+            if (!getEntityManager().contains(object)) {
                 object = getEntityManager().merge(object);
             }
             if (audit) {
@@ -280,7 +280,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     public T unique(Restriction restrictions, Class clazz) {
         return unique(getRestrictions(restrictions), clazz);
     }
-    
+
     @Override
     public T unique(String property, Object value) {
         return unique(new Restriction(property, value), entityClass);
@@ -340,15 +340,15 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     public List<T> list(String property, Object value) {
         return list(entityClass, new Restriction(property, value));
     }
-    
+
     @Override
     public List<T> list(String property, Object value, String order) {
         return list(entityClass, new Restriction(property, value), order);
     }
-    
+
     @Override
     public List<T> list(Restriction restriction) {
-        return list( entityClass, getRestrictions(restriction));
+        return list(entityClass, getRestrictions(restriction));
     }
 
     @Override
@@ -389,6 +389,14 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     @Override
     public List<T> listAttributes(Restriction restriction, String attributes) {
         return list(entityClass, getRestrictions(restriction), null, null, null, attributes);
+    }
+
+    public List listAttributes(String property, Object value, String attributes) {
+        return listAttributes(new Restriction(property, value), attributes);
+    }
+
+    public List listAttributes(String property, Object value, String attributes, String order) {
+        return listAttributes(new Restriction(property, value), attributes, order);
     }
 
     @Override
@@ -507,7 +515,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     public Long count(String property, Object value) {
         return count(new Restriction(property, value));
     }
-    
+
     @Override
     public Long count(Restriction restriction) {
         return count(getRestrictions(restriction));
