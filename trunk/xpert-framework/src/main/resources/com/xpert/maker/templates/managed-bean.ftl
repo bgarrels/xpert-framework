@@ -1,5 +1,7 @@
 package ${configuration.managedBean};
 
+
+import java.io.Serializable;
 import com.xpert.core.crud.AbstractBaseBean;
 import com.xpert.core.crud.AbstractBusinessObject;
 import javax.ejb.EJB;
@@ -14,7 +16,7 @@ import ${entity.name};
  */
 @ManagedBean
 @ViewScoped
-public class ${name}MB extends AbstractBaseBean<${name}> {
+public class ${name}MB extends AbstractBaseBean<${name}> implements Serializable {
 
     @EJB
     private ${name}BO ${nameLower}BO;
