@@ -330,6 +330,7 @@ public class BeanCreator {
             }
             String tag = "";
             String converter = "";
+            String mask = "";
             boolean hasSelectItem = false;
             boolean hasEmptySelect = false;
             Integer maxlength = null;
@@ -337,10 +338,15 @@ public class BeanCreator {
             if (isAnnotationPresent(field, NotNull.class) || isAnnotationPresent(field, NotBlank.class)) {
                 required = true;
             }
-            if (field.getType().equals(Date.class)) {
+            if (field.getType().equals(Date.class) || field.getType().equals(Calendar.class)) {
                 tag = "p:calendar";
-            } else if (field.getType().equals(BigDecimal.class)) {
+            } else if (field.getType().equals(BigDecimal.class)
+                    || field.getType().equals(Double.class) || field.getType().equals(double.class)) {
                 tag = "xc:inputNumber";
+            } else if (field.getType().equals(Integer.class) || field.getType().equals(int.class)
+                    || field.getType().equals(Long.class) || field.getType().equals(long.class)) {
+                tag = "p:inputMask";
+                mask = "9?999999999";
             } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
                 tag = "h:selectBooleanCheckbox";
             } else if (isAnnotationPresent(field, ManyToOne.class) || field.getType().isEnum()) {
@@ -370,7 +376,7 @@ public class BeanCreator {
                 }
                 tag = "p:inputText";
             }
-            appendTagValue(view, tag, field, managedBean, converter, resourceBundle, hasSelectItem, hasEmptySelect, maxlength, required, ident+"    ", extraField);
+            appendTagValue(view, tag, field, managedBean, converter, resourceBundle, hasSelectItem, hasEmptySelect, maxlength, required, ident + "    ", extraField, mask);
         }
         view.append(ident).append("</h:panelGrid>\n");
         view.append(extraFieldSets);
@@ -464,7 +470,7 @@ public class BeanCreator {
     }
 
     public static void appendTagValue(StringBuilder view, String tag, Field field, String managedBean, String converter, String resourceBundle,
-            boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required, String ident, String extraField) {
+            boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required, String ident, String extraField, String mask) {
         String type;
         if (field.getType().equals(Collection.class) || field.getType().equals(List.class) || field.getType().equals(Set.class)) {
             ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
@@ -479,8 +485,14 @@ public class BeanCreator {
         if (converter != null && !converter.trim().isEmpty()) {
             view.append(" converter=\"").append(converter).append("\" ");
         }
+        if (mask != null && !mask.trim().isEmpty()) {
+            view.append(" mask=\"").append(mask).append("\" placeHolder=\"\" ");
+        }
         if (maxlength != null && maxlength > 0) {
-            view.append(" maxlength=\"").append(maxlength).append("\" ");
+            //add maxlength when mask is empty
+            if (mask == null || mask.trim().isEmpty()) {
+                view.append(" maxlength=\"").append(maxlength).append("\" ");
+            }
             view.append(" size=\"").append(DEFAULT_SIZE).append("\" ");
         }
         if (hasSelectItem) {
