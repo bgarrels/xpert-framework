@@ -222,10 +222,10 @@ public class BeanCreator {
                 view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(getLowerFirstLetter(field.getType().getSimpleName())).append(")}\"");
             }
             //align Date on center
-            if (field.getType().equals(Date.class) || field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
+            if (field.getType().equals(Calendar.class) || field.getType().equals(Date.class) || field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
                 view.append("\n").append("                                   style=\"text-align: center;\"");
                 //align Number on right
-            } else if (field.getType().equals(BigDecimal.class)) {
+            } else if (isNumber(field)) {
                 view.append("\n").append("                                   style=\"text-align: right;\"");
             }
             view.append(">\n");
@@ -340,8 +340,7 @@ public class BeanCreator {
             }
             if (field.getType().equals(Date.class) || field.getType().equals(Calendar.class)) {
                 tag = "p:calendar";
-            } else if (field.getType().equals(BigDecimal.class)
-                    || field.getType().equals(Double.class) || field.getType().equals(double.class)) {
+            } else if (isNumber(field)) {
                 tag = "xc:inputNumber";
             } else if (field.getType().equals(Integer.class) || field.getType().equals(int.class)
                     || field.getType().equals(Long.class) || field.getType().equals(long.class)) {
@@ -444,7 +443,7 @@ public class BeanCreator {
             hasContent = true;
         } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
             text.append(" converter =\"yesNoConverter\" ");
-        } else if (field.getType().equals(BigDecimal.class)) {
+        } else if (isNumber(field)) {
             text.append(">\n").append(ident).append("   <f:convertNumber />\n");
             hasContent = true;
         } else if (isLazy(field)) {
@@ -711,6 +710,10 @@ public class BeanCreator {
             //nothing
             return null;
         }
+    }
+
+    public static boolean isNumber(Field field) {
+        return field.getType().equals(BigDecimal.class) || field.getType().equals(Double.class) || field.getType().equals(double.class);
     }
 
     public static String getNameLower(Class clazz) {
