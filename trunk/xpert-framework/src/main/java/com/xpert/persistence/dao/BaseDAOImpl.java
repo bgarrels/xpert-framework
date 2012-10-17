@@ -489,8 +489,11 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
         if (index > -1) {
             try {
                 String field = property.substring(0, property.indexOf("."));
-                Object propertyToInitialize = PropertyUtils.getPropertyDescriptor(bean, field).getPropertyType().newInstance();
-                PropertyUtils.setProperty(bean, field, propertyToInitialize);
+                Object propertyToInitialize = PropertyUtils.getProperty(bean, field);
+                if (propertyToInitialize == null) {
+                    propertyToInitialize = PropertyUtils.getPropertyDescriptor(bean, field).getPropertyType().newInstance();
+                    PropertyUtils.setProperty(bean, field, propertyToInitialize);
+                }
                 String afterField = property.substring(index + 1, property.length());
                 if (afterField != null && afterField.indexOf(".") > -1) {
                     initializeCascade(afterField, propertyToInitialize);

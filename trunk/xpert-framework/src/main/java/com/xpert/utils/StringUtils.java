@@ -23,16 +23,16 @@ public class StringUtils {
             + "([-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)*)*"
             + "(#([-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)?\\b";
 
-    public static String removeHTML(String htmlString) {
-        return htmlString.replaceAll("\\<.*?\\>", "");
+    public static String removeHTML(String string) {
+        return string.replaceAll("\\<.*?\\>", "");
     }
 
-    public static String getOnlyDecimalNumbers(String htmlString) {
-        return htmlString.replaceAll("([^0-9|^,|^.])", "");
+    public static String getOnlyDecimalNumbers(String string) {
+        return string.replaceAll("([^0-9|^,|^.])", "");
     }
 
-    public static String getOnlyIntegerNumbers(String htmlString) {
-        return htmlString.replaceAll("([^0-9])", "");
+    public static String getOnlyIntegerNumbers(String string) {
+        return string.replaceAll("([^0-9])", "");
     }
 
     public static String getAlphaNumeric(String string) {
@@ -45,8 +45,8 @@ public class StringUtils {
         return matcher.replaceAll(" ").trim();
     }
 
-    public static String extractUrl(String htmlString) {
-        return extractByRegex(htmlString, PATTERN_URL);
+    public static String extractUrl(String string) {
+        return extractByRegex(string, PATTERN_URL);
     }
 
     public static String extractByRegex(String string, String expressaoRegular) throws PatternSyntaxException {
