@@ -2,6 +2,7 @@ package com.xpert.faces.primefaces;
 
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.query.JoinBuilder;
+import com.xpert.persistence.query.QueryType;
 import com.xpert.persistence.query.Restriction;
 import com.xpert.persistence.query.RestrictionType;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
 
     private BaseDAO<T> dao;
     private String defaultOrder;
+    private String attributes;
     /*
      * to add restrictions on query to filter table
      */
@@ -22,6 +24,19 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
     private Restriction restriction;
     private JoinBuilder joinBuilder;
 
+    public LazyDataModelImpl(String attributes, String defaultOrder, Restriction restriction, BaseDAO<T> dao) {
+        this.dao = dao;
+        this.attributes = attributes;
+        this.defaultOrder = defaultOrder;
+        this.restriction = restriction;
+    }
+
+    public LazyDataModelImpl(String attributes, String defaultOrder, List<Restriction> restrictions, BaseDAO<T> dao) {
+        this.dao = dao;
+        this.attributes = attributes;
+        this.defaultOrder = defaultOrder;
+        this.restrictions = restrictions;
+    }
     public LazyDataModelImpl(String defaultOrder, Restriction restriction, BaseDAO<T> dao) {
         this.dao = dao;
         this.defaultOrder = defaultOrder;
@@ -84,7 +99,7 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
             }
         }
 
-        List<T> dados = dao.getQueryBuilder().from(dao.getEntityClass()).add(queryRestrictions).join(joinBuilder)
+        List<T> dados = dao.getQueryBuilder().type(QueryType.SELECT, attributes).from(dao.getEntityClass()).add(queryRestrictions).join(joinBuilder)
                 .orderBy(orderBy).createQuery(first, pageSize).getResultList();
         
         this.setRowCount(dao.count(queryRestrictions).intValue());

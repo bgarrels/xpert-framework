@@ -354,7 +354,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public List<T> listAttributes(String attributes) {
-        return listAttributes((String) null, attributes);
+        return listAttributes(attributes, null);
     }
 
     @Override
