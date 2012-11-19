@@ -85,7 +85,7 @@ public abstract class AbstractBaseBean<T> {
         }
     }
 
-    public BaseDAO getDAO() {
+    public BaseDAO<T> getDAO() {
         return getBO().getDAO();
     }
 
