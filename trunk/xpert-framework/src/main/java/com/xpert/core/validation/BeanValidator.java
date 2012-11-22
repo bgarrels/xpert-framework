@@ -22,6 +22,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.URL;
 
 /**
  *
@@ -42,6 +43,7 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
         VALIDATION_TYPES.add(Email.class);
         VALIDATION_TYPES.add(DecimalMax.class);
         VALIDATION_TYPES.add(DecimalMin.class);
+        VALIDATION_TYPES.add(URL.class);
     }
 
     @Override
@@ -106,6 +108,10 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
 
             if (violation.equals(Email.class)) {
                 return XpertResourceBundle.get("invalidEmail");
+            }
+            
+            if (violation.equals(URL.class)) {
+                return XpertResourceBundle.get("invalidURL");
             }
 
             if (violation.equals(NotNull.class) || violation.equals(NotEmpty.class) || violation.equals(NotBlank.class)) {
