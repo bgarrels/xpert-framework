@@ -40,7 +40,7 @@
                         <webModule>
                             <groupId>archetype.it</groupId>
                             <artifactId>basic-web</artifactId>
-                            <contextRoot>/</contextRoot>
+                            <contextRoot>/basic</contextRoot>
                         </webModule>
                     </modules>
                 </configuration>

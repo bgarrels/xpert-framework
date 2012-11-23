@@ -5,12 +5,12 @@
 <xpert-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <auditing>
-        <auditing-impl>${symbol_dollar}{groupId}.model.audit.Auditing</auditing-impl>
-        <metadata-impl>${symbol_dollar}{groupId}.model.audit.Metadata</metadata-impl>
-        <auditing-listener>${symbol_dollar}{groupId}.application.AuditingListenerImpl</auditing-listener>
+        <auditing-impl>${groupId}.model.audit.Auditing</auditing-impl>
+        <metadata-impl>${groupId}.model.audit.Metadata</metadata-impl>
+        <auditing-listener>${groupId}.application.AuditingListenerImpl</auditing-listener>
     </auditing>
     
-    <entity-manager-factory>${symbol_dollar}{groupId}.application.EntityManagerFactoryImpl</entity-manager-factory>
+    <entity-manager-factory>${groupId}.application.EntityManagerFactoryImpl</entity-manager-factory>
     <resource-bundle>bundles.messages</resource-bundle>
 
 </xpert-config>

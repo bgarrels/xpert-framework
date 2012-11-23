@@ -40,7 +40,7 @@
                         <webModule>
                             <groupId>${groupId}</groupId>
                             <artifactId>${rootArtifactId}-web</artifactId>
-                            <contextRoot>/</contextRoot>
+                            <contextRoot>/${rootArtifactId}</contextRoot>
                         </webModule>
                     </modules>
                 </configuration>
