@@ -1,0 +1,51 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <ui:param name="title" value="#{msg['estado.list']}" />
+   <ui:define name="body">
+       <ui:include src="menuEstado.xhtml" />
+       <h:form id="formListEstado">
+           <xc:modalMessages/>
+           <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                   var="estado" value="#{estadoMB.dataModel}" lazy="true" >
+               <p:column headerText="#{msg['estado.descricao']}" sortBy="#{estado.descricao}"
+                      filterBy="#{estado.descricao}">
+                   <h:outputText value="#{estado.descricao}"/>
+               </p:column>
+               <p:column headerText="#{msg['estado.sigla']}" sortBy="#{estado.sigla}"
+                      filterBy="#{estado.sigla}">
+                   <h:outputText value="#{estado.sigla}"/>
+               </p:column>
+               <p:column headerText="#{msg['estado.pais']}" sortBy="#{estado.pais}">
+                   <h:outputText value="#{estado.pais}">
+                      <x:initializer/>
+                   </h:outputText>
+               </p:column>
+               <p:column style="text-align: center;">
+                   <p:commandButton oncomplete="widgetEstadoDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailEstado" >
+                       <f:setPropertyActionListener value="#{estado}" target="#{estadoMB.entity}" />
+                   </p:commandButton>
+                   <p:button icon="ui-icon-pencil" outcome="createEstado" >
+                       <f:param name="id" value="#{estado.id}" />
+                   </p:button>
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{estadoMB.delete}" >
+                       <f:setPropertyActionListener value="#{estado.id}" target="#{estadoMB.id}" />
+                       <x:confirmation message="#{xmsg['confirmDelete']} - #{estado}" />
+                   </p:commandButton>
+               </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.estado}"/>
+               </f:facet>
+           </p:dataTable>
+       </h:form>
+
+       <p:dialog widgetVar="widgetEstadoDetail" header="#{msg['estado.detail']}" appendToBody="true" modal="true" height="500" width="800">
+           <ui:include src="detailEstado.xhtml" />
+       </p:dialog>
+   </ui:define>
+</ui:composition>

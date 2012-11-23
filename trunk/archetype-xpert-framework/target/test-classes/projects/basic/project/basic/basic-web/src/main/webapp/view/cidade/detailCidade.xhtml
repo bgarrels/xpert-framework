@@ -1,0 +1,26 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <h:form id="formDetailCidade">
+       <h:panelGrid columns="4" styleClass="grid-detail">
+
+           <h:outputLabel value="#{msg['cidade.estado']}:" />
+           <h:outputText value="#{cidadeMB.entity.estado}">
+              <x:initializer/>
+           </h:outputText>
+
+           <h:outputLabel value="#{msg['cidade.descricao']}:" />
+           <h:outputText value="#{cidadeMB.entity.descricao}"/>
+
+       </h:panelGrid>
+       <p:separator/>
+       <div style="text-align: center;">
+           <p:commandButton type="button" value="#{xmsg['close']}" onclick="widgetCidadeDetail.hide()" />
+           <xc:audit for="#{cidadeMB.entity}"/>
+       </div>
+   </h:form>
+</ui:composition>

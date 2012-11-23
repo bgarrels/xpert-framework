@@ -1,0 +1,31 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <h:form>
+       <xc:modalMessages/>
+          <h:panelGrid columns="2" styleClass="grid-form">
+
+              <h:outputLabel value="* ${symbol_pound}{msg['pais.descricao']}:" />
+              <p:inputText value="${symbol_pound}{paisMB.entity.descricao}" maxlength="255"  size="70"  />
+
+              <h:outputLabel value="${symbol_pound}{msg['pais.estados']}:" />
+              <h:selectManyCheckbox value="${symbol_pound}{paisMB.entity.estados}" converter="entityConverter" >
+                   <x:initializer/>
+                   <f:selectItems value="${symbol_pound}{findAllBean.get(classMB.estado)}" var="estado" itemLabel="${symbol_pound}{estado}" />
+              </h:selectManyCheckbox>
+          </h:panelGrid>
+       <p:separator/>
+       <h:outputText value="${symbol_pound}{xmsg['requiredFieldsForm']}"/>
+       <div style="text-align: center;">
+           <p:commandButton process="@form" update="@form" action="${symbol_pound}{paisMB.save}" value="${symbol_pound}{xmsg['save']}" />
+           <xc:audit for="${symbol_pound}{paisMB.entity}"/>
+       </div>
+   </h:form>
+</ui:composition>

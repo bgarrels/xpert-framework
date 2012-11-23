@@ -1,0 +1,47 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <ui:param name="title" value="#{msg['cidade.list']}" />
+   <ui:define name="body">
+       <ui:include src="menuCidade.xhtml" />
+       <h:form id="formListCidade">
+           <xc:modalMessages/>
+           <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                   var="cidade" value="#{cidadeMB.dataModel}" lazy="true" >
+               <p:column headerText="#{msg['cidade.estado']}" sortBy="#{cidade.estado}">
+                   <h:outputText value="#{cidade.estado}">
+                      <x:initializer/>
+                   </h:outputText>
+               </p:column>
+               <p:column headerText="#{msg['cidade.descricao']}" sortBy="#{cidade.descricao}"
+                      filterBy="#{cidade.descricao}">
+                   <h:outputText value="#{cidade.descricao}"/>
+               </p:column>
+               <p:column style="text-align: center;">
+                   <p:commandButton oncomplete="widgetCidadeDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailCidade" >
+                       <f:setPropertyActionListener value="#{cidade}" target="#{cidadeMB.entity}" />
+                   </p:commandButton>
+                   <p:button icon="ui-icon-pencil" outcome="createCidade" >
+                       <f:param name="id" value="#{cidade.id}" />
+                   </p:button>
+                   <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="#{cidadeMB.delete}" >
+                       <f:setPropertyActionListener value="#{cidade.id}" target="#{cidadeMB.id}" />
+                       <x:confirmation message="#{xmsg['confirmDelete']} - #{cidade}" />
+                   </p:commandButton>
+               </p:column>
+               <f:facet name="footer">
+                   <xc:auditDelete for="#{classMB.cidade}"/>
+               </f:facet>
+           </p:dataTable>
+       </h:form>
+
+       <p:dialog widgetVar="widgetCidadeDetail" header="#{msg['cidade.detail']}" appendToBody="true" modal="true" height="500" width="800">
+           <ui:include src="detailCidade.xhtml" />
+       </p:dialog>
+   </ui:define>
+</ui:composition>

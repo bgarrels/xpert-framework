@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      dir="ltr" lang="en-US" xml:lang="en"
+      xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+      xmlns:x="http://xpert.com/faces">
+
+    <f:view locale="#{localeBean.locale}">
+        <h:head>
+            <title>Project #{empty title ? '' : ' - '.concat(title)}</title>
+            <ui:include src="imports.xhtml"/>
+        </h:head>
+        <h:body style="font-size: 11px;">
+            <h:form/>
+            <ui:include src="ajaxStatus.xhtml" />
+
+            <ui:include src="menu.xhtml"/>
+            <h:form>
+                <xc:localeSwitcher/>
+            </h:form>
+            <ui:insert name="body" />
+            <x:filterOnEnter/>
+        </h:body>
+    </f:view>
+
+</html>

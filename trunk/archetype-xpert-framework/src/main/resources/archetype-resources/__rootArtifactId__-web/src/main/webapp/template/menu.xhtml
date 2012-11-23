@@ -1,0 +1,24 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form>
+        <p:menubar>
+            <p:submenu url="/index.jsf" label="${symbol_pound}{msg['menu.home']}" />
+            
+            <p:submenu label="CRUD">
+                <p:menuitem url="/view/cidade/listCidade.jsf" value="${symbol_pound}{msg['menu.cidade']}"/>
+                <p:menuitem url="/view/estado/listEstado.jsf" value="${symbol_pound}{msg['menu.estado']}"/>
+                <p:menuitem url="/view/pais/listPais.jsf" value="${symbol_pound}{msg['menu.pais']}"/>
+            </p:submenu>
+            
+            
+            
+        </p:menubar>
+    </h:form>
+</ui:composition>

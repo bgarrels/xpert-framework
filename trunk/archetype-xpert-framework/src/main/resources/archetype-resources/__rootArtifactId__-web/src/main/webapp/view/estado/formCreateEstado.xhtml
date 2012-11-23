@@ -1,0 +1,41 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <h:form>
+       <xc:modalMessages/>
+          <h:panelGrid columns="2" styleClass="grid-form">
+
+              <h:outputLabel value="* ${symbol_pound}{msg['estado.descricao']}:" />
+              <p:inputText value="${symbol_pound}{estadoMB.entity.descricao}" maxlength="255"  size="70"  />
+
+              <h:outputLabel value="* ${symbol_pound}{msg['estado.sigla']}:" />
+              <p:inputText value="${symbol_pound}{estadoMB.entity.sigla}" maxlength="255"  size="70"  />
+
+              <h:outputLabel value="* ${symbol_pound}{msg['estado.pais']}:" />
+              <h:selectOneMenu value="${symbol_pound}{estadoMB.entity.pais}" converter="entityConverter" >
+                   <x:initializer/>
+                   <f:selectItem itemLabel="${symbol_pound}{xmsg['select']}" />
+                   <f:selectItems value="${symbol_pound}{findAllBean.get(classMB.pais)}" var="pais" itemLabel="${symbol_pound}{pais}" />
+              </h:selectOneMenu>
+
+              <h:outputLabel value="${symbol_pound}{msg['estado.cidades']}:" />
+              <h:selectManyCheckbox value="${symbol_pound}{estadoMB.entity.cidades}" converter="entityConverter" >
+                   <x:initializer/>
+                   <f:selectItems value="${symbol_pound}{findAllBean.get(classMB.cidade)}" var="cidade" itemLabel="${symbol_pound}{cidade}" />
+              </h:selectManyCheckbox>
+          </h:panelGrid>
+       <p:separator/>
+       <h:outputText value="${symbol_pound}{xmsg['requiredFieldsForm']}"/>
+       <div style="text-align: center;">
+           <p:commandButton process="@form" update="@form" action="${symbol_pound}{estadoMB.save}" value="${symbol_pound}{xmsg['save']}" />
+           <xc:audit for="${symbol_pound}{estadoMB.entity}"/>
+       </div>
+   </h:form>
+</ui:composition>
