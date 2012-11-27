@@ -11,6 +11,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ValueExpression;
 import javax.el.ValueReference;
 import javax.faces.application.FacesMessage;
@@ -18,6 +20,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.constraints.*;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -30,6 +33,7 @@ import org.hibernate.validator.constraints.URL;
  */
 public class BeanValidator extends javax.faces.validator.BeanValidator {
 
+    private static final Logger logger = Logger.getLogger(BeanValidator.class.getName());
     private static final List<Class> VALIDATION_TYPES = new ArrayList<Class>();
 
     static {
@@ -109,7 +113,7 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
             if (violation.equals(Email.class)) {
                 return XpertResourceBundle.get("invalidEmail");
             }
-            
+
             if (violation.equals(URL.class)) {
                 return XpertResourceBundle.get("invalidURL");
             }
@@ -137,9 +141,9 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
         String value = I18N.get(property);
         //try to find in superclass
         if ((value == null || value.isEmpty() || value.equals(property)) && clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
-            return getMessageWithDefinedValue(value, valueReference, clazz.getSuperclass());
+            return getObjectWithAttribute(valueReference, clazz.getSuperclass());
         }
-        if(value.equals(property)){
+        if (value.equals(property)) {
             return new HumaniseCamelCase().humanise(valueReference.getProperty().toString());
         }
         return value;
@@ -211,24 +215,53 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
     public AnnotationFromViolation getAnnotation(ValueReference valueReference, Class violation) {
         try {
 
-            Field field = valueReference.getBase().getClass().getDeclaredField(valueReference.getProperty().toString());
-            Annotation annotation = null;
+            Field field = getDeclaredField(valueReference.getBase().getClass(), valueReference.getProperty().toString());
 
             if (field != null) {
                 return new AnnotationFromViolation(field.getAnnotation(violation), isChar(field));
             }
 
-            if (annotation == null) {
-                Method method = valueReference.getBase().getClass().getDeclaredMethod("get" + StringUtils.getUpperFirstLetter(valueReference.getProperty().toString()));
-                if (method != null) {
-                    return new AnnotationFromViolation(method.getAnnotation(violation), isChar(method));
-                }
+            Method method = getDeclaredMethod(valueReference.getBase().getClass(), valueReference.getProperty().toString());
+            if (method != null) {
+                return new AnnotationFromViolation(method.getAnnotation(violation), isChar(method));
             }
 
             return null;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public Field getDeclaredField(Class clazz, String fieldName) {
+        Field field = null;
+
+        try {
+            field = clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException ex) {
+            if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
+                return getDeclaredField(clazz.getSuperclass(), fieldName);
+            }
+        } catch (SecurityException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+
+        return field;
+    }
+    
+    public Method getDeclaredMethod(Class clazz, String fieldName) {
+        Method method = null;
+
+        try {
+            method = clazz.getDeclaredMethod("get" + StringUtils.getUpperFirstLetter(fieldName));
+        } catch (NoSuchMethodException ex) {
+            if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
+                return getDeclaredMethod(clazz.getSuperclass(), fieldName);
+            }
+        } catch (SecurityException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+
+        return method;
     }
 
     public boolean isChar(Field field) {
