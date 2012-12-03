@@ -1,7 +1,5 @@
 package com.xpert.core.validation;
 
-import com.xpert.Configuration;
-import com.xpert.core.exception.BusinessException;
 import com.xpert.core.exception.UniqueFieldException;
 import com.xpert.i18n.I18N;
 import com.xpert.i18n.XpertResourceBundle;
@@ -67,7 +65,7 @@ public class UniqueFieldsValidation {
     private static String getValidationMessage(UniqueField uniqueField, Object object) {
         String lowerClassName = StringUtils.getLowerFirstLetter(object.getClass().getSimpleName());
         StringBuilder properties = new StringBuilder();
-        properties.append(I18N.get(lowerClassName + "." + uniqueField.getConstraints()[0]));
+        properties.append(I18N.get((getLowerClassName(object.getClass(), uniqueField.getConstraints()[0])) + "." + uniqueField.getConstraints()[0]));
         if (uniqueField.getConstraints().length > 1) {
             int it = 0;
             for (String fieldName : uniqueField.getConstraints()) {
@@ -77,11 +75,29 @@ public class UniqueFieldsValidation {
                     } else if (it > 0) {
                         properties.append(", ");
                     }
-                    properties.append(I18N.get(lowerClassName + "." + fieldName));
+                    properties.append(I18N.get((getLowerClassName(object.getClass(), fieldName)) + "." + fieldName));
                 }
                 it++;
             }
         }
         return XpertResourceBundle.get("alreadyRegisteredWithField", I18N.get(lowerClassName), properties.toString());
+    }
+
+    private static String getLowerClassName(Class clazz, String fieldName) {
+        String className = null;
+        try {
+            clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException ex) {
+            if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
+                className = getLowerClassName(clazz.getSuperclass(), fieldName);
+            }
+        } catch (SecurityException ex) {
+            throw new RuntimeException(ex);
+        }
+        if (className == null) {
+            className = clazz.getSimpleName();
+        }
+
+        return StringUtils.getLowerFirstLetter(className);
     }
 }

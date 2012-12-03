@@ -48,6 +48,8 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
         VALIDATION_TYPES.add(DecimalMax.class);
         VALIDATION_TYPES.add(DecimalMin.class);
         VALIDATION_TYPES.add(URL.class);
+        VALIDATION_TYPES.add(Past.class);
+        VALIDATION_TYPES.add(Future.class);
     }
 
     @Override
@@ -121,6 +123,12 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
             if (violation.equals(NotNull.class) || violation.equals(NotEmpty.class) || violation.equals(NotBlank.class)) {
                 return object + " " + XpertResourceBundle.get("isRequired");
             }
+            if (violation.equals(Past.class)) {
+                return object + " " + XpertResourceBundle.get("mustBeAPastDate");
+            }
+            if (violation.equals(Future.class)) {
+                return object + " " + XpertResourceBundle.get("mustBeAFutuureDate");
+            }
 
             return getMessageWithDefinedValue(object, valueReference, violation);
 
@@ -152,7 +160,9 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
     /**
      *
      * @Size id for String or Collections/Map, the message is diferent from the
-     * two cases @Max and @Min is for Numbers (Long, BigInteger, etc...)
+     * two cases
+     * @Max and
+     * @Min is for Numbers (Long, BigInteger, etc...)
      *
      * @param object
      * @param valueReference
@@ -247,7 +257,7 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
 
         return field;
     }
-    
+
     public Method getDeclaredMethod(Class clazz, String fieldName) {
         Method method = null;
 
