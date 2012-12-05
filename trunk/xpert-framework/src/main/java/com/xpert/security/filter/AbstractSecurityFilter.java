@@ -22,7 +22,12 @@ public abstract class AbstractSecurityFilter implements Filter {
 
     private static final Logger logger = Logger.getLogger(AbstractSecurityFilter.class.getName());
 
-    public abstract AbstractUserSession getUserSession(ServletRequest request, ServletResponse response);
+    /**
+     * Name of session bean to get from HttpSession
+     *
+     * @return
+     */
+    public abstract String getUserSessionName();
 
     /**
      * Custom autentication. Define here more authetication logic
@@ -59,7 +64,7 @@ public abstract class AbstractSecurityFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
 
-        AbstractUserSession userSession = getUserSession(request, response);
+        AbstractUserSession userSession = (AbstractUserSession) getFromSession(request, getUserSessionName());
 
         if (userSession == null || !isAuthenticated(userSession)) {
             if (isDebug()) {
@@ -86,6 +91,10 @@ public abstract class AbstractSecurityFilter implements Filter {
             }
         }
 
+    }
+
+    public Object getFromSession(ServletRequest request, String attribute) {
+        return ((HttpServletRequest) request).getSession().getAttribute(attribute);
     }
 
     public boolean hasUrl(AbstractUserSession userSession, HttpServletRequest request) {
