@@ -117,7 +117,7 @@ public abstract class AbstractSecurityFilter implements Filter {
      * @return
      */
     public boolean isDebug() {
-        return false;
+        return true;
     }
 
     public boolean isAuthenticated(AbstractUserSession userSession) {
