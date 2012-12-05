@@ -4,17 +4,17 @@ package com.xpert.security.model;
  *
  * @author ayslan
  */
-public abstract class User {
+public interface User {
 
-    public abstract boolean isActive();
+    public boolean isActive();
 
-    public abstract void setActive(boolean active);
+    public void setActive(boolean active);
 
-    public abstract String getUserPassword();
+    public String getUserPassword();
 
-    public abstract void setUserPassword(String password);
+    public void setUserPassword(String password);
 
-    public abstract String getUserLogin();
+    public String getUserLogin();
 
-    public abstract void setUserLogin(String login);
+    public void setUserLogin(String login);
 }

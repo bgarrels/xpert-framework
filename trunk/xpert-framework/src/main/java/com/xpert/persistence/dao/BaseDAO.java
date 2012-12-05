@@ -87,6 +87,10 @@ public interface BaseDAO<T> {
 
     public Object findAttribute(String attributeName, Object object);
 
+    public Object findList(String attributeName, Long id);
+
+    public Object findList(String attributeName, Object object);
+
     public List<T> list(Map<String, Object> parameters);
 
     public List<T> list(Map<String, Object> parameters, String order);
@@ -122,7 +126,7 @@ public interface BaseDAO<T> {
     public List<T> list(List<Restriction> restrictions, String order, Integer firstResult, Integer maxResults);
 
     public List<T> list(String property, Object value);
-    
+
     public List<T> list(String property, Object value, String order);
 
     public Object getInitialized(Object object);
@@ -132,7 +136,7 @@ public interface BaseDAO<T> {
     public List<T> listAttributes(String attributes, String order);
 
     public List<T> listAttributes(String property, Object value, String attributes);
-    
+
     public List<T> listAttributes(String property, Object value, String attributes, String order);
 
     public List<T> listAttributes(Map<String, Object> args, String attributes, String order);

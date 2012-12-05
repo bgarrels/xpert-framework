@@ -256,6 +256,24 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     public Object findAttribute(String attributeName, Object object) {
         return findAttribute(attributeName, (Long)EntityUtils.getId(object));
     }
+    
+    @Override
+    public Object findList(String attributeName, Long id) {
+
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass)
+                .add(new Restriction(EntityUtils.getIdFieldName(entityClass), id)).type(QueryType.SELECT, attributeName).createQuery();
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public Object findList(String attributeName, Object object) {
+        return findAttribute(attributeName, (Long)EntityUtils.getId(object));
+    }
 
     @Override
     public T unique(Map<String, Object> args) {
