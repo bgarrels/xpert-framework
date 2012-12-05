@@ -1,0 +1,117 @@
+package com.xpert.security.filter;
+
+import com.xpert.faces.utils.FacesUtils;
+import com.xpert.security.session.AbstractUserSession;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author ayslan
+ */
+public abstract class AbstractSecurityFilter implements Filter {
+
+    private static final Logger logger = Logger.getLogger(AbstractSecurityFilter.class.getName());
+
+    public abstract AbstractUserSession getUserSession(ServletRequest request, ServletResponse response);
+
+    /**
+     * Custom autentication. Define here more authetication logic
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    public boolean getMoreAuthentication(ServletRequest request, ServletResponse response) {
+        return true;
+    }
+
+    /**
+     * Page to redirect if autentication fails
+     *
+     * @return
+     */
+    public abstract String getHomePage();
+
+    /**
+     * Define a logic to error. Called on exception in method
+     * "chain.doFilter(request, response);"
+     */
+    public void onError() {
+    }
+
+    /**
+     * URLs the are ignored on requests after user authenticated
+     *
+     * @return
+     */
+    public abstract String[] getIgnoredUrls();
+
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+
+        AbstractUserSession userSession = getUserSession(request, response);
+
+        if (userSession == null || !isAuthenticated(userSession)) {
+            if (isDebug()) {
+                logger.log(Level.INFO, "User not authenticated redirecting to: '{0}'", getHomePage());
+            }
+            redirectHome(request, response);
+            return;
+        }
+
+        if (!hasUrl(userSession, (HttpServletRequest) request)) {
+            if (isDebug()) {
+                logger.log(Level.INFO, "User {0} not authorized to url: '{1}'", new Object[]{userSession.getUser().getUserLogin(), ((HttpServletRequest) request).getRequestURI()});
+            }
+            redirectHome(request, response);
+            return;
+        }
+
+        if (getMoreAuthentication(request, response)) {
+            try {
+                chain.doFilter(request, response);
+            } catch (Throwable ex) {
+                logger.log(Level.SEVERE, null, ex);
+                onError();
+            }
+        }
+
+    }
+
+    public boolean hasUrl(AbstractUserSession userSession, HttpServletRequest request) {
+        String currentView = request.getRequestURI();
+        if (getIgnoredUrls() != null && Arrays.asList(getIgnoredUrls()).contains(currentView)) {
+            return true;
+        }
+        return userSession.hasURL(currentView);
+    }
+
+    public void redirectHome(ServletRequest request, ServletResponse response) {
+        //create faces context
+        FacesUtils.getFacesContext((HttpServletRequest) request, (HttpServletResponse) response);
+        FacesUtils.redirect(getHomePage());
+    }
+
+    /**
+     * Log events on filter
+     *
+     * @return
+     */
+    public boolean isDebug() {
+        return false;
+    }
+
+    public boolean isAuthenticated(AbstractUserSession userSession) {
+        return userSession.isAuthenticated(userSession);
+    }
+}
