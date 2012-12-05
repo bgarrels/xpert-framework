@@ -28,39 +28,41 @@ public abstract class SecurityLoginBean {
 
         User user = null;
         EntityManager entityManager = getEntityManager();
-        if (entityManager != null && getUserClass() != null) {
-            String queryString = " FROM " + getUserClass().getName() + " WHERE userLogin = ?1 ";
-            if (isLoginUpperCase()) {
-                login = login.toUpperCase();
-            } else if (isLoginLowerCase()) {
-                login = login.toLowerCase();
-            }
-            try {
-                user = (User) entityManager.createQuery(queryString).setParameter(1, login).getSingleResult();
-            } catch (NoResultException ex) {
-                //
-            }
-            //compare password encryptedPassword
-            if (user != null) {
-                try {
-                    String encryptedPassword = null;
-                    if (getEncryptionType() != null) {
-                        if (getEncryptionType().equals(EncryptionType.SHA256)) {
-                            encryptedPassword = Encryption.getSHA256(password);
-                        }
-                        if (getEncryptionType().equals(EncryptionType.MD5)) {
-                            encryptedPassword = Encryption.getMD5(password);
-                        }
-                    } else {
-                        encryptedPassword = password;
-                    }
+        if (entityManager == null || getUserClass() == null) {
+            throw new IllegalArgumentException("To get the user you must override methods getEntityManager() and getUserClass() or override getUser() and do your own logic");
+        }
 
-                    if (!user.getUserPassword().equals(encryptedPassword)) {
-                        user = null;
+        String queryString = " FROM " + getUserClass().getName() + " WHERE userLogin = ?1 ";
+        if (isLoginUpperCase()) {
+            login = login.toUpperCase();
+        } else if (isLoginLowerCase()) {
+            login = login.toLowerCase();
+        }
+        try {
+            user = (User) entityManager.createQuery(queryString).setParameter(1, login).getSingleResult();
+        } catch (NoResultException ex) {
+            //
+        }
+        //compare password encryptedPassword
+        if (user != null) {
+            try {
+                String encryptedPassword = null;
+                if (getEncryptionType() != null) {
+                    if (getEncryptionType().equals(EncryptionType.SHA256)) {
+                        encryptedPassword = Encryption.getSHA256(password);
                     }
-                } catch (NoSuchAlgorithmException ex) {
-                    throw new RuntimeException(ex);
+                    if (getEncryptionType().equals(EncryptionType.MD5)) {
+                        encryptedPassword = Encryption.getMD5(password);
+                    }
+                } else {
+                    encryptedPassword = password;
                 }
+
+                if (!user.getUserPassword().equals(encryptedPassword)) {
+                    user = null;
+                }
+            } catch (NoSuchAlgorithmException ex) {
+                throw new RuntimeException(ex);
             }
 
         }

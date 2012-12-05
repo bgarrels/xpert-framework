@@ -25,7 +25,7 @@
             <p:inputText id="user" value="#{cc.attrs.managedBean.userLogin}" size="30" required="true" requiredMessage="#{cc.attrs.requiredUserMessage}"/>
 
             <h:outputLabel for="password" value="#{cc.attrs.labelPassword}"/>
-            <p:inputText id="password" value="#{cc.attrs.managedBean.userPassword}" size="30" requiredMessage="#{cc.attrs.requiredPasswordMessage}"/>
+            <p:inputText id="password" value="#{cc.attrs.managedBean.userPassword}" size="30" required="true" requiredMessage="#{cc.attrs.requiredPasswordMessage}"/>
 
         </h:panelGrid>
         <p:commandButton process="@form" update="@form" value="#{cc.attrs.labelButtonLogin}" action="#{cc.attrs.managedBean.login}"/>
