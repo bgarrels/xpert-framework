@@ -1,10 +1,14 @@
-package com.xpert.security.mb;
+package com.xpert.security;
 
 import com.xpert.faces.utils.FacesUtils;
 import com.xpert.security.model.User;
 import com.xpert.security.session.AbstractUserSession;
+import com.xpert.utils.Encryption;
+import java.security.NoSuchAlgorithmException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -15,9 +19,67 @@ public abstract class SecurityLoginBean {
     private String userLogin;
     private String userPassword;
 
-    public abstract User getUser(String login, String password);
+    public EncryptionType getEncryptionType() {
+        return EncryptionType.SHA256;
+    }
+
+    public User getUser(String login, String password) {
+
+        User user = null;
+        EntityManager entityManager = getEntityManager();
+        if (entityManager != null && getUserClass() != null) {
+            String queryString = " FROM " + getUserClass().getName() + " WHERE userLogin = ?1 ";
+            if (isLoginUpperCase()) {
+                login = login.toUpperCase();
+            } else if (isLoginLowerCase()) {
+                login = login.toLowerCase();
+            }
+            try {
+                user = (User) entityManager.createQuery(queryString).setParameter(1, login).getSingleResult();
+                //compare password encryptedPassword
+                if (user != null) {
+                    try {
+                        String encryptedPassword = null;
+                        if (getEncryptionType() != null) {
+                            if (getEncryptionType().equals(EncryptionType.SHA256)) {
+                                encryptedPassword = Encryption.getSHA256(password);
+                            }
+                            if (getEncryptionType().equals(EncryptionType.MD5)) {
+                                encryptedPassword = Encryption.getMD5(password);
+                            }
+                        } else {
+                            encryptedPassword = password;
+                        }
+
+                        if (!user.getUserPassword().equals(encryptedPassword)) {
+                            user = null;
+                        }
+                    } catch (NoSuchAlgorithmException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            } catch (NoResultException ex) {
+                //
+            }
+        }
+        return user;
+    }
+
+    public boolean isLoginUpperCase() {
+        return true;
+    }
+
+    public boolean isLoginLowerCase() {
+        return false;
+    }
+
+    public Class getUserClass() {
+        return null;
+    }
 
     public abstract AbstractUserSession getUserSession();
+
+    public abstract EntityManager getEntityManager();
 
     /**
      * Define something when login is successful like add a message "Welcome
