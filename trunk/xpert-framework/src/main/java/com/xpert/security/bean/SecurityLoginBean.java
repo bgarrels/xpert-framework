@@ -91,7 +91,7 @@ public abstract class SecurityLoginBean {
      *
      * @return
      */
-    public void onSucess() {
+    public void onSucess(User user) {
     }
 
     /**
@@ -181,7 +181,7 @@ public abstract class SecurityLoginBean {
                     return;
                 }
             }
-            onSucess();
+            onSucess(user);
             FacesUtils.redirect(getRedirectPageWhenSucess());
         }
 

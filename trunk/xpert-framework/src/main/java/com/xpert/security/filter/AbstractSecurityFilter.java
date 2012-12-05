@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -68,7 +70,7 @@ public abstract class AbstractSecurityFilter implements Filter {
 
         if (userSession == null || !isAuthenticated(userSession)) {
             if (isDebug()) {
-                logger.log(Level.INFO, "User not authenticated redirecting to: '{0}'", getHomePage());
+                logger.log(Level.INFO, "User not authenticated redirecting to: {0}", getHomePage());
             }
             redirectHome(request, response);
             return;
@@ -76,7 +78,7 @@ public abstract class AbstractSecurityFilter implements Filter {
 
         if (!hasUrl(userSession, (HttpServletRequest) request)) {
             if (isDebug()) {
-                logger.log(Level.INFO, "User {0} not authorized to url: '{1}'", new Object[]{userSession.getUser().getUserLogin(), ((HttpServletRequest) request).getRequestURI()});
+                logger.log(Level.INFO, "User {0} not authorized to url: {1}", new Object[]{userSession.getUser().getUserLogin(), ((HttpServletRequest) request).getRequestURI()});
             }
             redirectHome(request, response);
             return;
