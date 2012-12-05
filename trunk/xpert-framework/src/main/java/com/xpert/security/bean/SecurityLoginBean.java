@@ -1,6 +1,7 @@
-package com.xpert.security;
+package com.xpert.security.bean;
 
 import com.xpert.faces.utils.FacesUtils;
+import com.xpert.security.EncryptionType;
 import com.xpert.security.model.User;
 import com.xpert.security.session.AbstractUserSession;
 import com.xpert.utils.Encryption;
@@ -36,31 +37,32 @@ public abstract class SecurityLoginBean {
             }
             try {
                 user = (User) entityManager.createQuery(queryString).setParameter(1, login).getSingleResult();
-                //compare password encryptedPassword
-                if (user != null) {
-                    try {
-                        String encryptedPassword = null;
-                        if (getEncryptionType() != null) {
-                            if (getEncryptionType().equals(EncryptionType.SHA256)) {
-                                encryptedPassword = Encryption.getSHA256(password);
-                            }
-                            if (getEncryptionType().equals(EncryptionType.MD5)) {
-                                encryptedPassword = Encryption.getMD5(password);
-                            }
-                        } else {
-                            encryptedPassword = password;
-                        }
-
-                        if (!user.getUserPassword().equals(encryptedPassword)) {
-                            user = null;
-                        }
-                    } catch (NoSuchAlgorithmException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
             } catch (NoResultException ex) {
                 //
             }
+            //compare password encryptedPassword
+            if (user != null) {
+                try {
+                    String encryptedPassword = null;
+                    if (getEncryptionType() != null) {
+                        if (getEncryptionType().equals(EncryptionType.SHA256)) {
+                            encryptedPassword = Encryption.getSHA256(password);
+                        }
+                        if (getEncryptionType().equals(EncryptionType.MD5)) {
+                            encryptedPassword = Encryption.getMD5(password);
+                        }
+                    } else {
+                        encryptedPassword = password;
+                    }
+
+                    if (!user.getUserPassword().equals(encryptedPassword)) {
+                        user = null;
+                    }
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
         }
         return user;
     }
