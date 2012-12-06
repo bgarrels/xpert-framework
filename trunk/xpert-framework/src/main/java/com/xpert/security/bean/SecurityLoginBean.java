@@ -23,7 +23,99 @@ public abstract class SecurityLoginBean {
     public EncryptionType getEncryptionType() {
         return EncryptionType.SHA256;
     }
+    public boolean isLoginUpperCase() {
+        return true;
+    }
 
+    public boolean isLoginLowerCase() {
+        return false;
+    }
+
+    public Class getUserClass() {
+        return null;
+    }
+
+    public abstract AbstractUserSession getUserSession();
+
+    public abstract EntityManager getEntityManager();
+
+    /**
+     * Define something when login is successful like add a message "Welcome
+     * user"
+     *
+     * @return
+     */
+    public void onSucess(User user) {
+    }
+
+    /**
+     * Define something when login is unsuccessful
+     *
+     * @return
+     */
+    public void onError() {
+    }
+
+    /**
+     * Redirect to this page when login is successful
+     *
+     * @return
+     */
+    public abstract String getRedirectPageWhenSucess();
+
+    /**
+     * Redirect to this page when user logout
+     *
+     * @return
+     */
+    public abstract String getRedirectPageWhenLogout();
+
+    /**
+     * Message when user was not found.
+     *
+     * @return
+     */
+    public String getUserNotFoundMessage() {
+        return "User not found";
+    }
+
+    /**
+     * Message when user is not active not found.
+     *
+     * @return
+     */
+    public String getInactiveUserMessage() {
+        return "Inactive User";
+    }
+
+    /**
+     * Message when there is no role.
+     *
+     * @return
+     */
+    public String getNoRolesFoundMessage() {
+        return "No roles found for this user";
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+        if (userLogin == null || userLogin.trim().isEmpty()) {
+            addErrorMessage("User is required");
+            valid = false;
+        }
+        if (userPassword == null || userPassword.trim().isEmpty()) {
+            addErrorMessage("Password is required");
+            valid = false;
+        }
+        return valid;
+    }
+
+    public void logout() {
+        FacesUtils.invalidateSession();
+        FacesUtils.redirect(getRedirectPageWhenLogout());
+    }
+    
+    
     public User getUser(String login, String password) {
 
         User user = null;
@@ -67,86 +159,6 @@ public abstract class SecurityLoginBean {
 
         }
         return user;
-    }
-
-    public boolean isLoginUpperCase() {
-        return true;
-    }
-
-    public boolean isLoginLowerCase() {
-        return false;
-    }
-
-    public Class getUserClass() {
-        return null;
-    }
-
-    public abstract AbstractUserSession getUserSession();
-
-    public abstract EntityManager getEntityManager();
-
-    /**
-     * Define something when login is successful like add a message "Welcome
-     * user"
-     *
-     * @return
-     */
-    public void onSucess(User user) {
-    }
-
-    /**
-     * Define something when login is unsuccessful
-     *
-     * @return
-     */
-    public void onError() {
-    }
-
-    /**
-     * Redirect to this page when login is successful
-     *
-     * @return
-     */
-    public abstract String getRedirectPageWhenSucess();
-
-    /**
-     * Message when user was not found.
-     *
-     * @return
-     */
-    public String getUserNotFoundMessage() {
-        return "User not found";
-    }
-
-    /**
-     * Message when user is not active not found.
-     *
-     * @return
-     */
-    public String getInactiveUserMessage() {
-        return "Inactive User";
-    }
-
-    /**
-     * Message when there is no role.
-     *
-     * @return
-     */
-    public String getNoRolesFoundMessage() {
-        return "No roles found for this user";
-    }
-
-    public boolean validate() {
-        boolean valid = true;
-        if (userLogin == null || userLogin.trim().isEmpty()) {
-            addErrorMessage("User is required");
-            valid = false;
-        }
-        if (userPassword == null || userPassword.trim().isEmpty()) {
-            addErrorMessage("Password is required");
-            valid = false;
-        }
-        return valid;
     }
 
     public void login() {
