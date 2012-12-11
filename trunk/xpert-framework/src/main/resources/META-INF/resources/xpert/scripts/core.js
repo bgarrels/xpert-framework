@@ -71,7 +71,7 @@ Xpert = {
          }
          
          $("body").delegate(selector+" .ui-column-filter", "focus", function(e){
-            var events = $(this).data('events');
+            var events = $._data(this, "events");
             var originalEvent;
             $.each(events, function(i, event) {
                 if(i == "keyup" || i == "keydown"){

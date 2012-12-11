@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolationException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -186,7 +187,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
             Query query = getEntityManager().createQuery("DELETE FROM " + entityClass.getName() + " WHERE " + EntityUtils.getIdFieldName(entityClass) + " = ? ");
             query.setParameter(1, id);
             query.executeUpdate();
-        } catch (Throwable t) {
+        } catch (ConstraintViolationException t) {
             throw new DeleteException("Object from class " + getEntityClass() + " with ID: " + id + " cannot be deleted");
         }
 
@@ -207,7 +208,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
                 getNewAudit().delete(object);
             }
             getEntityManager().remove(object);
-        } catch (Throwable t) {
+        } catch (ConstraintViolationException t) {
             throw new DeleteException("Object from class " + getEntityClass() + " with ID: " + EntityUtils.getId(object) + " cannot be deleted");
         }
 
