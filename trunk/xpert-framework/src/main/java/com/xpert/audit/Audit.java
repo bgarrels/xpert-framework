@@ -117,7 +117,7 @@ public class Audit {
     public void delete(Object id, Class clazz) {
         audit(getPersistedById(id, clazz), null, AuditingType.DELETE);
     }
-    
+
     public void delete(Object object) {
         audit(object, null, AuditingType.DELETE);
     }
@@ -245,6 +245,7 @@ public class Audit {
                         metadata.setNewValue(newValue.toString());
                     } else if (isEntity(method.getReturnType())) {
                         Object newId = getId(fieldValue);
+                        //a proxy doesnt has value changed
                         if (!(fieldValue instanceof HibernateProxy)) {
                             Object oldId = null;
                             if (fieldOld instanceof HibernateProxy) {
@@ -257,10 +258,10 @@ public class Audit {
                             if ((oldId == null && newId != null) || (oldId != null && newId == null) || (oldId != null && !oldId.equals(newId))) {
                                 addMetadata = true;
                             }
+                            metadata.setEntity(method.getDeclaringClass().getName());
+                            metadata.setNewIdentifier(newId == null ? null : Long.valueOf(newId.toString()));
+                            metadata.setNewValue(fieldValue == null ? "" : fieldValue.toString());
                         }
-                        metadata.setEntity(method.getDeclaringClass().getName());
-                        metadata.setNewIdentifier(newId == null ? null : Long.valueOf(newId.toString()));
-                        metadata.setNewValue(fieldValue == null ? "" : fieldValue.toString());
                     } else {
                         if (fieldOld != null) {
                             metadata.setOldValue(getToString(fieldOld));
@@ -296,11 +297,11 @@ public class Audit {
     public List<Method> getMethods(Object objeto) {
 
         List<Method> methodGet = mappedMethods.get(objeto.getClass());
-        
+
         if (methodGet != null) {
             return methodGet;
         }
-        
+
         methodGet = new ArrayList<Method>();
         Method methods[] = objeto.getClass().getMethods();
 

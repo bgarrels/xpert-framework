@@ -7,6 +7,9 @@ import com.xpert.persistence.query.QueryBuilder;
 import com.xpert.persistence.query.QueryType;
 import com.xpert.persistence.query.Restriction;
 import com.xpert.persistence.utils.EntityUtils;
+import com.xpert.utils.StringUtils;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -15,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.OrderBy;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -255,9 +259,9 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public Object findAttribute(String attributeName, Object object) {
-        return findAttribute(attributeName, (Long)EntityUtils.getId(object));
+        return findAttribute(attributeName, (Long) EntityUtils.getId(object));
     }
-    
+
     @Override
     public Object findList(String attributeName, Long id) {
 
@@ -273,7 +277,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public Object findList(String attributeName, Object object) {
-        return findAttribute(attributeName, (Long)EntityUtils.getId(object));
+        return findAttribute(attributeName, (Long) EntityUtils.getId(object));
     }
 
     @Override
@@ -599,10 +603,22 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
                             return collection;
                         }
                     }
+
+                    String fieldName = role.substring(role.lastIndexOf(".") + 1, role.length());
+                    String orderBy = null;
+
                     StringBuilder queryString = new StringBuilder();
-                    queryString.append(" SELECT ").append(role.substring(role.lastIndexOf(".") + 1, role.length()));
+                    queryString.append(" SELECT ").append(" c ");
                     queryString.append(" FROM ").append(owner.getClass().getName()).append(" o ");
+                    queryString.append(" JOIN ").append("o.").append(fieldName).append(" c ");
                     queryString.append(" WHERE o = ?1 ");
+
+                    orderBy = getOrderBy(fieldName, owner.getClass());
+
+                    if (orderBy != null && !orderBy.isEmpty()) {
+                        queryString.append(" ORDER BY c.").append(orderBy);
+                    }
+
 
                     Query query = getEntityManager().createQuery(queryString.toString());
                     query.setParameter(1, owner);
@@ -615,6 +631,76 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
             }
         }
         return object;
+    }
+
+    private String getOrderBy(String fieldName, Class entity) {
+        String orderBy = null;
+
+        try {
+            Field field = getDeclaredField(entity, fieldName);
+            OrderBy annotation = field.getAnnotation(OrderBy.class);
+            orderBy = getOrderByFromAnnotaion(annotation, field, null);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+
+        if (orderBy == null || orderBy.isEmpty()) {
+            try {
+                Method method = entity.getDeclaredMethod("get" + StringUtils.getUpperFirstLetter(fieldName));
+                OrderBy annotation = method.getAnnotation(OrderBy.class);
+                orderBy = getOrderByFromAnnotaion(annotation, null, method);
+            } catch (Exception ex) {
+                logger.log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return orderBy;
+    }
+
+    private Field getDeclaredField(Class clazz, String fieldName) {
+        Field field = null;
+        try {
+            field = clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException ex) {
+            if (field == null && clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
+                field = getDeclaredField(clazz.getSuperclass(), fieldName);
+            }
+        } catch (SecurityException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        return field;
+    }
+
+    private String getOrderByFromAnnotaion(OrderBy annotation, Field field, Method method) {
+        String orderBy = null;
+        if (annotation != null) {
+            String value = annotation.value();
+            if (value != null && !value.isEmpty()) {
+                orderBy = value;
+            } else {
+                Type realType = null;
+                if (field != null) {
+                    if (field.getGenericType() != null && field.getGenericType() instanceof ParameterizedType) {
+                        if (((ParameterizedType) field.getGenericType()).getActualTypeArguments().length > 0) {
+                            realType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+                        }
+                    }
+                }
+                if (method != null) {
+                    if (method.getGenericReturnType() != null && method.getGenericReturnType() instanceof ParameterizedType) {
+                        if (((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments().length > 0) {
+                            realType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+                        }
+                    }
+                }
+                if (realType == null) {
+                    return null;
+                }
+                orderBy = EntityUtils.getIdFieldName((Class) realType);
+            }
+        }
+        return orderBy;
     }
 
     private List<Restriction> getRestrictionsFromMap(Map<String, Object> args) {

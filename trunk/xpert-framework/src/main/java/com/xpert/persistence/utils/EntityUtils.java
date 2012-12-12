@@ -3,6 +3,8 @@ package com.xpert.persistence.utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EmbeddedId;
@@ -16,6 +18,7 @@ import javax.persistence.Id;
 public class EntityUtils {
 
     private static final Logger logger = Logger.getLogger(EntityUtils.class.getName());
+    private static final Map<Class, String> idNameMap = new HashMap<Class, String>();
 
     public static Object getId(Object object) {
         if (object == null) {
@@ -57,11 +60,18 @@ public class EntityUtils {
     }
 
     public static String getIdFieldName(Class clazz) {
+
+        String nameFromMap = idNameMap.get(clazz);
+        if (nameFromMap != null) {
+            return nameFromMap;
+        }
+
         for (Field field : clazz.getDeclaredFields()) {
             String name = field.getName();
             Annotation[] annotations = field.getDeclaredAnnotations();
             for (int i = 0; i < annotations.length; i++) {
                 if (annotations[i].annotationType().equals(Id.class) || annotations[i].annotationType().equals(EmbeddedId.class)) {
+                    idNameMap.put(clazz, name);
                     return name;
                 }
             }
@@ -73,7 +83,9 @@ public class EntityUtils {
                 for (int i = 0; i < annotations.length; i++) {
                     if (annotations[i].annotationType().equals(Id.class) || annotations[i].annotationType().equals(EmbeddedId.class)) {
                         String withouGet = name.substring(3, name.length());
-                        return getLowerFirstLetter(withouGet);
+                        withouGet = getLowerFirstLetter(withouGet);
+                        idNameMap.put(clazz, withouGet);
+                        return withouGet;
                     }
                 }
             }
