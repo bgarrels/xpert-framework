@@ -39,7 +39,7 @@
         <component-class>com.xpert.faces.component.spread.Spread</component-class>
     </component>
     <component>
-        <component-type>com.xpert.faces.component.</component-type>
+        <component-type>com.xpert.faces.component.SecurityArea</component-type>
         <component-class>com.xpert.faces.component.security.SecurityArea</component-class>
     </component>
 

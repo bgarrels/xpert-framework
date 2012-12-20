@@ -50,8 +50,8 @@
     <tag>
         <tag-name>securityArea</tag-name>
         <component>
-            <component-type>com.xpert.faces.component.security.SecurityArea</component-type>
-            <renderer-type>com.xpert.faces.component.security.SecurityAreaRenderer</renderer-type>
+            <component-type>com.xpert.faces.component.SecurityArea</component-type>
+            <renderer-type>com.xpert.faces.component.SecurityAreaRenderer</renderer-type>
         </component>
         <attribute>
             <name>id</name>

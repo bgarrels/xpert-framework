@@ -24,20 +24,27 @@ public class SecuritySessionManager {
     }
 
     /**
-     * Same as putRoles(ServletRequest request, List<Role> roles) but uses FacesContext
-     * 
-     * @param roles 
+     * Same as putRoles(ServletRequest request, List<Role> roles) but uses
+     * FacesContext
+     *
+     * @param roles
      */
     public static void putRoles(List<Role> roles) {
-        putRoles((ServletRequest) FacesContext.getCurrentInstance().getExternalContext(), roles);
+        putRoles((ServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(), roles);
     }
+
     /**
      * Put roles in session Map
-     * 
+     *
      * @param request
-     * @param roles 
+     * @param roles
      */
     public static void putRoles(ServletRequest request, List<Role> roles) {
+
+
+        if (roles == null || roles.isEmpty()) {
+            return;
+        }
 
         /**
          * Put keys and urls in a Map to optmize perfomance
@@ -59,6 +66,8 @@ public class SecuritySessionManager {
             }
         }
         ((HttpServletRequest) request).getSession().setAttribute(Constants.USER_ROLES, roles);
+        ((HttpServletRequest) request).getSession().setAttribute(Constants.USER_ROLES_KEY_MAP, rolesMap);
+        ((HttpServletRequest) request).getSession().setAttribute(Constants.USER_ROLES_URL_MAP, urlsMap);
 
     }
 
@@ -69,7 +78,7 @@ public class SecuritySessionManager {
      * @return
      */
     public static boolean hasURL(String url) {
-        return hasURL(url, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext());
+        return hasURL(url, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest());
     }
 
     /**
@@ -94,7 +103,7 @@ public class SecuritySessionManager {
      * @return
      */
     public static boolean hasRole(String key) {
-        return hasRole(key, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext());
+        return hasRole(key, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest());
     }
 
     /**
@@ -120,7 +129,7 @@ public class SecuritySessionManager {
      * @return
      */
     public static Role getRole(String key) {
-        return getRole(key, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext());
+        return getRole(key, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest());
     }
 
     /**

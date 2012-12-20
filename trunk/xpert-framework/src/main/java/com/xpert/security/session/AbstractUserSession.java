@@ -12,6 +12,7 @@ import java.util.List;
 public abstract class AbstractUserSession {
 
     public void createSession() {
+        SecuritySessionManager.clearRoles();
         SecuritySessionManager.putRoles(getRoles());
     }
 
@@ -21,6 +22,9 @@ public abstract class AbstractUserSession {
 
     public abstract List<Role> getRoles();
 
+    public boolean hasRole(String role) {
+        return SecuritySessionManager.hasRole(role);
+    }
     public boolean isAuthenticated() {
         return getUser() != null;
     }

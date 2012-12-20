@@ -66,7 +66,7 @@ public class ResourceBundleUtils {
                 resourceBundle = ResourceBundle.getBundle(bundle, locale);
             }
 
-            if (resourceBundle == null && !locale.equals(PT_BR)) {
+            if (resourceBundle == null || (!locale.equals(PT_BR) && !resourceBundle.containsKey(key))) {
                 resourceBundle = ResourceBundle.getBundle(bundle, PT_BR, classLoader);
             }
 

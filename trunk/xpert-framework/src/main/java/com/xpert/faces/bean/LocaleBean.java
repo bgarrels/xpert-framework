@@ -35,8 +35,9 @@ public class LocaleBean implements Serializable {
     }
 
     public String changeLocale() {
-        String view = FacesUtils.getRequest().getServletPath();
-        return view + "?faces-redirect=true;";
+        String view = FacesUtils.getRequest().getRequestURI();
+        String queryString = FacesUtils.getRequest().getQueryString();
+        return view + "?" + (queryString == null ? "" : queryString + "&") + "faces-redirect=true";
     }
 
     public DecimalFormatSymbols getDecimalFormatSymbols() {
