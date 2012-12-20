@@ -30,6 +30,9 @@ public abstract class SecurityLoginBean {
     public boolean isLoginLowerCase() {
         return false;
     }
+    public boolean isValidateWhenNoRolesFound() {
+        return true;
+    }
 
     public Class getUserClass() {
         return null;
@@ -187,7 +190,7 @@ public abstract class SecurityLoginBean {
                 getUserSession().setUser(user);
                 getUserSession().createSession();
                 //when no roles found, login is not sucessful
-                if (getUserSession().getRoles() == null || getUserSession().getRoles().isEmpty()) {
+                if (isValidateWhenNoRolesFound() && getUserSession().getRoles() == null || getUserSession().getRoles().isEmpty()) {
                     addErrorMessage(getNoRolesFoundMessage());
                     getUserSession().setUser(null);
                     return;

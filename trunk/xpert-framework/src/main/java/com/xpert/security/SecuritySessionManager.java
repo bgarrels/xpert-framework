@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author ayslan
  */
-public class SecurityManager {
+public class SecuritySessionManager {
 
     public static void clearRoles(ServletRequest request) {
         ((HttpServletRequest) request).getSession().removeAttribute(Constants.USER_ROLES);
@@ -23,6 +23,20 @@ public class SecurityManager {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(Constants.USER_ROLES);
     }
 
+    /**
+     * Same as putRoles(ServletRequest request, List<Role> roles) but uses FacesContext
+     * 
+     * @param roles 
+     */
+    public static void putRoles(List<Role> roles) {
+        putRoles((ServletRequest) FacesContext.getCurrentInstance().getExternalContext(), roles);
+    }
+    /**
+     * Put roles in session Map
+     * 
+     * @param request
+     * @param roles 
+     */
     public static void putRoles(ServletRequest request, List<Role> roles) {
 
         /**
@@ -49,7 +63,7 @@ public class SecurityManager {
     }
 
     /**
-     * same as hasURL(String url, ServletRequest request) but use FacesContext
+     * same as hasURL(String url, ServletRequest request) but uses FacesContext
      *
      * @param key
      * @return
@@ -73,7 +87,7 @@ public class SecurityManager {
     }
 
     /**
-     * same as hasRole(String key, ServletRequest request) but use FacesContext
+     * same as hasRole(String key, ServletRequest request) but uses FacesContext
      * to get the request
      *
      * @param key
@@ -99,7 +113,7 @@ public class SecurityManager {
     }
 
     /**
-     * Same as getRole(String key, ServletRequest request) but use FacesContext
+     * Same as getRole(String key, ServletRequest request) but uses FacesContext
      *
      * @param key
      * @param request

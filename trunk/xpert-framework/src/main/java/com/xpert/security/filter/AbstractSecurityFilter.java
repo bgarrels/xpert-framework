@@ -1,6 +1,7 @@
 package com.xpert.security.filter;
 
 import com.xpert.faces.utils.FacesUtils;
+import com.xpert.security.SecuritySessionManager;
 import com.xpert.security.session.AbstractUserSession;
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author ayslan
  */
 public abstract class AbstractSecurityFilter implements Filter {
-
+    
     private static final Logger logger = Logger.getLogger(AbstractSecurityFilter.class.getName());
 
     /**
@@ -60,12 +61,12 @@ public abstract class AbstractSecurityFilter implements Filter {
      * @return
      */
     public abstract String[] getIgnoredUrls();
-
+    
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-
+        
+        
         AbstractUserSession userSession = (AbstractUserSession) getFromSession(request, getUserSessionName());
-
+        
         if (userSession == null || !isAuthenticated(userSession)) {
             if (isDebug()) {
                 logger.log(Level.INFO, "User not authenticated redirecting to: {0}", getHomePage());
@@ -73,15 +74,15 @@ public abstract class AbstractSecurityFilter implements Filter {
             redirectHome(request, response);
             return;
         }
-
-        if (!hasUrl(userSession, (HttpServletRequest) request)) {
+        
+        if (!hasUrl((HttpServletRequest) request)) {
             if (isDebug()) {
                 logger.log(Level.INFO, "User {0} not authorized to url: {1}", new Object[]{userSession.getUser().getUserLogin(), ((HttpServletRequest) request).getRequestURI()});
             }
             redirectHome(request, response);
             return;
         }
-
+        
         if (getMoreAuthentication(request, response)) {
             try {
                 chain.doFilter(request, response);
@@ -90,21 +91,21 @@ public abstract class AbstractSecurityFilter implements Filter {
                 onError();
             }
         }
-
+        
     }
-
+    
     public Object getFromSession(ServletRequest request, String attribute) {
         return ((HttpServletRequest) request).getSession().getAttribute(attribute);
     }
-
-    public boolean hasUrl(AbstractUserSession userSession, HttpServletRequest request) {
+    
+    public boolean hasUrl(HttpServletRequest request) {
         String currentView = request.getRequestURI();
         if (getIgnoredUrls() != null && Arrays.asList(getIgnoredUrls()).contains(currentView)) {
             return true;
         }
-        return userSession.hasURL(currentView);
+        return SecuritySessionManager.hasURL(currentView, request);
     }
-
+    
     public void redirectHome(ServletRequest request, ServletResponse response) {
         //create faces context
         FacesUtils.getFacesContext((HttpServletRequest) request, (HttpServletResponse) response);
@@ -119,8 +120,8 @@ public abstract class AbstractSecurityFilter implements Filter {
     public boolean isDebug() {
         return true;
     }
-
+    
     public boolean isAuthenticated(AbstractUserSession userSession) {
-        return userSession.isAuthenticated(userSession);
+        return userSession.isAuthenticated();
     }
 }

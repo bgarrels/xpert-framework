@@ -1,9 +1,7 @@
 package com.xpert.faces.component.security;
 
-import com.xpert.Constants;
-import com.xpert.security.model.Role;
+import com.xpert.security.SecuritySessionManager;
 import java.io.IOException;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -18,7 +16,7 @@ public class SecurityAreaRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
         SecurityArea securityArea = (SecurityArea) component;
         if (securityArea.isRendered() && securityArea.getChildCount() > 0) {
-            if (allow(securityArea.getRolesAllowed(), component, context)) {
+            if (SecuritySessionManager.hasRole(securityArea.getRolesAllowed())) {
                 for (UIComponent child : securityArea.getChildren()) {
                     if (child.isRendered()) {
                         child.encodeAll(context);
@@ -36,42 +34,5 @@ public class SecurityAreaRenderer extends Renderer {
     @Override
     public boolean getRendersChildren() {
         return true;
-    }
-
-    private boolean allow(String rolesAllowed, UIComponent component, FacesContext context) {
-
-
-        List<Role> roles = (List<Role>) context.getExternalContext().getSessionMap().get(Constants.USER_ROLES);
-
-        if (rolesAllowed != null && !rolesAllowed.trim().isEmpty()) {
-            return checkRoles(roles, rolesAllowed);
-        } else {
-            return true;
-        }
-    }
-
-    private boolean checkRoles(List<Role> userRoles, String rolesAllowed) {
-        if (userRoles == null || userRoles.isEmpty()) {
-            return false;
-        }
-
-        String[] allowedRoles = rolesAllowed.split(",");
-        if (allowedRoles != null) {
-            for (Role role : userRoles) {
-                if (role.getKey() != null) {
-                    for (String string : role.getKey().split(",")) {
-                        if (string == null) {
-                            continue;
-                        }
-                        for (String allowed : allowedRoles) {
-                            if (string.trim().equalsIgnoreCase(allowed.trim())) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
     }
 }
