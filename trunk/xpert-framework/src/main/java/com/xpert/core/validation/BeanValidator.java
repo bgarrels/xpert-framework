@@ -127,7 +127,7 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
                 return object + " " + XpertResourceBundle.get("mustBeAPastDate");
             }
             if (violation.equals(Future.class)) {
-                return object + " " + XpertResourceBundle.get("mustBeAFutuureDate");
+                return object + " " + XpertResourceBundle.get("mustBeAFutureDate");
             }
 
             return getMessageWithDefinedValue(object, valueReference, violation);
