@@ -39,7 +39,11 @@ public abstract class AbstractUserSession {
         if (rolesMap == null) {
             rolesMap = new HashMap<String, Role>();
             for (Role role : getRoles()) {
-                rolesMap.put(role.getKey(), role);
+                if (role.getKey() != null) {
+                    for (String string : role.getKey().split(",")) {
+                        rolesMap.put(string, role);
+                    }
+                }
             }
         }
         return rolesMap;
@@ -80,7 +84,7 @@ public abstract class AbstractUserSession {
      * @return
      */
     public boolean hasRole(String key) {
-        if (getUser() != null && getUrlsMap() != null) {
+        if (getUser() != null && getRolesMap() != null) {
             if (getRole(key) != null) {
                 return true;
             }
@@ -96,7 +100,7 @@ public abstract class AbstractUserSession {
      * @return
      */
     private Role getRole(String key) {
-        if (key != null && !key.trim().isEmpty() && getUrlsMap() != null) {
+        if (key != null && !key.trim().isEmpty() && getRolesMap() != null) {
             String[] keys = key.split(",");
             for (String c : keys) {
                 Role role = getRolesMap().get(c.trim());
