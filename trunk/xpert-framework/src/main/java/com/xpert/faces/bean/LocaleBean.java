@@ -10,6 +10,7 @@ import java.util.Locale;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -35,7 +36,8 @@ public class LocaleBean implements Serializable {
     }
 
     public String changeLocale() {
-        String view = FacesUtils.getRequest().getRequestURI();
+        HttpServletRequest request = FacesUtils.getRequest();
+        String view = request.getRequestURI().replaceFirst(request.getContextPath(), "");
         String queryString = FacesUtils.getRequest().getQueryString();
         return view + "?" + (queryString == null ? "" : queryString + "&") + "faces-redirect=true";
     }

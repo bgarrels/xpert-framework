@@ -99,7 +99,7 @@ public abstract class AbstractSecurityFilter implements Filter {
     }
     
     public boolean hasUrl(HttpServletRequest request) {
-        String currentView = request.getRequestURI();
+        String currentView = request.getRequestURI().replaceFirst(request.getContextPath(), "");
         if (getIgnoredUrls() != null && Arrays.asList(getIgnoredUrls()).contains(currentView)) {
             return true;
         }
