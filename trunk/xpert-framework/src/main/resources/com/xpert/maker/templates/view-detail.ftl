@@ -10,7 +10,7 @@
         <h:panelGrid columns="4" styleClass="grid-detail">
 
         <#list entity.fields as field>
-            <#if field.collection == false and field.id == false>
+            <#if field.collection == false && field.id == false>
             <h:outputLabel value="${sharp}{${resourceBundle}['${entity.nameLower}.{field.name}']}:" />
             <#if field.lazy == true>
             <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}">
@@ -30,7 +30,7 @@
             <#if field.yesNo == true>
             <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}" converter ="yesNoConverter" />
             </#if>
-            <#if field.lazy == false and field.number == false and field.date == false and field.yesNo == false>
+            <#if field.lazy == false && field.number == false && field.date == false && field.yesNo == false>
             <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}"/>
             </#if>
             </#if>

@@ -15,11 +15,11 @@
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${sharp}{xmsg['noRecordFound']}"
                          var="${entity.nameLower}" value="${sharp}{${entity.nameLower}MB.dataModel}" lazy="true" >
                 <#list entity.fields as field>
-                <#if field.collection == false and field.id == false>
+                <#if field.collection == false && field.id == false>
                 <p:column headerText="${sharp}{${resourceBundle}['${entity.nameLower}.${field}']}" sortBy="${sharp}${entity.nameLower}.${field}"
-                          <#if field.string == true or field.integer == true or field.enumaration == true>filterBy="${sharp}{${entity.nameLower}.descricao}"</#if>
+                          <#if field.string == true || field.integer == true || field.enumaration == true>filterBy="${sharp}{${entity.nameLower}.descricao}"</#if>
                           <#if field.enumaration == true>filterOptions="${sharp}{findAllBean.getSelect(classMB.${field.typeNameLower})}"</#if>
-                          <#if field.date == true or field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>
+                          <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>
                           >
                         <h:outputLabel value="${sharp}{${resourceBundle}['${entity.nameLower}.{field.name}']}:" />
                         <#if field.lazy == true>
@@ -40,7 +40,7 @@
                         <#if field.yesNo == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}" converter ="yesNoConverter" />
                         </#if>
-                        <#if field.lazy == false and field.number == false and field.date == false and field.yesNo == false>
+                        <#if field.lazy == false && field.number == false && field.date == false && field.yesNo == false>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}"/>
                         </#if>
                 </p:column>
