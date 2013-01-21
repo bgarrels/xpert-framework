@@ -61,7 +61,7 @@ public class BeanCreator {
             return getList(bean.getEntity(), configuration.getTemplate(), configuration.getResourceBundle());
         }
         if (bean.getBeanType().equals(BeanType.MENU)) {
-            return getMenu(bean.getEntity());
+            return getMenu(bean.getEntity(), true);
         }
         if (bean.getBeanType().equals(BeanType.DETAIL)) {
             return getDetail(bean.getEntity(), configuration.getResourceBundle());
@@ -163,13 +163,25 @@ public class BeanCreator {
         return builder.toString();
     }
 
-    public static String getMenu(Class clazz) {
+    public static String getMenu(Class clazz, boolean securityArea) {
         StringBuilder view = new StringBuilder();
         view.append(getHeader(null));
         view.append("   <p:toolbar>\n");
         view.append("       <p:toolbarGroup align=\"left\">  \n");
+        if (securityArea) {
+            view.append("           <x:securityArea rolesAllowed=\"").append(clazz.getSimpleName()).append(".list\">  \n    ");
+        }
         view.append("           <p:button icon=\"ui-icon-search\" value=\"#{xmsg['list']}\" outcome=\"list").append(clazz.getSimpleName()).append("\" />\n");
+        if (securityArea) {
+            view.append("           </x:securityArea>\n");
+        }
+        if (securityArea) {
+            view.append("           <x:securityArea rolesAllowed=\"").append(clazz.getSimpleName()).append(".create\">  \n    ");
+        }
         view.append("           <p:button icon=\"ui-icon-plus\" value=\"#{xmsg['create']}\" outcome=\"create").append(clazz.getSimpleName()).append("\" />\n");
+        if (securityArea) {
+            view.append("           </x:securityArea>\n");
+        }
         view.append("       </p:toolbarGroup>\n");
         view.append("   </p:toolbar>\n");
         view.append("</ui:composition>");
