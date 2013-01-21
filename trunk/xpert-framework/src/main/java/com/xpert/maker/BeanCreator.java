@@ -1,7 +1,10 @@
 package com.xpert.maker;
 
+import com.xpert.maker.model.ViewEntity;
+import com.xpert.maker.model.ViewField;
 import com.xpert.persistence.utils.EntityUtils;
 import com.xpert.utils.HumaniseCamelCase;
+import com.xpert.utils.StringUtils;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -26,6 +29,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -39,6 +43,7 @@ public class BeanCreator {
     private static final String GET_PREFIX = "get";
     private static final int DEFAULT_SIZE = 70;
     private static final int DEFAULT_MAX_LENGTH = 255;
+    private static final int SIZE_ANNOTATION_MAX_DEFAULT = 2147483647;
     private static final String[] LOCALES_MAKER = {"pt_BR", "en", "es"};
 
     static {
@@ -51,20 +56,10 @@ public class BeanCreator {
 
     public static String createBean(Bean bean, BeanConfiguration configuration) throws IOException, TemplateException {
 
-        if (bean.getBeanType().equals(BeanType.FORM)) {
-            return getCreateForm(bean.getEntity(), configuration.getResourceBundle());
-        }
-        if (bean.getBeanType().equals(BeanType.CREATE)) {
-            return getCreate(bean.getEntity(), configuration.getTemplate(), configuration.getResourceBundle());
-        }
-        if (bean.getBeanType().equals(BeanType.LIST)) {
-            return getList(bean.getEntity(), configuration.getTemplate(), configuration.getResourceBundle());
-        }
-        if (bean.getBeanType().equals(BeanType.MENU)) {
-            return getMenu(bean.getEntity(), true);
-        }
-        if (bean.getBeanType().equals(BeanType.DETAIL)) {
-            return getDetail(bean.getEntity(), configuration.getResourceBundle());
+        ViewEntity viewEntity = createViewEntity(bean.getEntity());
+
+        if (bean.getBeanType().isView()) {
+            return getViewTemplate(viewEntity, configuration.getResourceBundle(), bean.getBeanType().getTemplate(), configuration == null ? null : configuration.getTemplate());
         }
 
         Template template = getTemplate(bean.getBeanType().getTemplate());
@@ -80,6 +75,81 @@ public class BeanCreator {
         writer.close();
 
         return writer.toString();
+    }
+
+    public static String getViewTemplate(ViewEntity viewEntity, String resourceBundle, String templatePath, String xhtmlTemplate) throws TemplateException, IOException {
+        Template template = getTemplate(templatePath);
+        StringWriter writer = new StringWriter();
+        Map attributes = getDefaultParameters();
+        attributes.put("entity", viewEntity);
+        attributes.put("resourceBundle", resourceBundle);
+        attributes.put("template", xhtmlTemplate);
+        template.process(attributes, writer);
+        writer.flush();
+        writer.close();
+        return writer.toString();
+    }
+
+    public static ViewEntity createViewEntity(Class clazz) {
+        ViewEntity entity = new ViewEntity();
+        entity.setName(clazz.getSimpleName());
+        List<Field> fields = getFields(clazz);
+        for (Field field : fields) {
+            if (isAnnotationPresent(field, Transient.class)) {
+                continue;
+            }
+            ViewField viewField = new ViewField();
+            viewField.setName(field.getName());
+            //@Id
+            if (isAnnotationPresent(field, Id.class)) {
+                viewField.setId(true);
+                //@ManyToMany
+            } else if (isAnnotationPresent(field, ManyToMany.class)) {
+                viewField.setManyToMany(true);
+                //@OneToMany
+            } else if (isAnnotationPresent(field, OneToMany.class)) {
+                viewField.setOneToMany(true);
+                //@OneToOne
+            } else if (isAnnotationPresent(field, OneToOne.class)) {
+                viewField.setOneToOne(true);
+                //@OneToOne
+            } else if (isAnnotationPresent(field, ManyToOne.class)) {
+                viewField.setManyToOne(true);
+                //Enum
+            } else if (field.getType().isEnum()) {
+                viewField.setEnumaration(true);
+                //Date
+            } else if (field.getType().equals(Date.class)) {
+                viewField.setDate(true);
+                //Boolean
+            } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
+                viewField.setYesNo(true);
+                //Decimal Number(BigDecimal, Double)
+            } else if (isDecimal(field)) {
+                viewField.setDecimal(true);
+                //Integer
+            } else if (isInteger(field)) {
+                viewField.setInteger(true);
+                //String
+            } else if (field.getType().equals(String.class)) {
+                int maxlength = DEFAULT_MAX_LENGTH;
+                Size size = field.getAnnotation(Size.class);
+                if (size != null && size.max() != SIZE_ANNOTATION_MAX_DEFAULT) {
+                    maxlength = size.max();
+                }
+                viewField.setMaxlength(maxlength+"");
+                viewField.setString(true);
+            }
+            if (isRequired(field)) {
+                viewField.setRequired(true);
+            }
+            viewField.setLazy(isLazy(field));
+            viewField.setTypeName(field.getType().getSimpleName());
+            entity.getFields().add(viewField);
+        }
+
+
+        return entity;
     }
 
     public static Template getTemplate(String template) throws IOException {
@@ -119,7 +189,7 @@ public class BeanCreator {
 
         Field[] fields = clazz.getDeclaredFields();
         StringBuilder builder = new StringBuilder();
-        String className = getLowerFirstLetter(clazz.getSimpleName());
+        String className = StringUtils.getLowerFirstLetter(clazz.getSimpleName());
         String humanName = new HumaniseCamelCase().humanise(clazz.getSimpleName());
         builder.append("\n\n#").append(clazz.getSimpleName()).append("\n");
         builder.append(className).append("=").append(humanName).append("\n");
@@ -146,6 +216,10 @@ public class BeanCreator {
 
     }
 
+    /**
+     * Deprecated. From 1.2 version templates are loaded from freemarker.
+     */
+    @Deprecated
     public static String getHeader(String template) {
 
         StringBuilder builder = new StringBuilder();
@@ -163,25 +237,17 @@ public class BeanCreator {
         return builder.toString();
     }
 
-    public static String getMenu(Class clazz, boolean securityArea) {
+    /**
+     * Deprecated. From 1.2 version templates are loaded from freemarker.
+     */
+    @Deprecated
+    public static String getMenu(Class clazz) {
         StringBuilder view = new StringBuilder();
         view.append(getHeader(null));
         view.append("   <p:toolbar>\n");
         view.append("       <p:toolbarGroup align=\"left\">  \n");
-        if (securityArea) {
-            view.append("           <x:securityArea rolesAllowed=\"").append(clazz.getSimpleName()).append(".list\">  \n    ");
-        }
         view.append("           <p:button icon=\"ui-icon-search\" value=\"#{xmsg['list']}\" outcome=\"list").append(clazz.getSimpleName()).append("\" />\n");
-        if (securityArea) {
-            view.append("           </x:securityArea>\n");
-        }
-        if (securityArea) {
-            view.append("           <x:securityArea rolesAllowed=\"").append(clazz.getSimpleName()).append(".create\">  \n    ");
-        }
         view.append("           <p:button icon=\"ui-icon-plus\" value=\"#{xmsg['create']}\" outcome=\"create").append(clazz.getSimpleName()).append("\" />\n");
-        if (securityArea) {
-            view.append("           </x:securityArea>\n");
-        }
         view.append("       </p:toolbarGroup>\n");
         view.append("   </p:toolbar>\n");
         view.append("</ui:composition>");
@@ -189,6 +255,10 @@ public class BeanCreator {
         return view.toString();
     }
 
+    /**
+     * Deprecated. From 1.2 version templates are loaded from freemarker.
+     */
+    @Deprecated
     public static String getCreate(Class clazz, String template, String resourceBundle) {
         StringBuilder view = new StringBuilder();
         view.append(getHeader(template));
@@ -204,10 +274,14 @@ public class BeanCreator {
         return view.toString();
     }
 
+    /**
+     * Deprecated. From 1.2 version templates are loaded from freemarker.
+     */
+    @Deprecated
     public static String getList(Class clazz, String template, String resourceBundle) {
         List<Field> fields = getFields(clazz);
         String managedBean = getNameManagedBean(clazz);
-        String varName = getLowerFirstLetter(clazz.getSimpleName());
+        String varName = StringUtils.getLowerFirstLetter(clazz.getSimpleName());
         String idExpression = "#{" + varName + "." + EntityUtils.getIdFieldName(clazz) + "}";
         String dialogWidget = getDialogWidget(clazz);
         StringBuilder view = new StringBuilder();
@@ -220,7 +294,7 @@ public class BeanCreator {
         view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\" paginatorPosition=\"bottom\" emptyMessage=\"#{xmsg['noRecordFound']}\"\n");
         view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\" lazy=\"true\" >\n");
         for (Field field : fields) {
-            String varFieldName = getLowerFirstLetter(field.getDeclaringClass().getSimpleName()) + "." + field.getName();
+            String varFieldName = StringUtils.getLowerFirstLetter(field.getDeclaringClass().getSimpleName()) + "." + field.getName();
             if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
                 continue;
             }
@@ -231,13 +305,13 @@ public class BeanCreator {
                 view.append("\n").append("                      filterBy=\"").append(varExpression).append("\"");
             }
             if (field.getType().isEnum()) {
-                view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(getLowerFirstLetter(field.getType().getSimpleName())).append(")}\"");
+                view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(StringUtils.getLowerFirstLetter(field.getType().getSimpleName())).append(")}\"");
             }
             //align Date on center
             if (field.getType().equals(Calendar.class) || field.getType().equals(Date.class) || field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
                 view.append("\n").append("                                   style=\"text-align: center;\"");
                 //align Number on right
-            } else if (isNumber(field)) {
+            } else if (isDecimal(field)) {
                 view.append("\n").append("                                   style=\"text-align: right;\"");
             }
             view.append(">\n");
@@ -271,6 +345,10 @@ public class BeanCreator {
         return view.toString();
     }
 
+    /**
+     * Deprecated. From 1.2 version templates are loaded from freemarker.
+     */
+    @Deprecated
     public static String getDetail(Class clazz, String resourceBundle) {
         List<Field> fields = getFields(clazz);
         String managedBean = getNameManagedBean(clazz);
@@ -308,6 +386,10 @@ public class BeanCreator {
         return getNameLower(clazz) + "MB";
     }
 
+    /**
+     * Deprecated. From 1.2 version templates are loaded from freemarker.
+     */
+    @Deprecated
     public static String getCreateForm(Class clazz, String resourceBundle) {
 
         resourceBundle = getResourceBundle(resourceBundle);
@@ -329,6 +411,10 @@ public class BeanCreator {
         return view.toString();
     }
 
+    /**
+     * Deprecated. From 1.2 version templates are loaded from freemarker.
+     */
+    @Deprecated
     public static String getInputsFromForm(Class clazz, String resourceBundle, String ident, String managedBean, String extraField) {
 
         StringBuilder view = new StringBuilder();
@@ -352,7 +438,7 @@ public class BeanCreator {
             }
             if (field.getType().equals(Date.class) || field.getType().equals(Calendar.class)) {
                 tag = "p:calendar";
-            } else if (isNumber(field)) {
+            } else if (isDecimal(field)) {
                 tag = "xc:inputNumber";
             } else if (field.getType().equals(Integer.class) || field.getType().equals(int.class)
                     || field.getType().equals(Long.class) || field.getType().equals(long.class)) {
@@ -455,7 +541,7 @@ public class BeanCreator {
             hasContent = true;
         } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
             text.append(" converter =\"yesNoConverter\" ");
-        } else if (isNumber(field)) {
+        } else if (isDecimal(field)) {
             text.append(">\n").append(ident).append("   <f:convertNumber />\n");
             hasContent = true;
         } else if (isLazy(field)) {
@@ -593,7 +679,7 @@ public class BeanCreator {
         StringBuilder builder = new StringBuilder();
         builder.append("\n\n#").append("menu").append("\n");
         for (MappedBean mappedBean : mappedBeans) {
-            builder.append("menu.").append(getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName()));
+            builder.append("menu.").append(StringUtils.getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName()));
             builder.append("=");
             builder.append(mappedBean.getHumanClassName());
             builder.append("\n");
@@ -625,7 +711,7 @@ public class BeanCreator {
             Map attributes = new HashMap();
             List<MenuModel> menus = new ArrayList<MenuModel>();
             for (MappedBean mappedBean : mappedBeans) {
-                String nameLower = getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName());
+                String nameLower = StringUtils.getLowerFirstLetter(mappedBean.getEntityClass().getSimpleName());
                 menus.add(new MenuModel("#{" + resourceBundle + "['menu." + nameLower + "']}",
                         "/" + getUrlForList(nameLower, mappedBean.getEntityClass().getSimpleName(), configuration) + ".jsf"));
             }
@@ -717,32 +803,27 @@ public class BeanCreator {
      */
     public static Method getMethod(Field field) {
         try {
-            return field.getDeclaringClass().getMethod(GET_PREFIX + getUpperFirstLetter(field.getName()));
+            return field.getDeclaringClass().getMethod(GET_PREFIX + StringUtils.getUpperFirstLetter(field.getName()));
         } catch (Exception ex) {
             //nothing
             return null;
         }
     }
 
-    public static boolean isNumber(Field field) {
+    public static String getNameLower(Class clazz) {
+        return StringUtils.getLowerFirstLetter(clazz.getSimpleName());
+    }
+
+    public static boolean isDecimal(Field field) {
         return field.getType().equals(BigDecimal.class) || field.getType().equals(Double.class) || field.getType().equals(double.class);
     }
 
-    public static String getNameLower(Class clazz) {
-        return getLowerFirstLetter(clazz.getSimpleName());
+    public static boolean isInteger(Field field) {
+        return field.getType().equals(Integer.class) || field.getType().equals(int.class)
+                || field.getType().equals(Long.class) || field.getType().equals(long.class);
     }
 
-    public static String getLowerFirstLetter(String string) {
-        if (string.length() > 1) {
-            return string.substring(0, 1).toLowerCase() + "" + string.substring(1, string.length());
-        }
-        return string.toLowerCase();
-    }
-
-    public static String getUpperFirstLetter(String string) {
-        if (string.length() > 1) {
-            return string.substring(0, 1).toUpperCase() + "" + string.substring(1, string.length());
-        }
-        return string.toUpperCase();
+    public static boolean isRequired(Field field) {
+        return isAnnotationPresent(field, NotNull.class) || isAnnotationPresent(field, NotBlank.class) || isAnnotationPresent(field, NotEmpty.class);
     }
 }

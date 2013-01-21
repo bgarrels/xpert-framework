@@ -46,11 +46,11 @@ public class PersistenceMappedBean {
                 mappedBean.setBusinnesObject(BeanCreator.createBean(new Bean(clazz, BeanType.BUSINESS_OBJECT), beanConfiguration));
                 mappedBean.setDao(BeanCreator.createBean(new Bean(clazz, BeanType.DAO), beanConfiguration));
                 mappedBean.setDaoImpl(BeanCreator.createBean(new Bean(clazz, BeanType.DAO_IMPL), beanConfiguration));
-                mappedBean.setFormCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.FORM), beanConfiguration));
-                mappedBean.setCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.CREATE), beanConfiguration));
-                mappedBean.setListView(BeanCreator.createBean(new Bean(clazz, BeanType.LIST), beanConfiguration));
-                mappedBean.setMenu(BeanCreator.createBean(new Bean(clazz, BeanType.MENU), beanConfiguration));
-                mappedBean.setDetail(BeanCreator.createBean(new Bean(clazz, BeanType.DETAIL), beanConfiguration));
+                mappedBean.setFormCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.VIEW_FORM_CREATE), beanConfiguration));
+                mappedBean.setCreateView(BeanCreator.createBean(new Bean(clazz, BeanType.VIEW_CREATE), beanConfiguration));
+                mappedBean.setListView(BeanCreator.createBean(new Bean(clazz, BeanType.VIEW_LIST), beanConfiguration));
+                mappedBean.setMenu(BeanCreator.createBean(new Bean(clazz, BeanType.VIEW_MENU), beanConfiguration));
+                mappedBean.setDetail(BeanCreator.createBean(new Bean(clazz, BeanType.VIEW_DETAIL), beanConfiguration));
                 mappedBeans.add(mappedBean);
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
@@ -64,7 +64,6 @@ public class PersistenceMappedBean {
 
     public void sortMappedBean(List<MappedBean> mappedBeans) {
         Collections.sort(mappedBeans, new Comparator<Object>() {
-
             @Override
             public int compare(Object o1, Object o2) {
                 return ((MappedBean) o1).getClass().getName().compareTo(((MappedBean) o2).getClass().getName());
@@ -74,7 +73,6 @@ public class PersistenceMappedBean {
 
     public void sortClass(List<Class> classes) {
         Collections.sort(classes, new Comparator<Object>() {
-
             @Override
             public int compare(Object o1, Object o2) {
                 return ((Class) o1).getName().compareTo(((Class) o2).getName());
@@ -148,7 +146,6 @@ public class PersistenceMappedBean {
         return "";
 
     }
-    
 
     public SessionFactory getSessionFactory() {
         return getSession().getSessionFactory();

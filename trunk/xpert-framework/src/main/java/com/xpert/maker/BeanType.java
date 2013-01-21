@@ -6,23 +6,24 @@ package com.xpert.maker;
  */
 public enum BeanType {
 
-    MANAGED_BEAN("managed-bean.ftl", "java"),
-    BUSINESS_OBJECT("business-object.ftl", "java"),
-    DAO("dao.ftl", "java"),
-    DAO_IMPL("dao-impl.ftl", "java"),
+    MANAGED_BEAN("managed-bean.ftl", "java", false),
+    BUSINESS_OBJECT("business-object.ftl", "java", false),
+    DAO("dao.ftl", "java", false),
+    DAO_IMPL("dao-impl.ftl", "java", false),
     //xhtml
-    FORM(null, "xhtml"),
-    CREATE(null, "xhtml"),
-    LIST(null, "xhtml"),
-    MENU(null, "xhtml"),
-    DETAIL(null, "xhtml");
-    
+    VIEW_LIST("view-list.ftl", "xhtml", true),
+    VIEW_DETAIL("view-detail.ftl", "xhtml", true),
+    VIEW_FORM_CREATE("view-form-create.ftl", "xhtml", true),
+    VIEW_MENU("view-menu.ftl", "xhtml", true),
+    VIEW_CREATE("view-create.ftl", "xhtml", true);
     private String template;
     private String extension;
+    private boolean view;
 
-    private BeanType(String template, String extension) {
+    private BeanType(String template, String extension, boolean view) {
         this.template = template;
         this.extension = extension;
+        this.view = view;
     }
 
     public String getTemplate() {
@@ -33,7 +34,7 @@ public enum BeanType {
         return extension;
     }
 
-    public void setExtension(String extension) {
-        this.extension = extension;
+    public boolean isView() {
+        return view;
     }
 }

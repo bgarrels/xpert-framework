@@ -23,7 +23,7 @@ public class ViewField {
     private boolean yesNo;
     private boolean enumaration;
     private boolean string;
-    private Integer maxlength;
+    private String maxlength;
 
     public String getTypeNameLower() {
         if (typeName != null) {
@@ -156,11 +156,13 @@ public class ViewField {
         this.yesNo = yesNo;
     }
 
-    public Integer getMaxlength() {
+    public String getMaxlength() {
         return maxlength;
     }
 
-    public void setMaxlength(Integer maxlength) {
+    public void setMaxlength(String maxlength) {
         this.maxlength = maxlength;
     }
+
+  
 }

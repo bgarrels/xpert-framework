@@ -16,18 +16,15 @@
                          var="${entity.nameLower}" value="${sharp}{${entity.nameLower}MB.dataModel}" lazy="true" >
                 <#list entity.fields as field>
                 <#if field.collection == false && field.id == false>
-                <p:column headerText="${sharp}{${resourceBundle}['${entity.nameLower}.${field}']}" sortBy="${sharp}${entity.nameLower}.${field}"
+                <p:column headerText="${sharp}{${resourceBundle}['${entity.nameLower}.${field.name}']}" sortBy="${sharp}{${entity.nameLower}.${field.name}}"
                           <#if field.string == true || field.integer == true || field.enumaration == true>filterBy="${sharp}{${entity.nameLower}.descricao}"</#if>
-                          <#if field.enumaration == true>filterOptions="${sharp}{findAllBean.getSelect(classMB.${field.typeNameLower})}"</#if>
-                          <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>
-                          >
-                        <h:outputLabel value="${sharp}{${resourceBundle}['${entity.nameLower}.{field.name}']}:" />
+                          <#if field.enumaration == true>filterOptions="${sharp}{findAllBean.getSelect(classMB.${field.typeNameLower})}"</#if> <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>>
                         <#if field.lazy == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}">
                             <x:initializer/>
                         </h:outputText>
                         </#if>
-                        <#if field.number == true>
+                        <#if field.decimal == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}">
                             <f:convertNumber />
                         </h:outputText>
@@ -40,7 +37,7 @@
                         <#if field.yesNo == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}" converter ="yesNoConverter" />
                         </#if>
-                        <#if field.lazy == false && field.number == false && field.date == false && field.yesNo == false>
+                        <#if field.lazy == false && field.decimal == false && field.date == false && field.yesNo == false>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}"/>
                         </#if>
                 </p:column>
