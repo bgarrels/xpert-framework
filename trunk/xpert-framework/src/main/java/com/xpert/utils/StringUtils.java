@@ -23,6 +23,50 @@ public class StringUtils {
             + "([-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)*)*"
             + "(#([-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)?\\b";
 
+    /**
+     * Search url in text and replace by anchor
+     * 
+     * Example: http://www.test.com returns <a href="http://www.test.com" target="_blank">http://www.test.com</a>
+     * 
+     * @param message
+     * @return 
+     */
+    public static String replaceUrlByAnchor(String message) {
+        String strRegex = "((((https?|ftp|telnet|file):((//)|(\\\\))+)|(www.))+[\\w\\d:#@%/;$()~_?\\+-=\\\\.&]*)";
+
+        if (message != null) {
+            StringBuffer str = new StringBuffer(message.length());
+            Pattern pattern = Pattern.compile(strRegex);
+            Matcher matcher = pattern.matcher(message);
+
+            // Replace urls with anchor tags to the url
+            while (matcher.find()) {
+                String url = matcher.group(0);
+
+                // Make sure the url isn't part of something else
+                int location = message.indexOf(url) + url.length();
+                if (location < message.length()) {
+                    char followingChar = message.charAt(location);
+                    if (followingChar != ' ') {
+                        break;
+                    }
+                }
+                String httpURL = url;
+                if (!url.substring(0, 4).equalsIgnoreCase("http")
+                        && !url.substring(0, 3).equalsIgnoreCase("ftp")
+                        && !url.substring(0, 4).equalsIgnoreCase("teln")
+                        && !url.substring(0, 4).equalsIgnoreCase("file")) {
+                    httpURL = "http://" + url;
+                }
+
+                matcher.appendReplacement(str, Matcher.quoteReplacement("" + "<a href=\"" + httpURL + "\" target=\"_blank\" >" + url + "</a>" + ""));
+            }
+            matcher.appendTail(str);
+            message = str.toString();
+        }
+        return message;
+    }
+
     public static String removeHTML(String string) {
         return string.replaceAll("\\<.*?\\>", "");
     }

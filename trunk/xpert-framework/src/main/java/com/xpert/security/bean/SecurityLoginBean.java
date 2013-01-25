@@ -190,7 +190,7 @@ public abstract class SecurityLoginBean {
                 getUserSession().setUser(user);
                 getUserSession().createSession();
                 //when no roles found, login is not sucessful
-                if (isValidateWhenNoRolesFound() && getUserSession().getRoles() == null || getUserSession().getRoles().isEmpty()) {
+                if (isValidateWhenNoRolesFound() && (getUserSession().getRoles() == null || getUserSession().getRoles().isEmpty())) {
                     addErrorMessage(getNoRolesFoundMessage());
                     getUserSession().setUser(null);
                     return;
