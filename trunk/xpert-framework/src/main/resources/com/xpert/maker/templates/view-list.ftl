@@ -45,7 +45,7 @@
                 </#list>
                 <p:column style="text-align: center;">
                     <p:commandButton oncomplete="widget${entity.name}Detail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetail${entity.name}" >
-                        <f:setPropertyActionListener value="${sharp}${entity.nameLower}" target="${sharp}{${entity.nameLower}MB.entity}" />
+                        <f:setPropertyActionListener value="${sharp}{${entity.nameLower}}" target="${sharp}{${entity.nameLower}MB.entity}" />
                     </p:commandButton>
                     <x:securityArea rolesAllowed="${entity.nameLower}.create">
                         <p:button icon="ui-icon-pencil" outcome="create${entity.name}" >
