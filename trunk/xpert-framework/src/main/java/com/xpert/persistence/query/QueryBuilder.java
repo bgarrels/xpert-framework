@@ -44,7 +44,7 @@ public class QueryBuilder {
 
     public QueryBuilder from(Class from) {
         this.from = from;
-        if(alias == null || alias.isEmpty()){
+        if (alias == null || alias.isEmpty()) {
             alias = from.getSimpleName().substring(0, 1).toLowerCase();
         }
         return this;
@@ -129,9 +129,9 @@ public class QueryBuilder {
         if (type.equals(QueryType.COUNT)) {
             queryString.append("SELECT COUNT(*) ");
         }
-        
+
         if (attributeName != null && !attributeName.isEmpty()) {
-            attributeName = alias+"."+attributeName;
+            attributeName = alias + "." + attributeName;
         }
 
         if (type.equals(QueryType.MAX)) {
@@ -283,8 +283,8 @@ public class QueryBuilder {
                         query.setParameter(parameter, re.getValue());
                     }
                 }
+                parameter++;
             }
-            parameter++;
         }
 
         if (maxResults != null) {
@@ -341,7 +341,7 @@ public class QueryBuilder {
                 new QueryBuilder(null).from(Person.class).type(QueryType.MAX, "nome").leftJoin("p.group").leftJoin("p.profile").add(new Restriction("cpf", RestrictionType.LIKE, LikeType.BOTH)).add(new Restriction("nome", "maria")).orderBy("p.nome");
 
         builder.add(new Restriction("nome", null));
-        
+
         System.out.println(builder.getQueryString());
 
     }
