@@ -17,7 +17,7 @@
                 <#list entity.fields as field>
                 <#if field.collection == false && field.id == false>
                 <p:column headerText="${sharp}{${resourceBundle}['${entity.nameLower}.${field.name}']}" sortBy="${sharp}{${entity.nameLower}.${field.name}}"
-                          <#if field.string == true || field.integer == true || field.enumaration == true>filterBy="${sharp}{${entity.nameLower}.descricao}"</#if>
+                          <#if field.string == true || field.integer == true || field.enumaration == true>filterBy="${sharp}{${entity.nameLower}.${field.name}}"</#if>
                           <#if field.enumaration == true>filterOptions="${sharp}{findAllBean.getSelect(classMB.${field.typeNameLower})}"</#if> <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>>
                         <#if field.lazy == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}">
