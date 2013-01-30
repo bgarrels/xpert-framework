@@ -42,15 +42,6 @@ public class StringUtils {
             // Replace urls with anchor tags to the url
             while (matcher.find()) {
                 String url = matcher.group(0);
-
-                // Make sure the url isn't part of something else
-                int location = message.indexOf(url) + url.length();
-                if (location < message.length()) {
-                    char followingChar = message.charAt(location);
-                    if (followingChar != ' ') {
-                        break;
-                    }
-                }
                 String httpURL = url;
                 if (!url.substring(0, 4).equalsIgnoreCase("http")
                         && !url.substring(0, 3).equalsIgnoreCase("ftp")
