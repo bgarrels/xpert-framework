@@ -36,7 +36,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Ayslan
  */
 public class BeanCreator {
-
+    
     private static final Logger logger = Logger.getLogger(BeanCreator.class.getName());
     private static final Configuration CONFIG = new Configuration();
     private static final String AUTHOR = "#Author";
@@ -45,7 +45,7 @@ public class BeanCreator {
     private static final int DEFAULT_MAX_LENGTH = 255;
     private static final int SIZE_ANNOTATION_MAX_DEFAULT = 2147483647;
     private static final String[] LOCALES_MAKER = {"pt_BR", "en", "es"};
-
+    
     static {
         try {
             CONFIG.setObjectWrapper(new DefaultObjectWrapper());
@@ -53,15 +53,15 @@ public class BeanCreator {
             throw new RuntimeException(ex);
         }
     }
-
+    
     public static String createBean(Bean bean, BeanConfiguration configuration) throws IOException, TemplateException {
-
+        
         ViewEntity viewEntity = createViewEntity(bean.getEntity());
-
+        
         if (bean.getBeanType().isView()) {
             return getViewTemplate(viewEntity, configuration.getResourceBundle(), bean.getBeanType().getTemplate(), configuration == null ? null : configuration.getTemplate());
         }
-
+        
         Template template = getTemplate(bean.getBeanType().getTemplate());
         StringWriter writer = new StringWriter();
         bean.setConfiguration(configuration);
@@ -70,13 +70,13 @@ public class BeanCreator {
         }
         bean.setAuthor(AUTHOR);
         template.process(bean, writer);
-
+        
         writer.flush();
         writer.close();
-
+        
         return writer.toString();
     }
-
+    
     public static String getViewTemplate(ViewEntity viewEntity, String resourceBundle, String templatePath, String xhtmlTemplate) throws TemplateException, IOException {
         Template template = getTemplate(templatePath);
         StringWriter writer = new StringWriter();
@@ -89,7 +89,7 @@ public class BeanCreator {
         writer.close();
         return writer.toString();
     }
-
+    
     public static ViewEntity createViewEntity(Class clazz) {
         ViewEntity entity = new ViewEntity();
         entity.setName(clazz.getSimpleName());
@@ -137,37 +137,43 @@ public class BeanCreator {
                 if (size != null && size.max() != SIZE_ANNOTATION_MAX_DEFAULT) {
                     maxlength = size.max();
                 }
-                viewField.setMaxlength(maxlength+"");
+                viewField.setMaxlength(maxlength + "");
                 viewField.setString(true);
             }
             if (isRequired(field)) {
                 viewField.setRequired(true);
             }
             viewField.setLazy(isLazy(field));
-            viewField.setTypeName(field.getType().getSimpleName());
+            if (field.getType().equals(Collection.class) || field.getType().equals(List.class) || field.getType().equals(Set.class)) {
+                ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                Class<?> listType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                viewField.setTypeName(listType.getSimpleName());
+            } else {
+                viewField.setTypeName(field.getType().getSimpleName());
+            }
             entity.getFields().add(viewField);
         }
-
-
+        
+        
         return entity;
     }
-
+    
     public static Template getTemplate(String template) throws IOException {
-
+        
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("com/xpert/maker/templates/" + template);
         String templateString = IOUtils.toString(inputStream, "UTF-8");
-
+        
         return new Template(template, new StringReader(templateString), CONFIG);
     }
-
+    
     public static Map<String, Object> getDefaultParameters() {
         Map parameters = new HashMap();
         parameters.put("sharp", "#");
         return parameters;
     }
-
+    
     public static String getViewTemplate() {
-
+        
         try {
             Template template = BeanCreator.getTemplate("view-template.ftl");
             StringWriter writer = new StringWriter();
@@ -180,13 +186,13 @@ public class BeanCreator {
         } catch (TemplateException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-
+        
         return "";
-
+        
     }
-
+    
     public static String getI18N(Class clazz) {
-
+        
         Field[] fields = clazz.getDeclaredFields();
         StringBuilder builder = new StringBuilder();
         String className = StringUtils.getLowerFirstLetter(clazz.getSimpleName());
@@ -211,9 +217,9 @@ public class BeanCreator {
             builder.append("=");
             builder.append(new HumaniseCamelCase().humanise(field.getName()));
         }
-
+        
         return builder.toString();
-
+        
     }
 
     /**
@@ -221,7 +227,7 @@ public class BeanCreator {
      */
     @Deprecated
     public static String getHeader(String template) {
-
+        
         StringBuilder builder = new StringBuilder();
         builder.append("<ui:composition  xmlns=\"http://www.w3.org/1999/xhtml\"\n");
         builder.append("                 xmlns:h=\"http://java.sun.com/jsf/html\"\n");
@@ -233,7 +239,7 @@ public class BeanCreator {
         }
         builder.append("                 xmlns:x=\"http://xpert.com/faces\"\n");
         builder.append("                 xmlns:xc=\"http://java.sun.com/jsf/composite/xpert/components\">\n");
-
+        
         return builder.toString();
     }
 
@@ -251,7 +257,7 @@ public class BeanCreator {
         view.append("       </p:toolbarGroup>\n");
         view.append("   </p:toolbar>\n");
         view.append("</ui:composition>");
-
+        
         return view.toString();
     }
 
@@ -262,15 +268,15 @@ public class BeanCreator {
     public static String getCreate(Class clazz, String template, String resourceBundle) {
         StringBuilder view = new StringBuilder();
         view.append(getHeader(template));
-
-
+        
+        
         view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".create']}\" />\n");
         view.append("   <ui:define name=\"body\">\n");
         view.append("       <ui:include src=\"menu").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("       <ui:include src=\"formCreate").append(clazz.getSimpleName()).append(".xhtml\" />\n");
         view.append("   </ui:define>\n");
         view.append("</ui:composition>");
-
+        
         return view.toString();
     }
 
@@ -341,7 +347,7 @@ public class BeanCreator {
         view.append("       </p:dialog>\n");
         view.append("   </ui:define>\n");
         view.append("</ui:composition>");
-
+        
         return view.toString();
     }
 
@@ -374,14 +380,14 @@ public class BeanCreator {
         view.append("       </div>\n");
         view.append("   </h:form>\n");
         view.append("</ui:composition>");
-
+        
         return view.toString();
     }
-
+    
     public static String getDialogWidget(Class clazz) {
         return "widget" + clazz.getSimpleName() + "Detail";
     }
-
+    
     public static String getNameManagedBean(Class clazz) {
         return getNameLower(clazz) + "MB";
     }
@@ -391,7 +397,7 @@ public class BeanCreator {
      */
     @Deprecated
     public static String getCreateForm(Class clazz, String resourceBundle) {
-
+        
         resourceBundle = getResourceBundle(resourceBundle);
         StringBuilder view = new StringBuilder();
         String managedBean = getNameManagedBean(clazz);
@@ -416,12 +422,12 @@ public class BeanCreator {
      */
     @Deprecated
     public static String getInputsFromForm(Class clazz, String resourceBundle, String ident, String managedBean, String extraField) {
-
+        
         StringBuilder view = new StringBuilder();
         StringBuilder extraFieldSets = new StringBuilder();
         view.append(ident).append("<h:panelGrid columns=\"2\" styleClass=\"grid-form\">\n");
         List<Field> fields = getFields(clazz);
-
+        
         for (Field field : fields) {
             if (field.isAnnotationPresent(Id.class)) {
                 continue;
@@ -477,12 +483,12 @@ public class BeanCreator {
         }
         view.append(ident).append("</h:panelGrid>\n");
         view.append(extraFieldSets);
-
+        
         return view.toString();
     }
-
+    
     public static boolean isLazy(Field field) {
-
+        
         Annotation annotation = field.getAnnotation(ManyToOne.class);
         //ManyToOne
         if (annotation == null) {
@@ -527,12 +533,12 @@ public class BeanCreator {
         if (annotation != null && ((OneToOne) annotation).fetch() != null && ((OneToOne) annotation).fetch().equals(FetchType.LAZY)) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     public static String getText(Field field, String varExpression, String ident) {
-
+        
         StringBuilder text = new StringBuilder();
         boolean hasContent = false;
         text.append(ident).append("<h:outputText value=\"").append(varExpression).append("\"");
@@ -553,19 +559,19 @@ public class BeanCreator {
         } else {
             text.append("/>\n");
         }
-
+        
         return text.toString();
     }
-
+    
     public static String getLabel(Field field, boolean required, String resourceBundle) {
-
+        
         StringBuilder label = new StringBuilder();
         label.append("<h:outputLabel value=\"").append(required ? "* " : "").append("#{").append(resourceBundle);
         label.append("['").append(getNameLower(field.getDeclaringClass())).append(".").append(field.getName()).append("']}:\" />\n");
-
+        
         return label.toString();
     }
-
+    
     public static void appendTagValue(StringBuilder view, String tag, Field field, String managedBean, String converter, String resourceBundle,
             boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required, String ident, String extraField, String mask) {
         String type;
@@ -602,7 +608,7 @@ public class BeanCreator {
             if (hasEmptySelect) {
                 view.append(ident).append("     ").append("<f:selectItem itemLabel=\"#{xmsg['select']}\" />");
                 view.append("\n");
-
+                
             }
             view.append(ident).append("     ").append("<f:selectItems value=\"#{findAllBean.get(").append("classMB.").append(type).append(")}\"");
             view.append(" var=\"").append(type).append("\"");
@@ -615,7 +621,7 @@ public class BeanCreator {
         }
         view.append("\n");
     }
-
+    
     public static String getI18N(List<MappedBean> mappedBeans) {
         if (mappedBeans == null) {
             return null;
@@ -627,7 +633,7 @@ public class BeanCreator {
         i18n.append(getMenuI18N(mappedBeans));
         return i18n.toString();
     }
-
+    
     public static byte[] createBeanZipFile(List<MappedBean> mappedBeans, String classBean, String viewTemplate, BeanConfiguration configuration) throws IOException, TemplateException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream out = new ZipOutputStream(baos);
@@ -655,7 +661,7 @@ public class BeanCreator {
             putEntry(out, viewPath + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
             //menu
             putEntry(out, viewPath + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
-
+            
         }
         //template
         putEntry(out, getViewTemplatePath(configuration), viewTemplate);
@@ -667,14 +673,14 @@ public class BeanCreator {
         for (String locale : LOCALES_MAKER) {
             putEntry(out, "messages_" + locale + ".properties", i18n);
         }
-
+        
         out.finish();
         out.flush();
         out.close();
-
+        
         return baos.toByteArray();
     }
-
+    
     public static String getMenuI18N(List<MappedBean> mappedBeans) {
         StringBuilder builder = new StringBuilder();
         builder.append("\n\n#").append("menu").append("\n");
@@ -684,28 +690,28 @@ public class BeanCreator {
             builder.append(mappedBean.getHumanClassName());
             builder.append("\n");
         }
-
-
+        
+        
         return builder.toString();
     }
-
+    
     private static String getUrlForList(String nameLower, String classSimpleName, BeanConfiguration configuration) {
         return getViewPath(configuration) + nameLower + "/list" + classSimpleName;
     }
-
+    
     private static String getResourceBundle(String resourceBundle) {
         if (resourceBundle == null || resourceBundle.trim().isEmpty()) {
             return "msg";
         }
         return resourceBundle;
     }
-
+    
     public static String getMenubar(List<MappedBean> mappedBeans, String resourceBundle, BeanConfiguration configuration) {
         if (mappedBeans == null || mappedBeans.isEmpty()) {
             return null;
         }
         try {
-
+            
             Template template = BeanCreator.getTemplate("menubar.ftl");
             StringWriter writer = new StringWriter();
             Map attributes = new HashMap();
@@ -725,11 +731,11 @@ public class BeanCreator {
         } catch (TemplateException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-
+        
         return "";
-
+        
     }
-
+    
     public static String getViewPath(BeanConfiguration configuration) {
         if (configuration != null && configuration.getViewPath() != null && !configuration.getViewPath().isEmpty()) {
             StringBuilder builder = new StringBuilder();
@@ -745,7 +751,7 @@ public class BeanCreator {
         }
         return "view/";
     }
-
+    
     public static String getViewTemplatePath(BeanConfiguration configuration) {
         if (configuration.getTemplate() != null && !configuration.getTemplate().isEmpty()) {
             return configuration.getTemplate().startsWith("/") ? configuration.getTemplate().substring(1, configuration.getTemplate().length()) : configuration.getTemplate();
@@ -753,7 +759,7 @@ public class BeanCreator {
             return "template/mainTemplate.xhtml";
         }
     }
-
+    
     public static void putEntry(ZipOutputStream out, String fileName, String content) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream));
@@ -765,7 +771,7 @@ public class BeanCreator {
         out.write(byteArrayOutputStream.toByteArray());
         out.closeEntry();
     }
-
+    
     public static List<Field> getFields(Class entity) {
         List<Field> fields = new ArrayList<Field>();
         fields.addAll(Arrays.asList(entity.getDeclaredFields()));
@@ -809,20 +815,20 @@ public class BeanCreator {
             return null;
         }
     }
-
+    
     public static String getNameLower(Class clazz) {
         return StringUtils.getLowerFirstLetter(clazz.getSimpleName());
     }
-
+    
     public static boolean isDecimal(Field field) {
         return field.getType().equals(BigDecimal.class) || field.getType().equals(Double.class) || field.getType().equals(double.class);
     }
-
+    
     public static boolean isInteger(Field field) {
         return field.getType().equals(Integer.class) || field.getType().equals(int.class)
                 || field.getType().equals(Long.class) || field.getType().equals(long.class);
     }
-
+    
     public static boolean isRequired(Field field) {
         return isAnnotationPresent(field, NotNull.class) || isAnnotationPresent(field, NotBlank.class) || isAnnotationPresent(field, NotEmpty.class);
     }
