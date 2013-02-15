@@ -8,7 +8,7 @@ import java.text.NumberFormat;
  *
  * @author Ayslan
  */
-public class Number {
+public class NumberUtils {
 
     public static String convertToMoney(BigDecimal valor) {
 

@@ -1,11 +1,15 @@
 package com.xpert.security.bean;
 
+import com.xpert.core.exception.BusinessException;
+import com.xpert.faces.utils.FacesMessageUtils;
 import com.xpert.faces.utils.FacesUtils;
 import com.xpert.security.EncryptionType;
 import com.xpert.security.model.User;
 import com.xpert.security.session.AbstractUserSession;
 import com.xpert.utils.Encryption;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -16,30 +20,32 @@ import javax.persistence.NoResultException;
  * @author Ayslan
  */
 public abstract class SecurityLoginBean {
-
+    
     private String userLogin;
     private String userPassword;
-
+    
     public EncryptionType getEncryptionType() {
         return EncryptionType.SHA256;
     }
+    
     public boolean isLoginUpperCase() {
         return true;
     }
-
+    
     public boolean isLoginLowerCase() {
         return false;
     }
+    
     public boolean isValidateWhenNoRolesFound() {
         return true;
     }
-
+    
     public Class getUserClass() {
         return null;
     }
-
+    
     public abstract AbstractUserSession getUserSession();
-
+    
     public abstract EntityManager getEntityManager();
 
     /**
@@ -100,6 +106,11 @@ public abstract class SecurityLoginBean {
         return "No roles found for this user";
     }
 
+    /**
+     * Executed before user query in database
+     *
+     * @return
+     */
     public boolean validate() {
         boolean valid = true;
         if (userLogin == null || userLogin.trim().isEmpty()) {
@@ -113,20 +124,28 @@ public abstract class SecurityLoginBean {
         return valid;
     }
 
+    /**
+     * Executed after user query in database
+     *
+     * @return
+     */
+    public boolean validate(User user) throws BusinessException {
+        return true;
+    }
+    
     public void logout() {
         FacesUtils.invalidateSession();
         FacesUtils.redirect(getRedirectPageWhenLogout());
     }
     
-    
     public User getUser(String login, String password) {
-
+        
         User user = null;
         EntityManager entityManager = getEntityManager();
         if (entityManager == null || getUserClass() == null) {
             throw new IllegalArgumentException("To get the user you must override methods getEntityManager() and getUserClass() or override getUser() and do your own logic");
         }
-
+        
         String queryString = " FROM " + getUserClass().getName() + " WHERE userLogin = ?1 ";
         if (isLoginUpperCase()) {
             login = login.toUpperCase();
@@ -152,28 +171,28 @@ public abstract class SecurityLoginBean {
                 } else {
                     encryptedPassword = password;
                 }
-
+                
                 if (!user.getUserPassword().equals(encryptedPassword)) {
                     user = null;
                 }
             } catch (NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
             }
-
+            
         }
         return user;
     }
-
+    
     public void login() {
 
         //clear user session
         if (getUserSession() != null) {
             getUserSession().setUser(null);
         }
-
+        
         if (validate()) {
             User user = getUser(userLogin, userPassword);
-
+            
             if (user == null) {
                 addErrorMessage(getUserNotFoundMessage());
                 onError();
@@ -182,6 +201,13 @@ public abstract class SecurityLoginBean {
             if (!user.isActive()) {
                 addErrorMessage(getInactiveUserMessage());
                 onError();
+                return;
+            }
+            try {
+                //more validation
+                validate(user);
+            } catch (BusinessException ex) {
+                FacesMessageUtils.error(ex);
                 return;
             }
 
@@ -199,26 +225,26 @@ public abstract class SecurityLoginBean {
             onSucess(user);
             FacesUtils.redirect(getRedirectPageWhenSucess());
         }
-
+        
     }
-
+    
     private void addErrorMessage(String message) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
     }
-
+    
     public String getUserLogin() {
         return userLogin;
     }
-
+    
     public void setUserLogin(String userLogin) {
         this.userLogin = userLogin;
     }
-
+    
     public String getUserPassword() {
         return userPassword;
     }
-
+    
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }

@@ -1,6 +1,6 @@
 package com.xpert.core.validation;
 
-import com.xpert.core.conversion.Number;
+import com.xpert.core.conversion.NumberUtils;
 import com.xpert.i18n.XpertResourceBundle;
 import com.xpert.i18n.I18N;
 import com.xpert.utils.HumaniseCamelCase;
@@ -184,11 +184,11 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
         }
         if (violation.equals(DecimalMax.class)) {
             String max = ((DecimalMax) annotation).value();
-            return object + " " + XpertResourceBundle.get("numberMax", Number.convertToNumber(max));
+            return object + " " + XpertResourceBundle.get("numberMax", NumberUtils.convertToNumber(max));
         }
         if (violation.equals(DecimalMin.class)) {
             String min = ((DecimalMin) annotation).value();
-            return object + " " + XpertResourceBundle.get("numberMin", Number.convertToNumber(min));
+            return object + " " + XpertResourceBundle.get("numberMin", NumberUtils.convertToNumber(min));
         }
 
         if (violation.equals(Size.class)) {
