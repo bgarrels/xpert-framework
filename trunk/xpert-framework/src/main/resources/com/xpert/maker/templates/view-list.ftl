@@ -13,7 +13,11 @@
         <h:form id="formList${entity.name}">
             <xc:modalMessages/>
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${sharp}{xmsg['noRecordFound']}"
-                         var="${entity.nameLower}" value="${sharp}{${entity.nameLower}MB.dataModel}" lazy="true" >
+                         var="${entity.nameLower}" rowIndexVar="index"
+                         value="${sharp}{${entity.nameLower}MB.dataModel}" lazy="true" >
+                <p:column style="text-align: center;">
+                    <h:outputText value="${sharp}{index+1}"/>
+                </p:column>
                 <#list entity.fields as field>
                 <#if field.collection == false && field.id == false>
                 <p:column headerText="${sharp}{${resourceBundle}['${entity.nameLower}.${field.name}']}" sortBy="${sharp}{${entity.nameLower}.${field.name}}"
@@ -26,7 +30,7 @@
                         </#if>
                         <#if field.decimal == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}">
-                            <f:convertNumber />
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
                         </h:outputText>
                         </#if>
                         <#if field.date == true>

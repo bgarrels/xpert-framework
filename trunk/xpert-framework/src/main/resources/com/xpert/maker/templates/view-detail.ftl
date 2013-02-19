@@ -19,7 +19,7 @@
             </#if>
             <#if field.decimal == true>
             <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}">
-                <f:convertNumber />
+                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
             </h:outputText>
             </#if>
             <#if field.date == true>
