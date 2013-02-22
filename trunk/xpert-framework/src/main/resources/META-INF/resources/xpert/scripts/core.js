@@ -101,7 +101,7 @@ Xpert = {
             if(total == 0){
                 inner = inner+"<tr>";
             }
-            var checkbox = $(element).find("input[type=checkbox]");
+            var checkbox = $(element).find("input[type=checkbox],input[type=radio]");
             if(highlight && checkbox[0].checked == true){
                 inner = inner+"<td class='ui-state-highlight' style='border: 0;'>";
             }else{
@@ -117,9 +117,12 @@ Xpert = {
         });
         $table.html(inner);
         if(highlight == true){
-            $table.find("input[type=checkbox]").click(function() {
+            $table.find("input[type=checkbox],input[type=radio]").click(function() {
                 var $td = $(this).closest("td");
                 $td.css("border", 0);
+                if($(this).attr("type") == "radio"){
+                    $table.find("td").removeClass("ui-state-highlight");
+                }
                 if(this.checked){
                     $td.addClass("ui-state-highlight");
                 }else{
