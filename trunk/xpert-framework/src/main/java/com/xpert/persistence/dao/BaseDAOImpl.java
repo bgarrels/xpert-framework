@@ -117,7 +117,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
     @Override
     public void save(T object, boolean audit) {
-        getSession().save(object);
+        getEntityManager().persist(object);
         if (audit) {
             getNewAudit().insert(object);
         }
@@ -166,7 +166,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
             getNewAudit().update(object);
         }
 
-        object = (T) getSession().merge(object);
+        object = (T) getEntityManager().merge(object);
 
         if (!persisted && audit) {
             getNewAudit().insert(object);

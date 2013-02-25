@@ -82,10 +82,10 @@ public class EntityUtils {
                 Annotation[] annotations = method.getDeclaredAnnotations();
                 for (int i = 0; i < annotations.length; i++) {
                     if (annotations[i].annotationType().equals(Id.class) || annotations[i].annotationType().equals(EmbeddedId.class)) {
-                        String withouGet = name.substring(3, name.length());
-                        withouGet = getLowerFirstLetter(withouGet);
-                        idNameMap.put(clazz, withouGet);
-                        return withouGet;
+                        String withoutGet = name.substring(3, name.length());
+                        withoutGet = getLowerFirstLetter(withoutGet);
+                        idNameMap.put(clazz, withoutGet);
+                        return withoutGet;
                     }
                 }
             }

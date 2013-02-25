@@ -61,8 +61,8 @@ public class AuditDeleteBean {
         insertUpdateTypes.add(AuditingType.UPDATE);
 
         List<Restriction> restrictions = new ArrayList<Restriction>();
-        restrictions.add(new Restriction("entity", deleteAuditing.getEntity()));
         restrictions.add(new Restriction("identifier", deleteAuditing.getIdentifier()));
+        restrictions.add(new Restriction("entity", deleteAuditing.getEntity()));
         restrictions.add(new Restriction("auditingType", RestrictionType.IN, insertUpdateTypes));
 
         return baseDAO.list(restrictions, "eventDate DESC");

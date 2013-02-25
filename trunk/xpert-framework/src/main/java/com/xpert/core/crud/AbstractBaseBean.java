@@ -29,26 +29,34 @@ public abstract class AbstractBaseBean<T> {
     private String dialog;
     private LazyDataModel<T> dataModel;
     private T entity;
+    private boolean loadEntityOnPostConstruct = true;
 
     public abstract AbstractBusinessObject getBO();
 
     public abstract String getDataModelOrder();
-    
+
     /**
-     * Called after @PostConstruct
+     * Called after
+     *
+     * @PostConstruct
      */
-    public void init(){
+    public void init() {
     }
 
     public AbstractBaseBean() {
     }
 
     /**
-     * Method called on @PostConstruct event
+     * Method called on
+     *
+     * @PostConstruct event
      */
     @PostConstruct
     public void postConstruct() {
-        Long entityId = getIdFromParameter();
+        Long entityId = null;
+        if (isLoadEntityOnPostConstruct()) {
+            entityId = getIdFromParameter();
+        }
         if (entityId != null) {
             entity = findById(entityId);
         } else {
@@ -202,4 +210,14 @@ public abstract class AbstractBaseBean<T> {
     public void setEntity(T entity) {
         this.entity = entity;
     }
+
+    public boolean isLoadEntityOnPostConstruct() {
+        return loadEntityOnPostConstruct;
+    }
+
+    public void setLoadEntityOnPostConstruct(boolean loadEntityOnPostConstruct) {
+        this.loadEntityOnPostConstruct = loadEntityOnPostConstruct;
+    }
+
+   
 }
