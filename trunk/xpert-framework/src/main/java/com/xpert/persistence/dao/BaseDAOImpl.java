@@ -36,6 +36,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     private Class entityClass;
     private Session session;
     private static final Logger logger = Logger.getLogger(BaseDAOImpl.class.getName());
+    private static Map<ClassField, String> orderByMap = new HashMap<ClassField, String>();
 
     /**
      * Set here your getEntityManager()
@@ -255,8 +256,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     @Override
     public Object findAttribute(String attributeName, Long id) {
 
-        Query query = new QueryBuilder(getEntityManager()).from(entityClass)
-                .add(new Restriction(EntityUtils.getIdFieldName(entityClass), id)).type(QueryType.SELECT, attributeName).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).add(new Restriction(EntityUtils.getIdFieldName(entityClass), id)).type(QueryType.SELECT, attributeName).createQuery();
 
         try {
             return query.getSingleResult();
@@ -273,8 +273,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     @Override
     public Object findList(String attributeName, Long id) {
 
-        Query query = new QueryBuilder(getEntityManager()).from(entityClass)
-                .add(new Restriction(EntityUtils.getIdFieldName(entityClass), id)).type(QueryType.SELECT, attributeName).createQuery();
+        Query query = new QueryBuilder(getEntityManager()).from(entityClass).add(new Restriction(EntityUtils.getIdFieldName(entityClass), id)).type(QueryType.SELECT, attributeName).createQuery();
 
         try {
             return query.getResultList();
@@ -644,6 +643,12 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     private String getOrderBy(String fieldName, Class entity) {
         String orderBy = null;
 
+        //try find in cache
+        ClassField classField = new ClassField(entity, fieldName);
+        if (orderByMap.containsKey(classField)) {
+            return orderByMap.get(classField);
+        }
+
         try {
             Field field = getDeclaredField(entity, fieldName);
             OrderBy annotation = field.getAnnotation(OrderBy.class);
@@ -661,6 +666,8 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
                 logger.log(Level.SEVERE, null, ex);
             }
         }
+
+        orderByMap.put(new ClassField(entity, fieldName), orderBy);
 
         return orderBy;
     }
