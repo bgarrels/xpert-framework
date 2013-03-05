@@ -11,8 +11,18 @@ import org.hibernate.Session;
 
 public interface BaseDAO<T> {
 
+    /**
+     * Returns the current EntityManager
+     *
+     * @return current javax.persistence.EntityManager
+     */
     public EntityManager getEntityManager();
 
+    /**
+     * Returns the current Hibernate Session
+     *
+     * @return current org.hibernate.Session
+     */
     public Session getSession();
 
     public QueryBuilder getQueryBuilder();
@@ -25,6 +35,10 @@ public interface BaseDAO<T> {
 
     public void setEntityClass(Class entityClass);
 
+    /**
+     *
+     * @param object
+     */
     public void save(T object);
 
     public void save(T object, boolean audit);
@@ -71,8 +85,20 @@ public interface BaseDAO<T> {
 
     public T find(Class entityClass, Object id);
 
-    public T unique(Map<String, Object> args);
+    /**
+     * Returns a unique object from query
+     * 
+     * @param parameters - Parameters to restrict query results
+     * @return a unique object from query
+     */
+    public T unique(Map<String, Object> parameters);
 
+    /**
+     * Returns a unique object from query
+     * 
+     * @param restrictions - Restrictions query results
+     * @return a unique object from query
+     */
     public T unique(List<Restriction> restrictions);
 
     public T unique(List<Restriction> restrictions, Class clazz);
@@ -81,8 +107,22 @@ public interface BaseDAO<T> {
 
     public T unique(Restriction restriction, Class clazz);
 
+    /**
+     * Returns a unique object from query
+     * 
+     * @param property - property name
+     * @param value - value to restrict
+     * @return
+     */
     public T unique(String property, Object value);
 
+    /**
+     * Returns the value of especified attribute
+     * 
+     * @param attributeName - atribute name of value
+     * @param id - id from object
+     * @return 
+     */
     public Object findAttribute(String attributeName, Long id);
 
     public Object findAttribute(String attributeName, Object object);
