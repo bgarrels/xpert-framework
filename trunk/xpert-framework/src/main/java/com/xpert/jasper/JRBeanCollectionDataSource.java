@@ -4,8 +4,8 @@ import com.xpert.DAO;
 import com.xpert.persistence.dao.BaseDAO;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
@@ -24,29 +24,24 @@ public class JRBeanCollectionDataSource extends net.sf.jasperreports.engine.data
     private Iterator<?> iterator;
     private Object currentBean;
 
-    /**
-     *
-     */
-    /**
-     *
-     */
     public JRBeanCollectionDataSource(Collection<?> beanCollection) {
-        this(beanCollection, true);
+        this(beanCollection, true, null);
+    }
+
+    public JRBeanCollectionDataSource(Collection<?> beanCollection, EntityManager entityManager) {
+        this(beanCollection, true, entityManager);
     }
 
     /**
      *
      */
-    public JRBeanCollectionDataSource(Collection<?> beanCollection, boolean isUseFieldDescription) {
+    public JRBeanCollectionDataSource(Collection<?> beanCollection, boolean isUseFieldDescription, EntityManager entityManager) {
         super(isUseFieldDescription);
-        try {
-            baseDAO = new DAO();
-        } catch (Throwable t) {
-            logger.log(Level.SEVERE, "Error on JRBeanCollectionDataSource Cosntructor. Cannot define EntityManager.", t);
+        if (entityManager != null) {
+            baseDAO = new DAO(entityManager);
+            beanCollection = (Collection<?>) baseDAO.getInitialized(beanCollection);
         }
-        beanCollection = (Collection<?>) baseDAO.getInitialized(beanCollection);
         this.data = beanCollection;
-
         if (this.data != null) {
             this.iterator = this.data.iterator();
         }
