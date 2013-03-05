@@ -8,8 +8,6 @@ import com.xpert.security.model.User;
 import com.xpert.security.session.AbstractUserSession;
 import com.xpert.utils.Encryption;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
