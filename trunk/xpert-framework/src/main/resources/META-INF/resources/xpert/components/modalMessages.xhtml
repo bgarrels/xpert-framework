@@ -17,13 +17,14 @@
             <p:outputPanel autoUpdate="#{cc.attrs.autoUpdate}">
                 <h:panelGroup rendered="#{not empty facesContext.messageList}">
                     <p:dialog showHeader="false" closable="false" modal="true" appendToBody="true"
-                              onShow="jQuery('button[id*=buttonConfirmMessage]').focus();"
+                              onShow="$('button[id*=buttonConfirmMessage]').focus();"
+                              id="xpertModalMessages"
                               styleClass="faces-modal-messages" resizable="false"
                               widgetVar="xpertModalDialogMessages" visible="true">
                         <div class="modal-messages">
                             <p:messages/>
                             <div align="center">
-                                <p:commandButton id="buttonConfirmMessage" onclick="xpertModalDialogMessages.hide();jQuery('.faces-modal-messages').remove();" type="button" value="Ok" />
+                                <p:commandButton id="buttonConfirmMessage" onclick="xpertModalDialogMessages.hide();$('.faces-modal-messages').remove();$('div[id*=xpertModalMessages]').remove();" type="button" value="Ok" />
                             </div>
                         </div>
                     </p:dialog>
