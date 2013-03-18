@@ -1,0 +1,12 @@
+#Documentação - Português
+
+= Sumário =
+
+#BaseDAO
+ #find
+ #listAll
+ #list
+ #unique
+ #count
+ #findAttribute
+ #listAttributes
