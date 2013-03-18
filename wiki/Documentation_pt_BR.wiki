@@ -10,3 +10,4 @@
  * count
  * findAttribute
  * listAttributes
+* DataTable paginado no banco com o LazyDataModelImpl
