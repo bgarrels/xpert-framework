@@ -17,6 +17,7 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
     private BaseDAO<T> dao;
     private String defaultOrder;
     private String attributes;
+    private OrderByHandler orderByHandler;
     /*
      * to add restrictions on query to filter table
      */
@@ -79,6 +80,11 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
         if (orderBy == null || orderBy.trim().isEmpty()) {
             orderBy = defaultOrder;
         } else {
+            
+            if(orderByHandler != null){
+                orderBy = getOrderByHandler().getOrderBy(orderBy);
+            }
+            
             if (order.equals(SortOrder.DESCENDING)) {
                 orderBy = orderBy + " DESC";
             }
@@ -138,4 +144,13 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
     public void setRestrictions(List<Restriction> restrictions) {
         this.restrictions = restrictions;
     }
+
+    public OrderByHandler getOrderByHandler() {
+        return orderByHandler;
+    }
+
+    public void setOrderByHandler(OrderByHandler orderByHandler) {
+        this.orderByHandler = orderByHandler;
+    }
+    
 }

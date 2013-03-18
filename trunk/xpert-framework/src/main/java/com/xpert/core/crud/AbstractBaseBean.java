@@ -5,6 +5,7 @@ import com.xpert.faces.utils.FacesMessageUtils;
 import com.xpert.faces.primefaces.PrimeFacesUtils;
 import com.xpert.i18n.XpertResourceBundle;
 import com.xpert.faces.primefaces.LazyDataModelImpl;
+import com.xpert.faces.primefaces.OrderByHandler;
 import com.xpert.utils.StringUtils;
 import com.xpert.faces.utils.FacesUtils;
 import com.xpert.persistence.dao.BaseDAO;
@@ -34,6 +35,10 @@ public abstract class AbstractBaseBean<T> {
     public abstract AbstractBusinessObject getBO();
 
     public abstract String getDataModelOrder();
+    
+    public OrderByHandler getOrderByHandler(){
+        return null;
+    }
 
     /**
      * Called after
@@ -125,6 +130,10 @@ public abstract class AbstractBaseBean<T> {
 
     public void createDataModel() {
         dataModel = new LazyDataModelImpl<T>(getDataModelOrder(), getDataModelRestrictions(), getDAO());
+        OrderByHandler orderByHandler = getOrderByHandler();
+        if(orderByHandler != null){
+             ((LazyDataModelImpl)dataModel).setOrderByHandler(orderByHandler);
+        }
     }
 
     public void onLoadList() {
