@@ -3,10 +3,10 @@
 = Sumário =
 
 * BaseDAO
- # find
- # listAll
- # list
- # unique
- # count
- # findAttribute
- # listAttributes
+ * find
+ * listAll
+ * list
+ * unique
+ * count
+ * findAttribute
+ * listAttributes
