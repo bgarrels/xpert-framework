@@ -4,13 +4,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  *
@@ -35,6 +32,7 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
 
     public static void run(final MakerMainFrame maker) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 maker.center();
                 maker.setVisible(true);
@@ -64,50 +62,6 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
 
     public void selectNone() {
         listClasses.setSelectedIndices(new int[0]);
-    }
-
-    public boolean validateField(String value, String fieldName) {
-        if (value == null || value.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, fieldName + " is required", "Warning", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-
-    public boolean validateConfiguration() {
-
-        if (!validateField(beanConfiguration.getManagedBeanLocation(), "ManagedBean location")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getManagedBean(), "ManagedBean package")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getBusinessObjectLocation(), "Business Object (BO) location")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getBusinessObject(), "Business Object (BO) package")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getDaoLocation(), "DAO location")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getDao(), "DAO package")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getDaoImplLocation(), "DAO Implementation location")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getDaoImpl(), "DAO Implementation package")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getViewLocation(), "View location")) {
-            return false;
-        }
-        if (!validateField(beanConfiguration.getTemplate(), "Facelets Template")) {
-            return false;
-        }
-
-        return true;
     }
 
     public void generate() {
@@ -140,15 +94,14 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
         beanConfiguration.setDaoImplLocation(textDAOImpl.getText());
         beanConfiguration.setViewLocation(textView.getText());
 
-        if (validateConfiguration()) {
-            PersistenceMappedBean persistenceMappedBean = new PersistenceMappedBean(null);
-            List<MappedBean> mappedBeans = persistenceMappedBean.getMappedBeans(classesList, beanConfiguration);
-            i18n = BeanCreator.getI18N(mappedBeans);
-            textAreaI18n.setText(i18n);
-            StringBuilder logBuilder = new StringBuilder();
-            BeanCreator.writeBean(mappedBeans, beanConfiguration, logBuilder);
-            textAreaLog.setText(logBuilder.toString());
-        }
+        PersistenceMappedBean persistenceMappedBean = new PersistenceMappedBean(null);
+        List<MappedBean> mappedBeans = persistenceMappedBean.getMappedBeans(classesList, beanConfiguration);
+        i18n = BeanCreator.getI18N(mappedBeans);
+        textAreaI18n.setText(i18n);
+        StringBuilder logBuilder = new StringBuilder();
+        BeanCreator.writeBean(mappedBeans, beanConfiguration, logBuilder);
+        textAreaLog.setText(logBuilder.toString());
+
     }
 
     public void showFileChooser(JTextField textSelection, JTextField textPackage) {
@@ -185,6 +138,12 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
      * Creates new form MakerMainFrame
      */
     public MakerMainFrame() {
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
         initComponents();
         initFromConfiguration();
 

@@ -304,7 +304,9 @@ public class BeanCreator {
     }
 
     public static void writeFile(String location, String fileName, String content, StringBuilder logBuilder) {
-
+        if (location == null || location.isEmpty()) {
+            return;
+        }
         //create dir
         File dir = new File(location);
         dir.mkdirs();
@@ -313,6 +315,7 @@ public class BeanCreator {
         if (!file.exists()) {
             FileOutputStream outputStream;
             try {
+                log(logBuilder, "Writing file: " + fileName + " on dir: " + file.getAbsolutePath());
                 outputStream = new FileOutputStream(file);
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
                 writer.write(content);
@@ -335,32 +338,44 @@ public class BeanCreator {
 
     public static void writeBean(List<MappedBean> mappedBeans, BeanConfiguration configuration, StringBuilder logBuilder) {
         for (MappedBean mappedBean : mappedBeans) {
-            log(logBuilder, "Creating class " + mappedBean.getClassName());
+            log(logBuilder, "Mapping class " + mappedBean.getClassName());
             String classSimpleName = mappedBean.getEntityClass().getSimpleName();
             String nameLower = getNameLower(mappedBean.getEntityClass());
 
             //ManagedBean
-            writeFile(configuration.getManagedBeanLocation(), classSimpleName + SUFFIX_MANAGED_BEAN, mappedBean.getManagedBean(), logBuilder);
+            if (configuration.getManagedBeanLocation() != null) {
+                writeFile(configuration.getManagedBeanLocation(), classSimpleName + SUFFIX_MANAGED_BEAN, mappedBean.getManagedBean(), logBuilder);
+            }
             //BusinessObject
-            writeFile(configuration.getBusinessObjectLocation(), classSimpleName + SUFFIX_BUSINESS_OBJECT, mappedBean.getBusinnesObject(), logBuilder);
+            if (configuration.getBusinessObjectLocation() != null) {
+                writeFile(configuration.getBusinessObjectLocation(), classSimpleName + SUFFIX_BUSINESS_OBJECT, mappedBean.getBusinnesObject(), logBuilder);
+
+            }
             //DAO
-            writeFile(configuration.getDaoLocation(), classSimpleName + SUFFIX_DAO, mappedBean.getDao(), logBuilder);
+            if (configuration.getDaoLocation() != null) {
+                writeFile(configuration.getDaoLocation(), classSimpleName + SUFFIX_DAO, mappedBean.getDao(), logBuilder);
+
+            }
             //DAOImpl
-            writeFile(configuration.getDaoImplLocation(), classSimpleName + SUFFIX_DAO_IMPL, mappedBean.getDaoImpl(), logBuilder);
+            if (configuration.getDaoImplLocation() != null) {
+                writeFile(configuration.getDaoImplLocation(), classSimpleName + SUFFIX_DAO_IMPL, mappedBean.getDaoImpl(), logBuilder);
+            }
 
             //Views
-            //View Create
-            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_CREATE + classSimpleName + ".xhtml", mappedBean.getCreateView(), logBuilder);
-            //View Form Create
-            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_FORM_CREATE + classSimpleName + ".xhtml", mappedBean.getFormCreateView(), logBuilder);
-            //View Menu
-            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_MENU + classSimpleName + ".xhtml", mappedBean.getMenu(), logBuilder);
+            if (configuration.getViewLocation() != null && !configuration.getViewLocation().trim().isEmpty()) {
+                //View Create
+                writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_CREATE + classSimpleName + ".xhtml", mappedBean.getCreateView(), logBuilder);
+                //View Form Create
+                writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_FORM_CREATE + classSimpleName + ".xhtml", mappedBean.getFormCreateView(), logBuilder);
+                //View Menu
+                writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_MENU + classSimpleName + ".xhtml", mappedBean.getMenu(), logBuilder);
 
-            //View List
-            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_LIST + classSimpleName + ".xhtml", mappedBean.getListView(), logBuilder);
+                //View List
+                writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_LIST + classSimpleName + ".xhtml", mappedBean.getListView(), logBuilder);
 
-            //View Detail
-            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_DETAIL + classSimpleName + ".xhtml", mappedBean.getDetail(), logBuilder);
+                //View Detail
+                writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_DETAIL + classSimpleName + ".xhtml", mappedBean.getDetail(), logBuilder);
+            }
         }
 
         log(logBuilder, "Finished!");
