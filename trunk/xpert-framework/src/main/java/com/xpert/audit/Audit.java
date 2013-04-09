@@ -101,10 +101,16 @@ public class Audit {
     }
 
     public void insert(Object object) {
+        if (!isAudit(object)) {
+            return;
+        }
         audit(object, null, AuditingType.INSERT);
     }
 
     public void update(Object object) {
+        if (!isAudit(object)) {
+            return;
+        }
         Object persisted = getPersisted(object);
         if (persisted != null) {
             audit(object, persisted, AuditingType.UPDATE);
@@ -115,10 +121,16 @@ public class Audit {
     }
 
     public void delete(Object id, Class clazz) {
+        if (!isAudit(clazz)) {
+            return;
+        }
         audit(getPersistedById(id, clazz), null, AuditingType.DELETE);
     }
 
     public void delete(Object object) {
+        if (!isAudit(object)) {
+            return;
+        }
         audit(object, null, AuditingType.DELETE);
     }
 
@@ -145,6 +157,20 @@ public class Audit {
         mappedName.put(entity, name);
 
         return name;
+    }
+
+    public boolean isAudit(Object object) {
+        if (object == null) {
+            return false;
+        }
+        return isAudit(object.getClass());
+    }
+
+    public boolean isAudit(Class entity) {
+        if (entity.isAnnotationPresent(NotAudited.class)) {
+            return false;
+        }
+        return true;
     }
 
     public void audit(Object object, Object persisted, AuditingType auditingType) {

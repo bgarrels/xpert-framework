@@ -2,7 +2,6 @@ package com.xpert.maker;
 
 import com.xpert.maker.model.ViewEntity;
 import com.xpert.maker.model.ViewField;
-import com.xpert.persistence.utils.EntityUtils;
 import com.xpert.utils.HumaniseCamelCase;
 import com.xpert.utils.StringUtils;
 import freemarker.template.Configuration;
@@ -14,8 +13,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,16 +35,28 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Ayslan
  */
 public class BeanCreator {
-    
+
     private static final Logger logger = Logger.getLogger(BeanCreator.class.getName());
     private static final Configuration CONFIG = new Configuration();
     private static final String AUTHOR = "#Author";
     private static final String GET_PREFIX = "get";
+    public static final String DEFAULT_RESOURCE_BUNDLE = "msg";
+    public static final String DEFAULT_TEMPLATE = "/template/mainTemplate.xhtml";
     private static final int DEFAULT_SIZE = 70;
     private static final int DEFAULT_MAX_LENGTH = 255;
     private static final int SIZE_ANNOTATION_MAX_DEFAULT = 2147483647;
     private static final String[] LOCALES_MAKER = {"pt_BR", "en", "es"};
-    
+    public static final String SUFFIX_MANAGED_BEAN = "MB.java";
+    public static final String SUFFIX_BUSINESS_OBJECT = "BO.java";
+    public static final String SUFFIX_DAO = "DAO.java";
+    public static final String SUFFIX_DAO_IMPL = "DAOImpl.java";
+    public static final String PREFFIX_VIEW_CREATE = "create";
+    public static final String PREFFIX_VIEW_FORM_CREATE = "formCreate";
+    public static final String PREFFIX_VIEW_LIST = "list";
+    public static final String PREFFIX_VIEW_MENU = "menu";
+    public static final String PREFFIX_VIEW_DETAIL = "detail";
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     static {
         try {
             CONFIG.setObjectWrapper(new DefaultObjectWrapper());
@@ -53,30 +64,30 @@ public class BeanCreator {
             throw new RuntimeException(ex);
         }
     }
-    
+
     public static String createBean(Bean bean, BeanConfiguration configuration) throws IOException, TemplateException {
-        
+
         ViewEntity viewEntity = createViewEntity(bean.getEntity());
-        
+
         if (bean.getBeanType().isView()) {
             return getViewTemplate(viewEntity, configuration.getResourceBundle(), bean.getBeanType().getTemplate(), configuration == null ? null : configuration.getTemplate());
         }
-        
+
         Template template = getTemplate(bean.getBeanType().getTemplate());
         StringWriter writer = new StringWriter();
         bean.setConfiguration(configuration);
         if (configuration.getAuthor() == null || configuration.getAuthor().trim().isEmpty()) {
             configuration.setAuthor(AUTHOR);
         }
-        bean.setAuthor(AUTHOR);
+        bean.setAuthor(configuration.getAuthor());
         template.process(bean, writer);
-        
+
         writer.flush();
         writer.close();
-        
+
         return writer.toString();
     }
-    
+
     public static String getViewTemplate(ViewEntity viewEntity, String resourceBundle, String templatePath, String xhtmlTemplate) throws TemplateException, IOException {
         Template template = getTemplate(templatePath);
         StringWriter writer = new StringWriter();
@@ -89,7 +100,7 @@ public class BeanCreator {
         writer.close();
         return writer.toString();
     }
-    
+
     public static ViewEntity createViewEntity(Class clazz) {
         ViewEntity entity = new ViewEntity();
         entity.setName(clazz.getSimpleName());
@@ -153,27 +164,27 @@ public class BeanCreator {
             }
             entity.getFields().add(viewField);
         }
-        
-        
+
+
         return entity;
     }
-    
+
     public static Template getTemplate(String template) throws IOException {
-        
+
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("com/xpert/maker/templates/" + template);
         String templateString = IOUtils.toString(inputStream, "UTF-8");
-        
+
         return new Template(template, new StringReader(templateString), CONFIG);
     }
-    
+
     public static Map<String, Object> getDefaultParameters() {
         Map parameters = new HashMap();
         parameters.put("sharp", "#");
         return parameters;
     }
-    
+
     public static String getViewTemplate() {
-        
+
         try {
             Template template = BeanCreator.getTemplate("view-template.ftl");
             StringWriter writer = new StringWriter();
@@ -186,13 +197,13 @@ public class BeanCreator {
         } catch (TemplateException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-        
+
         return "";
-        
+
     }
-    
+
     public static String getI18N(Class clazz) {
-        
+
         Field[] fields = clazz.getDeclaredFields();
         StringBuilder builder = new StringBuilder();
         String className = StringUtils.getLowerFirstLetter(clazz.getSimpleName());
@@ -217,278 +228,21 @@ public class BeanCreator {
             builder.append("=");
             builder.append(new HumaniseCamelCase().humanise(field.getName()));
         }
-        
+
         return builder.toString();
-        
+
     }
 
-    /**
-     * Deprecated. From 1.2 version templates are loaded from freemarker.
-     */
-    @Deprecated
-    public static String getHeader(String template) {
-        
-        StringBuilder builder = new StringBuilder();
-        builder.append("<ui:composition  xmlns=\"http://www.w3.org/1999/xhtml\"\n");
-        builder.append("                 xmlns:h=\"http://java.sun.com/jsf/html\"\n");
-        builder.append("                 xmlns:f=\"http://java.sun.com/jsf/core\"\n");
-        builder.append("                 xmlns:ui=\"http://java.sun.com/jsf/facelets\"\n");
-        builder.append("                 xmlns:p=\"http://primefaces.org/ui\"\n");
-        if (template != null && !template.isEmpty()) {
-            builder.append("                 template=\"").append(template).append("\"\n");
-        }
-        builder.append("                 xmlns:x=\"http://xpert.com/faces\"\n");
-        builder.append("                 xmlns:xc=\"http://java.sun.com/jsf/composite/xpert/components\">\n");
-        
-        return builder.toString();
-    }
-
-    /**
-     * Deprecated. From 1.2 version templates are loaded from freemarker.
-     */
-    @Deprecated
-    public static String getMenu(Class clazz) {
-        StringBuilder view = new StringBuilder();
-        view.append(getHeader(null));
-        view.append("   <p:toolbar>\n");
-        view.append("       <p:toolbarGroup align=\"left\">  \n");
-        view.append("           <p:button icon=\"ui-icon-search\" value=\"#{xmsg['list']}\" outcome=\"list").append(clazz.getSimpleName()).append("\" />\n");
-        view.append("           <p:button icon=\"ui-icon-plus\" value=\"#{xmsg['create']}\" outcome=\"create").append(clazz.getSimpleName()).append("\" />\n");
-        view.append("       </p:toolbarGroup>\n");
-        view.append("   </p:toolbar>\n");
-        view.append("</ui:composition>");
-        
-        return view.toString();
-    }
-
-    /**
-     * Deprecated. From 1.2 version templates are loaded from freemarker.
-     */
-    @Deprecated
-    public static String getCreate(Class clazz, String template, String resourceBundle) {
-        StringBuilder view = new StringBuilder();
-        view.append(getHeader(template));
-        
-        
-        view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".create']}\" />\n");
-        view.append("   <ui:define name=\"body\">\n");
-        view.append("       <ui:include src=\"menu").append(clazz.getSimpleName()).append(".xhtml\" />\n");
-        view.append("       <ui:include src=\"formCreate").append(clazz.getSimpleName()).append(".xhtml\" />\n");
-        view.append("   </ui:define>\n");
-        view.append("</ui:composition>");
-        
-        return view.toString();
-    }
-
-    /**
-     * Deprecated. From 1.2 version templates are loaded from freemarker.
-     */
-    @Deprecated
-    public static String getList(Class clazz, String template, String resourceBundle) {
-        List<Field> fields = getFields(clazz);
-        String managedBean = getNameManagedBean(clazz);
-        String varName = StringUtils.getLowerFirstLetter(clazz.getSimpleName());
-        String idExpression = "#{" + varName + "." + EntityUtils.getIdFieldName(clazz) + "}";
-        String dialogWidget = getDialogWidget(clazz);
-        StringBuilder view = new StringBuilder();
-        view.append(getHeader(template));
-        view.append("   <ui:param name=\"title\" value=\"#{").append(resourceBundle).append("['").append(getNameLower(clazz)).append(".list']}\" />\n");
-        view.append("   <ui:define name=\"body\">\n");
-        view.append("       <ui:include src=\"menu").append(clazz.getSimpleName()).append(".xhtml\" />\n");
-        view.append("       <h:form id=\"formList").append(clazz.getSimpleName()).append("\">\n");
-        view.append("           <xc:modalMessages/>\n");
-        view.append("           <p:dataTable paginator=\"true\" rows=\"10\" rowsPerPageTemplate=\"10,20,30\" paginatorPosition=\"bottom\" emptyMessage=\"#{xmsg['noRecordFound']}\"\n");
-        view.append("                   var=\"").append(varName).append("\" value=\"#{").append(managedBean).append(".dataModel}\" lazy=\"true\" >\n");
-        for (Field field : fields) {
-            String varFieldName = StringUtils.getLowerFirstLetter(field.getDeclaringClass().getSimpleName()) + "." + field.getName();
-            if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
-                continue;
-            }
-            String fieldName = varName + "." + field.getName();
-            String varExpression = "#{" + fieldName + "}";
-            view.append("               <p:column headerText=\"#{").append(resourceBundle).append("['").append(varFieldName).append("']}\" sortBy=\"").append(varExpression).append("\"");
-            if (field.getType().equals(String.class) || field.getType().equals(Integer.class) || field.getType().equals(Long.class) || field.getType().isEnum()) {
-                view.append("\n").append("                      filterBy=\"").append(varExpression).append("\"");
-            }
-            if (field.getType().isEnum()) {
-                view.append("\n").append("                      filterOptions=\"#{findAllBean.getSelect(classMB.").append(StringUtils.getLowerFirstLetter(field.getType().getSimpleName())).append(")}\"");
-            }
-            //align Date on center
-            if (field.getType().equals(Calendar.class) || field.getType().equals(Date.class) || field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
-                view.append("\n").append("                                   style=\"text-align: center;\"");
-                //align Number on right
-            } else if (isDecimal(field)) {
-                view.append("\n").append("                                   style=\"text-align: right;\"");
-            }
-            view.append(">\n");
-            view.append(getText(field, varExpression, "                   "));
-            view.append("               </p:column>\n");
-        }
-        //actions column
-        view.append("               <p:column style=\"text-align: center;\">\n");
-        view.append("                   <p:commandButton oncomplete=\"").append(dialogWidget).append(".show();\"  icon=\"ui-icon-zoomin\" process=\"@form\" update=\":formDetail").append(clazz.getSimpleName()).append("\" >\n");
-        view.append("                       <f:setPropertyActionListener value=\"#{").append(varName).append("}\" target=\"#{").append(managedBean).append(".entity}\" />\n");
-        view.append("                   </p:commandButton>\n");
-        view.append("                   <p:button icon=\"ui-icon-pencil\" outcome=\"create").append(clazz.getSimpleName()).append("\" >\n");
-        view.append("                       <f:param name=\"id\" value=\"").append(idExpression).append("\" />\n");
-        view.append("                   </p:button>\n");
-        view.append("                   <p:commandButton icon=\"ui-icon-trash\" process=\"@form\" update=\"@form\" action=\"#{").append(managedBean).append(".delete}\" >\n");
-        view.append("                       <f:setPropertyActionListener value=\"").append(idExpression).append("\" target=\"#{").append(managedBean).append(".id}\" />\n");
-        view.append("                       <x:confirmation ").append("message=\"#{xmsg['").append("confirmDelete").append("']} - #{").append(varName).append("}\" />\n");
-        view.append("                   </p:commandButton>\n");
-        view.append("               </p:column>\n");
-        view.append("               <f:facet name=\"footer\">\n");
-        view.append("                   <xc:auditDelete for=\"#{classMB.").append(varName).append("}\"/>\n");
-        view.append("               </f:facet>\n");
-        view.append("           </p:dataTable>\n");
-        view.append("       </h:form>\n\n");
-        view.append("       <p:dialog widgetVar=\"").append(dialogWidget).append("\" header=\"#{").append(resourceBundle).append("['").append(varName).append(".detail']}\" appendToBody=\"true\" modal=\"true\" height=\"500\" width=\"800\">\n");
-        view.append("           <ui:include src=\"detail").append(clazz.getSimpleName()).append(".xhtml\" />\n");
-        view.append("       </p:dialog>\n");
-        view.append("   </ui:define>\n");
-        view.append("</ui:composition>");
-        
-        return view.toString();
-    }
-
-    /**
-     * Deprecated. From 1.2 version templates are loaded from freemarker.
-     */
-    @Deprecated
-    public static String getDetail(Class clazz, String resourceBundle) {
-        List<Field> fields = getFields(clazz);
-        String managedBean = getNameManagedBean(clazz);
-        String dialogWidget = getDialogWidget(clazz);
-        StringBuilder view = new StringBuilder();
-        view.append(getHeader(null));
-        view.append("   <h:form id=\"formDetail").append(clazz.getSimpleName()).append("\">\n");
-        view.append("       <h:panelGrid columns=\"4\" styleClass=\"grid-detail\">\n");
-        for (Field field : fields) {
-            if (isAnnotationPresent(field, Id.class) || isAnnotationPresent(field, ManyToMany.class) || isAnnotationPresent(field, OneToMany.class)) {
-                continue;
-            }
-            String varExpression = "#{" + managedBean + ".entity." + field.getName() + "}";
-            view.append("\n");
-            view.append("           ").append(getLabel(field, false, resourceBundle));
-            view.append(getText(field, varExpression, "           "));
-        }
-        view.append("\n").append("       </h:panelGrid>\n");
-        view.append("       <p:separator/>\n");
-        view.append("       <div style=\"text-align: center;\">\n");
-        view.append("           <p:commandButton type=\"button\" value=\"#{xmsg['close']}\" onclick=\"").append(dialogWidget).append(".hide()\" />\n");
-        view.append("           <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
-        view.append("       </div>\n");
-        view.append("   </h:form>\n");
-        view.append("</ui:composition>");
-        
-        return view.toString();
-    }
-    
     public static String getDialogWidget(Class clazz) {
         return "widget" + clazz.getSimpleName() + "Detail";
     }
-    
+
     public static String getNameManagedBean(Class clazz) {
         return getNameLower(clazz) + "MB";
     }
 
-    /**
-     * Deprecated. From 1.2 version templates are loaded from freemarker.
-     */
-    @Deprecated
-    public static String getCreateForm(Class clazz, String resourceBundle) {
-        
-        resourceBundle = getResourceBundle(resourceBundle);
-        StringBuilder view = new StringBuilder();
-        String managedBean = getNameManagedBean(clazz);
-        view.append(getHeader(null));
-        view.append("   <h:form>\n");
-        view.append("       <xc:modalMessages/>\n");
-        view.append(getInputsFromForm(clazz, resourceBundle, "          ", managedBean, ""));
-        view.append("       <p:separator/>\n");
-        view.append("       <h:outputText value=\"#{xmsg['requiredFieldsForm']}\"/>\n");
-        view.append("       <div style=\"text-align: center;\">\n");
-        view.append("           <p:commandButton process=\"@form\" update=\"@form\" action=\"#{");
-        view.append(managedBean).append(".save}\" value=\"#{xmsg['save']}\" />\n");
-        view.append("           <xc:audit for=\"#{").append(managedBean).append(".entity}\"/>\n");
-        view.append("       </div>\n");
-        view.append("   </h:form>\n");
-        view.append("</ui:composition>");
-        return view.toString();
-    }
-
-    /**
-     * Deprecated. From 1.2 version templates are loaded from freemarker.
-     */
-    @Deprecated
-    public static String getInputsFromForm(Class clazz, String resourceBundle, String ident, String managedBean, String extraField) {
-        
-        StringBuilder view = new StringBuilder();
-        StringBuilder extraFieldSets = new StringBuilder();
-        view.append(ident).append("<h:panelGrid columns=\"2\" styleClass=\"grid-form\">\n");
-        List<Field> fields = getFields(clazz);
-        
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Id.class)) {
-                continue;
-            }
-            String tag = "";
-            String converter = "";
-            String mask = "";
-            boolean hasSelectItem = false;
-            boolean hasEmptySelect = false;
-            Integer maxlength = null;
-            boolean required = false;
-            if (isAnnotationPresent(field, NotNull.class) || isAnnotationPresent(field, NotBlank.class)) {
-                required = true;
-            }
-            if (field.getType().equals(Date.class) || field.getType().equals(Calendar.class)) {
-                tag = "p:calendar";
-            } else if (isDecimal(field)) {
-                tag = "xc:inputNumber";
-            } else if (field.getType().equals(Integer.class) || field.getType().equals(int.class)
-                    || field.getType().equals(Long.class) || field.getType().equals(long.class)) {
-                tag = "p:inputMask";
-                mask = "9?999999999";
-            } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
-                tag = "h:selectBooleanCheckbox";
-            } else if (isAnnotationPresent(field, ManyToOne.class) || field.getType().isEnum()) {
-                tag = "h:selectOneMenu";
-                if (!field.getType().isEnum()) {
-                    converter = "entityConverter";
-                }
-                hasSelectItem = true;
-                hasEmptySelect = true;
-            } else if (isAnnotationPresent(field, OneToOne.class)) {
-                extraFieldSets.append("\n");
-                extraFieldSets.append(ident).append("<p:fieldset legend=\"#{").append(resourceBundle).append("['").append(getNameLower(field.getDeclaringClass())).append(".").append(field.getName()).append("']}\">\n");
-                extraFieldSets.append(getInputsFromForm(field.getType(), resourceBundle, ident + "     ", managedBean, field.getName()));
-                extraFieldSets.append(ident).append("</p:fieldset>\n");
-                continue;
-            } else if (isAnnotationPresent(field, OneToMany.class) || isAnnotationPresent(field, ManyToMany.class)) {
-                tag = "h:selectManyCheckbox";
-                converter = "entityConverter";
-                hasSelectItem = true;
-            } else {
-                if (field.getType().equals(String.class)) {
-                    maxlength = DEFAULT_MAX_LENGTH;
-                    Size size = field.getAnnotation(Size.class);
-                    if (size != null) {
-                        maxlength = size.max();
-                    }
-                }
-                tag = "p:inputText";
-            }
-            appendTagValue(view, tag, field, managedBean, converter, resourceBundle, hasSelectItem, hasEmptySelect, maxlength, required, ident + "    ", extraField, mask);
-        }
-        view.append(ident).append("</h:panelGrid>\n");
-        view.append(extraFieldSets);
-        
-        return view.toString();
-    }
-    
     public static boolean isLazy(Field field) {
-        
+
         Annotation annotation = field.getAnnotation(ManyToOne.class);
         //ManyToOne
         if (annotation == null) {
@@ -533,95 +287,10 @@ public class BeanCreator {
         if (annotation != null && ((OneToOne) annotation).fetch() != null && ((OneToOne) annotation).fetch().equals(FetchType.LAZY)) {
             return true;
         }
-        
+
         return false;
     }
-    
-    public static String getText(Field field, String varExpression, String ident) {
-        
-        StringBuilder text = new StringBuilder();
-        boolean hasContent = false;
-        text.append(ident).append("<h:outputText value=\"").append(varExpression).append("\"");
-        if (field.getType().equals(Date.class)) {
-            text.append(">\n").append(ident).append("   <f:convertDateTime />\n");
-            hasContent = true;
-        } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
-            text.append(" converter =\"yesNoConverter\" ");
-        } else if (isDecimal(field)) {
-            text.append(">\n").append(ident).append("   <f:convertNumber />\n");
-            hasContent = true;
-        } else if (isLazy(field)) {
-            text.append(">\n").append(ident).append("   <x:initializer/>\n");
-            hasContent = true;
-        }
-        if (hasContent) {
-            text.append(ident).append("</h:outputText>\n");
-        } else {
-            text.append("/>\n");
-        }
-        
-        return text.toString();
-    }
-    
-    public static String getLabel(Field field, boolean required, String resourceBundle) {
-        
-        StringBuilder label = new StringBuilder();
-        label.append("<h:outputLabel value=\"").append(required ? "* " : "").append("#{").append(resourceBundle);
-        label.append("['").append(getNameLower(field.getDeclaringClass())).append(".").append(field.getName()).append("']}:\" />\n");
-        
-        return label.toString();
-    }
-    
-    public static void appendTagValue(StringBuilder view, String tag, Field field, String managedBean, String converter, String resourceBundle,
-            boolean hasSelectItem, boolean hasEmptySelect, Integer maxlength, boolean required, String ident, String extraField, String mask) {
-        String type;
-        if (field.getType().equals(Collection.class) || field.getType().equals(List.class) || field.getType().equals(Set.class)) {
-            ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-            Class<?> clazz = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-            type = getNameLower(clazz);
-        } else {
-            type = getNameLower(field.getType());
-        }
-        view.append("\n");
-        view.append(ident).append(getLabel(field, required, resourceBundle));
-        view.append(ident).append("<").append(tag).append(" value=\"#{").append(managedBean).append(".entity.").append(extraField != null && !extraField.isEmpty() ? extraField + "." : "").append(field.getName()).append("}\"");
-        if (converter != null && !converter.trim().isEmpty()) {
-            view.append(" converter=\"").append(converter).append("\" ");
-        }
-        if (mask != null && !mask.trim().isEmpty()) {
-            view.append(" mask=\"").append(mask).append("\" placeHolder=\"\" ");
-        }
-        if (maxlength != null && maxlength > 0) {
-            //add maxlength when mask is empty
-            if (mask == null || mask.trim().isEmpty()) {
-                view.append(" maxlength=\"").append(maxlength).append("\" ");
-            }
-            view.append(" size=\"").append(DEFAULT_SIZE).append("\" ");
-        }
-        if (hasSelectItem) {
-            view.append(">");
-            view.append("\n");
-            if (isLazy(field)) {
-                view.append(ident).append("     ").append("<x:initializer/>");
-                view.append("\n");
-            }
-            if (hasEmptySelect) {
-                view.append(ident).append("     ").append("<f:selectItem itemLabel=\"#{xmsg['select']}\" />");
-                view.append("\n");
-                
-            }
-            view.append(ident).append("     ").append("<f:selectItems value=\"#{findAllBean.get(").append("classMB.").append(type).append(")}\"");
-            view.append(" var=\"").append(type).append("\"");
-            view.append(" itemLabel=\"#{").append(type).append("}\"");
-            view.append(" />");
-            view.append("\n");
-            view.append(ident).append("</").append(tag).append(">");
-        } else {
-            view.append(" />");
-        }
-        view.append("\n");
-    }
-    
+
     public static String getI18N(List<MappedBean> mappedBeans) {
         if (mappedBeans == null) {
             return null;
@@ -633,7 +302,71 @@ public class BeanCreator {
         i18n.append(getMenuI18N(mappedBeans));
         return i18n.toString();
     }
-    
+
+    public static void writeFile(String location, String fileName, String content, StringBuilder logBuilder) {
+
+        //create dir
+        File dir = new File(location);
+        dir.mkdirs();
+        //create file
+        File file = new File(location + File.separator + fileName);
+        if (!file.exists()) {
+            FileOutputStream outputStream;
+            try {
+                outputStream = new FileOutputStream(file);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                writer.write(content);
+                writer.close();
+                outputStream.close();
+            } catch (IOException ex) {
+                log(logBuilder, "IOException: " + ex.getMessage() + ". More details see java log.");
+                logger.log(Level.SEVERE, null, ex);
+            }
+        } else {
+            log(logBuilder, "File: " + fileName + " already exists");
+        }
+    }
+
+    public static void log(StringBuilder logBuilder, String message) {
+        if (logBuilder != null) {
+            logBuilder.append(SIMPLE_DATE_FORMAT.format(new Date())).append(" ").append(message).append("\n");
+        }
+    }
+
+    public static void writeBean(List<MappedBean> mappedBeans, BeanConfiguration configuration, StringBuilder logBuilder) {
+        for (MappedBean mappedBean : mappedBeans) {
+            log(logBuilder, "Creating class " + mappedBean.getClassName());
+            String classSimpleName = mappedBean.getEntityClass().getSimpleName();
+            String nameLower = getNameLower(mappedBean.getEntityClass());
+
+            //ManagedBean
+            writeFile(configuration.getManagedBeanLocation(), classSimpleName + SUFFIX_MANAGED_BEAN, mappedBean.getManagedBean(), logBuilder);
+            //BusinessObject
+            writeFile(configuration.getBusinessObjectLocation(), classSimpleName + SUFFIX_BUSINESS_OBJECT, mappedBean.getBusinnesObject(), logBuilder);
+            //DAO
+            writeFile(configuration.getDaoLocation(), classSimpleName + SUFFIX_DAO, mappedBean.getDao(), logBuilder);
+            //DAOImpl
+            writeFile(configuration.getDaoImplLocation(), classSimpleName + SUFFIX_DAO_IMPL, mappedBean.getDaoImpl(), logBuilder);
+
+            //Views
+            //View Create
+            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_CREATE + classSimpleName + ".xhtml", mappedBean.getCreateView(), logBuilder);
+            //View Form Create
+            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_FORM_CREATE + classSimpleName + ".xhtml", mappedBean.getFormCreateView(), logBuilder);
+            //View Menu
+            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_MENU + classSimpleName + ".xhtml", mappedBean.getMenu(), logBuilder);
+
+            //View List
+            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_LIST + classSimpleName + ".xhtml", mappedBean.getListView(), logBuilder);
+
+            //View Detail
+            writeFile(configuration.getViewLocation() + File.separator + nameLower, PREFFIX_VIEW_DETAIL + classSimpleName + ".xhtml", mappedBean.getDetail(), logBuilder);
+        }
+
+        log(logBuilder, "Finished!");
+
+    }
+
     public static byte[] createBeanZipFile(List<MappedBean> mappedBeans, String classBean, String viewTemplate, BeanConfiguration configuration) throws IOException, TemplateException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream out = new ZipOutputStream(baos);
@@ -644,24 +377,24 @@ public class BeanCreator {
             String classSimpleName = mappedBean.getEntityClass().getSimpleName();
             String nameLower = getNameLower(mappedBean.getEntityClass());
             //Managed bean
-            putEntry(out, "mb/" + classSimpleName + "MB.java", mappedBean.getManagedBean());
+            putEntry(out, "mb/" + classSimpleName + SUFFIX_MANAGED_BEAN, mappedBean.getManagedBean());
             //BO
-            putEntry(out, "bo/" + classSimpleName + "BO.java", mappedBean.getBusinnesObject());
+            putEntry(out, "bo/" + classSimpleName + SUFFIX_BUSINESS_OBJECT, mappedBean.getBusinnesObject());
             //DAO
-            putEntry(out, "dao/" + classSimpleName + "DAO.java", mappedBean.getDao());
+            putEntry(out, "dao/" + classSimpleName + SUFFIX_DAO, mappedBean.getDao());
             //DAO Impl
-            putEntry(out, "dao/impl/" + classSimpleName + "DAOImpl.java", mappedBean.getDaoImpl());
+            putEntry(out, "dao/impl/" + classSimpleName + SUFFIX_DAO_IMPL, mappedBean.getDaoImpl());
             //create
-            putEntry(out, viewPath + nameLower + "/create" + classSimpleName + ".xhtml", mappedBean.getCreateView());
+            putEntry(out, viewPath + nameLower + "/" + PREFFIX_VIEW_CREATE + classSimpleName + ".xhtml", mappedBean.getCreateView());
             //form
-            putEntry(out, viewPath + nameLower + "/formCreate" + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
+            putEntry(out, viewPath + nameLower + "/" + PREFFIX_VIEW_FORM_CREATE + classSimpleName + ".xhtml", mappedBean.getFormCreateView());
             //list
             putEntry(out, getUrlForList(nameLower, classSimpleName, configuration) + ".xhtml", mappedBean.getListView());
             //detail
-            putEntry(out, viewPath + nameLower + "/detail" + classSimpleName + ".xhtml", mappedBean.getDetail());
+            putEntry(out, viewPath + nameLower + "/" + PREFFIX_VIEW_DETAIL + classSimpleName + ".xhtml", mappedBean.getDetail());
             //menu
-            putEntry(out, viewPath + nameLower + "/menu" + classSimpleName + ".xhtml", mappedBean.getMenu());
-            
+            putEntry(out, viewPath + nameLower + "/" + PREFFIX_VIEW_MENU + classSimpleName + ".xhtml", mappedBean.getMenu());
+
         }
         //template
         putEntry(out, getViewTemplatePath(configuration), viewTemplate);
@@ -673,14 +406,14 @@ public class BeanCreator {
         for (String locale : LOCALES_MAKER) {
             putEntry(out, "messages_" + locale + ".properties", i18n);
         }
-        
+
         out.finish();
         out.flush();
         out.close();
-        
+
         return baos.toByteArray();
     }
-    
+
     public static String getMenuI18N(List<MappedBean> mappedBeans) {
         StringBuilder builder = new StringBuilder();
         builder.append("\n\n#").append("menu").append("\n");
@@ -690,28 +423,28 @@ public class BeanCreator {
             builder.append(mappedBean.getHumanClassName());
             builder.append("\n");
         }
-        
-        
+
+
         return builder.toString();
     }
-    
+
     private static String getUrlForList(String nameLower, String classSimpleName, BeanConfiguration configuration) {
-        return getViewPath(configuration) + nameLower + "/list" + classSimpleName;
+        return getViewPath(configuration) + nameLower + "/" + PREFFIX_VIEW_LIST + classSimpleName;
     }
-    
+
     private static String getResourceBundle(String resourceBundle) {
         if (resourceBundle == null || resourceBundle.trim().isEmpty()) {
-            return "msg";
+            return DEFAULT_RESOURCE_BUNDLE;
         }
         return resourceBundle;
     }
-    
+
     public static String getMenubar(List<MappedBean> mappedBeans, String resourceBundle, BeanConfiguration configuration) {
         if (mappedBeans == null || mappedBeans.isEmpty()) {
             return null;
         }
         try {
-            
+
             Template template = BeanCreator.getTemplate("menubar.ftl");
             StringWriter writer = new StringWriter();
             Map attributes = new HashMap();
@@ -731,11 +464,11 @@ public class BeanCreator {
         } catch (TemplateException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-        
+
         return "";
-        
+
     }
-    
+
     public static String getViewPath(BeanConfiguration configuration) {
         if (configuration != null && configuration.getViewPath() != null && !configuration.getViewPath().isEmpty()) {
             StringBuilder builder = new StringBuilder();
@@ -751,15 +484,15 @@ public class BeanCreator {
         }
         return "view/";
     }
-    
+
     public static String getViewTemplatePath(BeanConfiguration configuration) {
         if (configuration.getTemplate() != null && !configuration.getTemplate().isEmpty()) {
             return configuration.getTemplate().startsWith("/") ? configuration.getTemplate().substring(1, configuration.getTemplate().length()) : configuration.getTemplate();
         } else {
-            return "template/mainTemplate.xhtml";
+            return DEFAULT_TEMPLATE;
         }
     }
-    
+
     public static void putEntry(ZipOutputStream out, String fileName, String content) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream));
@@ -771,7 +504,7 @@ public class BeanCreator {
         out.write(byteArrayOutputStream.toByteArray());
         out.closeEntry();
     }
-    
+
     public static List<Field> getFields(Class entity) {
         List<Field> fields = new ArrayList<Field>();
         fields.addAll(Arrays.asList(entity.getDeclaredFields()));
@@ -815,20 +548,20 @@ public class BeanCreator {
             return null;
         }
     }
-    
+
     public static String getNameLower(Class clazz) {
         return StringUtils.getLowerFirstLetter(clazz.getSimpleName());
     }
-    
+
     public static boolean isDecimal(Field field) {
         return field.getType().equals(BigDecimal.class) || field.getType().equals(Double.class) || field.getType().equals(double.class);
     }
-    
+
     public static boolean isInteger(Field field) {
         return field.getType().equals(Integer.class) || field.getType().equals(int.class)
                 || field.getType().equals(Long.class) || field.getType().equals(long.class);
     }
-    
+
     public static boolean isRequired(Field field) {
         return isAnnotationPresent(field, NotNull.class) || isAnnotationPresent(field, NotBlank.class) || isAnnotationPresent(field, NotEmpty.class);
     }

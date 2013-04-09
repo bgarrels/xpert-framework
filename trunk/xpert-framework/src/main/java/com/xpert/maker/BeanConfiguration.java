@@ -19,6 +19,54 @@ public class BeanConfiguration {
     private String resourceBundle;
     private String template;
     private String viewPath;
+    
+    //location attributes
+    private String managedBeanLocation;
+    private String businessObjectLocation;
+    private String daoLocation;
+    private String daoImplLocation;
+    private String viewLocation;
+
+    public String getManagedBeanLocation() {
+        return managedBeanLocation;
+    }
+
+    public void setManagedBeanLocation(String managedBeanLocation) {
+        this.managedBeanLocation = managedBeanLocation;
+    }
+
+    public String getBusinessObjectLocation() {
+        return businessObjectLocation;
+    }
+
+    public void setBusinessObjectLocation(String businessObjectLocation) {
+        this.businessObjectLocation = businessObjectLocation;
+    }
+
+    public String getDaoLocation() {
+        return daoLocation;
+    }
+
+    public void setDaoLocation(String daoLocation) {
+        this.daoLocation = daoLocation;
+    }
+
+    public String getDaoImplLocation() {
+        return daoImplLocation;
+    }
+
+    public void setDaoImplLocation(String daoImplLocation) {
+        this.daoImplLocation = daoImplLocation;
+    }
+
+    public String getViewLocation() {
+        return viewLocation;
+    }
+
+    public void setViewLocation(String viewLocation) {
+        this.viewLocation = viewLocation;
+    }
+    
 
     public String getViewPath() {
         return viewPath;
