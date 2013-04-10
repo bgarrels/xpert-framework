@@ -57,16 +57,31 @@ public class QueryBuilder {
     }
 
     public QueryBuilder leftJoin(String join) {
-        this.joins.append("LEFT JOIN FETCH ").append(join).append(" ");
+        this.joins.append("LEFT JOIN ").append(join).append(" ");
         return this;
     }
 
     public QueryBuilder innerJoin(String join) {
-        this.joins.append("INNER JOIN FETCH ").append(join).append(" ");
+        this.joins.append("INNER JOIN ").append(join).append(" ");
         return this;
     }
 
     public QueryBuilder join(String join) {
+        this.joins.append("JOIN ").append(join).append(" ");
+        return this;
+    }
+
+    public QueryBuilder leftJoinFetch(String join) {
+        this.joins.append("LEFT JOIN FETCH ").append(join).append(" ");
+        return this;
+    }
+
+    public QueryBuilder innerJoinFetch(String join) {
+        this.joins.append("INNER JOIN FETCH ").append(join).append(" ");
+        return this;
+    }
+
+    public QueryBuilder joinFetch(String join) {
         this.joins.append("JOIN FETCH ").append(join).append(" ");
         return this;
     }
