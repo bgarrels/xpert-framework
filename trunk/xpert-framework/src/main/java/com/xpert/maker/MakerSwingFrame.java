@@ -7,16 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
  * @author ayslan
  */
-public abstract class MakerMainFrame extends javax.swing.JFrame {
+public abstract class MakerSwingFrame extends javax.swing.JFrame {
 
     private static final String JAVA_PROJECT_PREFFIX = File.separator + "java";
-    private static final Logger logger = Logger.getLogger(MakerMainFrame.class.getName());
+    private static final Logger logger = Logger.getLogger(MakerSwingFrame.class.getName());
     private String i18n;
     private BeanConfiguration beanConfiguration;
     private ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
@@ -30,9 +32,8 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
 
     public abstract String getDefaultBaseDAOImpl();
 
-    public static void run(final MakerMainFrame maker) {
+    public static void run(final MakerSwingFrame maker) {
         java.awt.EventQueue.invokeLater(new Runnable() {
-
             public void run() {
                 maker.center();
                 maker.setVisible(true);
@@ -62,6 +63,50 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
 
     public void selectNone() {
         listClasses.setSelectedIndices(new int[0]);
+    }
+
+    public boolean validateField(String value, String fieldName) {
+        if (value == null || value.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, fieldName + " is required", "Warning", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validateConfiguration() {
+
+        if (!validateField(beanConfiguration.getManagedBeanLocation(), "ManagedBean location")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getManagedBean(), "ManagedBean package")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getBusinessObjectLocation(), "Business Object (BO) location")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getBusinessObject(), "Business Object (BO) package")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getDaoLocation(), "DAO location")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getDao(), "DAO package")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getDaoImplLocation(), "DAO Implementation location")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getDaoImpl(), "DAO Implementation package")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getViewLocation(), "View location")) {
+            return false;
+        }
+        if (!validateField(beanConfiguration.getTemplate(), "Facelets Template")) {
+            return false;
+        }
+
+        return true;
     }
 
     public void generate() {
@@ -94,14 +139,15 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
         beanConfiguration.setDaoImplLocation(textDAOImpl.getText());
         beanConfiguration.setViewLocation(textView.getText());
 
-        PersistenceMappedBean persistenceMappedBean = new PersistenceMappedBean(null);
-        List<MappedBean> mappedBeans = persistenceMappedBean.getMappedBeans(classesList, beanConfiguration);
-        i18n = BeanCreator.getI18N(mappedBeans);
-        textAreaI18n.setText(i18n);
-        StringBuilder logBuilder = new StringBuilder();
-        BeanCreator.writeBean(mappedBeans, beanConfiguration, logBuilder);
-        textAreaLog.setText(logBuilder.toString());
-
+        if (validateConfiguration()) {
+            PersistenceMappedBean persistenceMappedBean = new PersistenceMappedBean(null);
+            List<MappedBean> mappedBeans = persistenceMappedBean.getMappedBeans(classesList, beanConfiguration);
+            i18n = BeanCreator.getI18N(mappedBeans);
+            textAreaI18n.setText(i18n);
+            StringBuilder logBuilder = new StringBuilder();
+            BeanCreator.writeBean(mappedBeans, beanConfiguration, logBuilder);
+            textAreaLog.setText(logBuilder.toString());
+        }
     }
 
     public void showFileChooser(JTextField textSelection, JTextField textPackage) {
@@ -137,13 +183,7 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MakerMainFrame
      */
-    public MakerMainFrame() {
-        try {
-            UIManager.setLookAndFeel(
-                    UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, null, ex);
-        }
+    public MakerSwingFrame() {
         initComponents();
         initFromConfiguration();
 
@@ -506,7 +546,7 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonSelectBO))
                     .addComponent(textPackageBO, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -798,7 +838,6 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton buttonSelectAll;
     private javax.swing.JButton buttonSelectBO;
     private javax.swing.JButton buttonSelectDAO;
-    private javax.swing.JButton buttonSelectDAO2;
     private javax.swing.JButton buttonSelectDAOImpl;
     private javax.swing.JButton buttonSelectMB;
     private javax.swing.JButton buttonSelectNone;
@@ -809,7 +848,6 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -817,7 +855,6 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -825,7 +862,6 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel labelManagedBean;
     private javax.swing.JLabel labelManagedBean2;
     private javax.swing.JLabel labelManagedBean3;
-    private javax.swing.JLabel labelManagedBean4;
     private javax.swing.JLabel labelManagedBean5;
     private javax.swing.JLabel labelPackageName;
     private javax.swing.JLabel labelSelectClasses;
@@ -844,12 +880,10 @@ public abstract class MakerMainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField textBusinessObject;
     private javax.swing.JTextField textDAO;
     private javax.swing.JTextField textDAOImpl;
-    private javax.swing.JTextField textDAOImpl1;
     private javax.swing.JTextField textManagedBean;
     private javax.swing.JTextField textPackageBO;
     private javax.swing.JTextField textPackageDAO;
     private javax.swing.JTextField textPackageDAOImpl;
-    private javax.swing.JTextField textPackageDAOImpl1;
     private javax.swing.JTextField textPackageMB;
     private javax.swing.JTextField textPackageName;
     private javax.swing.JTextField textResourceBundle;
