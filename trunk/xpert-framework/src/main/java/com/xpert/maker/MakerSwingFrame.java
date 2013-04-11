@@ -34,6 +34,7 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
 
     public static void run(final MakerSwingFrame maker) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 maker.center();
                 maker.setVisible(true);
@@ -47,7 +48,7 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
             listClasses.setListData(classes.toArray(new Class[classes.size()]));
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage() + ". See java log for details", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -139,15 +140,14 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
         beanConfiguration.setDaoImplLocation(textDAOImpl.getText());
         beanConfiguration.setViewLocation(textView.getText());
 
-        if (validateConfiguration()) {
-            PersistenceMappedBean persistenceMappedBean = new PersistenceMappedBean(null);
-            List<MappedBean> mappedBeans = persistenceMappedBean.getMappedBeans(classesList, beanConfiguration);
-            i18n = BeanCreator.getI18N(mappedBeans);
-            textAreaI18n.setText(i18n);
-            StringBuilder logBuilder = new StringBuilder();
-            BeanCreator.writeBean(mappedBeans, beanConfiguration, logBuilder);
-            textAreaLog.setText(logBuilder.toString());
-        }
+        PersistenceMappedBean persistenceMappedBean = new PersistenceMappedBean(null);
+        List<MappedBean> mappedBeans = persistenceMappedBean.getMappedBeans(classesList, beanConfiguration);
+        i18n = BeanCreator.getI18N(mappedBeans);
+        textAreaI18n.setText(i18n);
+        StringBuilder logBuilder = new StringBuilder();
+        BeanCreator.writeBean(mappedBeans, beanConfiguration, logBuilder);
+        textAreaLog.setText(logBuilder.toString());
+        
     }
 
     public void showFileChooser(JTextField textSelection, JTextField textPackage) {

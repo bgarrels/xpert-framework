@@ -50,7 +50,7 @@ public class AuditDeleteBean {
             List<Restriction> restrictions = new ArrayList<Restriction>();
             restrictions.add(new Restriction("entity", Audit.getEntityName(entity)));
             restrictions.add(new Restriction("auditingType", AuditingType.DELETE));
-            auditings = new LazyDataModelImpl<AbstractAuditing>("eventDate DESC", restrictions, baseDAO, new JoinBuilder("a").leftJoin("a.metadatas"));
+            auditings = new LazyDataModelImpl<AbstractAuditing>("eventDate DESC", restrictions, baseDAO, new JoinBuilder("a").leftJoinFetch("a.metadatas"));
         }
     }
 

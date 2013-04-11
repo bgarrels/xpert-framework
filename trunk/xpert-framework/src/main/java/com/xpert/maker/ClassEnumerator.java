@@ -6,11 +6,15 @@ package com.xpert.maker;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -93,14 +97,16 @@ public class ClassEnumerator {
             }
         }
         log("Package: '" + pkgname + "' becomes Resource: '" + resource.toString() + "'");
-
-        resource.getPath();
-        if (resource.toString().startsWith("jar:")) {
-            processJarfile(resource, pkgname, classes);
-        } else {
-            processDirectory(new File(resource.getPath()), pkgname, classes);
+        try {
+            String path = URLDecoder.decode(resource.getPath(), "UTF-8");
+            if (resource.toString().startsWith("jar:")) {
+                processJarfile(resource, pkgname, classes);
+            } else {
+                processDirectory(new File(path), pkgname, classes);
+            }
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
         }
-
         return classes;
     }
 }
