@@ -19,6 +19,8 @@
         <cc:attribute name="resourceBundle"/>
         <cc:attribute name="template"/>
         <cc:attribute name="viewPath"/>
+        <cc:attribute name="managedBeanSuffix"/>
+        <cc:attribute name="businessObjectSuffix"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
@@ -34,6 +36,8 @@
         <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setResourceBundle(cc.attrs.resourceBundle)}" />
         <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setTemplate(cc.attrs.template)}" />
         <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setViewPath(cc.attrs.viewPath)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setBusinessObjectSuffix(cc.attrs.businessObjectSuffix)}" />
+        <f:event type="preRenderComponent" listener="#{beanMaker.configuration.setManagedBeanSuffix(cc.attrs.managedBeanSuffix)}" />
         <h:form prependId="false">
             <p:messages/>
             <p:tabView>
@@ -85,6 +89,14 @@
                                 <h:outputLabel value="Author:"/>
                                 <p:inputText value="#{beanMaker.author}" size="50"/>
                                 <h:panelGroup/>
+
+                                <h:outputLabel value="Managed Bean Suffix:"/>
+                                <p:inputText value="#{beanMaker.configuration.managedBeanSuffix}" size="50"/>
+                                <h:outputText value="(Default is 'MB', example: 'PersonMB.java')"/>
+                                
+                                <h:outputLabel value="Business Object Suffix:"/>
+                                <p:inputText value="#{beanMaker.configuration.businessObjectSuffix}" size="50"/>
+                                <h:outputText value="(Default is 'BO', example: 'PersonBO.java')"/>
 
                             </h:panelGrid>
                         </p:fieldset>

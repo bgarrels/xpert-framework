@@ -46,10 +46,10 @@ public class BeanCreator {
     private static final int DEFAULT_MAX_LENGTH = 255;
     private static final int SIZE_ANNOTATION_MAX_DEFAULT = 2147483647;
     private static final String[] LOCALES_MAKER = {"pt_BR", "en", "es"};
-    public static final String SUFFIX_MANAGED_BEAN = "MB.java";
-    public static final String SUFFIX_BUSINESS_OBJECT = "BO.java";
-    public static final String SUFFIX_DAO = "DAO.java";
-    public static final String SUFFIX_DAO_IMPL = "DAOImpl.java";
+    public static final String SUFFIX_MANAGED_BEAN = "MB";
+    public static final String SUFFIX_BUSINESS_OBJECT = "BO";
+    public static final String SUFFIX_DAO = "DAO";
+    public static final String SUFFIX_DAO_IMPL = "DAOImpl";
     public static final String PREFFIX_VIEW_CREATE = "create";
     public static final String PREFFIX_VIEW_FORM_CREATE = "formCreate";
     public static final String PREFFIX_VIEW_LIST = "list";
@@ -70,7 +70,8 @@ public class BeanCreator {
         ViewEntity viewEntity = createViewEntity(bean.getEntity());
 
         if (bean.getBeanType().isView()) {
-            return getViewTemplate(viewEntity, configuration.getResourceBundle(), bean.getBeanType().getTemplate(), configuration == null ? null : configuration.getTemplate());
+            return getViewTemplate(viewEntity, configuration.getResourceBundle(),
+                    bean.getBeanType().getTemplate(), configuration == null ? null : configuration.getTemplate(), configuration);
         }
 
         Template template = getTemplate(bean.getBeanType().getTemplate());
@@ -88,12 +89,14 @@ public class BeanCreator {
         return writer.toString();
     }
 
-    public static String getViewTemplate(ViewEntity viewEntity, String resourceBundle, String templatePath, String xhtmlTemplate) throws TemplateException, IOException {
+    public static String getViewTemplate(ViewEntity viewEntity, String resourceBundle,
+            String templatePath, String xhtmlTemplate, BeanConfiguration configuration) throws TemplateException, IOException {
         Template template = getTemplate(templatePath);
         StringWriter writer = new StringWriter();
         Map attributes = getDefaultParameters();
         attributes.put("entity", viewEntity);
         attributes.put("resourceBundle", resourceBundle);
+        attributes.put("configuration", configuration);
         attributes.put("template", xhtmlTemplate);
         template.process(attributes, writer);
         writer.flush();
@@ -237,10 +240,6 @@ public class BeanCreator {
         return "widget" + clazz.getSimpleName() + "Detail";
     }
 
-    public static String getNameManagedBean(Class clazz) {
-        return getNameLower(clazz) + "MB";
-    }
-
     public static boolean isLazy(Field field) {
 
         Annotation annotation = field.getAnnotation(ManyToOne.class);
@@ -336,6 +335,20 @@ public class BeanCreator {
         }
     }
 
+    public static String getManagedBeanSuffix(BeanConfiguration configuration) {
+        if (configuration != null && configuration.getManagedBeanSuffix() != null && !configuration.getManagedBeanSuffix().isEmpty()) {
+            return configuration.getManagedBeanSuffix();
+        }
+        return SUFFIX_MANAGED_BEAN;
+    }
+
+    public static String getBusinessObjectSuffix(BeanConfiguration configuration) {
+        if (configuration != null && configuration.getBusinessObjectSuffix() != null && !configuration.getBusinessObjectSuffix().isEmpty()) {
+            return configuration.getBusinessObjectSuffix();
+        }
+        return SUFFIX_BUSINESS_OBJECT;
+    }
+
     public static void writeBean(List<MappedBean> mappedBeans, BeanConfiguration configuration, StringBuilder logBuilder) {
         for (MappedBean mappedBean : mappedBeans) {
             log(logBuilder, "Mapping class " + mappedBean.getClassName());
@@ -344,21 +357,21 @@ public class BeanCreator {
 
             //ManagedBean
             if (configuration.getManagedBeanLocation() != null) {
-                writeFile(configuration.getManagedBeanLocation(), classSimpleName + SUFFIX_MANAGED_BEAN, mappedBean.getManagedBean(), logBuilder);
+                writeFile(configuration.getManagedBeanLocation(), classSimpleName + getManagedBeanSuffix(configuration) + ".java", mappedBean.getManagedBean(), logBuilder);
             }
             //BusinessObject
             if (configuration.getBusinessObjectLocation() != null) {
-                writeFile(configuration.getBusinessObjectLocation(), classSimpleName + SUFFIX_BUSINESS_OBJECT, mappedBean.getBusinnesObject(), logBuilder);
+                writeFile(configuration.getBusinessObjectLocation(), classSimpleName + getBusinessObjectSuffix(configuration) + ".java", mappedBean.getBusinnesObject(), logBuilder);
 
             }
             //DAO
             if (configuration.getDaoLocation() != null) {
-                writeFile(configuration.getDaoLocation(), classSimpleName + SUFFIX_DAO, mappedBean.getDao(), logBuilder);
+                writeFile(configuration.getDaoLocation(), classSimpleName + SUFFIX_DAO + ".java", mappedBean.getDao(), logBuilder);
 
             }
             //DAOImpl
             if (configuration.getDaoImplLocation() != null) {
-                writeFile(configuration.getDaoImplLocation(), classSimpleName + SUFFIX_DAO_IMPL, mappedBean.getDaoImpl(), logBuilder);
+                writeFile(configuration.getDaoImplLocation(), classSimpleName + SUFFIX_DAO_IMPL + ".java", mappedBean.getDaoImpl(), logBuilder);
             }
 
             //Views
@@ -392,13 +405,13 @@ public class BeanCreator {
             String classSimpleName = mappedBean.getEntityClass().getSimpleName();
             String nameLower = getNameLower(mappedBean.getEntityClass());
             //Managed bean
-            putEntry(out, "mb/" + classSimpleName + SUFFIX_MANAGED_BEAN, mappedBean.getManagedBean());
+            putEntry(out, "mb/" + classSimpleName + getManagedBeanSuffix(configuration) + ".java", mappedBean.getManagedBean());
             //BO
-            putEntry(out, "bo/" + classSimpleName + SUFFIX_BUSINESS_OBJECT, mappedBean.getBusinnesObject());
+            putEntry(out, "bo/" + classSimpleName + getBusinessObjectSuffix(configuration) + ".java", mappedBean.getBusinnesObject());
             //DAO
-            putEntry(out, "dao/" + classSimpleName + SUFFIX_DAO, mappedBean.getDao());
+            putEntry(out, "dao/" + classSimpleName + SUFFIX_DAO + ".java", mappedBean.getDao());
             //DAO Impl
-            putEntry(out, "dao/impl/" + classSimpleName + SUFFIX_DAO_IMPL, mappedBean.getDaoImpl());
+            putEntry(out, "dao/impl/" + classSimpleName + SUFFIX_DAO_IMPL + ".java", mappedBean.getDaoImpl());
             //create
             putEntry(out, viewPath + nameLower + "/" + PREFFIX_VIEW_CREATE + classSimpleName + ".xhtml", mappedBean.getCreateView());
             //form

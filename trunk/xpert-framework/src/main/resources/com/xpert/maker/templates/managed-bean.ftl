@@ -7,7 +7,7 @@ import com.xpert.core.crud.AbstractBusinessObject;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import ${configuration.businessObject}.${name}BO;
+import ${configuration.businessObject}.${name}${configuration.businessObjectSuffix};
 import ${entity.name};
 
 /**
@@ -16,14 +16,14 @@ import ${entity.name};
  */
 @ManagedBean
 @ViewScoped
-public class ${name}MB extends AbstractBaseBean<${name}> implements Serializable {
+public class ${name}${configuration.managedBeanSuffix} extends AbstractBaseBean<${name}> implements Serializable {
 
     @EJB
-    private ${name}BO ${nameLower}BO;
+    private ${name}${configuration.businessObjectSuffix} ${nameLower}${configuration.businessObjectSuffix};
 
     @Override
     public AbstractBusinessObject getBO() {
-        return ${nameLower}BO;
+        return ${nameLower}${configuration.businessObjectSuffix};
     }
 
     @Override

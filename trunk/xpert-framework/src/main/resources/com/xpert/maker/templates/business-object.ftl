@@ -16,7 +16,7 @@ import ${entity.name};
  * @author ${author}
  */
 @Stateless
-public class ${name}BO extends AbstractBusinessObject<${name}> {
+public class ${name}${configuration.businessObjectSuffix} extends AbstractBusinessObject<${name}> {
 
     @EJB
     private ${name}DAO ${nameLower}DAO;

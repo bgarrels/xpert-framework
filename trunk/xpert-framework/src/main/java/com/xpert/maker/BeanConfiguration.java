@@ -26,7 +26,27 @@ public class BeanConfiguration {
     private String daoLocation;
     private String daoImplLocation;
     private String viewLocation;
+    
+    //suffix/preffix
+    private String managedBeanSuffix;
+    private String businessObjectSuffix;
 
+    public String getBusinessObjectSuffix() {
+        return businessObjectSuffix;
+    }
+
+    public void setBusinessObjectSuffix(String businessObjectSuffix) {
+        this.businessObjectSuffix = businessObjectSuffix;
+    }
+
+    public String getManagedBeanSuffix() {
+        return managedBeanSuffix;
+    }
+
+    public void setManagedBeanSuffix(String managedBeanSuffix) {
+        this.managedBeanSuffix = managedBeanSuffix;
+    }
+    
     public String getManagedBeanLocation() {
         return managedBeanLocation;
     }

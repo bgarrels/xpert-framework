@@ -38,6 +38,14 @@ public class PersistenceMappedBean {
 
     public List<MappedBean> getMappedBeans(List<Class> classes, BeanConfiguration beanConfiguration) {
         List<MappedBean> mappedBeans = new ArrayList<MappedBean>();
+        if (beanConfiguration != null) {
+            if (beanConfiguration.getManagedBeanSuffix() == null || beanConfiguration.getManagedBeanSuffix().isEmpty()) {
+                beanConfiguration.setManagedBeanSuffix(BeanCreator.SUFFIX_MANAGED_BEAN);
+            }
+            if (beanConfiguration.getBusinessObjectSuffix() == null || beanConfiguration.getBusinessObjectSuffix().isEmpty()) {
+                beanConfiguration.setBusinessObjectSuffix(BeanCreator.SUFFIX_BUSINESS_OBJECT);
+            }
+        }
         for (Class clazz : classes) {
             try {
                 MappedBean mappedBean = new MappedBean(clazz);
@@ -64,6 +72,7 @@ public class PersistenceMappedBean {
 
     public void sortMappedBean(List<MappedBean> mappedBeans) {
         Collections.sort(mappedBeans, new Comparator<Object>() {
+
             @Override
             public int compare(Object o1, Object o2) {
                 return ((MappedBean) o1).getClass().getName().compareTo(((MappedBean) o2).getClass().getName());
@@ -73,6 +82,7 @@ public class PersistenceMappedBean {
 
     public void sortClass(List<Class> classes) {
         Collections.sort(classes, new Comparator<Object>() {
+
             @Override
             public int compare(Object o1, Object o2) {
                 return ((Class) o1).getName().compareTo(((Class) o2).getName());

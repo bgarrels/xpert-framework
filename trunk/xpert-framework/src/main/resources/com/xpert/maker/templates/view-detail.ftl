@@ -13,25 +13,25 @@
            
             <h:outputLabel value="${sharp}{${resourceBundle}['${entity.nameLower}.${field.name}']}:" />
             <#if field.lazy == true>
-            <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}">
+            <h:outputText value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}">
                 <x:initializer/>
             </h:outputText>
             </#if>
             <#if field.decimal == true>
-            <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}">
+            <h:outputText value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}">
                 <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
             </h:outputText>
             </#if>
             <#if field.date == true>
-            <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}">
+            <h:outputText value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}">
                 <f:convertDateTime />
             </h:outputText>
             </#if>
             <#if field.yesNo == true>
-            <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}" converter ="yesNoConverter" />
+            <h:outputText value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}" converter ="yesNoConverter" />
             </#if>
             <#if field.lazy == false && field.decimal == false && field.date == false && field.yesNo == false>
-            <h:outputText value="${sharp}{${entity.nameLower}MB.entity.${field.name}}"/>
+            <h:outputText value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}"/>
             </#if>
             </#if>
         </#list>
@@ -41,7 +41,7 @@
         <div style="text-align: center;">
             <p:commandButton type="button" value="${sharp}{xmsg['close']}" onclick="widget${entity.name}Detail.hide()" />
             <x:securityArea rolesAllowed="${entity.nameLower}.audit">
-                <xc:audit for="${sharp}{${entity.nameLower}MB.entity}"/>
+                <xc:audit for="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity}"/>
             </x:securityArea>
         </div>
     </h:form>

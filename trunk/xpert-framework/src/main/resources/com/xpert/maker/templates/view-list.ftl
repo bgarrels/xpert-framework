@@ -14,7 +14,7 @@
             <xc:modalMessages/>
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${sharp}{xmsg['noRecordFound']}"
                          var="${entity.nameLower}" rowIndexVar="index"
-                         value="${sharp}{${entity.nameLower}MB.dataModel}" lazy="true" >
+                         value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.dataModel}" lazy="true" >
                 <p:column style="text-align: center;">
                     <h:outputText value="${sharp}{index+1}"/>
                 </p:column>
@@ -49,7 +49,7 @@
                 </#list>
                 <p:column style="text-align: center;">
                     <p:commandButton oncomplete="widget${entity.name}Detail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetail${entity.name}" >
-                        <f:setPropertyActionListener value="${sharp}{${entity.nameLower}}" target="${sharp}{${entity.nameLower}MB.entity}" />
+                        <f:setPropertyActionListener value="${sharp}{${entity.nameLower}}" target="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity}" />
                     </p:commandButton>
                     <x:securityArea rolesAllowed="${entity.nameLower}.create">
                         <p:button icon="ui-icon-pencil" outcome="create${entity.name}" >
@@ -57,8 +57,8 @@
                         </p:button>
                     </x:securityArea>
                     <x:securityArea rolesAllowed="${entity.nameLower}.delete">
-                        <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="${sharp}{${entity.nameLower}MB.delete}" >
-                            <f:setPropertyActionListener value="${sharp}{${entity.nameLower}.id}" target="${sharp}{${entity.nameLower}MB.id}" />
+                        <p:commandButton icon="ui-icon-trash" process="@form" update="@form" action="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.delete}" >
+                            <f:setPropertyActionListener value="${sharp}{${entity.nameLower}.id}" target="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.id}" />
                             <x:confirmation message="${sharp}{xmsg['confirmDelete']} - ${sharp}{${entity.nameLower}}" />
                         </p:commandButton>
                     </x:securityArea>
