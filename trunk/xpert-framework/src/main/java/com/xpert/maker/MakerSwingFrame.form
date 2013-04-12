@@ -34,8 +34,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tabbedPanelMain" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="42" max="32767" attributes="0"/>
+              <Component id="tabbedPanelMain" min="-2" pref="585" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -100,7 +100,7 @@
                               <Component id="labelSelectClasses" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" pref="487" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="437" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -214,7 +214,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel5" pref="222" max="32767" attributes="0"/>
+                      <Component id="jPanel5" min="-2" pref="170" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -347,32 +348,41 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="labelView3" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="labelView1" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="labelView2" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="labelView5" pref="142" max="32767" attributes="0"/>
-                                  <Component id="labelView4" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="labelView" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="labelView6" alignment="0" pref="142" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="labelView1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="labelView2" alignment="0" max="32767" attributes="0"/>
+                              <Component id="labelView5" pref="142" max="32767" attributes="0"/>
+                              <Component id="labelView4" alignment="0" max="32767" attributes="0"/>
+                              <Component id="labelView" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="textResourceBundle" pref="158" max="32767" attributes="0"/>
+                                      <Component id="textManagedBeanSuffix" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="labelView6" min="-2" pref="143" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                          <Component id="textBusinessObjectSuffix" min="-2" pref="157" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="labelView3" min="-2" pref="142" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="textAuthor" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
                               <Group type="102" attributes="0">
                                   <Component id="textView" min="-2" pref="480" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="buttonSelectView" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="textManagedBeanSuffix" min="-2" pref="480" max="-2" attributes="0"/>
-                                  <Component id="textBusinessObjectSuffix" min="-2" pref="480" max="-2" attributes="0"/>
-                                  <Component id="textAuthor" alignment="1" min="-2" pref="480" max="-2" attributes="0"/>
-                                  <Component id="textResourceBundle" alignment="1" min="-2" pref="480" max="-2" attributes="0"/>
-                                  <Component id="textTemplatePath" alignment="1" min="-2" pref="480" max="-2" attributes="0"/>
-                                  <Component id="textBaseDAOImpl" alignment="1" min="-2" pref="480" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="textBaseDAOImpl" min="-2" pref="480" max="-2" attributes="0"/>
+                              <Component id="textTemplatePath" min="-2" pref="480" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="24" max="32767" attributes="0"/>
                       </Group>
@@ -400,21 +410,15 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="labelView2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="textResourceBundle" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="labelView3" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="textAuthor" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="labelView5" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="textManagedBeanSuffix" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="textBusinessObjectSuffix" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelView5" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelView6" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="textBusinessObjectSuffix" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -823,7 +827,7 @@
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane3" min="-2" pref="201" max="-2" attributes="0"/>
-                      <EmptySpace pref="116" max="32767" attributes="0"/>
+                      <EmptySpace pref="66" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
