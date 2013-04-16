@@ -429,7 +429,7 @@ public class BeanCreator {
         //menubar
         putEntry(out, "menu.xhtml", getMenubar(mappedBeans, getResourceBundle(configuration.getResourceBundle()), configuration));
         //class bean
-        putEntry(out, "mb/ClassMB.java", classBean);
+        putEntry(out, "mb/Class" + configuration.getManagedBeanSuffix() + ".java", classBean);
         //i18n
         for (String locale : LOCALES_MAKER) {
             putEntry(out, "messages_" + locale + ".properties", i18n);

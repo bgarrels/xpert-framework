@@ -6,7 +6,7 @@ import ${clazz.name};
 import javax.faces.bean.ManagedBean;
 
 @ManagedBean
-public class ClassMB {
+public class Class${configuration.managedBeanSuffix} {
 
     <#list classes as class>
     public Class get${class.simpleName}() {

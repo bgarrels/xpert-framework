@@ -132,7 +132,7 @@ public class PersistenceMappedBean {
         return classes;
     }
 
-    public String getClassBean(String beanPackage) {
+    public String getClassBean(BeanConfiguration configuration) {
 
         try {
 
@@ -140,7 +140,8 @@ public class PersistenceMappedBean {
             StringWriter writer = new StringWriter();
             Map attributes = new HashMap();
             attributes.put("classes", getMappedClasses(true));
-            attributes.put("package", beanPackage == null ? "" : beanPackage);
+            attributes.put("configuration", configuration);
+            attributes.put("package", configuration.getManagedBean() == null ? "" : configuration.getManagedBean());
             template.process(attributes, writer);
 
             writer.flush();

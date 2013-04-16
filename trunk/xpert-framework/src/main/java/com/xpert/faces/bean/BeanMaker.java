@@ -72,7 +72,7 @@ public class BeanMaker implements Serializable {
     }
 
     private void load() {
-        classBean = persistenceMappedBean.getClassBean(configuration.getManagedBean());
+        classBean = persistenceMappedBean.getClassBean(configuration);
         if (mappedBeans != null) {
             menubar = BeanCreator.getMenubar(mappedBeans, configuration.getResourceBundle(), configuration);
             i18n = BeanCreator.getI18N(mappedBeans);
