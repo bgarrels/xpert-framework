@@ -24,7 +24,7 @@
 
                     <p:commandButton process="@this" action="#{auditBean.detail}" icon="ui-icon-plus"
                                      rendered="#{cc.attrs.collapsed}"
-                                     styleClass="button-detail-auditing" style="margin-bottom: 2px;"
+                                     styleClass="button-detail-auditing"
                                      oncomplete="$(PrimeFaces.escapeClientId('#{cc.attrs.clientId}')).find('.button-detail-auditing').hide();$(PrimeFaces.escapeClientId('#{cc.attrs.clientId}')).find('.panel-detail-auditing').show()"
                                      update="accordionDetail" value="#{xmsg.auditing}" >
                         <f:setPropertyActionListener value="#{cc.attrs.for}" target="#{auditBean.object}" />
