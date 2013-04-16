@@ -850,11 +850,9 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonSelectMBActionPerformed
 
     private void textPackageMBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPackageMBActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_textPackageMBActionPerformed
 
     private void textPackageBOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPackageBOActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_textPackageBOActionPerformed
 
     private void buttonSelectBOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSelectBOActionPerformed
@@ -862,7 +860,6 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonSelectBOActionPerformed
 
     private void textPackageDAOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPackageDAOActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_textPackageDAOActionPerformed
 
     private void buttonSelectDAOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSelectDAOActionPerformed
@@ -870,7 +867,6 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonSelectDAOActionPerformed
 
     private void textPackageDAOImplActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPackageDAOImplActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_textPackageDAOImplActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

@@ -39,7 +39,7 @@
                 <x:initializer/>
                 </#if>
                 <f:selectItem itemLabel="${sharp}{xmsg['select']}" />
-                <f:selectItems value="${sharp}{findAllBean.get(classMB.${field.typeNameLower})}" 
+                <f:selectItems value="${sharp}{findAllBean.get(class${configuration.managedBeanSuffix}.${field.typeNameLower})}" 
                                var="${field.typeNameLower}"
                                itemLabel="${sharp}{${field.typeNameLower}}"/>
             </h:selectOneMenu>
@@ -50,7 +50,7 @@
                 <#if field.lazy == true>
                 <x:initializer/>
                 </#if>
-                <f:selectItems value="${sharp}{findAllBean.get(classMB.${field.typeNameLower})}" 
+                <f:selectItems value="${sharp}{findAllBean.get(class${configuration.managedBeanSuffix}.${field.typeNameLower})}" 
                                var="${field.typeNameLower}"
                                itemLabel="${sharp}{${field.typeNameLower}}"/>
             </h:selectManyCheckbox>

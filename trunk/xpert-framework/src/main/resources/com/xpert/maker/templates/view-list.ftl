@@ -22,7 +22,7 @@
                 <#if field.collection == false && field.id == false>
                 <p:column headerText="${sharp}{${resourceBundle}['${entity.nameLower}.${field.name}']}" sortBy="${sharp}{${entity.nameLower}.${field.name}}"
                           <#if field.string == true || field.integer == true || field.enumaration == true>filterBy="${sharp}{${entity.nameLower}.${field.name}}"</#if>
-                          <#if field.enumaration == true>filterOptions="${sharp}{findAllBean.getSelect(classMB.${field.typeNameLower})}"</#if> <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>>
+                          <#if field.enumaration == true>filterOptions="${sharp}{findAllBean.getSelect(class${configuration.managedBeanSuffix}.${field.typeNameLower})}"</#if> <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>>
                         <#if field.lazy == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}">
                             <x:initializer/>
@@ -65,7 +65,7 @@
                 </p:column>
                 <f:facet name="footer">
                     <x:securityArea rolesAllowed="${entity.nameLower}.audit">
-                        <xc:auditDelete for="${sharp}{classMB.${entity.nameLower}}"/>
+                        <xc:auditDelete for="${sharp}{class${configuration.managedBeanSuffix}.${entity.nameLower}}"/>
                     </x:securityArea>
                 </f:facet>
             </p:dataTable>
