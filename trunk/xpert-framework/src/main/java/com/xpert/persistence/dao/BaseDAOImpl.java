@@ -576,7 +576,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
     }
 
     @Override
-    public Object getInitialized(Object object) {
+    public <U> U getInitialized(U object) {
         if (object != null) {
             if (object instanceof HibernateProxy || object instanceof PersistentBag || object instanceof PersistentSet) {
 
@@ -585,9 +585,9 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
                     LazyInitializer lazyInitializer = ((HibernateProxy) object).getHibernateLazyInitializer();
 
                     if (Hibernate.isInitialized(object)) {
-                        return lazyInitializer.getImplementation();
+                        return (U)lazyInitializer.getImplementation();
                     }
-                    return getEntityManager().find(lazyInitializer.getPersistentClass(), lazyInitializer.getIdentifier());
+                    return (U)getEntityManager().find(lazyInitializer.getPersistentClass(), lazyInitializer.getIdentifier());
                 }
 
                 if (object instanceof PersistentCollection) {
@@ -600,14 +600,14 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
                         collection = new ArrayList();
                         if (Hibernate.isInitialized(object)) {
                             collection.addAll((PersistentBag) object);
-                            return collection;
+                            return (U) collection;
                         }
                     }
                     if (object instanceof PersistentSet) {
                         collection = new HashSet();
                         if (Hibernate.isInitialized(object)) {
                             collection.addAll((PersistentSet) object);
-                            return collection;
+                            return (U) collection;
                         }
                     }
 
@@ -632,7 +632,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
                     collection.addAll(query.getResultList());
 
-                    return collection;
+                    return (U) collection;
                 }
 
             }

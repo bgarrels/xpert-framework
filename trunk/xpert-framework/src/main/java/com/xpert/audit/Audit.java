@@ -295,8 +295,17 @@ public class Audit {
                         if (fieldValue != null) {
                             metadata.setNewValue(getToString(fieldValue));
                         }
-                        if ((fieldOld == null && fieldValue != null) || (fieldOld != null && fieldValue == null) || (fieldOld != null && !fieldOld.equals(fieldValue))) {
-                            addMetadata = true;
+                        //verify empty String
+                        if (fieldValue instanceof String) {
+                             if ((fieldOld == null && fieldValue != null && !fieldValue.toString().isEmpty()) || 
+                                     (fieldOld != null && !fieldOld.toString().isEmpty() && fieldValue == null) || 
+                                     (fieldOld != null && !fieldOld.equals(fieldValue))) {
+                                addMetadata = true;
+                            }
+                        } else {
+                            if ((fieldOld == null && fieldValue != null) || (fieldOld != null && fieldValue == null) || (fieldOld != null && !fieldOld.equals(fieldValue))) {
+                                addMetadata = true;
+                            }
                         }
                     }
                     metadata.setField(getMethodName(method));

@@ -169,7 +169,7 @@ public interface BaseDAO<T> {
 
     public List<T> list(String property, Object value, String order);
 
-    public Object getInitialized(Object object);
+    public <U> U getInitialized(U object);
 
     public List<T> listAttributes(String attributes);
 
