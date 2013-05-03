@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
  * @author Ayslan
  */
 public class QueryBuilder {
-
+    
     private String order;
     private String attributeName;
     private Class from;
@@ -32,16 +32,16 @@ public class QueryBuilder {
     private QueryType type;
     private EntityManager entityManager;
     private static final Logger logger = Logger.getLogger(QueryBuilder.class.getName());
-
+    
     public QueryBuilder(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-
+    
     public QueryBuilder(EntityManager entityManager, String alias) {
         this.entityManager = entityManager;
         this.alias = alias;
     }
-
+    
     public QueryBuilder from(Class from) {
         this.from = from;
         if (alias == null || alias.isEmpty()) {
@@ -49,43 +49,43 @@ public class QueryBuilder {
         }
         return this;
     }
-
+    
     public QueryBuilder from(Class from, String alias) {
         this.from = from;
         this.alias = alias;
         return this;
     }
-
+    
     public QueryBuilder leftJoin(String join) {
         this.joins.append("LEFT JOIN ").append(join).append(" ");
         return this;
     }
-
+    
     public QueryBuilder innerJoin(String join) {
         this.joins.append("INNER JOIN ").append(join).append(" ");
         return this;
     }
-
+    
     public QueryBuilder join(String join) {
         this.joins.append("JOIN ").append(join).append(" ");
         return this;
     }
-
+    
     public QueryBuilder leftJoinFetch(String join) {
         this.joins.append("LEFT JOIN FETCH ").append(join).append(" ");
         return this;
     }
-
+    
     public QueryBuilder innerJoinFetch(String join) {
         this.joins.append("INNER JOIN FETCH ").append(join).append(" ");
         return this;
     }
-
+    
     public QueryBuilder joinFetch(String join) {
         this.joins.append("JOIN FETCH ").append(join).append(" ");
         return this;
     }
-
+    
     public QueryBuilder join(JoinBuilder joinBuilder) {
         if (joinBuilder != null) {
             this.alias = joinBuilder.getAlias();
@@ -93,30 +93,30 @@ public class QueryBuilder {
         }
         return this;
     }
-
+    
     public QueryBuilder orderBy(String order) {
         this.order = order;
         return this;
     }
-
+    
     public QueryBuilder type(QueryType type) {
         this.type = type;
         return this;
     }
-
+    
     public QueryBuilder type(QueryType type, String attributeName) {
         this.type = type;
         this.attributeName = attributeName;
         return this;
     }
-
+    
     public QueryBuilder add(List<Restriction> restrictions) {
         if (restrictions != null) {
             this.restrictions.addAll(restrictions);
         }
         return this;
     }
-
+    
     public QueryBuilder add(Map<String, Object> restrictions) {
         if (restrictions != null) {
             for (Map.Entry e : restrictions.entrySet()) {
@@ -125,52 +125,57 @@ public class QueryBuilder {
         }
         return this;
     }
-
+    
     public QueryBuilder add(Restriction restriction) {
         if (restriction != null) {
             this.restrictions.add(restriction);
         }
         return this;
     }
-
+    
+    public QueryBuilder add(String field, Object value) {
+        this.restrictions.add(new Restriction(order, value));
+        return this;
+    }
+    
     public String getQueryString() {
-
+        
         StringBuilder queryString = new StringBuilder();
         //type
         if (type == null) {
             type = QueryType.SELECT;
         }
-
+        
         if (type.equals(QueryType.COUNT)) {
             queryString.append("SELECT COUNT(*) ");
         }
-
+        
         if (attributeName != null && !attributeName.isEmpty()) {
             attributeName = alias + "." + attributeName;
         }
-
+        
         if (type.equals(QueryType.MAX)) {
             queryString.append("SELECT MAX(").append(attributeName).append(") ");
         }
-
+        
         if (type.equals(QueryType.MIN)) {
             queryString.append("SELECT MIN(").append(attributeName).append(") ");
         }
-
+        
         if (type.equals(QueryType.SUM)) {
             queryString.append("SELECT SUM(").append(attributeName).append(") ");
         }
-
+        
         if (type.equals(QueryType.SELECT) && attributeName != null && !attributeName.isEmpty()) {
             queryString.append("SELECT ").append(attributeName).append(" ");
         }
-
+        
         queryString.append("FROM ").append(from.getName()).append(" ");
-
+        
         if (alias != null) {
             queryString.append(alias).append(" ");
         }
-
+        
         if (joins != null) {
             queryString.append(joins).append(" ");
         }
@@ -178,7 +183,7 @@ public class QueryBuilder {
         //restrictions
         int currentParameter = 1;
         boolean containsWhere = false;
-
+        
         for (Restriction restriction : restrictions) {
             String propertyName;
             if (alias != null && !alias.trim().isEmpty()) {
@@ -218,7 +223,7 @@ public class QueryBuilder {
                     logger.log(Level.WARNING, "Error getting Property Type: {0}", ex.getMessage());
                 }
             }
-
+            
             if (!containsWhere) {
                 queryString.append("WHERE");
                 containsWhere = true;
@@ -259,23 +264,23 @@ public class QueryBuilder {
         if (order != null && !order.trim().isEmpty()) {
             queryString.append("ORDER BY ").append(order).toString();
         }
-
+        
         return queryString.toString();
     }
-
+    
     public Query createQuery() {
         return createQuery(null);
     }
-
+    
     public Query createQuery(Integer maxResults) {
         return createQuery(null, maxResults);
     }
-
+    
     public Query createQuery(Integer firstResult, Integer maxResults) {
-
+        
         String queryString = getQueryString();
         Query query = entityManager.createQuery(queryString);
-
+        
         int parameter = 1;
         for (Restriction re : restrictions) {
             if (re.getValue() != null) {
@@ -301,7 +306,7 @@ public class QueryBuilder {
                 parameter++;
             }
         }
-
+        
         if (maxResults != null) {
             query.setMaxResults(maxResults);
         }
@@ -310,13 +315,13 @@ public class QueryBuilder {
         }
         return query;
     }
-
+    
     public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass) {
         return createNativeQueryFromFile(entityManager, queryPath, daoClass, null);
     }
-
+    
     public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass, Class resultClass) {
-
+        
         InputStream inputStream = daoClass.getResourceAsStream(queryPath);
         if (inputStream == null) {
             throw new QueryFileNotFoundException("Query File not found: " + queryPath + " in package: " + daoClass.getPackage());
@@ -331,12 +336,12 @@ public class QueryBuilder {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
+        
     }
-
+    
     public static String readInputStreamAsString(InputStream inputStream)
             throws IOException {
-
+        
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         int result = bis.read();
@@ -349,15 +354,15 @@ public class QueryBuilder {
         buf.close();
         return buf.toString();
     }
-
+    
     public static void main(String[] args) {
-
+        
         QueryBuilder builder =
                 new QueryBuilder(null).from(Person.class).type(QueryType.MAX, "nome").leftJoin("p.group").leftJoin("p.profile").add(new Restriction("cpf", RestrictionType.LIKE, LikeType.BOTH)).add(new Restriction("nome", "maria")).orderBy("p.nome");
-
+        
         builder.add(new Restriction("nome", null));
-
+        
         System.out.println(builder.getQueryString());
-
+        
     }
 }

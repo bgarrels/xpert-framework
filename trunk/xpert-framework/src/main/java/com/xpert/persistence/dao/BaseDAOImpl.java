@@ -193,7 +193,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
             query.setParameter(1, id);
             query.executeUpdate();
         } catch (Exception ex) {
-            if (ex instanceof ConstraintViolationException || (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException)) {
+            if (ex instanceof ConstraintViolationException || ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
                 throw new DeleteException("Object from class " + getEntityClass() + " with ID: " + id + " cannot be deleted");
             } else {
                 throw new RuntimeException(ex);
@@ -219,7 +219,7 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
             getEntityManager().remove(object);
             getEntityManager().flush();
         } catch (Exception ex) {
-            if (ex instanceof ConstraintViolationException || (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException)) {
+            if (ex instanceof ConstraintViolationException || ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
                 throw new DeleteException("Object from class " + getEntityClass() + " with ID: " + EntityUtils.getId(object) + " cannot be deleted");
             } else {
                 throw new RuntimeException(ex);
