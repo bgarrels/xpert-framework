@@ -193,10 +193,10 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
             query.setParameter(1, id);
             query.executeUpdate();
         } catch (Exception ex) {
-            if (ex instanceof ConstraintViolationException) {
+            if (ex instanceof ConstraintViolationException || (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException)) {
                 throw new DeleteException("Object from class " + getEntityClass() + " with ID: " + id + " cannot be deleted");
             } else {
-                throw new DeleteException(ex);
+                throw new RuntimeException(ex);
             }
         }
 
@@ -217,11 +217,12 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
                 getNewAudit().delete(object);
             }
             getEntityManager().remove(object);
+            getEntityManager().flush();
         } catch (Exception ex) {
-            if (ex instanceof ConstraintViolationException) {
+            if (ex instanceof ConstraintViolationException || (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException)) {
                 throw new DeleteException("Object from class " + getEntityClass() + " with ID: " + EntityUtils.getId(object) + " cannot be deleted");
             } else {
-                throw new DeleteException(ex);
+                throw new RuntimeException(ex);
             }
         }
 
@@ -585,9 +586,9 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
                     LazyInitializer lazyInitializer = ((HibernateProxy) object).getHibernateLazyInitializer();
 
                     if (Hibernate.isInitialized(object)) {
-                        return (U)lazyInitializer.getImplementation();
+                        return (U) lazyInitializer.getImplementation();
                     }
-                    return (U)getEntityManager().find(lazyInitializer.getPersistentClass(), lazyInitializer.getIdentifier());
+                    return (U) getEntityManager().find(lazyInitializer.getPersistentClass(), lazyInitializer.getIdentifier());
                 }
 
                 if (object instanceof PersistentCollection) {
