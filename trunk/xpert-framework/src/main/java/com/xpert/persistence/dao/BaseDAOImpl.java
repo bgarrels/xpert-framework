@@ -490,51 +490,12 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
         }
 
         if (attributes != null && attributes.split(",").length > 0) {
-            List<Object> objects = query.getResultList();
-            List result = new ArrayList();
-            String[] fields = attributes.split(",");
-            for (Object object : objects) {
-                try {
-                    Object entity = clazz.newInstance();
-                    for (int i = 0; i < fields.length; i++) {
-                        String property = fields[i].trim().replaceAll("/s", "");
-                        initializeCascade(property, entity);
-                        if (object instanceof Object[]) {
-                            PropertyUtils.setProperty(entity, property, ((Object[]) object)[i]);
-                        } else {
-                            PropertyUtils.setProperty(entity, property, object);
-                        }
-                    }
-                    result.add(entity);
-                } catch (Exception ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                }
-            }
-            return result;
+            return QueryBuilder.getNormalizedResultList(attributes, query.getResultList(), clazz);
         }
 
         return query.getResultList();
     }
 
-    public void initializeCascade(String property, Object bean) {
-        int index = property.indexOf(".");
-        if (index > -1) {
-            try {
-                String field = property.substring(0, property.indexOf("."));
-                Object propertyToInitialize = PropertyUtils.getProperty(bean, field);
-                if (propertyToInitialize == null) {
-                    propertyToInitialize = PropertyUtils.getPropertyDescriptor(bean, field).getPropertyType().newInstance();
-                    PropertyUtils.setProperty(bean, field, propertyToInitialize);
-                }
-                String afterField = property.substring(index + 1, property.length());
-                if (afterField != null && afterField.indexOf(".") > -1) {
-                    initializeCascade(afterField, propertyToInitialize);
-                }
-            } catch (Exception ex) {
-                logger.log(Level.SEVERE, null, ex);
-            }
-        }
-    }
 
     @Override
     public Long count(Map<String, Object> restrictions) {

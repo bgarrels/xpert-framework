@@ -106,7 +106,7 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
         }
 
         List<T> dados = dao.getQueryBuilder().type(QueryType.SELECT, attributes).from(dao.getEntityClass()).add(queryRestrictions).join(joinBuilder)
-                .orderBy(orderBy).createQuery(first, pageSize).getResultList();
+                .orderBy(orderBy).getResultList(first, pageSize);
         
         this.setRowCount(dao.count(queryRestrictions).intValue());
 
