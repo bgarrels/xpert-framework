@@ -30,6 +30,7 @@ public class Audit {
     private static final SimpleDateFormat AUDIT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static Map<Class, String> mappedName = new HashMap<Class, String>();
     private static Map<Class, List<Method>> mappedMethods = new HashMap<Class, List<Method>>();
+    private static Map<Method, Boolean> mappedOneToOneCascadeAll = new HashMap<Method, Boolean>();
     private Session session;
     private EntityManager entityManager;
 
@@ -232,7 +233,7 @@ public class Audit {
                 AbstractMetadata metadata = Configuration.getAbstractMetadata();
                 if (fieldValue != null && fieldValue.getClass().isAnnotationPresent(Embeddable.class)) {
                     List<AbstractMetadata> embedableMetadata = getMetadata(fieldValue, persisted, auditing);
-                    if (embedableMetadata != null && embedableMetadata.isEmpty()) {
+                    if (embedableMetadata != null && !embedableMetadata.isEmpty()) {
                         metadatas.addAll(embedableMetadata);
                     }
                 } else {
@@ -273,20 +274,31 @@ public class Audit {
                         Object newId = getId(fieldValue);
                         //a proxy doesnt has value changed
                         if (!(fieldValue instanceof HibernateProxy)) {
-                            Object oldId = null;
-                            if (fieldOld instanceof HibernateProxy) {
-                                oldId = ((HibernateProxy) fieldOld).getHibernateLazyInitializer().getIdentifier();
+                            /**
+                             * One to One cascade ALL
+                             */
+                            if (isOneToOneCascadeAll(method)) {
+                                List<AbstractMetadata> embedableMetadata = getMetadata(fieldValue, getPersisted(fieldValue), auditing);
+                                if (embedableMetadata != null && !embedableMetadata.isEmpty()) {
+                                    metadatas.addAll(embedableMetadata);
+                                }
                             } else {
-                                oldId = getId(fieldOld);
+
+                                Object oldId = null;
+                                if (fieldOld instanceof HibernateProxy) {
+                                    oldId = ((HibernateProxy) fieldOld).getHibernateLazyInitializer().getIdentifier();
+                                } else {
+                                    oldId = getId(fieldOld);
+                                }
+                                metadata.setOldIdentifier(oldId == null ? null : Long.valueOf(oldId.toString()));
+                                metadata.setOldValue(fieldOld == null ? "" : fieldOld.toString());
+                                if ((oldId == null && newId != null) || (oldId != null && newId == null) || (oldId != null && !oldId.equals(newId))) {
+                                    addMetadata = true;
+                                }
+                                metadata.setEntity(method.getDeclaringClass().getName());
+                                metadata.setNewIdentifier(newId == null ? null : Long.valueOf(newId.toString()));
+                                metadata.setNewValue(fieldValue == null ? "" : fieldValue.toString());
                             }
-                            metadata.setOldIdentifier(oldId == null ? null : Long.valueOf(oldId.toString()));
-                            metadata.setOldValue(fieldOld == null ? "" : fieldOld.toString());
-                            if ((oldId == null && newId != null) || (oldId != null && newId == null) || (oldId != null && !oldId.equals(newId))) {
-                                addMetadata = true;
-                            }
-                            metadata.setEntity(method.getDeclaringClass().getName());
-                            metadata.setNewIdentifier(newId == null ? null : Long.valueOf(newId.toString()));
-                            metadata.setNewValue(fieldValue == null ? "" : fieldValue.toString());
                         }
                     } else {
                         if (fieldOld != null) {
@@ -297,9 +309,9 @@ public class Audit {
                         }
                         //verify empty String
                         if (fieldValue instanceof String) {
-                             if ((fieldOld == null && fieldValue != null && !fieldValue.toString().isEmpty()) || 
-                                     (fieldOld != null && !fieldOld.toString().isEmpty() && fieldValue == null) || 
-                                     (fieldOld != null && !fieldOld.equals(fieldValue))) {
+                            if ((fieldOld == null && fieldValue != null && !fieldValue.toString().isEmpty())
+                                    || (fieldOld != null && !fieldOld.toString().isEmpty() && fieldValue == null)
+                                    || (fieldOld != null && !fieldOld.equals(fieldValue))) {
                                 addMetadata = true;
                             }
                         } else {
@@ -319,6 +331,33 @@ public class Audit {
             }
         }
         return metadatas;
+    }
+
+    public boolean isOneToOneCascadeAll(Method method) throws Exception {
+        Boolean isOneToOneAll = mappedOneToOneCascadeAll.get(method);
+        if (isOneToOneAll != null) {
+            return isOneToOneAll;
+        }
+        OneToOne oneToOne = method.getAnnotation(OneToOne.class);
+        if (oneToOne == null) {
+            Field field = getDeclaredField(method.getDeclaringClass(), getMethodName(method));
+            if (field != null) {
+                oneToOne = field.getAnnotation(OneToOne.class);
+            }
+        }
+        CascadeType[] cascadeTypes = null;
+        if (oneToOne != null) {
+            cascadeTypes = oneToOne.cascade();
+        }
+        if (oneToOne != null && cascadeTypes != null && cascadeTypes.length > 0 && Arrays.asList(cascadeTypes).contains(CascadeType.ALL)) {
+            isOneToOneAll = true;
+        } else {
+            isOneToOneAll = false;
+
+        }
+        mappedOneToOneCascadeAll.put(method, isOneToOneAll);
+        return isOneToOneAll;
+
     }
 
     private String getToString(Object object) {
