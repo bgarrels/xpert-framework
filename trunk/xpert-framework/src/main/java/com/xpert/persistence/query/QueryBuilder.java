@@ -209,6 +209,9 @@ public class QueryBuilder {
                         if (propertyType.isEnum()) {
                             restriction.setValue(Enum.valueOf(propertyType, restriction.getValue().toString()));
                         }
+                        if (propertyType.equals(Integer.class)) {
+                            restriction.setValue(Integer.valueOf(restriction.getValue().toString()));
+                        }
                         if (propertyType.equals(Long.class)) {
                             restriction.setValue(Long.valueOf(restriction.getValue().toString()));
                         }
