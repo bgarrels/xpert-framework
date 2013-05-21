@@ -1,6 +1,7 @@
 package com.xpert.persistence.query;
 
 import com.xpert.persistence.exception.QueryFileNotFoundException;
+import com.xpert.utils.StringUtils;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -210,10 +211,10 @@ public class QueryBuilder {
                             restriction.setValue(Enum.valueOf(propertyType, restriction.getValue().toString()));
                         }
                         if (propertyType.equals(Integer.class)) {
-                            restriction.setValue(Integer.valueOf(restriction.getValue().toString()));
+                            restriction.setValue(Integer.valueOf(StringUtils.getOnlyIntegerNumbers(restriction.getValue().toString())));
                         }
                         if (propertyType.equals(Long.class)) {
-                            restriction.setValue(Long.valueOf(restriction.getValue().toString()));
+                            restriction.setValue(Long.valueOf(StringUtils.getOnlyIntegerNumbers(restriction.getValue().toString())));
                         }
                         if (propertyType.equals(BigDecimal.class)) {
                             restriction.setValue(new BigDecimal(restriction.getValue().toString()));
