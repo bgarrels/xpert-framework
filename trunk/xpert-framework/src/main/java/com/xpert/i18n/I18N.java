@@ -1,6 +1,8 @@
 package com.xpert.i18n;
 
 import com.xpert.Configuration;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
@@ -18,6 +20,10 @@ public class I18N {
             return key;
         }
         return ResourceBundleUtils.get(key, Configuration.BUNDLE, Thread.currentThread().getContextClassLoader(), parameters);
+    }
+
+    public static String getDatePattern() {
+        return ((SimpleDateFormat) DateFormat.getDateInstance(SimpleDateFormat.SHORT, getLocale())).toPattern();
     }
 
     public static Locale getLocale() {

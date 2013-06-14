@@ -28,8 +28,8 @@ public class BeanConfiguration {
     private String viewLocation;
     
     //suffix/preffix
-    private String managedBeanSuffix;
-    private String businessObjectSuffix;
+    private String managedBeanSuffix = BeanCreator.SUFFIX_MANAGED_BEAN;
+    private String businessObjectSuffix =BeanCreator.SUFFIX_BUSINESS_OBJECT;
 
     public String getBusinessObjectSuffix() {
         return businessObjectSuffix;

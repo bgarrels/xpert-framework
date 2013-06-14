@@ -61,6 +61,17 @@ Xpert = {
         
         return this;
     },
+    dateFilter : function(element) {
+        var dateId = PrimeFaces.escapeClientId(element);
+        var $column = $(dateId).closest('.ui-filter-column');
+        var $inputFilter = $column.find('.ui-column-filter');
+        
+        var dateStart = $column.find('.calendar-filter-start input').val();
+        var dateEnd = $column.find('.calendar-filter-end input').val();
+        var cancatDate = dateStart+" - "+dateEnd;
+        $inputFilter.val(cancatDate);
+
+    },
     filterOnEnter: function(target, selector){
         
          if(target != null && target != "" && target != undefined){
@@ -70,7 +81,7 @@ Xpert = {
              selector = ".ui-datatable";
          }
          
-         $("body").delegate(selector+" .ui-column-filter", "focus", function(e){
+         $("body").delegate(selector+" .ui-filter-column input", "focus", function(e){
             var events = $._data(this, "events");
             var originalEvent;
             $.each(events, function(i, event) {

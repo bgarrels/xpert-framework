@@ -100,10 +100,11 @@ public class LazyDataModelImpl<T> extends LazyDataModel {
         if (filters != null && !filters.isEmpty()) {
             for (Entry e : ((Map<String, String>) filters).entrySet()) {
                 if (e.getValue() != null && !e.getValue().toString().isEmpty()) {
-                    queryRestrictions.add(new Restriction(e.getKey().toString(), RestrictionType.LIKE, e.getValue()));
+                    queryRestrictions.add(new Restriction(e.getKey().toString(), RestrictionType.DATA_TABLE_FILTER, e.getValue()));
                 }
             }
         }
+        
 
         List<T> dados = dao.getQueryBuilder().type(QueryType.SELECT, attributes).from(dao.getEntityClass()).add(queryRestrictions).join(joinBuilder)
                 .orderBy(orderBy).getResultList(first, pageSize);
