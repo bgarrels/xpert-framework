@@ -103,8 +103,7 @@ public class ReflectionUtils {
                 // Once get method successfully, jump out the loop. 
                 break;
             } catch (NoSuchMethodException e) {
-                // do nothing but logging
-                logger.log(Level.WARNING, "No such read method ''{0}()'' in class ''{1}''.", new Object[]{methodName, clazz.getName()});
+                // do nothing
             } catch (SecurityException e) {
                 // do nothing but logging
                 logger.log(Level.WARNING, "Error occurs while getting read method ''{0}()'' in class ''{1}''.", new Object[]{methodName, clazz.getName()});

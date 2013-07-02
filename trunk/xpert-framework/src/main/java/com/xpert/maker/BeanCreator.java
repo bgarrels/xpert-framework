@@ -131,7 +131,7 @@ public class BeanCreator {
                 viewField.setManyToOne(true);
                 //Enum
             } else if (field.getType().isEnum()) {
-                viewField.setEnumaration(true);
+                viewField.setEnumeration(true);
                 //Date
             } else if (field.getType().equals(Date.class)) {
                 viewField.setDate(true);
@@ -205,6 +205,10 @@ public class BeanCreator {
 
     }
 
+    public static boolean isSerialVersionUID(Field field) {
+        return field.getName().equals("serialVersionUID");
+    }
+
     public static String getI18N(Class clazz) {
 
         Field[] fields = clazz.getDeclaredFields();
@@ -220,6 +224,9 @@ public class BeanCreator {
         builder.append(className).append(".detail").append("=").append(humanName).append(" Detail").append("\n");
         boolean first = false;
         for (Field field : fields) {
+            if (isSerialVersionUID(field)) {
+                continue;
+            }
             if (!first) {
                 builder.append("\n");
             } else {
@@ -535,7 +542,12 @@ public class BeanCreator {
 
     public static List<Field> getFields(Class entity) {
         List<Field> fields = new ArrayList<Field>();
-        fields.addAll(Arrays.asList(entity.getDeclaredFields()));
+        for (Field field : entity.getDeclaredFields()) {
+            if (isSerialVersionUID(field)) {
+                continue;
+            }
+            fields.add(field);
+        }
         if (entity.getSuperclass() != null && !entity.getSuperclass().equals(Object.class)) {
             fields.addAll(getFields(entity.getSuperclass()));
         }

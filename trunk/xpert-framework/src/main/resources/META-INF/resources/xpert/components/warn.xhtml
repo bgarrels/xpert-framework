@@ -2,23 +2,28 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://java.sun.com/jsf/composite"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <!-- INTERFACE -->
     <cc:interface>
-        <cc:attribute name="value" />
+        <cc:attribute name="value"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <h:outputStylesheet library="xpert" name="css/style.css" />
-        <div class="ui-widget conteiner-message">
-            <div class="inner-conteiner-message ui-state-error ui-corner-all">
-                <p>
-                    <span class="icon-conteiner-message ui-icon ui-icon-alert" />
-                    <h:outputText value="#{cc.attrs.value}" />
-                    <cc:insertChildren/>
-                </p>
+        <div class="ui-messages ui-widget">
+            <div class="ui-messages-warn ui-corner-all">
+                <span class="ui-messages-warn-icon"></span>
+                <ul>
+                    <li>
+                        <span class="ui-messages-warn-detail">
+                            <h:outputText value="#{cc.attrs.value}"/>
+                            <cc:insertChildren/>
+                        </span>
+                    </li>
+                </ul>
             </div>
         </div>
     </cc:implementation>

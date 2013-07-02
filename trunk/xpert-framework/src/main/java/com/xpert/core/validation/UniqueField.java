@@ -13,8 +13,8 @@ public class UniqueField {
     private String message;
     private String[] constraints;
 
-    public UniqueField(String... field) {
-        this.constraints = field;
+    public UniqueField(String... fields) {
+        this.constraints = fields;
     }
 
     public String[] getConstraints() {

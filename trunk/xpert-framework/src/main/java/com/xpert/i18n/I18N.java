@@ -23,7 +23,7 @@ public class I18N {
     }
 
     public static String getDatePattern() {
-        return ((SimpleDateFormat) DateFormat.getDateInstance(SimpleDateFormat.SHORT, getLocale())).toPattern();
+        return ((SimpleDateFormat) DateFormat.getDateInstance(SimpleDateFormat.MEDIUM, getLocale())).toPattern();
     }
 
     public static Locale getLocale() {

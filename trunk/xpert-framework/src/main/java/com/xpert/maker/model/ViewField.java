@@ -21,7 +21,7 @@ public class ViewField {
     private boolean integer;
     private boolean date;
     private boolean yesNo;
-    private boolean enumaration;
+    private boolean enumeration;
     private boolean string;
     private String maxlength;
 
@@ -48,12 +48,12 @@ public class ViewField {
         this.required = required;
     }
 
-    public boolean isEnumaration() {
-        return enumaration;
+    public boolean isEnumeration() {
+        return enumeration;
     }
 
-    public void setEnumaration(boolean enumaration) {
-        this.enumaration = enumaration;
+    public void setEnumeration(boolean enumeration) {
+        this.enumeration = enumeration;
     }
 
     public String getTypeName() {

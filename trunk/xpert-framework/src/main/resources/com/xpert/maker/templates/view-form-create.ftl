@@ -33,8 +33,8 @@
             <p:calendar value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}" />
             </#if>
             <#-- Enuns/ManyToOne (render a combobox) -->
-            <#if field.enumaration == true || field.manyToOne == true>
-            <h:selectOneMenu value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}" <#if field.enumaration == false>converter="entityConverter"</#if>  >
+            <#if field.enumeration == true || field.manyToOne == true>
+            <h:selectOneMenu value="${sharp}{${entity.nameLower}${configuration.managedBeanSuffix}.entity.${field.name}}" <#if field.enumeration == false>converter="entityConverter"</#if>  >
                 <#if field.lazy == true>
                 <x:initializer/>
                 </#if>

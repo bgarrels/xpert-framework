@@ -38,7 +38,6 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
 
     public static void run(final MakerSwingFrame maker) {
         java.awt.EventQueue.invokeLater(new Runnable() {
-
             public void run() {
                 maker.center();
                 maker.setVisible(true);
@@ -48,7 +47,13 @@ public abstract class MakerSwingFrame extends javax.swing.JFrame {
 
     public void searchClasses() {
         try {
-            classes = ClassEnumerator.getClassesForPackage(textPackageName.getText());
+            ArrayList<Class<?>> allClasses = ClassEnumerator.getClassesForPackage(textPackageName.getText());
+            classes = new ArrayList<Class<?>>();
+            for (Class entity : allClasses) {
+                if (!entity.isEnum()) {
+                    classes.add(entity);
+                }
+            }
             listClasses.setListData(classes.toArray(new Class[classes.size()]));
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);

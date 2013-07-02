@@ -35,8 +35,8 @@ public abstract class AbstractBaseBean<T> {
     public abstract AbstractBusinessObject getBO();
 
     public abstract String getDataModelOrder();
-    
-    public OrderByHandler getOrderByHandler(){
+
+    public OrderByHandler getOrderByHandler() {
         return null;
     }
 
@@ -119,9 +119,21 @@ public abstract class AbstractBaseBean<T> {
         entity = getEntityNewInstance();
     }
 
+    public Class getEntityClass() {
+        if (getClass().getGenericSuperclass() != null && !getClass().getGenericSuperclass().equals(Object.class)) {
+            if (getClass().getGenericSuperclass() instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+                if (parameterizedType != null && parameterizedType.getActualTypeArguments() != null && parameterizedType.getActualTypeArguments().length > 0) {
+                    return (Class<T>) parameterizedType.getActualTypeArguments()[0];
+                }
+            }
+        }
+        return null;
+    }
+
     public final T getEntityNewInstance() {
         try {
-            return (T) ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).newInstance();
+            return (T) getEntityClass().newInstance();
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
             return null;
@@ -131,8 +143,8 @@ public abstract class AbstractBaseBean<T> {
     public void createDataModel() {
         dataModel = new LazyDataModelImpl<T>(getDataModelOrder(), getDataModelRestrictions(), getDAO());
         OrderByHandler orderByHandler = getOrderByHandler();
-        if(orderByHandler != null){
-             ((LazyDataModelImpl)dataModel).setOrderByHandler(orderByHandler);
+        if (orderByHandler != null) {
+            ((LazyDataModelImpl) dataModel).setOrderByHandler(orderByHandler);
         }
     }
 
@@ -227,6 +239,4 @@ public abstract class AbstractBaseBean<T> {
     public void setLoadEntityOnPostConstruct(boolean loadEntityOnPostConstruct) {
         this.loadEntityOnPostConstruct = loadEntityOnPostConstruct;
     }
-
-   
 }

@@ -26,7 +26,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  * @author Ayslan
  */
 public class QueryBuilder {
-    
+
     private String order;
     private String attributeName;
     private Class from;
@@ -37,57 +37,57 @@ public class QueryBuilder {
     private QueryType type;
     private EntityManager entityManager;
     private static final Logger logger = Logger.getLogger(QueryBuilder.class.getName());
-    
+
     public QueryBuilder(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
+
     public QueryBuilder(EntityManager entityManager, String alias) {
         this.entityManager = entityManager;
         this.alias = alias;
     }
-    
+
     public QueryBuilder from(Class from) {
         this.from = from;
         return this;
     }
-    
+
     public QueryBuilder from(Class from, String alias) {
         this.from = from;
         this.alias = alias;
         return this;
     }
-    
+
     public QueryBuilder leftJoin(String join) {
         this.joins.append("LEFT JOIN ").append(join).append(" ");
         return this;
     }
-    
+
     public QueryBuilder innerJoin(String join) {
         this.joins.append("INNER JOIN ").append(join).append(" ");
         return this;
     }
-    
+
     public QueryBuilder join(String join) {
         this.joins.append("JOIN ").append(join).append(" ");
         return this;
     }
-    
+
     public QueryBuilder leftJoinFetch(String join) {
         this.joins.append("LEFT JOIN FETCH ").append(join).append(" ");
         return this;
     }
-    
+
     public QueryBuilder innerJoinFetch(String join) {
         this.joins.append("INNER JOIN FETCH ").append(join).append(" ");
         return this;
     }
-    
+
     public QueryBuilder joinFetch(String join) {
         this.joins.append("JOIN FETCH ").append(join).append(" ");
         return this;
     }
-    
+
     public QueryBuilder join(JoinBuilder joinBuilder) {
         if (joinBuilder != null) {
             this.alias = joinBuilder.getAlias();
@@ -95,30 +95,30 @@ public class QueryBuilder {
         }
         return this;
     }
-    
+
     public QueryBuilder orderBy(String order) {
         this.order = order;
         return this;
     }
-    
+
     public QueryBuilder type(QueryType type) {
         this.type = type;
         return this;
     }
-    
+
     public QueryBuilder type(QueryType type, String attributeName) {
         this.type = type;
         this.attributeName = attributeName;
         return this;
     }
-    
+
     public QueryBuilder add(List<Restriction> restrictions) {
         if (restrictions != null) {
             this.restrictions.addAll(restrictions);
         }
         return this;
     }
-    
+
     public QueryBuilder add(Map<String, Object> restrictions) {
         if (restrictions != null) {
             for (Map.Entry e : restrictions.entrySet()) {
@@ -127,53 +127,53 @@ public class QueryBuilder {
         }
         return this;
     }
-    
+
     public QueryBuilder add(Restriction restriction) {
         if (restriction != null) {
             this.restrictions.add(restriction);
         }
         return this;
     }
-    
+
     public QueryBuilder add(String field, Object value) {
         this.restrictions.add(new Restriction(order, value));
         return this;
     }
-    
+
     public String getQueryString() {
-        
+
         StringBuilder queryString = new StringBuilder();
         //type
         if (type == null) {
             type = QueryType.SELECT;
         }
-        
+
         if (type.equals(QueryType.COUNT)) {
             queryString.append("SELECT COUNT(*) ");
         }
-        
+
         if (type.equals(QueryType.MAX)) {
             queryString.append("SELECT MAX(").append(alias).append(".").append(attributeName).append(") ");
         }
-        
+
         if (type.equals(QueryType.MIN)) {
             queryString.append("SELECT MIN(").append(alias).append(".").append(attributeName).append(") ");
         }
-        
+
         if (type.equals(QueryType.SUM)) {
             queryString.append("SELECT SUM(").append(alias).append(".").append(attributeName).append(") ");
         }
-        
+
         if (type.equals(QueryType.SELECT) && attributeName != null && !attributeName.isEmpty()) {
             queryString.append("SELECT ").append(attributeName).append(" ");
         }
-        
+
         queryString.append("FROM ").append(from.getName()).append(" ");
-        
+
         if (alias != null) {
             queryString.append(alias).append(" ");
         }
-        
+
         if (joins != null) {
             queryString.append(joins).append(" ");
         }
@@ -181,7 +181,7 @@ public class QueryBuilder {
         //restrictions
         int currentParameter = 1;
         boolean containsWhere = false;
-        
+
         normalizedRestrictions = new ArrayList<Restriction>();
 
         //normalize result
@@ -218,18 +218,21 @@ public class QueryBuilder {
                         if (propertyType.isEnum()) {
                             restriction.setValue(Enum.valueOf(propertyType, restriction.getValue().toString()));
                         }
-                        if (propertyType.equals(Integer.class)) {
+                        if (propertyType.equals(Integer.class) || propertyType.equals(int.class)) {
                             restriction.setValue(Integer.valueOf(StringUtils.getOnlyIntegerNumbers(restriction.getValue().toString())));
                         }
-                        if (propertyType.equals(Long.class)) {
+                        if (propertyType.equals(Long.class) || propertyType.equals(long.class)) {
                             restriction.setValue(Long.valueOf(StringUtils.getOnlyIntegerNumbers(restriction.getValue().toString())));
                         }
                         if (propertyType.equals(BigDecimal.class)) {
                             restriction.setValue(new BigDecimal(restriction.getValue().toString()));
                         }
+                        if (propertyType.equals(Boolean.class) || propertyType.equals(boolean.class)) {
+                            restriction.setValue(Boolean.valueOf(restriction.getValue().toString()));
+                        }
                         //if is a date, then its a interval, set GREATER THAN and LESS THAN
                         if (propertyType.equals(Date.class) || propertyType.equals(Calendar.class)) {
-                            
+
                             SimpleDateFormat dateFormat = new SimpleDateFormat(I18N.getDatePattern(), I18N.getLocale());
                             Object value = restriction.getValue().toString();
                             String[] dateArray = null;
@@ -271,8 +274,8 @@ public class QueryBuilder {
                 normalizedRestrictions.addAll(moreRestrictions);
             }
         }
-        
-        
+
+
         for (Restriction restriction : normalizedRestrictions) {
             String propertyName;
             if (alias != null && !alias.trim().isEmpty()) {
@@ -321,23 +324,23 @@ public class QueryBuilder {
         if (order != null && !order.trim().isEmpty()) {
             queryString.append("ORDER BY ").append(order).toString();
         }
-        
+
         return queryString.toString();
     }
-    
+
     public Query createQuery() {
         return createQuery(null);
     }
-    
+
     public Query createQuery(Integer maxResults) {
         return createQuery(null, maxResults);
     }
-    
+
     public Query createQuery(Integer firstResult, Integer maxResults) {
-        
+
         String queryString = getQueryString();
         Query query = entityManager.createQuery(queryString);
-        
+
         int parameter = 1;
         for (Restriction re : normalizedRestrictions) {
             if (re.getValue() != null) {
@@ -363,7 +366,7 @@ public class QueryBuilder {
                 parameter++;
             }
         }
-        
+
         if (maxResults != null) {
             query.setMaxResults(maxResults);
         }
@@ -372,7 +375,7 @@ public class QueryBuilder {
         }
         return query;
     }
-    
+
     public <T> List<T> getResultList(Integer maxResults) {
         List list = this.createQuery(maxResults).getResultList();
         if (list != null && attributeName != null && !attributeName.trim().isEmpty()) {
@@ -380,7 +383,7 @@ public class QueryBuilder {
         }
         return list;
     }
-    
+
     public <T> List<T> getResultList(Integer firstResult, Integer maxResults) {
         List list = this.createQuery(firstResult, maxResults).getResultList();
         if (list != null && attributeName != null && !attributeName.trim().isEmpty()) {
@@ -388,7 +391,7 @@ public class QueryBuilder {
         }
         return list;
     }
-    
+
     public <T> List<T> getResultList() {
         List list = this.createQuery().getResultList();
         if (list != null && attributeName != null && !attributeName.trim().isEmpty()) {
@@ -396,7 +399,7 @@ public class QueryBuilder {
         }
         return list;
     }
-    
+
     public static <T> List<T> getNormalizedResultList(String attributes, List resultList, Class<T> clazz) {
         if (attributes != null && attributes.split(",").length > 0) {
             List result = new ArrayList();
@@ -422,7 +425,7 @@ public class QueryBuilder {
         }
         return resultList;
     }
-    
+
     public static void initializeCascade(String property, Object bean) {
         int index = property.indexOf(".");
         if (index > -1) {
@@ -442,13 +445,13 @@ public class QueryBuilder {
             }
         }
     }
-    
+
     public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass) {
         return createNativeQueryFromFile(entityManager, queryPath, daoClass, null);
     }
-    
+
     public static Query createNativeQueryFromFile(EntityManager entityManager, String queryPath, Class daoClass, Class resultClass) {
-        
+
         InputStream inputStream = daoClass.getResourceAsStream(queryPath);
         if (inputStream == null) {
             throw new QueryFileNotFoundException("Query File not found: " + queryPath + " in package: " + daoClass.getPackage());
@@ -463,12 +466,12 @@ public class QueryBuilder {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-        
+
     }
-    
+
     public static String readInputStreamAsString(InputStream inputStream)
             throws IOException {
-        
+
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         int result = bis.read();
@@ -481,19 +484,19 @@ public class QueryBuilder {
         buf.close();
         return buf.toString();
     }
-    
+
     public List<Restriction> getNormalizedRestrictions() {
         return normalizedRestrictions;
     }
-    
+
     public static void main(String[] args) {
-        
+
         QueryBuilder builder =
                 new QueryBuilder(null).from(Person.class).type(QueryType.MAX, "nome").leftJoin("p.group").leftJoin("p.profile").add(new Restriction("cpf", RestrictionType.LIKE, LikeType.BOTH)).add(new Restriction("nome", "maria")).orderBy("p.nome");
-        
+
         builder.add(new Restriction("nome", null));
-        
+
         System.out.println(builder.getQueryString());
-        
+
     }
 }
