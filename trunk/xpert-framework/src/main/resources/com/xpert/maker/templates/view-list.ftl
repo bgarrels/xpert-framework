@@ -5,7 +5,6 @@
                  xmlns:p="http://primefaces.org/ui"
                  template="${template}"
                  xmlns:x="http://xpert.com/faces"
-                 xmlns:custom="http://java.sun.com/jsf/composite/components"
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
     <ui:param name="title" value="${sharp}{msg['${entity.nameLower}.list']}" />
     <ui:define name="body">
@@ -24,8 +23,7 @@
                 <#list entity.fields as field>
                 <#if field.collection == false && field.id == false>
                 <p:column headerText="${sharp}{${resourceBundle}['${entity.nameLower}.${field.name}']}" sortBy="${sharp}{${entity.nameLower}.${field.name}}"
-                          <#if field.string == true || field.integer == true || field.enumeration == true || field.yesNo == true>filterBy="${sharp}{${entity.nameLower}.${field.name}}"</#if> <#if field.yesNo == true>filterOptions="${sharp}{booleanSelectItensEmptyOption}"</#if>
-                          <#if field.enumeration == true>filterOptions="${sharp}{findAllBean.getSelect(class${configuration.managedBeanSuffix}.${field.typeNameLower})}"</#if> <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>>
+                          <#if field.string == true || field.integer == true || field.enumeration == true || field.yesNo == true || field.date == true>filterBy="${sharp}{${entity.nameLower}.${field.name}}"</#if> <#if field.yesNo == true>filterOptions="${sharp}{booleanSelectItensEmptyOption}"</#if> <#if field.enumeration == true>filterOptions="${sharp}{findAllBean.getSelect(class${configuration.managedBeanSuffix}.${field.typeNameLower})}"</#if> <#if field.date == true || field.yesNo == true>style="text-align: center;"</#if><#if field.decimal == true>style="text-align: right;"</#if>>
                         <#if field.lazy == true>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}">
                             <x:initializer/>
@@ -37,6 +35,10 @@
                         </h:outputText>
                         </#if>
                         <#if field.date == true>
+                        <f:facet name="header">
+                            ${sharp}{${resourceBundle}['${entity.nameLower}.${field.name}']}
+                            <x:dateFilter/>
+                        </f:facet>
                         <h:outputText value="${sharp}{${entity.nameLower}.${field.name}}">
                             <f:convertDateTime />
                         </h:outputText>

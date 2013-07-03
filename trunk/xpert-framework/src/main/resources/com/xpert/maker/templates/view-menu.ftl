@@ -4,7 +4,6 @@
                  xmlns:ui="http://java.sun.com/jsf/facelets"
                  xmlns:p="http://primefaces.org/ui"
                  xmlns:x="http://xpert.com/faces"
-                 xmlns:custom="http://java.sun.com/jsf/composite/components"
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
     <p:toolbar>
         <p:toolbarGroup align="left">  
