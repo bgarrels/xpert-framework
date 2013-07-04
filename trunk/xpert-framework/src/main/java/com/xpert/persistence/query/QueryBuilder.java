@@ -2,12 +2,15 @@ package com.xpert.persistence.query;
 
 import com.xpert.i18n.I18N;
 import com.xpert.persistence.exception.QueryFileNotFoundException;
+import com.xpert.persistence.utils.EntityManagerUtils;
 import com.xpert.utils.StringUtils;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +23,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.service.jdbc.connections.spi.ConnectionProvider;
 
 /**
  *
@@ -267,6 +273,8 @@ public class QueryBuilder {
                     logger.log(Level.WARNING, "Error getting Property Type: {0}", ex.getMessage());
                 }
             }
+
+
             if (ignoreRestriction == false) {
                 normalizedRestrictions.add(restriction);
             }
@@ -274,7 +282,6 @@ public class QueryBuilder {
                 normalizedRestrictions.addAll(moreRestrictions);
             }
         }
-
 
         for (Restriction restriction : normalizedRestrictions) {
             String propertyName;
@@ -293,8 +300,16 @@ public class QueryBuilder {
             if (restriction.getRestrictionType().equals(RestrictionType.LIKE) || restriction.getRestrictionType().equals(RestrictionType.NOT_LIKE)) {
                 queryString.append("UPPER(").append(propertyName).append(")").append(" ");
             } else if (restriction.getTemporalType() != null && restriction.getTemporalType().equals(TemporalType.DATE)) {
-                //force Date
-                queryString.append("CAST(").append(propertyName).append(" AS date)").append(" ");
+                try {
+                    if (EntityManagerUtils.isOracle(entityManager)) {
+                        queryString.append("TRUNC(").append(propertyName).append(")").append(" ");
+                    } else {
+                        queryString.append("CAST(").append(propertyName).append(" AS date)").append(" ");
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(QueryBuilder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             } else {
                 queryString.append(propertyName);
             }

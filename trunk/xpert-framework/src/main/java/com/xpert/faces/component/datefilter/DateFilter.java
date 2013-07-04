@@ -1,31 +1,17 @@
 package com.xpert.faces.component.datefilter;
 
-import com.xpert.i18n.I18N;
-import com.xpert.i18n.XpertResourceBundle;
-import java.io.IOException;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
+import javax.faces.application.ResourceDependencies;
+import javax.faces.application.ResourceDependency;
 import javax.faces.component.html.HtmlPanelGroup;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEvent;
-import org.primefaces.component.behavior.ajax.AjaxBehavior;
-import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.calendar.CalendarRenderer;
-import org.primefaces.component.column.Column;
-import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.commandbutton.CommandButtonRenderer;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.util.ComponentUtils;
 
 /**
  *
  * @author ayslan
  */
+@ResourceDependencies({
+    @ResourceDependency(library = "xpert", name = "css/style.css"),
+    @ResourceDependency(library = "xpert", name = "scripts/core.js")
+})
 public class DateFilter extends HtmlPanelGroup {
 
     private static final String COMPONENT_FAMILY = "com.xpert.component";
