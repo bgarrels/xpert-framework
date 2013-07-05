@@ -2,15 +2,12 @@ package com.xpert.persistence.query;
 
 import com.xpert.i18n.I18N;
 import com.xpert.persistence.exception.QueryFileNotFoundException;
-import com.xpert.persistence.utils.EntityManagerUtils;
 import com.xpert.utils.StringUtils;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,9 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.hibernate.Session;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.service.jdbc.connections.spi.ConnectionProvider;
 
 /**
  *
@@ -245,32 +239,42 @@ public class QueryBuilder {
                             if (value != null) {
                                 dateArray = value.toString().split(" - ");
                             }
-                            String startDate = null;
-                            String endDate = null;
+                            String startDateString = null;
+                            String endDateString = null;
                             if (dateArray != null && dateArray.length > 0) {
-                                startDate = dateArray[0];
+                                startDateString = dateArray[0];
                                 if (dateArray.length > 1) {
-                                    endDate = dateArray[1];
+                                    endDateString = dateArray[1];
                                 }
                             }
                             //if start date is empty then should be ignored
-                            if (startDate != null && !startDate.isEmpty()) {
-                                restriction.setValue(dateFormat.parse(startDate));
+                            if (startDateString != null && !startDateString.isEmpty()) {
+                                restriction.setValue(dateFormat.parse(startDateString));
                                 restriction.setTemporalType(TemporalType.DATE);
                                 restriction.setRestrictionType(RestrictionType.GREATER_EQUALS_THAN);
                             } else {
                                 ignoreRestriction = true;
                             }
                             //add LESS THAN
-                            if (endDate != null && !endDate.trim().isEmpty()) {
-                                moreRestrictions.add(new Restriction(restriction.getProperty(), RestrictionType.LESS_EQUALS_THAN, dateFormat.parse(endDate), TemporalType.DATE));
+                            if (endDateString != null && !endDateString.trim().isEmpty()) {
+                                Date dateEnd = dateFormat.parse(endDateString);
+                                //add 1 day e set to the first second
+                                Calendar calendar = (Calendar) Calendar.getInstance().clone();
+                                calendar.setTime(dateEnd);
+                                calendar.add(Calendar.DATE, 1);
+                                calendar.set(Calendar.HOUR, 0);
+                                calendar.set(Calendar.MINUTE, 0);
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MILLISECOND, 0);
+                                dateEnd = calendar.getTime();
+                                moreRestrictions.add(new Restriction(restriction.getProperty(), RestrictionType.LESS_THAN, dateEnd));
                             }
                         }
                     } else {
                         restriction.setRestrictionType(RestrictionType.LIKE);
                     }
                 } catch (Exception ex) {
-                    logger.log(Level.WARNING, "Error getting Property Type: {0}", ex.getMessage());
+                    logger.log(Level.WARNING, "Error getting Property: " + property, ex);
                 }
             }
 
@@ -300,16 +304,7 @@ public class QueryBuilder {
             if (restriction.getRestrictionType().equals(RestrictionType.LIKE) || restriction.getRestrictionType().equals(RestrictionType.NOT_LIKE)) {
                 queryString.append("UPPER(").append(propertyName).append(")").append(" ");
             } else if (restriction.getTemporalType() != null && restriction.getTemporalType().equals(TemporalType.DATE)) {
-                try {
-                    if (EntityManagerUtils.isOracle(entityManager)) {
-                        queryString.append("TRUNC(").append(propertyName).append(")").append(" ");
-                    } else {
-                        queryString.append("CAST(").append(propertyName).append(" AS date)").append(" ");
-                    }
-                } catch (Exception ex) {
-                    Logger.getLogger(QueryBuilder.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
+                queryString.append("CAST(").append(propertyName).append(" AS date)").append(" ");
             } else {
                 queryString.append(propertyName);
             }
@@ -363,9 +358,9 @@ public class QueryBuilder {
                     if (re.getLikeType() == null || re.getLikeType().equals(LikeType.BOTH)) {
                         query.setParameter(parameter, "%" + re.getValue() + "%");
                     } else if (re.getLikeType().equals(LikeType.BEGIN)) {
-                        query.setParameter(parameter, "%" + re.getValue());
-                    } else if (re.getLikeType().equals(LikeType.END)) {
                         query.setParameter(parameter, re.getValue() + "%");
+                    } else if (re.getLikeType().equals(LikeType.END)) {
+                        query.setParameter(parameter, "%" + re.getValue());
                     }
                 } else {
                     if (re.getTemporalType() != null && (re.getValue() instanceof Date || re.getValue() instanceof Calendar)) {
@@ -502,16 +497,5 @@ public class QueryBuilder {
 
     public List<Restriction> getNormalizedRestrictions() {
         return normalizedRestrictions;
-    }
-
-    public static void main(String[] args) {
-
-        QueryBuilder builder =
-                new QueryBuilder(null).from(Person.class).type(QueryType.MAX, "nome").leftJoin("p.group").leftJoin("p.profile").add(new Restriction("cpf", RestrictionType.LIKE, LikeType.BOTH)).add(new Restriction("nome", "maria")).orderBy("p.nome");
-
-        builder.add(new Restriction("nome", null));
-
-        System.out.println(builder.getQueryString());
-
     }
 }
