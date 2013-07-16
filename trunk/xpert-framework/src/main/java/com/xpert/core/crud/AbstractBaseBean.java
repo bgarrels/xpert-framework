@@ -67,8 +67,8 @@ public abstract class AbstractBaseBean<T> {
         } else {
             create();
         }
-        createDataModel();
         init();
+        createDataModel();
     }
 
     private Long getIdFromParameter() {
