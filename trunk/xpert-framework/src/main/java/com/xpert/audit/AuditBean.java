@@ -5,6 +5,7 @@ import com.xpert.Configuration;
 import com.xpert.audit.model.AbstractAuditing;
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.utils.EntityUtils;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -18,7 +19,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class AuditBean {
+public class AuditBean implements Serializable{
 
     private static final Logger logger = Logger.getLogger(AuditBean.class.getName());
     private Object object;

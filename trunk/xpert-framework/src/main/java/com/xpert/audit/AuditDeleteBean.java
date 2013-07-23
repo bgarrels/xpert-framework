@@ -11,6 +11,7 @@ import com.xpert.persistence.query.JoinBuilder;
 import com.xpert.persistence.query.Restriction;
 import com.xpert.persistence.query.RestrictionType;
 import com.xpert.persistence.utils.EntityUtils;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,7 +28,7 @@ import org.primefaces.model.LazyDataModel;
  */
 @ManagedBean
 @ViewScoped
-public class AuditDeleteBean {
+public class AuditDeleteBean implements Serializable{
 
     private static final Logger logger= Logger.getLogger(AuditDeleteBean.class.getName());
     
