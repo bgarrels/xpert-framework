@@ -10,6 +10,7 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="for" required="true" />
+        <cc:attribute name="forClass" required="java.lang.Class" />
         <cc:attribute name="collapsed" type="boolean" default="true" />
     </cc:interface>
 
@@ -73,7 +74,7 @@
                                                     <h:outputText value="#{indexMetadata+1}" />
                                                 </p:column>
                                                 <p:column headerText="#{xmsg.field}">
-                                                    <h:outputText value="#{metadata.field}" />
+                                                    <h:outputText value="#{metadata.getFieldName(empty cc.attrs.forClass ? cc.attrs.for.getClass() : cc.attrs.forClass)}" />
                                                 </p:column>
                                                 <p:column headerText="#{xmsg.oldValue}">
                                                     <h:outputText value="#{metadata.oldValue}" />

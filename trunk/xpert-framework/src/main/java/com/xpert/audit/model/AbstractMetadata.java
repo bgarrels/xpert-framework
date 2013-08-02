@@ -1,5 +1,6 @@
 package com.xpert.audit.model;
 
+import com.xpert.i18n.I18N;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -21,6 +22,20 @@ public abstract class AbstractMetadata {
     public abstract AbstractAuditing getAuditing();
 
     public abstract void setAuditing(AbstractAuditing auditing);
+
+    /**
+     * @param clazz auditing class
+     *
+     * @return the attribute name from configured resourcebundle the message
+     * for: simple name (FirstLetter lowercase) + "." + property. Example: Class
+     * Person and attribute name - person.name
+     */
+    public String getFieldName(Class clazz) {
+        if (field != null) {
+            return I18N.getAttributeName(clazz, field);
+        }
+        return field;
+    }
 
     public String getEntity() {
         return entity;

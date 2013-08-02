@@ -52,7 +52,7 @@
                                 <p:column headerText="#{xmsg['object']}">
                                     <ui:repeat value="#{audit.metadatas}" var="metadata" varStatus="status">
                                         <h:outputText value=", " rendered="#{status.index gt 0}"/>    
-                                        <h:outputText value="#{metadata.field}: " style="font-weight: bold;"/>    
+                                        <h:outputText value="#{metadata.getFieldName(cc.attrs.for)}: " style="font-weight: bold;"/>    
                                         <h:outputText value="#{empty metadata.newValue ? ' - ': metadata.newValue}"/>    
                                     </ui:repeat>
                                 </p:column>
@@ -60,7 +60,7 @@
                                     <h:outputText value="#{audit.userName}" />
                                 </p:column>
                                 <p:column>  
-                                    <xc:audit for="#{audit}"/>
+                                    <xc:audit for="#{audit}" forClass="#{cc.attrs.for}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>

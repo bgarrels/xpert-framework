@@ -42,6 +42,9 @@ public class Audit {
         if (object == null) {
             return null;
         }
+        if (object instanceof HibernateProxy) {
+            return ((HibernateProxy) object).getHibernateLazyInitializer().getIdentifier();
+        }
         return getAnnotadedWithId(object, object.getClass());
     }
 
@@ -223,6 +226,7 @@ public class Audit {
     public List<AbstractMetadata> getMetadata(Object object, Object persisted, AbstractAuditing auditing) throws Exception {
         List<Method> methodsGet = getMethods(object);
         List<AbstractMetadata> metadatas = new ArrayList<AbstractMetadata>();
+        boolean isDelete = auditing.getAuditingType() != null && auditing.getAuditingType().equals(AuditingType.DELETE);
         for (Method method : methodsGet) {
             try {
                 Object fieldValue = method.invoke(object);
@@ -249,7 +253,7 @@ public class Audit {
                             addMetadata = true;
                         } else {
                             StringBuilder oldValue = new StringBuilder();
-                            if (!(collectionNew instanceof PersistentBag) && !(collectionNew instanceof PersistentCollection)) {
+                            if ((!(collectionNew instanceof PersistentBag) && !(collectionNew instanceof PersistentCollection)) || isDelete == true) {
                                 if ((collectionNew == null && collectionOld != null) || (collectionNew != null && collectionOld == null) || (collectionNew.size() != collectionOld.size())) {
                                     addMetadata = true;
                                 } else {
@@ -273,7 +277,7 @@ public class Audit {
                     } else if (isEntity(method.getReturnType())) {
                         Object newId = getId(fieldValue);
                         //a proxy doesnt has value changed
-                        if (!(fieldValue instanceof HibernateProxy)) {
+                        if (!(fieldValue instanceof HibernateProxy) || isDelete == true) {
                             /**
                              * One to One cascade ALL
                              */

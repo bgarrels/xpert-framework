@@ -110,7 +110,7 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
     public String getMessage(String message, ValueReference valueReference) {
         Class violation = getViolation(message);
         if (violation != null) {
-            String object = getObjectWithAttribute(valueReference, valueReference.getBase().getClass());
+            String object = getAttributeName(valueReference, valueReference.getBase().getClass());
 
             if (violation.equals(Email.class)) {
                 return XpertResourceBundle.get("invalidEmail");
@@ -144,17 +144,8 @@ public class BeanValidator extends javax.faces.validator.BeanValidator {
      *
      * @return
      */
-    public String getObjectWithAttribute(ValueReference valueReference, Class clazz) {
-        String property = StringUtils.getLowerFirstLetter(clazz.getSimpleName()) + "." + valueReference.getProperty();
-        String value = I18N.get(property);
-        //try to find in superclass
-        if ((value == null || value.isEmpty() || value.equals(property)) && clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class)) {
-            return getObjectWithAttribute(valueReference, clazz.getSuperclass());
-        }
-        if (value.equals(property)) {
-            return new HumaniseCamelCase().humanise(valueReference.getProperty().toString());
-        }
-        return value;
+    public String getAttributeName(ValueReference valueReference, Class clazz) {
+        return I18N.getAttributeName(clazz,  valueReference.getProperty().toString());
     }
 
     /**
