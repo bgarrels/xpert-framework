@@ -211,7 +211,7 @@ public class BeanCreator {
 
     public static String getI18N(Class clazz) {
 
-        Field[] fields = clazz.getDeclaredFields();
+        List<Field> fields = getFields(clazz);
         StringBuilder builder = new StringBuilder();
         String className = StringUtils.getLowerFirstLetter(clazz.getSimpleName());
         String humanName = new HumaniseCamelCase().humanise(clazz.getSimpleName());

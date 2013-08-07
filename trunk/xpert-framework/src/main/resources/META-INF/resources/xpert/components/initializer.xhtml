@@ -6,6 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <ui:composition>
-        <f:event listener="#{initilizerBean.initialize}" type="javax.faces.event.PreRenderComponentEvent"  />
+        <f:event listener="#{initializerBean.setValueExpression(value)}" type="javax.faces.event.PreRenderComponentEvent"  />
+        <f:event listener="#{initializerBean.initialize}" type="javax.faces.event.PreRenderComponentEvent"  />
     </ui:composition>
 </html>

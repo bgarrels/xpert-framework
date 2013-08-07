@@ -46,7 +46,13 @@
         <component-type>com.xpert.faces.component.DateFilter</component-type>
         <component-class>com.xpert.faces.component.datefilter.DateFilter</component-class>
     </component>
-
+    
+    <!--
+    <component>
+        <component-type>com.xpert.faces.component.Initializer</component-type>
+        <component-class>com.xpert.faces.component.initializer.Initializer</component-class>
+    </component>
+-->
     
     <render-kit>
         <renderer>
@@ -74,5 +80,11 @@
             <renderer-type>com.xpert.faces.component.DateFilterRenderer</renderer-type>
             <renderer-class>com.xpert.faces.component.datefilter.DateFilterRenderer</renderer-class>
         </renderer>
+        <!--
+        <renderer>
+            <component-family>com.xpert.component</component-family>
+            <renderer-type>com.xpert.faces.component.InitializerRenderer</renderer-type>
+            <renderer-class>com.xpert.faces.component.initializer.InitializerRenderer</renderer-class>
+        </renderer>-->
     </render-kit>
 </faces-config>

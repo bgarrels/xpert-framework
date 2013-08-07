@@ -23,13 +23,13 @@ import org.hibernate.proxy.LazyInitializer;
  * @author Ayslan
  */
 @ManagedBean
-public class InitilizerBean {
+public class InitializerBean {
 
-    private static final Logger logger = Logger.getLogger(InitilizerBean.class.getName());
+    private static final Logger logger = Logger.getLogger(InitializerBean.class.getName());
     private Map<ClassIdentifier, Object> cache = new HashMap<ClassIdentifier, Object>();
     private BaseDAO baseDAO;
 
-    public InitilizerBean() {
+    public InitializerBean() {
         try {
             baseDAO = new DAO();
         } catch (Throwable t) {
@@ -43,7 +43,7 @@ public class InitilizerBean {
 
     public void initialize(ComponentSystemEvent event) {
         try {
-            initialize(event.getComponent(), FacesContext.getCurrentInstance());
+            initialize(event.getComponent(), FacesContext.getCurrentInstance(), (String) null);
         } catch (Throwable t) {
             logger.log(Level.SEVERE, null, t);
         }
@@ -82,6 +82,7 @@ public class InitilizerBean {
             lazyInitializer = ((HibernateProxy) value).getHibernateLazyInitializer();
             Object cached = cache.get(new ClassIdentifier(lazyInitializer.getIdentifier(), lazyInitializer.getPersistentClass()));
             if (cached != null) {
+                logger.log(Level.INFO, "Initializer: Object from class {0} id {1} expression found in cache", new Object[]{lazyInitializer.getPersistentClass(), lazyInitializer.getIdentifier(), expression});
                 FacesUtils.setValueEl(expression, cached);
                 return;
             }
@@ -89,6 +90,7 @@ public class InitilizerBean {
         }
 
         if (value instanceof HibernateProxy || value instanceof PersistentCollection) {
+            logger.log(Level.INFO, "Initializer: Initializing expression {0} in database", new Object[]{expression});
             Object initialized = baseDAO.getInitialized(value);
             if (value instanceof HibernateProxy) {
                 cache.put(new ClassIdentifier(lazyInitializer.getIdentifier(), lazyInitializer.getPersistentClass()), initialized);
@@ -97,10 +99,32 @@ public class InitilizerBean {
         }
     }
 
-    public void initialize(UIComponent component, FacesContext context) {
-        ValueExpression valueExpression = component.getValueExpression("value");
-        String expression = valueExpression.getExpressionString();
-        initializeValue(expression);
+    /**
+     *
+     * @param component Component to get ValueExpression
+     * @param context Current FacesCOntext
+     * @param property Property Name to be initialized
+     */
+    public void initialize(UIComponent component, FacesContext context, String property) {
+        if (property == null || property.isEmpty()) {
+            property = "value";
+        }
+        ValueExpression valueExpression = component.getValueExpression(property);
+        initialize(component, context, valueExpression);
+    }
+
+    /**
+     *
+     * @param component Component to get ValueExpression
+     * @param context Current FacesContext
+     * @param value If passed ValueExpression will not be used, this value will
+     * be initilized
+     */
+    public void initialize(UIComponent component, FacesContext context, ValueExpression valueExpression) {
+        if (valueExpression != null) {
+            String expression = valueExpression.getExpressionString();
+            initializeValue(expression);
+        }
     }
 
     public class ClassIdentifier {
