@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -17,6 +18,8 @@ public class PersonType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @NotBlank
     private String description;
 
     public String getDescription() {

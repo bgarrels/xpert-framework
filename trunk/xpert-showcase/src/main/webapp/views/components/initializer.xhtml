@@ -14,72 +14,148 @@
             #{msg['initializer.description']}
         </div>
 
-        <p:panel header="#{msg['initializer.combo']}">
+        <h3>#{msg['initializer.combo']}</h3>
+
+        <h:outputText value="#{msg['initializer.comboDescription']}"/>
+        <br/>
+        <h:form>
+            <h:panelGrid columns="2">
+
+                <h:outputLabel value="#{msg['country']}:" />
+                <h:selectOneMenu value="#{viewScope.country}" converter="entityConverter" >
+                    <f:selectItem itemLabel="" />
+                    <f:selectItems value="#{findAllBean.get(classMB.country)}" var="country" itemLabel="#{country.name}" />
+                    <p:ajax process="@this" update="@form"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{msg['state']}:" />
+                <h:selectOneMenu value="#{viewScope.state}" converter="entityConverter" >
+                    <f:selectItem itemLabel="" />
+                    <f:selectItems value="#{viewScope.country.states}" var="state" itemLabel="#{state.name}" >
+                        <x:initializer/>
+                    </f:selectItems>
+                    <p:ajax process="@this" update="@form"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{msg['city']}:" />
+                <h:selectOneMenu value="#{viewScope.city}" converter="entityConverter" >
+                    <f:selectItem itemLabel="" />
+                    <f:selectItems value="#{viewScope.state.cities}" var="city" itemLabel="#{city.name}" >
+                        <x:initializer/>
+                    </f:selectItems>
+                </h:selectOneMenu>
+
+            </h:panelGrid>
+        </h:form>
+
+        <pre name="code" class="xml">
+            &lt;h:form&gt;
+                &lt;h:panelGrid columns=&quot;2&quot;&gt;
+
+                    &lt;h:outputLabel value=&quot;#{msg['country']}:&quot; /&gt;
+                    &lt;h:selectOneMenu value=&quot;\#{viewScope.country}&quot; converter=&quot;entityConverter&quot; &gt;
+                        &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
+                        &lt;f:selectItems value=&quot;\#{findAllBean.get(classMB.country)}&quot; var=&quot;country&quot; itemLabel=&quot;\#{country.name}&quot; /&gt;
+                        &lt;p:ajax process=&quot;@this&quot; update=&quot;@form&quot;/&gt;
+                    &lt;/h:selectOneMenu&gt;
+
+                    &lt;h:outputLabel value=&quot;#{msg['state']}:&quot; /&gt;
+                    &lt;h:selectOneMenu value=&quot;\#{viewScope.state}&quot; converter=&quot;entityConverter&quot; &gt;
+                        &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
+                        &lt;f:selectItems value=&quot;\#{viewScope.country.states}&quot; var=&quot;state&quot; itemLabel=&quot;\#{state.name}&quot; &gt;
+                            &lt;x:initializer/&gt;
+                        &lt;/f:selectItems&gt;
+                        &lt;p:ajax process=&quot;@this&quot; update=&quot;@form&quot;/&gt;
+                    &lt;/h:selectOneMenu&gt;
+
+                    &lt;h:outputLabel value=&quot;#{msg['city']}:&quot; /&gt;
+                    &lt;h:selectOneMenu value=&quot;#{viewScope.city}&quot; converter=&quot;entityConverter&quot; &gt;
+                        &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
+                        &lt;f:selectItems value=&quot;\#{viewScope.state.cities}&quot; var=&quot;city&quot; itemLabel=&quot;\#{city.name}&quot; &gt;
+                            &lt;x:initializer/&gt;
+                        &lt;/f:selectItems&gt;
+                    &lt;/h:selectOneMenu&gt;
+
+                &lt;/h:panelGrid&gt;
+            &lt;/h:form&gt;
+        </pre>
+
+        <h3>#{msg['initializer.zeroConfiguration']}</h3>
+
+        <h:outputText value="#{msg['initializer.podeIndicarOEntityManagerNoComponente']}"/>
+        <br/>
+
+        <pre name="code" class="xml">
+            &lt;x:initializer  entityManager=&quot;\#{someBean.entityManager}&quot; /&gt;
+        </pre>
+
+        <h3>#{msg['initializer.initializeAnyExpression']}</h3>
+
+        <h:outputText value="#{msg['initializer.initializeAnyExpressionDescription']}"/>
+        <br/>
+
+        <pre name="code" class="xml">
+            &lt;x:initializer value=&quot;\#{someBean.object.lazyAtribute}&quot; /&gt;
+            &lt;h:outputText value=&quot;\#{someBean.object.lazyAtribute}&quot; /&gt;
+        </pre>
+
+        <br/>
+        <h:outputText value="#{msg['initializer.isEqualsTo']}:"/>
+        <br/>
+        <pre name="code" class="xml">
+                &lt;h:outputText value=&quot;\#{someBean.object.lazyAtribute}&quot;&gt;
+                     &lt;x:initializer /&gt;
+                &lt;/h:outputText&gt;
+        </pre>
+
+        <h3>#{msg['initializer.initializeAnotherProperty']}</h3>
+
+        <h:outputText value="#{msg['initializer.initializeAnotherPropertyDescription']}"/>
+
+        <br/>
+
+        <pre name="code" class="xml">
+                &lt;p:panel header=&quot;\#{someBean.object.lazyAtribute}&quot;&gt;
+                     &lt;x:initializer property=&quot;header&quot;/&gt;
+                &lt;/p:panel&gt;
+        </pre>
+
+        <h3>#{msg['initializer.person']}</h3>
+
+        <h:outputText value="#{msg['initializer.initializeGroupPerson']}"/>
+        <br/>
+        <h:panelGroup id="panelFormPerson">
             <h:form>
-                <h:panelGrid columns="2">
 
-                    <h:outputLabel value="#{msg['country']}:" />
-                    <h:selectOneMenu value="#{viewScope.country}" converter="entityConverter" >
-                        <f:selectItem itemLabel="" />
-                        <f:selectItems value="#{findAllBean.get(classMB.country)}" var="country" itemLabel="#{country.name}" />
-                        <p:ajax process="@this" update="@form"/>
-                    </h:selectOneMenu>
-
-                    <h:outputLabel value="#{msg['state']}:" />
-                    <h:selectOneMenu value="#{viewScope.state}" converter="entityConverter" >
-                        <f:selectItem itemLabel="" />
-                        <f:selectItems value="#{viewScope.country.states}" var="state" itemLabel="#{state.name}" >
-                            <x:initializer/>
-                        </f:selectItems>
-                        <p:ajax process="@this" update="@form"/>
-                    </h:selectOneMenu>
-                    
-                    <h:outputLabel value="#{msg['city']}:" />
-                    <h:selectOneMenu value="#{viewScope.city}" converter="entityConverter" >
-                        <f:selectItem itemLabel="" />
-                        <f:selectItems value="#{viewScope.state.cities}" var="city" itemLabel="#{city.name}" >
-                            <x:initializer/>
-                        </f:selectItems>
-                    </h:selectOneMenu>
-
-                </h:panelGrid>
-            </h:form>
-        </p:panel>
-        <p:spacer height="3"/>
-        <p:panel header="#{msg['initializer.person']}">
-            <h:panelGroup id="panelFormPerson">
-                <h:form>
-
-                    <p:dataTable id="dataTablePerson" 
-                                 paginator="true" rows="5" paginatorPosition="bottom"
+                <p:dataTable id="dataTablePerson" 
+                             paginator="true" rows="5" paginatorPosition="bottom"
                              var="person" value="#{personMB.dataModel}">
-                        <p:column headerText="#{msg['person.name']}" >
-                            <h:outputText value="#{person.name}"/>
-                        </p:column>
-                        <p:column headerText="#{msg['person.cpf']}">
-                            <h:outputText value="#{person.cpf}"/>
-                        </p:column>
-                        <p:column headerText="#{msg['person.code']}">
-                            <h:outputText value="#{person.code}"/>
-                        </p:column>
-                        <p:column headerText="#{msg['person.group']}">
-                            <h:outputText value="#{person.group.description}">
-                                <x:initializer/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column style="text-align: center;">
-                            <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":panelPersonDetail" >
-                                <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}" />
-                            </p:commandButton>
-                        </p:column>
+                    <p:column headerText="#{msg['person.name']}" >
+                        <h:outputText value="#{person.name}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['person.cpf']}">
+                        <h:outputText value="#{person.cpf}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['person.code']}">
+                        <h:outputText value="#{person.code}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['person.group']}">
+                        <h:outputText value="#{person.group.description}">
+                            <x:initializer/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":panelPersonDetail" >
+                            <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}" />
+                        </p:commandButton>
+                    </p:column>
 
-                    </p:dataTable>
+                </p:dataTable>
 
-                </h:form>
-            </h:panelGroup>
-        </p:panel>
+            </h:form>
+        </h:panelGroup>
 
-        <p:dialog widgetVar="widgetPersonDetail" header="Detalhe Person" appendToBody="true" modal="true" width="600">
+        <p:dialog widgetVar="widgetPersonDetail" header="#{msg['person.detail']}" appendToBody="true" modal="true" width="600">
             <h:panelGroup id="panelPersonDetail">
                 <h:form>
                     <h:panelGrid columns="2" style="width: 450px;" >
@@ -113,40 +189,8 @@
 
         <h3>Source</h3>
         <p:tabView>
-            <p:tab title="initializer.xhtml">
+            <p:tab title="#{msg['initializer.person']}">
                 <pre name="code" class="xml">
-                &lt;p:panel header=&quot;#{msg['initializer.combo']}&quot;&gt;
-                    &lt;h:form&gt;
-                        &lt;h:panelGrid columns=&quot;2&quot;&gt;
-
-                            &lt;h:outputLabel value=&quot;#{msg['country']}:&quot; /&gt;
-                            &lt;h:selectOneMenu value=&quot;\#{viewScope.country}&quot; converter=&quot;entityConverter&quot; &gt;
-                                &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
-                                &lt;f:selectItems value=&quot;\#{findAllBean.get(classMB.country)}&quot; var=&quot;country&quot; itemLabel=&quot;\#{country.name}&quot; /&gt;
-                                &lt;p:ajax process=&quot;@this&quot; update=&quot;@form&quot;/&gt;
-                            &lt;/h:selectOneMenu&gt;
-
-                            &lt;h:outputLabel value=&quot;#{msg['state']}:&quot; /&gt;
-                            &lt;h:selectOneMenu value=&quot;\#{viewScope.state}&quot; converter=&quot;entityConverter&quot; &gt;
-                                &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
-                                &lt;f:selectItems value=&quot;\#{viewScope.country.states}&quot; var=&quot;state&quot; itemLabel=&quot;\#{state.name}&quot; &gt;
-                                    &lt;x:initializer/&gt;
-                                &lt;/f:selectItems&gt;
-                                &lt;p:ajax process=&quot;@this&quot; update=&quot;@form&quot;/&gt;
-                            &lt;/h:selectOneMenu&gt;
-
-                            &lt;h:outputLabel value=&quot;#{msg['city']}:&quot; /&gt;
-                            &lt;h:selectOneMenu value=&quot;#{viewScope.city}&quot; converter=&quot;entityConverter&quot; &gt;
-                                &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
-                                &lt;f:selectItems value=&quot;\#{viewScope.state.cities}&quot; var=&quot;city&quot; itemLabel=&quot;\#{city.name}&quot; &gt;
-                                    &lt;x:initializer/&gt;
-                                &lt;/f:selectItems&gt;
-                            &lt;/h:selectOneMenu&gt;
-
-                        &lt;/h:panelGrid&gt;
-                    &lt;/h:form&gt;
-                &lt;/p:panel&gt;
-                &lt;p:spacer height=&quot;3&quot;/&gt;
                 &lt;p:panel header=&quot;#{msg['initializer.person']}&quot;&gt;
                     &lt;h:panelGroup id=&quot;panelFormPerson&quot;&gt;
                         &lt;h:form&gt;
@@ -180,7 +224,7 @@
                     &lt;/h:panelGroup&gt;
                 &lt;/p:panel&gt;
 
-                &lt;p:dialog widgetVar=&quot;widgetPersonDetail&quot; header=&quot;Detalhe Person&quot; appendToBody=&quot;true&quot; modal=&quot;true&quot; width=&quot;600&quot;&gt;
+                &lt;p:dialog widgetVar=&quot;widgetPersonDetail&quot; header=&quot;#{msg['person.detail']}&quot; appendToBody=&quot;true&quot; modal=&quot;true&quot; width=&quot;600&quot;&gt;
                     &lt;h:panelGroup id=&quot;panelPersonDetail&quot;&gt;
                         &lt;h:form&gt;
                             &lt;h:panelGrid columns=&quot;2&quot; style=&quot;width: 450px;&quot; &gt;
@@ -215,6 +259,7 @@
                 </pre>
             </p:tab>
             <p:tab title="Configuration">
+                <xc:info value="#{msg['initializer.noConfigurationAlert']}"/>
                 <ui:include src="/views/common/java/entityManagerFactory.xhtml"/>
             </p:tab>
             <ui:include src="/views/common/java/person.xhtml"/>

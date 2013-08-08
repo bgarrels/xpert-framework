@@ -24,3 +24,4 @@ h1 a{text-decoration: none;}
 .grid-detail td label{font-weight: bold;}
 .ui-toolbar{margin: 2px 0;}
 .ui-datatable th input.ui-column-filter{width: 90%;}
+.ui-panel{margin-top: 6px;}

@@ -10,7 +10,7 @@
     <f:view locale="#{localeBean.locale}">
         <h:head>
             <title>Xpert - #{title}</title>
-            <link rel="stylesheet" href="#{request.contextPath}/css/style.css" type="text/css" media="screen" />
+            <link rel="stylesheet" href="#{request.contextPath}/css/style.css?version=#{constantMB.xpertFrameworkVersion}" type="text/css" media="screen" />
             <script type="text/javascript" src="#{request.contextPath}/scripts/scripts.js"/>
             <h:outputScript library="xpert" name="scripts/sh.js"/>
             <h:outputScript library="xpert" name="scripts/core.js"/>
@@ -26,7 +26,7 @@
                     <tr>
                         <td>
                             <h1 class="title">
-                                <h:link outcome="/index.jsf" value="Xpert - Showcase"/>
+                                <h:link outcome="/index.jsf" value="Xpert Framework - Showcase"/>
                             </h1>
                         </td>
                         <td align="right">

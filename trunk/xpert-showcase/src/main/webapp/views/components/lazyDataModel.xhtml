@@ -7,15 +7,16 @@
                  xmlns:x="http://xpert.com/faces"
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
                  >
-    <ui:param name="title" value="I18N BeanValidation (JSR 303)" />
+    <ui:param name="title" value="LazyDataModel" />
     <ui:define name="body">
         <div class="description">
             Primefaces LazyDataModel integrated with the xpert-persistence. Load data from database on demand.
         </div>
 
         <h:form>
+            
 
-            <p:dataTable id="dataTablePerson" 
+            <p:dataTable id="dataTablePerson" lazy="true"
                          paginator="true" rows="5"
                          var="person" value="#{lazyDataModelMB.people}">
                 <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">

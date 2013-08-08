@@ -13,7 +13,7 @@ import com.xpert.showcase.model.StatusGroup;
 
 /**
  *
- * @author #Author
+ * @author ayslan
  */
 @Stateless
 public class StatusGroupBO extends AbstractBusinessObject<StatusGroup> {
@@ -22,7 +22,7 @@ public class StatusGroupBO extends AbstractBusinessObject<StatusGroup> {
     private StatusGroupDAO statusGroupDAO;
     
     @Override
-    public BaseDAO getDAO() {
+    public StatusGroupDAO getDAO() {
         return statusGroupDAO;
     }
 

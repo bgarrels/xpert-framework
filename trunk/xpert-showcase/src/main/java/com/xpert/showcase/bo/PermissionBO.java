@@ -1,27 +1,28 @@
 package com.xpert.showcase.bo;
 
 import com.xpert.core.crud.AbstractBusinessObject;
-import com.xpert.core.exception.BusinessException;
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.showcase.dao.PermissionDAO;
 import com.xpert.core.validation.UniqueField;
-import com.xpert.showcase.model.Permission;
+import com.xpert.core.exception.BusinessException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import com.xpert.showcase.model.Permission;
 
 /**
  *
- * @author #Insert Author here
+ * @author ayslan
  */
 @Stateless
 public class PermissionBO extends AbstractBusinessObject<Permission> {
 
     @EJB
     private PermissionDAO permissionDAO;
-
+    
     @Override
-    public BaseDAO getDAO() {
+    public PermissionDAO getDAO() {
         return permissionDAO;
     }
 
@@ -31,11 +32,12 @@ public class PermissionBO extends AbstractBusinessObject<Permission> {
     }
 
     @Override
+    public void validate(Permission permission) throws BusinessException {
+    }
+
+    @Override
     public boolean isAudit() {
         return true;
     }
 
-    @Override
-    public void validate(Permission permission) throws BusinessException {
-    }
 }

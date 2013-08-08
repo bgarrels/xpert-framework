@@ -13,7 +13,7 @@ import com.xpert.showcase.model.CompanyType;
 
 /**
  *
- * @author #Author
+ * @author ayslan
  */
 @Stateless
 public class CompanyTypeBO extends AbstractBusinessObject<CompanyType> {
@@ -22,7 +22,7 @@ public class CompanyTypeBO extends AbstractBusinessObject<CompanyType> {
     private CompanyTypeDAO companyTypeDAO;
     
     @Override
-    public BaseDAO getDAO() {
+    public CompanyTypeDAO getDAO() {
         return companyTypeDAO;
     }
 

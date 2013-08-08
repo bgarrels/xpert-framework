@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -19,7 +21,10 @@ public class State implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank
     private String name;
+    
+    @NotNull
     @ManyToOne
     private Country country;
     @OneToMany(mappedBy = "state")

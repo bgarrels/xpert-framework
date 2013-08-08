@@ -2,6 +2,8 @@ package com.xpert.showcase.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -13,8 +15,12 @@ public class Project extends Generic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @NotNull
     @ManyToOne
     private State state;
+    
+    @NotBlank
     private String name;
 
     public Long getId() {

@@ -1,6 +1,7 @@
 package com.xpert.showcase.model;
 
 import javax.persistence.*;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -13,6 +14,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @NotBlank
     private String description;
     
     @ManyToOne(fetch = FetchType.LAZY)
