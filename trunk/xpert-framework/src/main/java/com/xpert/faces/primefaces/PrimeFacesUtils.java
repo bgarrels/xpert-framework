@@ -22,6 +22,15 @@ public class PrimeFacesUtils {
         }
     }
 
+    public static void update(String... targets) {
+        RequestContext context = RequestContext.getCurrentInstance();
+        if (context != null) {
+            for (String string : targets) {
+                context.update(string);
+            }
+        }
+    }
+    
     public static void addPartialUpdateTarget(String... targets) {
         RequestContext context = RequestContext.getCurrentInstance();
         if (context != null) {

@@ -4,7 +4,7 @@ class Validation {
 
     public static boolean validateCPF(String cpf) {
 
-        cpf = cpf.replace(".", "").replace("-", "");
+        cpf = cpf.replaceAll("[^\\d]", "");
         boolean valid = false;
         if (cpf.length() < 11) {
             return valid;
@@ -94,7 +94,7 @@ class Validation {
         @SuppressWarnings("unused")
         int soma = 0, dig;
 
-        cnpj = cnpj.replace(".", "").replace("-", "").replace("/", "");
+        cnpj = cnpj.replaceAll("[^\\d]", "");
 
         if (cnpj.length() != 14) {
             return false;

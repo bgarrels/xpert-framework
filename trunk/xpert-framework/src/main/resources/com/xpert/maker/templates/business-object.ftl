@@ -22,7 +22,7 @@ public class ${name}${configuration.businessObjectSuffix} extends AbstractBusine
     private ${name}DAO ${nameLower}DAO;
     
     @Override
-    public BaseDAO getDAO() {
+    public ${name}DAO getDAO() {
         return ${nameLower}DAO;
     }
 

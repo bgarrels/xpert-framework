@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.xpert.faces.component.initializer;
 
-import com.xpert.faces.bean.InitializerBean;
 import java.util.Map;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -53,7 +48,6 @@ public class InitializerEventListener implements ComponentSystemEventListener {
     }
 
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        long inicio = System.currentTimeMillis();
         if (parent == null || faceletContext == null) {
             return;
         }
@@ -63,7 +57,5 @@ public class InitializerEventListener implements ComponentSystemEventListener {
         } else {
             initializerBean.initialize(parent, faceletContext.getFacesContext(), valueExpression);
         }
-        long fim = System.currentTimeMillis();
-        System.out.println("fim: " + (fim - inicio));
     }
 }

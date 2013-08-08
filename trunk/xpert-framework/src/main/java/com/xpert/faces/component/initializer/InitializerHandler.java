@@ -1,16 +1,10 @@
 package com.xpert.faces.component.initializer;
 
-import com.xpert.faces.bean.InitializerBean;
 import java.io.IOException;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.view.facelets.ComponentConfig;
-import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;

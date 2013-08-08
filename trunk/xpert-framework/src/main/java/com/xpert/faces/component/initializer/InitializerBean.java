@@ -1,17 +1,14 @@
-package com.xpert.faces.bean;
+package com.xpert.faces.component.initializer;
 
 import com.xpert.DAO;
 import com.xpert.faces.utils.FacesUtils;
-import com.xpert.persistence.dao.BaseDAO;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
 import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
