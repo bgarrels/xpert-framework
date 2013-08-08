@@ -68,7 +68,7 @@ Xpert = {
         
         var dateStart = $column.find('.calendar-filter-start input').val();
         var dateEnd = $column.find('.calendar-filter-end input').val();
-        var cancatDate = dateStart+" - "+dateEnd;
+        var cancatDate = dateStart+" ## "+dateEnd;
         $inputFilter.val(cancatDate);
 
     },

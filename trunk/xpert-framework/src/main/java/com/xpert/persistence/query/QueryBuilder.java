@@ -27,6 +27,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  */
 public class QueryBuilder {
 
+    private static final String DATE_FILTER_INTERVAL_SEPARATOR = " ## ";
     private String order;
     private String attributeName;
     private Class from;
@@ -237,7 +238,7 @@ public class QueryBuilder {
                             Object value = restriction.getValue().toString();
                             String[] dateArray = null;
                             if (value != null) {
-                                dateArray = value.toString().split(" - ");
+                                dateArray = value.toString().split(DATE_FILTER_INTERVAL_SEPARATOR);
                             }
                             String startDateString = null;
                             String endDateString = null;
@@ -249,15 +250,15 @@ public class QueryBuilder {
                             }
                             //if start date is empty then should be ignored
                             if (startDateString != null && !startDateString.isEmpty()) {
-                                restriction.setValue(dateFormat.parse(startDateString));
-                                restriction.setTemporalType(TemporalType.DATE);
+                                restriction.setValue(dateFormat.parse(startDateString.trim()));
+                                restriction.setTemporalType(TemporalType.TIMESTAMP);
                                 restriction.setRestrictionType(RestrictionType.GREATER_EQUALS_THAN);
                             } else {
                                 ignoreRestriction = true;
                             }
                             //add LESS THAN
                             if (endDateString != null && !endDateString.trim().isEmpty()) {
-                                Date dateEnd = dateFormat.parse(endDateString);
+                                Date dateEnd = dateFormat.parse(endDateString.trim());
                                 //add 1 day e set to the first second
                                 Calendar calendar = (Calendar) Calendar.getInstance().clone();
                                 calendar.setTime(dateEnd);
