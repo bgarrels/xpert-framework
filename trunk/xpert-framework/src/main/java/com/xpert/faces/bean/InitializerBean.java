@@ -6,6 +6,8 @@ import com.xpert.persistence.dao.BaseDAO;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -13,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.persistence.EntityManager;
 import org.hibernate.LazyInitializationException;
 import org.hibernate.collection.spi.PersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
@@ -22,22 +25,33 @@ import org.hibernate.proxy.LazyInitializer;
  *
  * @author Ayslan
  */
-@ManagedBean
 public class InitializerBean {
 
     private static final Logger logger = Logger.getLogger(InitializerBean.class.getName());
     private Map<ClassIdentifier, Object> cache = new HashMap<ClassIdentifier, Object>();
-    private BaseDAO baseDAO;
+    private DAO dao;
+    private EntityManager entityManager;
 
-    public InitializerBean() {
+    public InitializerBean(EntityManager entityManager) {
+        this.entityManager = entityManager;
         try {
-            baseDAO = new DAO();
+            this.dao = new DAO();
+            if (this.entityManager != null) {
+                this.dao.setEntityManager(this.entityManager);
+            }
         } catch (Throwable t) {
             logger.log(Level.SEVERE, "Error on InitilizerBean Cosntructor.", t);
         }
     }
 
-    @PostConstruct
+    public InitializerBean() {
+        try {
+            dao = new DAO();
+        } catch (Throwable t) {
+            logger.log(Level.SEVERE, "Error on InitilizerBean Cosntructor.", t);
+        }
+    }
+
     public void init() {
     }
 
@@ -91,7 +105,7 @@ public class InitializerBean {
 
         if (value instanceof HibernateProxy || value instanceof PersistentCollection) {
             logger.log(Level.INFO, "Initializer: Initializing expression {0} in database", new Object[]{expression});
-            Object initialized = baseDAO.getInitialized(value);
+            Object initialized = dao.getInitialized(value);
             if (value instanceof HibernateProxy) {
                 cache.put(new ClassIdentifier(lazyInitializer.getIdentifier(), lazyInitializer.getPersistentClass()), initialized);
             }
@@ -123,7 +137,10 @@ public class InitializerBean {
     public void initialize(UIComponent component, FacesContext context, ValueExpression valueExpression) {
         if (valueExpression != null) {
             String expression = valueExpression.getExpressionString();
-            initializeValue(expression);
+            Matcher matcher = Pattern.compile("\\#\\{.*?\\}").matcher(expression);
+            while (matcher.find()) {
+                initializeValue(matcher.group());
+            }
         }
     }
 

@@ -1,8 +1,6 @@
 package com.xpert;
 
 import com.xpert.persistence.dao.BaseDAOImpl;
-import com.xpert.persistence.utils.EntityUtils;
-import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
@@ -36,4 +34,10 @@ public class DAO extends BaseDAOImpl {
         }
         return entityManager;
     }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+    
+    
 }

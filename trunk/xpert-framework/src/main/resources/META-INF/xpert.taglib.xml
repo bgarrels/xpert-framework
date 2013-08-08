@@ -32,9 +32,9 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>initializeOnlyWhenRendered</name>
+            <name>entityManager</name>
             <required>false</required>
-            <type>java.lang.Boolean</type>
+            <type>javax.persistence.EntityManager</type>
         </attribute>
     </tag>
     <tag>
