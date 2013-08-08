@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author Ayslan
  */
 @Entity
-public class City extends Generic implements Serializable {
+public class City implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

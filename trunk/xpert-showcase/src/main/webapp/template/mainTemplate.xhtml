@@ -33,6 +33,12 @@
                             <div class="header-detail">
                                 <b>Powered by</b><br/>
                                 JSF API 2.1, Xpert-Framework #{constantMB.xpertFrameworkVersion},<br/> PrimeFaces #{constantMB.primefacesVersion}, Glassfish 3.1
+                                <br/>
+                                <h:panelGroup style="font-weight: normal; font-style: italic;"> 
+                                    (Session date: <h:outputText value="#{userSession.startSession}">
+                                        <f:convertDateTime dateStyle="full" timeStyle="full"/>
+                                    </h:outputText>)
+                                </h:panelGroup>
                             </div>
                             <h:form>
                                 <xc:localeSwitcher/>
@@ -83,12 +89,9 @@
                                 <h:link outcome="/views/crud/country/listCountry.jsf" value="Country" />
                                 <h:link outcome="/views/crud/state/listState.jsf" value="State" />
                                 <h:link outcome="/views/crud/city/listCity.jsf" value="City" />
-                                <h:link outcome="/views/crud/companyType/listCompanyType.jsf" value="Company Type" />
-                                <h:link outcome="/views/crud/group/listGroup.jsf" value="Group" />
-                                <h:link outcome="/views/crud/model/listModel.jsf" value="Model" />
                                 <h:link outcome="/views/crud/permission/listPermission.jsf" value="Permission" />
-                                <h:link outcome="/views/crud/personType/listPersonType.jsf" value="Person Type" />
                                 <h:link outcome="/views/crud/profile/listProfile.jsf" value="Profile" />
+                                <h:link outcome="/views/crud/group/listGroup.jsf" value="Group" />
                                 <h:link outcome="/views/crud/statusGroup/listStatusGroup.jsf" value="Status Group" />
                             </h:panelGrid>
                         </p:panel>
@@ -115,7 +118,11 @@
             </h:panelGrid>
 
             <script type="text/javascript">
-                $(function() {$('.sidebar a').hover(function() {$(this).toggleClass('ui-state-hover');})});
+                $(function() {
+                    $('.sidebar a').hover(function() {
+                        $(this).toggleClass('ui-state-hover');
+                    })
+                });
                 Xpert.highlightCode("code");
             </script>
 
@@ -127,9 +134,12 @@
                 _gaq.push(['_trackPageview']);
 
                 (function() {
-                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    var ga = document.createElement('script');
+                    ga.type = 'text/javascript';
+                    ga.async = true;
                     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(ga, s);
                 })();
 
             </script>

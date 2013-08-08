@@ -19,7 +19,6 @@ public class FindAllBean extends com.xpert.faces.bean.FindAllBean {
 
     static {
         MODEL.put(Group.class, new ClassModel("description"));
-        MODEL.put(Permission.class, new ClassModel("description"));
         MODEL.put(Status.class, new ClassModel("description"));
         MODEL.put(Country.class, new ClassModel("name"));
         MODEL.put(State.class, new ClassModel("name"));
