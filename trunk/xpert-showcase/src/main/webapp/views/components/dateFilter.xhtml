@@ -1,0 +1,78 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <ui:param name="title" value="Date Filter" />
+    <ui:define name="body">
+
+        <div class="description">
+            #{msg['dateFilter.description']}
+        </div>
+
+        <h:form>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30"
+                         lazy="true"
+                         var="person" value="#{personMB.dataModel}">
+                <p:column sortBy="#{person.birthday}"
+                          filterBy="#{person.birthday}" style="text-align: center;">
+                    <f:facet name="header">
+                        #{msg['person.birthday']}
+                        <x:dateFilter/>
+                    </f:facet>
+                    <h:outputText value="#{person.birthday}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}"
+                          filterBy="#{person.name}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}" sortBy="#{person.cpf}"
+                          filterBy="#{person.cpf}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <h3>Source</h3>
+        
+        <pre name="code" class="xml">
+
+            &lt;p:dataTable paginator=&quot;true&quot; rows=&quot;10&quot; rowsPerPageTemplate=&quot;10,20,30&quot;
+                         lazy=&quot;true&quot;
+                         var=&quot;person&quot; value=&quot;\#{personMB.dataModel}&quot;&gt;
+                &lt;p:column sortBy=&quot;\#{person.birthday}&quot;
+                          filterBy=&quot;\#{person.birthday}&quot; style=&quot;text-align: center;&quot;&gt;
+                    &lt;f:facet name=&quot;header&quot;&gt;
+                        #{msg['person.birthday']}
+                        &lt;x:dateFilter/&gt;
+                    &lt;/f:facet&gt;
+                    &lt;h:outputText value=&quot;\#{person.birthday}&quot;/&gt;
+                &lt;/p:column&gt;
+                &lt;p:column headerText=&quot;#{msg['person.name']}&quot; sortBy=&quot;\#{person.name}&quot;
+                          filterBy=&quot;\#{person.name}&quot;&gt;
+                    &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                &lt;/p:column&gt;
+                &lt;p:column headerText=&quot;#{msg['person.cpf']}&quot; sortBy=&quot;\#{person.cpf}&quot;
+                          filterBy=&quot;\#{person.cpf}&quot;&gt;
+                    &lt;h:outputText value=&quot;\#{person.cpf}&quot;/&gt;
+                &lt;/p:column&gt;
+            &lt;/p:dataTable&gt;
+
+        </pre>
+
+        To acess the selected locale by EL:
+        <pre name="code" class="xml">
+        \#{localeBean.locale}
+        </pre>
+        Example:
+        <pre name="code" class="xml">
+        &lt;f:view locale=&quot;\#{localeBean.locale}&quot;&gt;
+        </pre>
+
+    </ui:define>
+</ui:composition>

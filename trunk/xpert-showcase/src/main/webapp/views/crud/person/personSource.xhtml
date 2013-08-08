@@ -259,15 +259,15 @@
 
             </pre>
         </p:tab>
+        
         <p:tab title="PersonBO.java">
             <pre name="code" class="java">
-            package com.xpert.showcase.bo;
-
             import com.xpert.core.crud.AbstractBusinessObject;
             import com.xpert.core.exception.BusinessException;
             import com.xpert.persistence.dao.BaseDAO;
             import com.xpert.showcase.dao.PersonDAO;
             import com.xpert.core.validation.UniqueField;
+            import com.xpert.core.validation.UniqueFields;
             import com.xpert.showcase.model.Person;
             import java.util.ArrayList;
             import java.util.List;
@@ -287,14 +287,11 @@
 
                 @Override
                 public List&lt;UniqueField&gt; getUniqueFields() {
-                    return new ArrayList&lt;UniqueField&gt;() {
-
-                        {
-                            add(new UniqueField(&quot;CPF already exists&quot;, &quot;cpf&quot;));
-                            add(new UniqueField(&quot;Email already exists&quot;, &quot;email&quot;));
-                            add(new UniqueField(&quot;RG already exists&quot;, &quot;rg&quot;));
-                        }
-                    };
+                    UniqueFields uniqueFields = new UniqueFields();
+                    uniqueFields.add(new UniqueField(&quot;cpf&quot;).setMessage(&quot;CPF already exists&quot;));
+                    uniqueFields.add(new UniqueField(&quot;email&quot;).setMessage(&quot;Email already exists&quot;));
+                    uniqueFields.add(new UniqueField(&quot;rg&quot;).setMessage(&quot;RG already exists&quot;));
+                    return uniqueFields;
                 }
 
                 @Override
@@ -305,10 +302,7 @@
                 @Override
                 public void validate(Person person) throws BusinessException {
                 }
-
-
             }
-
             </pre>
         </p:tab>
     </p:tabView>

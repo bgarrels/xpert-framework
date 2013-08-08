@@ -31,8 +31,8 @@ public class ClassMB {
     public Class getGroup() {
         return Group.class;
     }
-    public Class getPerson() {
-        return Person.class;
+    public Class getPermission() {
+        return Permission.class;
     }
     public Class getProfile() {
         return Profile.class;

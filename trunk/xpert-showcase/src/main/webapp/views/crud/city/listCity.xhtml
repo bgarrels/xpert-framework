@@ -28,16 +28,6 @@
                           filterBy="#{city.name}"   >
                         <h:outputText value="#{city.name}"/>
                 </p:column>
-                <p:column headerText="#{msg['city.creation']}" sortBy="#{city.creation}"
-                          filterBy="#{city.creation}"   style="text-align: center;">
-                        <f:facet name="header">
-                            #{msg['city.creation']}
-                            <x:dateFilter/>
-                        </f:facet>
-                        <h:outputText value="#{city.creation}">
-                            <f:convertDateTime />
-                        </h:outputText>
-                </p:column>
                 <p:column style="text-align: center;">
                     <f:facet name="header">
                         <xc:legends detail="true" edit="true" delete="true"/>
