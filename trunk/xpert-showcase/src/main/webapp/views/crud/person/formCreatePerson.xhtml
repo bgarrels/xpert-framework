@@ -44,8 +44,8 @@
            </h:selectOneMenu>
 
            <h:outputLabel value="* #{msg['person.group2']}:" />
+           <x:initializer value="#{personMB.entity.group2}"  entityManager="#{personMB.DAO.entityManager}" />
            <h:selectOneMenu value="#{personMB.entity.group2}" converter="entityConverter" >
-               <x:initializer/>
                <f:selectItem itemLabel="#{xmsg['select']}" />
                <f:selectItems value="#{findAllBean.get(classMB.group)}" var="group" itemLabel="#{group}" />
            </h:selectOneMenu>

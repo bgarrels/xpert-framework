@@ -12,6 +12,7 @@
         <h:form id="formListPerson">
             <xc:modalMessages/>
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30"
+                         lazy="true"
                          var="person" value="#{personMB.dataModel}">
                 <p:column headerText="#{msg['person.code']}" sortBy="#{person.code}"
                           filterBy="#{person.code}">
@@ -31,9 +32,6 @@
                     <h:outputText value="#{person.status}"/>
                 </p:column>
                 <p:column headerText="#{msg['person.group']}" sortBy="#{person.group}">
-                    <h:outputText value="#{person.group}">
-                        <x:initializer/>
-                    </h:outputText>
                 </p:column>
                 <p:column style="text-align: center;">
                     <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailPerson" >
