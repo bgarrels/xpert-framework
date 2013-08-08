@@ -1,0 +1,74 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <ui:param name="title" value="#{msg['project.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuProject.xhtml" />
+        <h:form id="formListProject">
+            <xc:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="project" rowIndexVar="index" widgetVar="dataTableProjectWidget"
+                         value="#{projectMB.dataModel}" lazy="true" >
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <p:commandButton onclick="dataTableProjectWidget.filter()" type="button" icon="ui-icon-refresh" />
+                    </f:facet>
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['project.state']}" sortBy="#{project.state}"
+                             >
+                        <h:outputText value="#{project.state}"/>
+                </p:column>
+                <p:column headerText="#{msg['project.name']}" sortBy="#{project.name}"
+                          filterBy="#{project.name}"   >
+                        <h:outputText value="#{project.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['project.creation']}" sortBy="#{project.creation}"
+                          filterBy="#{project.creation}"   style="text-align: center;">
+                        <f:facet name="header">
+                            #{msg['project.creation']}
+                            <x:dateFilter/>
+                        </f:facet>
+                        <h:outputText value="#{project.creation}">
+                            <f:convertDateTime />
+                        </h:outputText>
+                </p:column>
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <xc:legends detail="true" edit="true" delete="true"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="widgetProjectDetail.show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailProject" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{project}" target="#{projectMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="project.create">
+                        <p:button icon="ui-icon-pencil" outcome="createProject" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{project.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="project.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{projectMB.delete}" >
+                            <f:setPropertyActionListener value="#{project.id}" target="#{projectMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{project}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+                <f:facet name="footer">
+                    <x:securityArea rolesAllowed="project.audit">
+                        <xc:auditDelete for="#{projectMB.entityClass}"/>
+                    </x:securityArea>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetProjectDetail" header="#{msg['project.detail']}" appendToBody="true" modal="true" height="500" width="800">
+            <ui:include src="detailProject.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

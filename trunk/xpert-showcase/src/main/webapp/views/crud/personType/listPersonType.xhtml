@@ -1,0 +1,60 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <ui:param name="title" value="#{msg['personType.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuPersonType.xhtml" />
+        <h:form id="formListPersonType">
+            <xc:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="personType" rowIndexVar="index" widgetVar="dataTablePersonTypeWidget"
+                         value="#{personTypeMB.dataModel}" lazy="true" >
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <p:commandButton onclick="dataTablePersonTypeWidget.filter()" type="button" icon="ui-icon-refresh" />
+                    </f:facet>
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['personType.description']}" sortBy="#{personType.description}"
+                          filterBy="#{personType.description}"   >
+                        <h:outputText value="#{personType.description}"/>
+                </p:column>
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <xc:legends detail="true" edit="true" delete="true"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="widgetPersonTypeDetail.show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailPersonType" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{personType}" target="#{personTypeMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="personType.create">
+                        <p:button icon="ui-icon-pencil" outcome="createPersonType" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{personType.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="personType.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{personTypeMB.delete}" >
+                            <f:setPropertyActionListener value="#{personType.id}" target="#{personTypeMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{personType}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+                <f:facet name="footer">
+                    <x:securityArea rolesAllowed="personType.audit">
+                        <xc:auditDelete for="#{personTypeMB.entityClass}"/>
+                    </x:securityArea>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetPersonTypeDetail" header="#{msg['personType.detail']}" appendToBody="true" modal="true" height="500" width="800">
+            <ui:include src="detailPersonType.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,64 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <ui:param name="title" value="#{msg['state.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuState.xhtml" />
+        <h:form id="formListState">
+            <xc:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="state" rowIndexVar="index" widgetVar="dataTableStateWidget"
+                         value="#{stateMB.dataModel}" lazy="true" >
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <p:commandButton onclick="dataTableStateWidget.filter()" type="button" icon="ui-icon-refresh" />
+                    </f:facet>
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['state.name']}" sortBy="#{state.name}"
+                          filterBy="#{state.name}"   >
+                        <h:outputText value="#{state.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['state.country']}" sortBy="#{state.country}"
+                             >
+                        <h:outputText value="#{state.country}"/>
+                </p:column>
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <xc:legends detail="true" edit="true" delete="true"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="widgetStateDetail.show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailState" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{state}" target="#{stateMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="state.create">
+                        <p:button icon="ui-icon-pencil" outcome="createState" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{state.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="state.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{stateMB.delete}" >
+                            <f:setPropertyActionListener value="#{state.id}" target="#{stateMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{state}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+                <f:facet name="footer">
+                    <x:securityArea rolesAllowed="state.audit">
+                        <xc:auditDelete for="#{stateMB.entityClass}"/>
+                    </x:securityArea>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetStateDetail" header="#{msg['state.detail']}" appendToBody="true" modal="true" height="500" width="800">
+            <ui:include src="detailState.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,43 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <h:form>
+        <xc:modalMessages/>
+        <h:panelGrid columns="2" styleClass="grid-form">
+        
+            <h:outputLabel value="* #{msg['state.name']}:" />
+            <p:inputText value="#{stateMB.entity.name}" maxlength="255"  size="70"  />
+
+            <h:outputLabel value="* #{msg['state.country']}:" />
+            <h:selectOneMenu value="#{stateMB.entity.country}" converter="entityConverter"  >
+                <f:selectItem itemLabel="#{xmsg['select']}" />
+                <f:selectItems value="#{findAllBean.get(classMB.country)}" 
+                               var="country"
+                               itemLabel="#{country}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value=" #{msg['state.cities']}:" />
+            <h:selectManyCheckbox value="#{stateMB.entity.cities}" converter="entityConverter" >
+                <x:initializer/>
+                <f:selectItems value="#{findAllBean.get(classMB.city)}" 
+                               var="city"
+                               itemLabel="#{city}"/>
+            </h:selectManyCheckbox>
+
+        </h:panelGrid>
+        <p:separator/>
+        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
+        <div style="text-align: center;">
+           <x:securityArea rolesAllowed="state.create">
+                <p:commandButton process="@form" update="@form" action="#{stateMB.save}" value="#{xmsg['save']}" />
+           </x:securityArea>
+           <x:securityArea rolesAllowed="state.audit">
+                <xc:audit for="#{stateMB.entity}"/>
+           </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>

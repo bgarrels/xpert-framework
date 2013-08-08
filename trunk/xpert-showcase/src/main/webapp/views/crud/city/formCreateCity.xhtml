@@ -1,0 +1,38 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <h:form>
+        <xc:modalMessages/>
+        <h:panelGrid columns="2" styleClass="grid-form">
+        
+            <h:outputLabel value="* #{msg['city.state']}:" />
+            <h:selectOneMenu value="#{cityMB.entity.state}" converter="entityConverter"  >
+                <f:selectItem itemLabel="#{xmsg['select']}" />
+                <f:selectItems value="#{findAllBean.get(classMB.state)}" 
+                               var="state"
+                               itemLabel="#{state}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="* #{msg['city.name']}:" />
+            <p:inputText value="#{cityMB.entity.name}" maxlength="255"  size="70"  />
+
+            <h:outputLabel value=" #{msg['city.creation']}:" />
+            <p:calendar value="#{cityMB.entity.creation}" />
+
+        </h:panelGrid>
+        <p:separator/>
+        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
+        <div style="text-align: center;">
+           <x:securityArea rolesAllowed="city.create">
+                <p:commandButton process="@form" update="@form" action="#{cityMB.save}" value="#{xmsg['save']}" />
+           </x:securityArea>
+           <x:securityArea rolesAllowed="city.audit">
+                <xc:audit for="#{cityMB.entity}"/>
+           </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>

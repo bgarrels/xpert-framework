@@ -1,0 +1,60 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <ui:param name="title" value="#{msg['model.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuModel.xhtml" />
+        <h:form id="formListModel">
+            <xc:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="model" rowIndexVar="index" widgetVar="dataTableModelWidget"
+                         value="#{modelMB.dataModel}" lazy="true" >
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <p:commandButton onclick="dataTableModelWidget.filter()" type="button" icon="ui-icon-refresh" />
+                    </f:facet>
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['model.description']}" sortBy="#{model.description}"
+                          filterBy="#{model.description}"   >
+                        <h:outputText value="#{model.description}"/>
+                </p:column>
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <xc:legends detail="true" edit="true" delete="true"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="widgetModelDetail.show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailModel" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{model}" target="#{modelMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="model.create">
+                        <p:button icon="ui-icon-pencil" outcome="createModel" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{model.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="model.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{modelMB.delete}" >
+                            <f:setPropertyActionListener value="#{model.id}" target="#{modelMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{model}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+                <f:facet name="footer">
+                    <x:securityArea rolesAllowed="model.audit">
+                        <xc:auditDelete for="#{modelMB.entityClass}"/>
+                    </x:securityArea>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetModelDetail" header="#{msg['model.detail']}" appendToBody="true" modal="true" height="500" width="800">
+            <ui:include src="detailModel.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

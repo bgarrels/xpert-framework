@@ -1,0 +1,60 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <ui:param name="title" value="#{msg['permission.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuPermission.xhtml" />
+        <h:form id="formListPermission">
+            <xc:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="permission" rowIndexVar="index" widgetVar="dataTablePermissionWidget"
+                         value="#{permissionMB.dataModel}" lazy="true" >
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <p:commandButton onclick="dataTablePermissionWidget.filter()" type="button" icon="ui-icon-refresh" />
+                    </f:facet>
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['permission.description']}" sortBy="#{permission.description}"
+                          filterBy="#{permission.description}"   >
+                        <h:outputText value="#{permission.description}"/>
+                </p:column>
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <xc:legends detail="true" edit="true" delete="true"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="widgetPermissionDetail.show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailPermission" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{permission}" target="#{permissionMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="permission.create">
+                        <p:button icon="ui-icon-pencil" outcome="createPermission" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{permission.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="permission.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{permissionMB.delete}" >
+                            <f:setPropertyActionListener value="#{permission.id}" target="#{permissionMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{permission}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+                <f:facet name="footer">
+                    <x:securityArea rolesAllowed="permission.audit">
+                        <xc:auditDelete for="#{permissionMB.entityClass}"/>
+                    </x:securityArea>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetPermissionDetail" header="#{msg['permission.detail']}" appendToBody="true" modal="true" height="500" width="800">
+            <ui:include src="detailPermission.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,31 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <h:form id="formDetailProject">
+        <h:panelGrid columns="4" styleClass="grid-detail">
+           
+            <h:outputLabel value="#{msg['project.state']}:" />
+            <h:outputText value="#{projectMB.entity.state}"/>
+           
+            <h:outputLabel value="#{msg['project.name']}:" />
+            <h:outputText value="#{projectMB.entity.name}"/>
+           
+            <h:outputLabel value="#{msg['project.creation']}:" />
+            <h:outputText value="#{projectMB.entity.creation}">
+                <f:convertDateTime />
+            </h:outputText>
+
+        </h:panelGrid>
+        <p:separator/>
+        <div style="text-align: center;">
+            <p:commandButton type="button" value="#{xmsg['close']}" onclick="widgetProjectDetail.hide()" />
+            <x:securityArea rolesAllowed="project.audit">
+                <xc:audit for="#{projectMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>
