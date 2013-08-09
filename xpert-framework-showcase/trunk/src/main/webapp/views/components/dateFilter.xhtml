@@ -16,7 +16,7 @@
         </div>
 
         <h:form>
-            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30"
+            <p:dataTable paginator="true" rows="10"
                          lazy="true"
                          var="person" value="#{personMB.dataModel}">
                 <p:column sortBy="#{person.birthday}"

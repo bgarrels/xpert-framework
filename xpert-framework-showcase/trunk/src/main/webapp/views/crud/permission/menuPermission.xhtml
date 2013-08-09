@@ -7,11 +7,11 @@
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
     <p:toolbar>
         <p:toolbarGroup align="left">  
-            <x:securityArea rolesAllowed="profile.list">
-                <p:button icon="ui-icon-search" value="#{xmsg['list']}" outcome="listProfile" />
+            <x:securityArea rolesAllowed="permission.list">
+                <p:button icon="ui-icon-search" value="#{xmsg['list']}" outcome="listPermission" />
             </x:securityArea>
-            <x:securityArea rolesAllowed="profile.create">
-                <p:button icon="ui-icon-plus" value="#{xmsg['create']}" outcome="createProfile" />
+            <x:securityArea rolesAllowed="permission.create">
+                <p:button icon="ui-icon-plus" value="#{xmsg['create']}" outcome="createPermission" />
             </x:securityArea>
         </p:toolbarGroup>
     </p:toolbar>

@@ -7,7 +7,6 @@ import com.xpert.showcase.model.Country;
 import com.xpert.showcase.model.Group;
 import com.xpert.showcase.model.Permission;
 import com.xpert.showcase.model.Person;
-import com.xpert.showcase.model.Profile;
 import com.xpert.showcase.model.State;
 import com.xpert.showcase.model.Status;
 import com.xpert.showcase.model.StatusGroup;
@@ -33,9 +32,6 @@ public class ClassMB {
     }
     public Class getPermission() {
         return Permission.class;
-    }
-    public Class getProfile() {
-        return Profile.class;
     }
     public Class getState() {
         return State.class;

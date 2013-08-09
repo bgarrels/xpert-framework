@@ -5,18 +5,18 @@
                  xmlns:p="http://primefaces.org/ui"
                  xmlns:x="http://xpert.com/faces"
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
-    <h:form id="formDetailProfile">
+    <h:form id="formDetailPermission">
         <h:panelGrid columns="4" styleClass="grid-detail">
            
-            <h:outputLabel value="#{msg['profile.description']}:" />
-            <h:outputText value="#{profileMB.entity.description}"/>
+            <h:outputLabel value="#{msg['permission.description']}:" />
+            <h:outputText value="#{permissionMB.entity.description}"/>
 
         </h:panelGrid>
         <p:separator/>
         <div style="text-align: center;">
-            <p:commandButton type="button" value="#{xmsg['close']}" onclick="widgetProfileDetail.hide()" />
-            <x:securityArea rolesAllowed="profile.audit">
-                <xc:audit for="#{profileMB.entity}"/>
+            <p:commandButton type="button" value="#{xmsg['close']}" onclick="widgetPermissionDetail.hide()" />
+            <x:securityArea rolesAllowed="permission.audit">
+                <xc:audit for="#{permissionMB.entity}"/>
             </x:securityArea>
         </div>
     </h:form>

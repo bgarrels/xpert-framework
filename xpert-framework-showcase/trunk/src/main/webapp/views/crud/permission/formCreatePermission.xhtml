@@ -9,18 +9,18 @@
         <xc:modalMessages/>
         <h:panelGrid columns="2" styleClass="grid-form">
         
-            <h:outputLabel value="* #{msg['profile.description']}:" />
-            <p:inputText value="#{profileMB.entity.description}" maxlength="255"  size="70"  />
+            <h:outputLabel value="* #{msg['permission.description']}:" />
+            <p:inputText value="#{permissionMB.entity.description}" maxlength="255"  size="70"  />
 
         </h:panelGrid>
         <p:separator/>
         <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
         <div style="text-align: center;">
-           <x:securityArea rolesAllowed="profile.create">
-                <p:commandButton process="@form" update="@form" action="#{profileMB.save}" value="#{xmsg['save']}" />
+           <x:securityArea rolesAllowed="permission.create">
+                <p:commandButton process="@form" update="@form" action="#{permissionMB.save}" value="#{xmsg['save']}" />
            </x:securityArea>
-           <x:securityArea rolesAllowed="profile.audit">
-                <xc:audit for="#{profileMB.entity}"/>
+           <x:securityArea rolesAllowed="permission.audit">
+                <xc:audit for="#{permissionMB.entity}"/>
            </x:securityArea>
         </div>
     </h:form>
