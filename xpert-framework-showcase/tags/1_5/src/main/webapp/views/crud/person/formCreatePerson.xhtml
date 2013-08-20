@@ -1,0 +1,67 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+   <h:form>
+       <xc:modalMessages/>
+       <h:panelGrid columns="2">
+
+           <h:outputLabel value="* #{msg['person.code']}:" />
+           <p:inputText value="#{personMB.entity.code}" />
+
+           <h:outputLabel value="* #{msg['person.name']}:" />
+           <p:inputText value="#{personMB.entity.name}" maxlength="255"  />
+
+           <h:outputLabel value="#{msg['person.email']}:" />
+           <p:inputText value="#{personMB.entity.email}" maxlength="255"  />
+
+           <h:outputLabel value="#{msg['person.salary']}:" />
+           <xc:inputNumber value="#{personMB.entity.salary}" />
+
+           <h:outputLabel value="* #{msg['person.cpf']}:" />
+           <p:inputText value="#{personMB.entity.cpf}" maxlength="255"  />
+
+           <h:outputLabel value="* #{msg['person.birthday']}:" />
+           <p:calendar value="#{personMB.entity.birthday}" />
+
+           <h:outputLabel value="* #{msg['person.rg']}:" />
+           <p:inputText value="#{personMB.entity.rg}" maxlength="10"  />
+
+           <h:outputLabel value="* #{msg['person.status']}:" />
+           <h:selectOneMenu value="#{personMB.entity.status}">
+               <f:selectItem itemLabel="#{xmsg['select']}" />
+               <f:selectItems value="#{findAllBean.get(classMB.status)}" var="status" itemLabel="#{status}" />
+           </h:selectOneMenu>
+
+           <h:outputLabel value="* #{msg['person.group']}:" />
+           <h:selectOneMenu value="#{personMB.entity.group}" converter="entityConverter" >
+               <x:initializer/>
+               <f:selectItem itemLabel="#{xmsg['select']}" />
+               <f:selectItems value="#{findAllBean.get(classMB.group)}" var="group" itemLabel="#{group}" />
+           </h:selectOneMenu>
+
+           <h:outputLabel value="* #{msg['person.group2']}:" />
+           <x:initializer value="#{personMB.entity.group2}"  entityManager="#{personMB.DAO.entityManager}" />
+           <h:selectOneMenu value="#{personMB.entity.group2}" converter="entityConverter" >
+               <f:selectItem itemLabel="#{xmsg['select']}" />
+               <f:selectItems value="#{findAllBean.get(classMB.group)}" var="group" itemLabel="#{group}" />
+           </h:selectOneMenu>
+
+           <h:outputLabel value="#{msg['person.permissions']}:" />
+           <h:selectManyCheckbox value="#{personMB.entity.permissions}" converter="entityConverter" >
+               <x:initializer/>
+               <f:selectItems value="#{findAllBean.get(classMB.permission)}" var="permission" itemLabel="#{permission}" />
+           </h:selectManyCheckbox>
+       </h:panelGrid>
+       <p:separator/>
+       <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
+       <div style="text-align: center;">
+           <p:commandButton process="@form" update="@form" action="#{personMB.save}" value="#{msg['save']}" />
+            <xc:audit for="#{personMB.entity}"/>
+        </div>
+   </h:form>
+</ui:composition>
+                                            

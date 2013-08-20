@@ -1,0 +1,56 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <h:form id="formDetailPerson">
+        <h:panelGrid columns="4" styleClass="xpert-grid-detail">
+
+            <h:outputLabel value="#{msg['person.code']}:" />
+            <h:outputText value="#{personMB.entity.code}"/>
+
+            <h:outputLabel value="#{msg['person.name']}:" />
+            <h:outputText value="#{personMB.entity.name}"/>
+
+            <h:outputLabel value="#{msg['person.email']}:" />
+            <h:outputText value="#{personMB.entity.email}"/>
+
+            <h:outputLabel value="#{msg['person.salary']}:" />
+            <h:outputText value="#{personMB.entity.salary}">
+                <f:convertNumber />
+            </h:outputText>
+
+            <h:outputLabel value="#{msg['person.cpf']}:" />
+            <h:outputText value="#{personMB.entity.cpf}"/>
+
+            <h:outputLabel value="#{msg['person.birthday']}:" />
+            <h:outputText value="#{personMB.entity.birthday}">
+                <f:convertDateTime />
+            </h:outputText>
+
+            <h:outputLabel value="#{msg['person.rg']}:" />
+            <h:outputText value="#{personMB.entity.rg}"/>
+
+            <h:outputLabel value="#{msg['person.status']}:" />
+            <h:outputText value="#{personMB.entity.status}"/>
+
+            <h:outputLabel value="#{msg['person.group']}:" />
+            <h:outputText value="#{personMB.entity.group}">
+                <x:initializer/>
+            </h:outputText>
+
+            <h:outputLabel value="#{msg['person.group2']}:" />
+            <h:outputText value="#{personMB.entity.group2}">
+                <x:initializer/>
+            </h:outputText>
+            
+        </h:panelGrid>
+        <p:separator/>
+        <div style="text-align: center;">
+            <p:commandButton type="button" value="#{xmsg['close']}" onclick="widgetPersonDetail.hide()" />
+            <xc:audit for="#{personMB.entity}"/>
+        </div>
+    </h:form>
+</ui:composition>

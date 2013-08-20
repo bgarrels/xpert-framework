@@ -1,0 +1,52 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Persistence - Configuration" />
+    <ui:define name="body">
+        
+        <div class="description">
+            Create a class that extends <b>com.xpert.persistence.dao.BaseDAOImpl</b>. The implementation of DAO classes must extends this class.<br/>
+            This class must set the <b>Entity Manager</b>. Calling <b>super.setEntityManager</b>.
+            <br/>
+            <br/>
+            To create interfaces for DAOs, just create a class that extend <b>com.xpert.persistence.dao.BaseDAO</b>.
+        </div>
+
+        <p:tabView>
+            <p:tab title="BaseDAOImpl.java">
+                <pre name="code" class="java">
+                    import javax.persistence.EntityManager;
+                    import javax.persistence.PersistenceContext;
+
+                    /**
+                    *
+                    * @author Ayslan
+                    */
+                    public class BaseDAOImpl&lt;T&gt; extends com.xpert.persistence.dao.BaseDAOImpl&lt;T&gt; {
+
+                        @PersistenceContext(unitName = &quot;xpertShowcasePU&quot;)
+                        private EntityManager entityManager;
+
+                        public BaseDAOImpl() {
+                        }
+
+                        @Override
+                        public EntityManager getEntityManager() {
+                            return entityManager;
+                        }
+                    }
+                </pre>
+            </p:tab> 
+            <ui:include src="/views/common/java/personDAO.xhtml"/>
+            <ui:include src="/views/common/java/person.xhtml"/>
+
+        </p:tabView>
+
+
+    </ui:define>
+</ui:composition>

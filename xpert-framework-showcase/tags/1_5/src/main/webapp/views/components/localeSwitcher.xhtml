@@ -1,0 +1,33 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <ui:param name="title" value="Locale Switcher" />
+    <ui:define name="body">
+        <h:form prependId="false">
+            <xc:localeSwitcher/>
+        </h:form>
+        <h3>Source</h3>
+        <pre name="code" class="xml">
+        &lt;h:form prependId=&quot;false&quot;&gt;
+            &lt;xc:localeSwitcher/&gt;
+        &lt;/h:form&gt;
+        </pre>
+        
+        To acess the selected locale by EL:
+        <pre name="code" class="xml">
+        \#{localeBean.locale}
+        </pre>
+        Example:
+        <pre name="code" class="xml">
+        &lt;f:view locale=&quot;\#{localeBean.locale}&quot;&gt;
+        </pre>
+
+    </ui:define>
+</ui:composition>

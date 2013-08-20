@@ -1,0 +1,70 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+                 xmlns:custom="http://java.sun.com/jsf/composite/components"
+                 xmlns:x="http://xpert.com/faces">
+    <ui:param name="title" value="Show Auditing" />
+    <ui:define name="body">
+
+        <h3>Show Auditing Insert/Update</h3>
+        <h:form id="formSearchPerson">
+            <p:dataTable id="dataTablePerson" 
+                         paginator="true" rows="5"
+                         var="person" value="#{personMB.dataModel}">
+                <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.code']}" sortBy="#{person.code}" filterBy="#{person.code}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+                <p:column headerText="Auditing" style="text-align: center;">
+                    <xc:audit for="#{person}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+         <pre name="code" class="xml">
+            &lt;xc:audit for=&quot;\#{person}&quot;/&gt;
+        </pre>
+
+        <h3>Show Auditing Delete</h3>
+        <h:form>
+            <xc:auditDelete for="#{classMB.person}"/>
+        </h:form>
+        <pre name="code" class="xml">
+             &lt;xc:auditDelete for=&quot;\#{classMB.person}&quot;/&gt;
+        </pre>
+
+        <p:spacer height="5"/>
+        <p:tabView>
+            <p:tab title="auditing.xhtml">
+                <pre name="code" class="xml">
+                    &lt;h3&gt;Show Auditing Insert/Update&lt;/h3&gt;
+                    &lt;h:form id=&quot;formSearchPerson&quot;&gt;
+                        &lt;p:dataTable id=&quot;dataTablePerson&quot; 
+                                    paginator=&quot;true&quot; rows=&quot;5&quot;
+                                    var=&quot;person&quot; value=&quot;\#{personMB.dataModel}&quot;&gt;
+                            &lt;p:column headerText=&quot;#{msg['person.name']}&quot; sortBy=&quot;\#{person.name}&quot; filterBy=&quot;\#{person.name}&quot;&gt;
+                                &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;#{msg['person.code']}&quot; sortBy=&quot;\#{person.code}&quot; filterBy=&quot;\#{person.code}&quot;&gt;
+                                &lt;h:outputText value=&quot;\#{person.code}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;Auditing&quot; style=&quot;text-align: center;&quot;&gt;
+                                &lt;xc:audit for=&quot;\#{person}&quot;/&gt;
+                            &lt;/p:column&gt;
+                        &lt;/p:dataTable&gt;
+                    &lt;/h:form&gt;
+
+                    &lt;h3&gt;Show Auditing Delete&lt;/h3&gt;
+                    &lt;h:form&gt;
+                        &lt;xc:auditDelete for=&quot;\#{classMB.person}&quot;/&gt;
+                    &lt;/h:form&gt;
+                </pre>
+            </p:tab>
+        </p:tabView>
+    </ui:define>
+</ui:composition>

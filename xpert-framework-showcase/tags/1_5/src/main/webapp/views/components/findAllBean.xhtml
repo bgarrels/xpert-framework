@@ -1,0 +1,167 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+
+                 xmlns:x="http://xpert.com/faces">
+    <ui:param name="title" value="Find All Bean" />
+    <ui:define name="body">
+
+        <div class="description">
+            #{msg['findAll.description']}
+        </div>
+
+        <h:form>
+            <p:panel header="#{msg['findAll.default']}">
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="#{msg['country']}:" />
+                    <h:selectOneMenu value="#{viewScope.country}" converter="entityConverter" >
+                        <f:selectItem itemLabel="" />
+                        <f:selectItems value="#{findAllBean.get(classMB.country)}" var="country" itemLabel="#{country.name}" />
+                    </h:selectOneMenu>
+
+                </h:panelGrid>
+            </p:panel>
+            <p:spacer height="3"/>
+            <p:panel header="#{msg['findAll.selectItem']}">
+                <h:panelGrid columns="2">
+
+                    <p:dataTable value="#{findAllBean.get(classMB.state)}" var="state">
+                        <p:column headerText="#{msg['state']}">
+                            <h:outputText value="#{state.name}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['country']}" filterBy="#{state.country.id}" 
+                                  filterOptions="#{findAllBean.getSelect(classMB.country)}">
+                            <h:outputText value="#{state.country.name}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h3>Source</h3>
+        <p:tabView>
+            <p:tab title="findAllBean.xhtml">
+                <pre name="code" class="xml">
+                &lt;h:form&gt;
+                    &lt;p:panel header=&quot;#{msg['initializer.combo']}&quot;&gt;
+                        &lt;h:panelGrid columns=&quot;2&quot;&gt;
+
+                            &lt;h:outputLabel value=&quot;#{msg['country']}:&quot; /&gt;
+                            &lt;h:selectOneMenu value=&quot;\#{viewScope.country}&quot; converter=&quot;entityConverter&quot; &gt;
+                                &lt;f:selectItem itemLabel=&quot;&quot; /&gt;
+                                &lt;f:selectItems value=&quot;\#{findAllBean.get(classMB.country)}&quot; var=&quot;country&quot; itemLabel=&quot;#{country.name}&quot; /&gt;
+                            &lt;/h:selectOneMenu&gt;
+
+                        &lt;/h:panelGrid&gt;
+                    &lt;/p:panel&gt;
+                    &lt;p:spacer height=&quot;3&quot;/&gt;
+                    &lt;p:panel header=&quot;#{msg['initializer.combo']}&quot;&gt;
+                        &lt;h:panelGrid columns=&quot;2&quot;&gt;
+
+                            &lt;p:dataTable value=&quot;\#{findAllBean.get(classMB.state)}&quot; var=&quot;state&quot;&gt;
+                                &lt;p:column headerText=&quot;#{msg['state']}&quot;&gt;
+                                    &lt;h:outputText value=&quot;#{state.name}&quot;/&gt;
+                                &lt;/p:column&gt;
+                                &lt;p:column headerText=&quot;#{msg['country']}&quot; filterBy=&quot;\#{state.country.id}&quot; 
+                                        filterOptions=&quot;\#{findAllBean.getSelect(classMB.country)}&quot;&gt;
+                                    &lt;h:outputText value=&quot;\#{state.country.name}&quot;/&gt;
+                                &lt;/p:column&gt;
+                            &lt;/p:dataTable&gt;
+
+                        &lt;/h:panelGrid&gt;
+                    &lt;/p:panel&gt;
+                &lt;/h:form&gt;
+                </pre>
+            </p:tab>
+            <ui:include src="/views/common/java/country.xhtml"/>
+            <p:tab title="FindAllBean.java">
+
+                <h:outputText value="#{msg['findAll.findAllBean']}"/>
+                <br/>
+                <pre name="code" class="java">
+                package com.xpert.showcase.mb;
+
+                import com.xpert.faces.bean.ClassModel;
+                import com.xpert.showcase.model.*;
+                import java.util.HashMap;
+                import java.util.Map;
+                import javax.faces.bean.ManagedBean;
+                import javax.faces.bean.ViewScoped;
+
+                @ManagedBean
+                @ViewScoped
+                public class FindAllBean extends com.xpert.faces.bean.FindAllBean {
+
+                    private static final Map&lt;Class, ClassModel&gt; MODEL = new HashMap&lt;Class, ClassModel&gt;();
+
+                    static {
+                        MODEL.put(Group.class, new ClassModel(&quot;description&quot;));
+                        MODEL.put(Permission.class, new ClassModel(&quot;description&quot;));
+                        MODEL.put(Status.class, new ClassModel(&quot;description&quot;));
+                        MODEL.put(Country.class, new ClassModel(&quot;name&quot;));
+                        MODEL.put(State.class, new ClassModel(&quot;name&quot;));
+                        MODEL.put(City.class, new ClassModel(&quot;name&quot;));
+                    }
+
+                    @Override
+                    public Map&lt;Class, ClassModel&gt; getClassModel() {
+                        return MODEL;
+                    }
+                }
+                </pre>
+            </p:tab>
+            <p:tab title="ClassMB.java">
+
+                <h:outputText value="#{msg['findAll.classMB']}"/>
+                <br/>
+                <h:outputText value="#{msg['findAll.classMB2']} "/>
+                <h:link outcome="/views/maker/maker.jsf" value="Bean Maker" />
+
+                <br/>
+                <pre name="code" class="java">
+                package com.xpert.showcase.mb;
+
+                import com.xpert.showcase.model.*;
+                import javax.faces.bean.ManagedBean;
+
+                @ManagedBean
+                public class ClassMB {
+
+                    public Class getGroup() {
+                        return Group.class;
+                    }
+
+                    public Class getPermission() {
+                        return Permission.class;
+                    }
+
+                    public Class getPerson() {
+                        return Person.class;
+                    }
+
+                    public Class getStatus() {
+                        return Status.class;
+                    }
+
+                    public Class getCountry() {
+                        return Country.class;
+                    }
+                    public Class getState() {
+                        return State.class;
+                    }
+                }
+                </pre>
+
+            </p:tab>
+            <p:tab title="Configuration">
+                <ui:include src="/views/common/java/entityManagerFactory.xhtml"/>
+            </p:tab>
+        </p:tabView>
+
+    </ui:define>
+</ui:composition>

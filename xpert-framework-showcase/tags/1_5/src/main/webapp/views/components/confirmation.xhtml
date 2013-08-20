@@ -1,0 +1,81 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <ui:param name="title" value="Confirmation" />
+    <ui:define name="body">
+
+        <div class="description">
+            #{msg['confirmation.description']}
+        </div>
+        <h:form>
+            <xc:modalMessages/>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="#{msg['person.name']}:" />
+                <h:inputText value="#{personMB.entity.name}"/>
+
+                <h:outputText value="JSF commandButton:"/>
+                <h:commandButton value="Submit" >
+                    <f:ajax render="@form" execute="@form"/>
+                    <x:confirmation/>
+                </h:commandButton>
+
+                <h:outputText value="JSF commandLink:"/>
+                <h:commandLink value="Submit"  >
+                    <f:ajax render="@form" execute="@form"/>
+                    <x:confirmation/>
+                </h:commandLink>
+
+                <h:outputText value="Primefaces commandButton:"/>
+                <p:commandButton process="@form" update="@form" value="Submit (With custom message)" >
+                    <x:confirmation message="Are you sure?" confirmLabel="Of course" cancelLabel="No way"/>
+                </p:commandButton>
+
+                <h:outputText value="Primefaces commandLink:"/>
+                <p:commandLink process="@form" update="@form" value="Submit" >
+                    <x:confirmation/>
+                </p:commandLink>
+            </h:panelGrid>
+        </h:form>
+        <h3>Source</h3>
+        <pre name="code" class="xml">
+       &lt;h:form&gt;
+            &lt;xc:modalMessages/&gt;
+            &lt;h:panelGrid columns=&quot;2&quot;&gt;
+                &lt;h:outputLabel value=&quot;#{msg['person.name']}:&quot; /&gt;
+                &lt;h:inputText value=&quot;#{personMB.entity.name}&quot;/&gt;
+
+                &lt;h:outputText value=&quot;JSF commandButton:&quot;/&gt;
+                &lt;h:commandButton value=&quot;Submit&quot; &gt;
+                    &lt;f:ajax render=&quot;@form&quot; execute=&quot;@form&quot;/&gt;
+                    &lt;x:confirmation/&gt;
+                &lt;/h:commandButton&gt;
+
+                &lt;h:outputText value=&quot;JSF commandLink:&quot;/&gt;
+                &lt;h:commandLink value=&quot;Submit&quot;  &gt;
+                    &lt;f:ajax render=&quot;@form&quot; execute=&quot;@form&quot;/&gt;
+                    &lt;x:confirmation/&gt;
+                &lt;/h:commandLink&gt;
+
+                &lt;h:outputText value=&quot;Primefaces commandButton:&quot;/&gt;
+                &lt;p:commandButton process=&quot;@form&quot; update=&quot;@form&quot; value=&quot;Submit (With custom message)&quot; &gt;
+                    &lt;x:confirmation message=&quot;Are you sure?&quot; confirmLabel=&quot;Of course&quot; cancelLabel=&quot;No way&quot;/&gt;
+                &lt;/p:commandButton&gt;
+
+                &lt;h:outputText value=&quot;Primefaces commandLink:&quot;/&gt;
+                &lt;p:commandLink process=&quot;@form&quot; update=&quot;@form&quot; value=&quot;Submit&quot; &gt;
+                    &lt;x:confirmation/&gt;
+                &lt;/p:commandLink&gt;
+            &lt;/h:panelGrid&gt;
+        &lt;/h:form&gt;
+        </pre>
+
+
+    </ui:define>
+</ui:composition>

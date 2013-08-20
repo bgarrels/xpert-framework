@@ -1,0 +1,110 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+
+                 xmlns:x="http://xpert.com/faces">
+    <ui:param name="title" value="Filter On Enter" />
+    <ui:define name="body">
+
+        <div class="description">
+            #{msg['filterOnEnter.description']} <br/>
+            #{msg['filterOnEnter.description2']}
+        </div>
+
+        <h:form>
+            <p:dataTable id="dataTablePerson" paginatorPosition="bottom"
+                         paginator="true" rows="5"
+                         var="person" value="#{personMB.dataModel}">
+                <f:facet name="header">
+                    #{msg['filterOnEnter.target']} (target = dataTablePerson)
+                </f:facet>
+                <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}" 
+                          sortBy="#{person.cpf}" filterBy="#{person.cpf}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.code']}" sortBy="#{person.code}" filterBy="#{person.code}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+            </p:dataTable>
+            <x:filterOnEnter target="dataTablePerson"/>
+            <p:spacer height="10"/>
+            <p:dataTable id="dataTablePerson2" paginatorPosition="bottom" styleClass="datatable-enter"
+                         paginator="true" rows="5"
+                         var="person" value="#{personMB.dataModel}">
+                <f:facet name="header">
+                    #{msg['filterOnEnter.selector']} (selector = .datatable-enter)
+                </f:facet>
+                <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}" 
+                          sortBy="#{person.cpf}" filterBy="#{person.cpf}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.code']}" sortBy="#{person.code}" filterBy="#{person.code}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+            </p:dataTable>
+
+            <x:filterOnEnter selector=".datatable-enter"/>
+        </h:form>
+
+
+        <h3>Source</h3>
+        <p:tabView>
+            <p:tab title="filterOnEnter.xhtml">
+                <pre name="code" class="xml">
+                  &lt;h:form&gt;
+                    &lt;p:dataTable id=&quot;dataTablePerson&quot; paginatorPosition=&quot;bottom&quot;
+                                paginator=&quot;true&quot; rows=&quot;5&quot;
+                                var=&quot;person&quot; value=&quot;\#{personMB.dataModel}&quot;&gt;
+                        &lt;f:facet name=&quot;header&quot;&gt;
+                            #{msg['filterOnEnter.target']} (target = dataTablePerson)
+                        &lt;/f:facet&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.name']}&quot; sortBy=&quot;\#{person.name}&quot; filterBy=&quot;\#{person.name}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.cpf']}&quot; 
+                                sortBy=&quot;\#{person.cpf}&quot; filterBy=&quot;\#{person.cpf}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.cpf}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.code']}&quot; sortBy=&quot;\#{person.code}&quot; filterBy=&quot;\#{person.code}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.code}&quot;/&gt;
+                        &lt;/p:column&gt;
+                    &lt;/p:dataTable&gt;
+                    &lt;x:filterOnEnter target=&quot;dataTablePerson&quot;/&gt;
+                    &lt;p:spacer height=&quot;10&quot;/&gt;
+                    &lt;p:dataTable id=&quot;dataTablePerson2&quot; paginatorPosition=&quot;bottom&quot; styleClass=&quot;datatable-enter&quot;
+                                paginator=&quot;true&quot; rows=&quot;5&quot;
+                                var=&quot;person&quot; value=&quot;\#{personMB.dataModel}&quot;&gt;
+                        &lt;f:facet name=&quot;header&quot;&gt;
+                            #{msg['filterOnEnter.selector']} (selector = .datatable-enter)
+                        &lt;/f:facet&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.name']}&quot; sortBy=&quot;\#{person.name}&quot; filterBy=&quot;\#{person.name}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.cpf']}&quot; 
+                                sortBy=&quot;\#{person.cpf}&quot; filterBy=&quot;\#{person.cpf}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.cpf}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#{msg['person.code']}&quot; sortBy=&quot;\#{person.code}&quot; filterBy=&quot;\#{person.code}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#{person.code}&quot;/&gt;
+                        &lt;/p:column&gt;
+                    &lt;/p:dataTable&gt;
+
+                    &lt;x:filterOnEnter selector=&quot;.datatable-enter&quot;/&gt;
+                &lt;/h:form&gt;
+
+                </pre>
+            </p:tab>
+        </p:tabView>
+
+    </ui:define>
+</ui:composition>

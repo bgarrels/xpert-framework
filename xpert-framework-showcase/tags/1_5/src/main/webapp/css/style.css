@@ -1,0 +1,27 @@
+.description{padding: 20px 3px;}
+.center{text-align: center;}
+.table-td-top{}
+.table-td-top td{vertical-align: top;}
+.bold{font-weight: bold;}
+h1 a{text-decoration: none;}
+.sidebar a{text-decoration: none; border: 0; font-weight: normal;}
+.sidebar a.ui-state-hover{border: 0; font-weight: normal;}
+#north { margin-bottom: 3px; position: relative;}
+#north .ui-panel-content{ padding: 0 10px ;}
+#title{ padding: 5px; font-size: 20px; margin: 0;}
+#west{float: left;width: 270px;}
+#west .ui-panel-content{ padding: 5px ;}
+#center{float: left;width: 100%;}
+.header-detail{font-size: 10px;}
+.header-detail b{font-size: 11px;}
+.grid-template{width: 100%;}
+.grid-template > tbody > tr > td{vertical-align: top;}
+.w-260{width: 260px;}
+.w-280{width: 280px;}
+.grid-detail, grid-form{margin-top: 15px;}
+.grid-detail td, grid-form td{padding: 4px 0;}
+.grid-detail td label, .grid-form td label{margin: 0 5px 0 15px ; float: right;}
+.grid-detail td label{font-weight: bold;}
+.ui-toolbar{margin: 2px 0;}
+.ui-datatable th input.ui-column-filter{width: 90%;}
+.ui-panel{margin-top: 6px;}

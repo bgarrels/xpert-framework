@@ -1,0 +1,136 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Define Attributes in Result" />
+    <ui:define name="body">
+
+        
+        <div class="description">
+            Defines attributes to get in result list of query.
+            <br/>
+            <br/>
+            Ex: <b>code, name, group.description</b>
+        </div>
+        
+        <h:form>
+            <p:messages/>
+            
+            <h:panelGrid columns="3">
+
+                <h:outputText styleClass="bold" value="Attributes: "/>
+                <p:inputText value="#{persistenceSomeAttributesMB.attributes}" size="70" required="true" requiredMessage="Attributes is required"/>
+                <p:commandButton process="@form" update="@form"
+                                 value="Search" action="#{persistenceSomeAttributesMB.search}" />
+
+            </h:panelGrid>
+            
+            <p:spacer height="5"/>
+            
+            <p:dataTable var="person" value="#{persistenceSomeAttributesMB.people}">
+                <p:column headerText="ID">
+                    <h:outputText value="#{person.id}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.name']}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.code']}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.status']}">
+                    <h:outputText value="#{person.status.description}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.group']}">
+                    <h:outputText value="#{person.group.description}"/>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+
+        <br/>
+
+        <p:tabView>
+            <p:tab title="attributes.xhtml">
+                <pre name="code" class="xml">
+                 &lt;h:form&gt;
+                    &lt;p:messages/&gt;
+
+                    &lt;h:panelGrid columns=&quot;3&quot;&gt;
+
+                        &lt;h:outputText styleClass=&quot;bold&quot; value=&quot;Attributes: &quot;/&gt;
+                        &lt;p:inputText size=&quot;70&quot;  value=&quot;\#{persistenceSomeAttributesMB.attributes}&quot; 
+                                required=&quot;true&quot; requiredMessage=&quot;Attributes is required&quot;/&gt;
+                        &lt;p:commandButton process=&quot;@form&quot; update=&quot;@form&quot;
+                                        value=&quot;Search&quot; action=&quot;\#[persistenceSomeAttributesMB.search}&quot; /&gt;
+
+                    &lt;/h:panelGrid&gt;
+
+                    &lt;p:spacer height=&quot;5&quot;/&gt;
+
+                    &lt;p:dataTable var=&quot;person&quot; value=&quot;\#[persistenceSomeAttributesMB.people}&quot;&gt;
+                        &lt;p:column headerText=&quot;ID&quot;&gt;
+                            &lt;h:outputText value=&quot;\#[person.id}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#[msg['person.name']}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#[person.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#[msg['person.cpf']}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#[person.cpf}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#[msg['person.code']}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#[person.code}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#[msg['person.status']}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#[person.status.description}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;\#[msg['person.group']}&quot;&gt;
+                            &lt;h:outputText value=&quot;\#[person.group.description}&quot;/&gt;
+                        &lt;/p:column&gt;
+                    &lt;/p:dataTable&gt;
+
+                 &lt;/h:form&gt;
+                </pre>
+            </p:tab> 
+            <p:tab title="PersistenceSomeAttributesMB.java">
+                <pre name="code" class="java">
+                    import com.xpert.core.faces.FacesMessageUtils;
+                    import com.xpert.showcase.dao.PersonDAO;
+                    import com.xpert.showcase.model.Person;
+                    import java.util.List;
+                    import javax.ejb.EJB;
+                    import javax.faces.bean.ManagedBean;
+
+                    @ManagedBean
+                    public class PersistenceSomeAttributesMB {
+
+                        @EJB
+                        private PersonDAO personDAO;
+                        private List&lt;Person&gt; people;
+                        private String attributes;
+
+                        public void search() {
+                            try {
+                                people = personDAO.listAttributes(attributes, &quot;id&quot;);
+                            } catch (Exception ex) {
+                                FacesMessageUtils.error(ex.getCause().getMessage());
+                            }
+                        }
+                    //getters and setters
+                    }
+                </pre>
+            </p:tab>
+            <ui:include src="/views/common/java/person.xhtml"/>
+            <ui:include src="/views/common/java/personDAO.xhtml"/>
+
+        </p:tabView>
+
+
+    </ui:define>
+</ui:composition>

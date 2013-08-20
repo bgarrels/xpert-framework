@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      dir="ltr" lang="en-US" xml:lang="en"
+      xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+
+    <f:view locale="#{localeBean.locale}">
+        <h:head>
+            <title>Xpert - #{title}</title>
+            <link rel="stylesheet" href="#{request.contextPath}/css/style.css?version=#{constantMB.xpertFrameworkVersion}" type="text/css" media="screen" />
+            <script type="text/javascript" src="#{request.contextPath}/scripts/scripts.js"/>
+            <h:outputScript library="xpert" name="scripts/sh.js"/>
+            <h:outputScript library="xpert" name="scripts/core.js"/>
+            <h:outputStylesheet library="xpert" name="css/sh-style.css"/>
+            <h:outputStylesheet library="xpert" name="css/style.css"/>
+        </h:head>
+        <h:body style="font-size: 11px;">
+            <h:form/>
+            <ui:include src="ajaxStatus.xhtml" />
+
+            <p:panel id="north" styleClass="ui-widget-header">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <h1 class="title">
+                                <h:link outcome="/index.jsf" value="Xpert Framework - Showcase"/>
+                            </h1>
+                        </td>
+                        <td align="right">
+                            <div class="header-detail">
+                                <b>Powered by</b><br/>
+                                JSF API 2.1, Xpert-Framework #{constantMB.xpertFrameworkVersion},<br/> PrimeFaces #{constantMB.primefacesVersion}, Glassfish 3.1
+                                <br/>
+                                <h:panelGroup style="font-weight: normal; font-style: italic;"> 
+                                    (Session date: <h:outputText value="#{userSession.startSession}">
+                                        <f:convertDateTime dateStyle="full" timeStyle="full"/>
+                                    </h:outputText>)
+                                </h:panelGroup>
+                            </div>
+                            <h:form>
+                                <xc:localeSwitcher/>
+                            </h:form>
+                        </td>
+                    </tr>
+                </table>
+            </p:panel>
+            <h:panelGrid columns="2" columnClasses="w-280" styleClass="grid-template" cellpadding="0" cellspacing="0">
+                <p:panel id="west">
+                    <div class="sidebar">
+                        <p:panel header="Xpert-Framework" style="border: 0;">
+                            <h:panelGrid columns="1" style="width: 100%;" >
+                                <h:link outcome="/index.jsf" value="Showcase Homepage" />
+                                <h:outputLink target="_blank" value="https://code.google.com/p/xpert-framework/" >Project Homepage</h:outputLink>
+                                <h:outputLink target="_blank" value="https://code.google.com/p/xpert-framework/downloads/list" >Download</h:outputLink>
+                                <h:outputLink target="_blank" value="https://code.google.com/p/xpert-framework/downloads/list" >Documentation - PDF</h:outputLink>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Faces" style="border: 0;">
+                            <h:panelGrid columns="2" columnClasses="center,center" style="width: 100%;">
+                                <h:link outcome="/views/components/confirmation.jsf" value="Confirmation" />
+                                <h:link outcome="/views/components/entityConverter.jsf" value="Entity Converter" />
+                                <h:link outcome="/views/components/download.jsf" value="File Download" />
+                                <h:link outcome="/views/components/filterOnEnter.jsf" value="Filter On Enter" />
+                                <h:link outcome="/views/components/findAllBean.jsf" value="Find All Bean" />
+                                <h:link outcome="/views/components/infoWarn.jsf" value="Info/Warn" />
+                                <h:link outcome="/views/components/initializer.jsf" value="Initializer" />
+                                <h:link outcome="/views/components/inputNumber.jsf" value="Input Number" />
+                                <h:link outcome="/views/components/lazyDataModel.jsf" value="LazyDataModel" />
+                                <h:link outcome="/views/components/localeSwitcher.jsf" value="Locale Switcher" />
+                                <h:link outcome="/views/components/modalMessages.jsf" value="Modal Messages" />
+                                <h:link outcome="/views/components/spread.jsf" value="Spread Checkbox" />
+                                <h:link outcome="/views/components/dateFilter.jsf" value="Date Filter" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Core" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/core/i18nBeanValidation.jsf" value="I18N Bean Validation (JSR 303)" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Maker" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/maker/maker.jsf" value="Bean Maker" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="CRUD (generated by Xpert-Maker)" style="border: 0;" toggleable="true" collapsed="true">
+                            <h:panelGrid columns="2" style="width: 100%;">
+                                <h:link outcome="/views/crud/person/listPerson.jsf" value="Person" />
+                                <h:link outcome="/views/crud/country/listCountry.jsf" value="Country" />
+                                <h:link outcome="/views/crud/state/listState.jsf" value="State" />
+                                <h:link outcome="/views/crud/city/listCity.jsf" value="City" />
+                                <h:link outcome="/views/crud/permission/listPermission.jsf" value="Permission" />
+                                <h:link outcome="/views/crud/group/listGroup.jsf" value="Group" />
+                                <h:link outcome="/views/crud/statusGroup/listStatusGroup.jsf" value="Status Group" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Persistence" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/persistence/configuration.jsf" value="Configuration" />
+                                <h:link outcome="/views/persistence/basic.jsf" value="Basic" />
+                                <h:link outcome="/views/persistence/attributes.jsf" value="Define Attributes in Result" />
+                                <h:link outcome="/views/persistence/queryFromFile.jsf" value="Native Query From File" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="Xpert-Audit" style="border: 0;">
+                            <h:panelGrid columns="1">
+                                <h:link outcome="/views/audit/configuration.jsf" value="Configuration" />
+                                <h:link outcome="/views/audit/auditing.jsf" value="Show auditing" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+                </p:panel>
+                <p:panel style="border: 0;" header="#{title}" id="center" >
+                    <ui:insert name="body" />
+                </p:panel>
+
+            </h:panelGrid>
+
+            <script type="text/javascript">
+                $(function() {
+                    $('.sidebar a').hover(function() {
+                        $(this).toggleClass('ui-state-hover');
+                    })
+                });
+                Xpert.highlightCode("code");
+            </script>
+
+
+            <script type="text/javascript">
+
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-31152587-2']);
+                _gaq.push(['_trackPageview']);
+
+                (function() {
+                    var ga = document.createElement('script');
+                    ga.type = 'text/javascript';
+                    ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(ga, s);
+                })();
+
+            </script>
+
+        </h:body>
+    </f:view>
+
+</html>

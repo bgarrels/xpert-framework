@@ -1,0 +1,119 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components"
+                 >
+    <ui:param name="title" value="LazyDataModel" />
+    <ui:define name="body">
+        <div class="description">
+            Primefaces LazyDataModel integrated with the xpert-persistence. Load data from database on demand.
+        </div>
+
+        <h:form>
+            
+
+            <p:dataTable id="dataTablePerson" lazy="true"
+                         paginator="true" rows="5"
+                         var="person" value="#{lazyDataModelMB.people}">
+                <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}" sortBy="#{person.cpf}" filterBy="#{person.cpf}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.code']}" sortBy="#{person.code}" filterBy="#{person.code}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.status']}" sortBy="#{person.status}"
+                          filterBy="#{person.status}"
+                          filterOptions="#{findAllBean.getSelect(classMB.status)}">
+                    <h:outputText value="#{person.status.description}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.birthday']}">
+                    <h:outputText value="#{person.birthday}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+        <h3>Source</h3>
+        <p:tabView>
+            <p:tab title="lazyDataModelMB.xhtml">
+                <pre name="code" class="xml">
+                    &lt;h:form&gt;
+
+                        &lt;p:dataTable id=&quot;dataTablePerson&quot; 
+                                    paginator=&quot;true&quot; rows=&quot;5&quot;
+                                    var=&quot;person&quot; value=&quot;\#{lazyDataModelMB.people}&quot;&gt;
+                            &lt;p:column headerText=&quot;\#{msg['person.name']}&quot; sortBy=&quot;\#{person.name}&quot; filterBy=&quot;\#{person.name}&quot;&gt;
+                                &lt;h:outputText value=&quot;#{person.name}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;\#{msg['person.cpf']}&quot; sortBy=&quot;\#{person.cpf}&quot; filterBy=&quot;\#{person.cpf}&quot;&gt;
+                                &lt;h:outputText value=&quot;#{person.cpf}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;\#{msg['person.code']}&quot; sortBy=&quot;\#{person.code}&quot; filterBy=&quot;\#{person.code}&quot;&gt;
+                                &lt;h:outputText value=&quot;#{person.code}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;\#{msg['person.status']}&quot; sortBy=&quot;\#{person.status}&quot;
+                                    filterBy=&quot;\#{person.status}&quot;
+                                    filterOptions=&quot;\#{findAllBean.getSelect(classMB.status)}&quot;&gt;
+                                &lt;h:outputText value=&quot;\#{person.status.description}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;\#{msg['person.birthday']}&quot;&gt;
+                                &lt;h:outputText value=&quot;\#{person.birthday}&quot;&gt;
+                                    &lt;f:convertDateTime pattern=&quot;dd/MM/yyyy&quot; /&gt;
+                                &lt;/h:outputText&gt;
+                            &lt;/p:column&gt;
+                        &lt;/p:dataTable&gt;
+
+                    &lt;/h:form&gt;
+                </pre>
+            </p:tab>
+            <p:tab title="LazyDataModelMB.java">
+                <pre name="code" class="java">
+                    import com.xpert.core.primefaces.LazyDataModelImpl;
+                    import com.xpert.showcase.dao.PersonDAO;
+                    import com.xpert.showcase.model.Person;
+                    import javax.annotation.PostConstruct;
+                    import javax.ejb.EJB;
+                    import javax.faces.bean.ManagedBean;
+                    import javax.faces.bean.ViewScoped;
+                    import org.primefaces.model.LazyDataModel;
+
+                    @ManagedBean
+                    @ViewScoped
+                    public class LazyDataModelMB {
+
+                        @EJB
+                        private PersonDAO personDAO;
+                        private LazyDataModel&lt;Person&gt; people;
+
+                        @PostConstruct
+                        public void init(){
+                            people = new LazyDataModelImpl&lt;Person&gt;(&quot;name&quot;, personDAO);
+                        }
+
+                        public LazyDataModel&lt;Person&gt; getPeople() {
+                            return people;
+                        }
+
+                        public void setPeople(LazyDataModel&lt;Person&gt; people) {
+                            this.people = people;
+                        }
+
+
+                    }
+
+
+
+                </pre>
+            </p:tab>
+        </p:tabView>
+
+    </ui:define>
+</ui:composition>
