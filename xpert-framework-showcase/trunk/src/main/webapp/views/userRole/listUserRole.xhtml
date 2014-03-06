@@ -1,0 +1,66 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+    <ui:param name="title" value="#{msg['userRole.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuUserRole.xhtml" />
+        <h:form id="formListUserRole">
+            <xc:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="userRole" rowIndexVar="index" widgetVar="dataTableUserRoleWidget" styleClass="table-responsive"
+                         currentPageReportTemplate="#{userRoleMB.dataModel.currentPageReportTemplate}"
+                         paginatorTemplate="#{userRoleMB.dataModel.paginatorTemplate}"
+                         value="#{userRoleMB.dataModel}" lazy="true" >
+                <p:column styleClass="uix-datatable-index">
+                    <f:facet name="header">
+                        <p:commandButton onclick="PF('dataTableUserRoleWidget').filter()" type="button" icon="ui-icon-refresh" />
+                    </f:facet>
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['userRole.key']}" sortBy="userRole.key"
+                          filterBy="userRole.key"   >
+                        <h:outputText value="#{userRole.key}"/>
+                </p:column>
+                <p:column headerText="#{msg['userRole.url']}" sortBy="userRole.url"
+                          filterBy="userRole.url"   >
+                        <h:outputText value="#{userRole.url}"/>
+                </p:column>
+                <p:column styleClass="uix-datatable-actions">
+                    <f:facet name="header">
+                        <xc:legends detail="true" edit="true" delete="true"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="PF('widgetUserRoleDetail').show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailUserRole" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{userRole}" target="#{userRoleMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="userRole.create">
+                        <p:button icon="ui-icon-pencil" outcome="createUserRole" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{userRole.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="userRole.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{userRoleMB.delete}" >
+                            <f:setPropertyActionListener value="#{userRole.id}" target="#{userRoleMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{userRole}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+                <f:facet name="footer">
+                    <x:securityArea rolesAllowed="userRole.audit">
+                        <xc:auditDelete for="#{userRoleMB.entityClass}"/>
+                    </x:securityArea>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetUserRoleDetail" header="#{msg['userRole.detail']}" appendTo="@(body)" modal="true" height="500" width="800">
+            <ui:include src="detailUserRole.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>
