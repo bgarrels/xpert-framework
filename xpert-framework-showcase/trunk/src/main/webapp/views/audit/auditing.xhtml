@@ -12,7 +12,7 @@
 
         <h3>Show Auditing Insert/Update</h3>
         <h:form id="formSearchPerson">
-            <p:dataTable id="dataTablePerson" 
+            <p:dataTable id="dataTablePerson" lazy="true"
                          paginator="true" rows="5"
                          var="person" value="#{personMB.dataModel}">
                 <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}" filterBy="#{person.name}">
