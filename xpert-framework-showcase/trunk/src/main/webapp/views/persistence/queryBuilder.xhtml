@@ -87,7 +87,9 @@
         <pre name="code" class="java">
                            queryBuilder
                                  .from(Person.class)
-                                 .orderBy(&quot;name&quot;).getResultList(10);
+                                 .orderBy(&quot;name&quot;)
+                                 .setMaxResults(10)
+                                 .getResultList();
         </pre>
 
         
@@ -96,13 +98,18 @@
         <pre name="code" class="java">
                            queryBuilder
                                  .from(Person.class)
-                                 .orderBy(&quot;name&quot;).getResultList(0, 10);
+                                 .orderBy(&quot;name&quot;)
+                                 .setFirstResult(0)
+                                 .setMaxResults(10)
+                                 .getResultList();
         </pre>
         Setting first 10 and no max results:
         <pre name="code" class="java">
                            queryBuilder
                                  .from(Person.class)
-                                 .orderBy(&quot;name&quot;).getResultList(10, null);
+                                 .orderBy(&quot;name&quot;)
+                                 .setFirstResult(10)
+                                 .getResultList();
         </pre>
 
         <h3>Count rows</h3>
