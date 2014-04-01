@@ -69,7 +69,7 @@
                                  .orderBy(&quot;name&quot;).getSingleResult();
         </pre>
         
-        <h3>Using retrictions</h3>
+         <h3>Using Retrictions</h3>
         JPQL:
         <pre name="code" class="java">
         FROM Person.class WHERE name LIKE '%Maria%' ORDER BY name
@@ -80,6 +80,41 @@
                                  .from(Person.class)
                                  .like(&quot;name&quot;, &quot;Maria&quot;)
                                  .orderBy(&quot;name&quot;).getResultList();
+        </pre>
+        
+        <h3>Alias</h3>
+        The alias can be defined in "from" method
+        <pre name="code" class="java">
+            queryBuilder.select("p").from(Person.class, "p");
+        </pre>
+        
+        Restrictions and ordering can be used with the "path" defined with the alias
+        <pre name="code" class="java">
+            queryBuilder.select("p")
+                       .from(Person.class, "p")
+                       .equals(&quot;p.name&quot;, "Peter")
+                       .orderBy(&quot;p.name&quot;)
+                       .getResultList();
+        </pre>
+        
+        <h3>Joins</h3>
+        The methods "innerJoin()", "innerJoinFetch()", "leftJoin()" and "leftJoinFetch()" can be used to define joins
+        <pre name="code" class="java">
+        queryBuilder.select(&quot;p&quot;)
+                    .from(Person.class, &quot;p&quot;)
+                    .innerJoin(&quot;p.group&quot;, &quot;g&quot;)
+                    .orderBy(&quot;g.description&quot;)
+                    .getResultList();
+        </pre>
+        
+        <h3>Select Distinct</h3>
+        use "selectDistinct" method to Distinct que select clausule
+        <pre name="code" class="java">
+        queryBuilder
+                .selectDistinct(&quot;p&quot;)
+                .from(Person.class, &quot;p&quot;)
+                .leftJoinFetch(&quot;p.permissions&quot;, &quot;pe&quot;)
+                .getResultList();
         </pre>
 
         <h3>Set Max Results</h3>

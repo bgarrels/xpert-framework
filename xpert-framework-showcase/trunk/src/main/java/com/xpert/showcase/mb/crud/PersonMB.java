@@ -2,6 +2,7 @@ package com.xpert.showcase.mb.crud;
 
 import com.xpert.core.crud.AbstractBaseBean;
 import com.xpert.core.crud.AbstractBusinessObject;
+import com.xpert.persistence.query.JoinBuilder;
 import com.xpert.showcase.bo.PersonBO;
 import com.xpert.showcase.model.Person;
 import javax.ejb.EJB;
@@ -28,4 +29,11 @@ public class PersonMB extends AbstractBaseBean<Person> {
     public String getDataModelOrder() {
         return "name";
     }
+
+    @Override
+    public JoinBuilder getDataModelJoinBuilder() {
+        return new JoinBuilder().innerJoinFetch("o.group");
+    }
+    
+    
 }
