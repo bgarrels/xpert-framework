@@ -39,7 +39,7 @@ public class QueryBuilderMB {
                             .from(Person.class)
                             .equals("status", Status.ACTIVE)
                             .greaterEqualsThan("salary", new BigDecimal(1000))
-                            .orderBy("code").getResultList();
+                            .orderBy("code DESC").getResultList();
         
         countPerson = personDAO.getQueryBuilder()
                                .from(Person.class).count();

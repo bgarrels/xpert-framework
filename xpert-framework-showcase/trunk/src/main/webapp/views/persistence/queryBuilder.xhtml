@@ -49,7 +49,76 @@
         </p:tabView>
 
         <br/>
-        <h3>Examples:</h3>
+        <h3>Select all rows</h3>
+        
+        JPQL:
+        <pre name="code" class="java">
+        FROM Person.class
+        </pre>
+        Using QueryBuilder:
+        <pre name="code" class="java">
+                        queryBuilder
+                                 .from(Person.class)
+                                 .getResultList();
+        </pre>
+
+        <h3>Using retrictions</h3>
+        JPQL:
+        <pre name="code" class="java">
+        FROM Person.class WHERE name LIKE '%Maria%' ORDER BY name
+        </pre>
+        Using QueryBuilder:
+        <pre name="code" class="java">
+                           queryBuilder
+                                 .from(Person.class)
+                                 .like(&quot;name&quot;, &quot;Maria&quot;)
+                                 .orderBy(&quot;name&quot;).getResultList();
+        </pre>
+
+        <h3>Count rows</h3>
+        JPQL:
+        <pre name="code" class="java">
+            SELECT COUNT(*) FROM Person.class 
+        </pre>
+        Using QueryBuilder:
+        <pre name="code" class="java">
+                        queryBuilder.from(Person.class).count();
+        </pre>
+
+        <h3>Sum</h3>
+
+        JPQL:
+        <pre name="code" class="java">
+            SELECT SUM(salary) FROM Person.class 
+        </pre>
+        Using QueryBuilder:
+        <pre name="code" class="java">
+                        (BigDecimal) queryBuilder.from(Person.class).sum(&quot;salary&quot;);
+        </pre>
+        
+        <h3>Max</h3>
+        JPQL:
+        <pre name="code" class="java">
+            SELECT MAX(salary) FROM Person.class 
+        </pre>
+        Using QueryBuilder:
+        <pre name="code" class="java">
+                        (BigDecimal) queryBuilder.from(Person.class).max(&quot;salary&quot;);
+        </pre>
+        
+        <h3>Min</h3>
+        JPQL:
+        <pre name="code" class="java">
+            SELECT MIN(salary) FROM Person.class 
+        </pre>
+        Using QueryBuilder:
+        <pre name="code" class="java">
+                        (BigDecimal) queryBuilder.from(Person.class).min(&quot;salary&quot;);
+        </pre>
+
+
+        <h3>More Examples</h3> 
+
         <table class="ui-panelgrid ui-widget">
             <tr class="ui-widget-header">
                 <td class="ui-widget-header" style="text-align: center;" >Query Builder</td>
@@ -59,7 +128,7 @@
             <tr>
                 <td>
                     <pre name="code" class="java">
-                        queryBuilder
+                            queryBuilder
                                  .from(Person.class)
                                  .like(&quot;name&quot;, &quot;Maria&quot;)
                                  .orderBy(&quot;name&quot;).getResultList();
@@ -103,7 +172,7 @@ ORDER BY name
                                  .from(Person.class)
                                  .equals(&quot;status&quot;, Status.ACTIVE)
                                  .greaterEqualsThan(&quot;salary&quot;, new BigDecimal(1000))
-                                 .orderBy(&quot;code&quot;).getResultList();
+                                 .orderBy(&quot;code DESC&quot;).getResultList();
                     </pre>
 
                 </td>
@@ -113,7 +182,7 @@ FROM Person.class
 WHERE 
 status = 'ACTIVE' 
 AND salary >= 1000
-ORDER BY code
+ORDER BY code DESC
                     </pre>
                 </td>
                 <td>
