@@ -1,0 +1,45 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:xe="http://java.sun.com/jsf/composite/components"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Entity Search" />
+    <ui:define name="body">
+        <h:form>
+
+            <xe:entitySearch forClass="#{entitySearchBeanTest.personDAO.entityClass}" value="#{entitySearchBeanTest.people}"
+                             baseDAO="#{entitySearchBeanTest.personDAO}" >
+                <xe:entitySearchField propertyName="#{msg['person.name']}" property="name" options="like,eq" />
+                <xe:entitySearchField propertyName="#{msg['person.rg']}" property="rg" options="eq" />
+                <xe:entitySearchField propertyName="#{msg['person.status']}" property="status" options="eq" 
+                                      filterOptions="#{findAllBean.get(classMB.status)}" filterOptionsLabel="description" />
+                <xe:entitySearchOrder value="name ASC"/>
+                <xe:entitySearchOrder value="code DESC"/>
+            </xe:entitySearch>
+
+
+            <p:dataTable var="person" value="#{entitySearchBeanTest.people}">
+                <p:column headerText="ID">
+                    <h:outputText value="#{person.id}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.name']}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.cpf']}">
+                    <h:outputText value="#{person.cpf}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.rg']}">
+                    <h:outputText value="#{person.rg}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.code']}">
+                    <h:outputText value="#{person.code}"/>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="restrictions"/>
+        <cc:attribute name="forClass"/>
+        <cc:attribute name="baseDAO"/>
+        <cc:attribute name="value"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <f:event type="preRenderComponent" listener="#{entitySearchBean.entitySearch.setBaseDAO(cc.attrs.baseDAO)}"/>
+        <f:event type="preRenderComponent" listener="#{entitySearchBean.entitySearch.setForClass(cc.attrs.forClass)}"/>
+
+
+        <cc:insertChildren/>
+
+        <table>
+            <ui:repeat var="field" value="#{entitySearchBean.fields}">
+                <tr>
+                    <td>
+                        <h:outputLabel value="#{field.propertyName}:"/>
+                    </td> 
+                    <td>
+                        <h:selectOneMenu value="#{field.restrictionType}" >
+                            <f:selectItems value="#{field.restrictionTypes}"
+                                           var="restrictionType"
+                                           itemLabel="#{restrictionType}"/>
+                        </h:selectOneMenu>
+                    </td> 
+                    <td>
+                        <p:inputText rendered="#{field.filterOptions == null}" value="#{field.value}" required="#{field.required}" requiredMessage="#{field.requiredMessage}"/>
+                        <h:selectOneMenu rendered="#{field.filterOptions != null}" value="#{field.value}" required="#{field.required}" requiredMessage="#{field.requiredMessage}" >
+                            <f:selectItem itemLabel="-All-" itemValue="" />
+                            <f:selectItems value="#{field.filterOptions}"
+                                           var="option"
+                                           itemValue="#{option}"
+                                           itemLabel="#{option[field.filterOptionsLabel]}"/>
+                        </h:selectOneMenu>
+                    </td> 
+                </tr>
+            </ui:repeat>
+            <h:panelGroup rendered="#{not empty entitySearchBean.orderList}">
+                <tr>
+                    <td>
+                        <h:outputLabel value="Order:"/>
+                    </td> 
+                    <td>
+                        <h:selectOneMenu value="#{entitySearchBean.order}"  >
+                            <f:selectItems value="#{entitySearchBean.orderList}"
+                                           var="order"
+                                           itemValue="#{order}"
+                                           itemLabel="#{order}"/>
+                        </h:selectOneMenu>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </h:panelGroup>
+        </table>
+
+        <p:commandButton value="Search" actionListener="#{entitySearchBean.search}" process="@form" update="@form">
+            <f:setPropertyActionListener target="#{cc.attrs.value}" value="#{entitySearchBean.entitySearch.value}"/>
+        </p:commandButton>
+    </cc:implementation>
+</html>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="propertyName"/>
+        <cc:attribute name="property"/>
+        <cc:attribute name="options"/>
+        <cc:attribute name="required" type="boolean" default="false"/>
+        <cc:attribute name="requiredMessage" />
+        <cc:attribute name="filterOptions"/>
+        <cc:attribute name="filterOptionsLabel"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <f:event type="preRenderComponent" listener="#{entitySearchBean.addField(cc.attrs.propertyName, cc.attrs.property, cc.attrs.options, cc.attrs.required, cc.attrs.requiredMessage, cc.attrs.filterOptions, cc.attrs.filterOptionsLabel)}"/>
+    </cc:implementation>
+</html>

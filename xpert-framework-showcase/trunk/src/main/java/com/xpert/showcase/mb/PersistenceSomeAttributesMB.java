@@ -21,25 +21,6 @@ public class PersistenceSomeAttributesMB {
     private String attributes;
     
     public void search() {
-        
-        Long code = (Long) personDAO.findAttribute("id", 15L);
-        Status status = (Status) personDAO.findAttribute("status", 15L);
-        
-        List<String> names = (List<String>) personDAO.findList("permissions", 15L);
-        
-        List<Person> list = personDAO.getQueryBuilder()
-                .selectDistinct("p")
-                .from(Person.class, "p")
-                .leftJoinFetch("p.permissions", "pe")
-                .getResultList();
-        
-        List<Person> list2 = personDAO.getQueryBuilder()
-                .select("p")
-              //  .select("p")
-                .from(Person.class, "p")
-                .innerJoin("p.group", "g")
-                .getResultList();
-        
         try {
             people = personDAO.listAttributes(attributes, "id");
         } catch (Exception ex) {
