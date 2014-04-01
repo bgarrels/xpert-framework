@@ -17,7 +17,7 @@
 
         <h:form>
             <p:dataTable id="dataTablePerson" paginatorPosition="bottom"
-                         paginator="true" rows="5"
+                         paginator="true" rows="5" lazy="true"
                          var="person" value="#{personMB.dataModel}">
                 <f:facet name="header">
                     #{msg['filterOnEnter.target']} (target = dataTablePerson)
@@ -36,7 +36,7 @@
             <x:filterOnEnter target="dataTablePerson"/>
             <p:spacer height="10"/>
             <p:dataTable id="dataTablePerson2" paginatorPosition="bottom" styleClass="datatable-enter"
-                         paginator="true" rows="5"
+                         paginator="true" rows="5" lazy="true"
                          var="person" value="#{personMB.dataModel}">
                 <f:facet name="header">
                     #{msg['filterOnEnter.selector']} (selector = .datatable-enter)

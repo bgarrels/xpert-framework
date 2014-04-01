@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
-    <!--
     <jdbc-resource enabled="true" jndi-name="jdbc/xpertShowCaseDS" object-type="user" pool-name="xpertFrameworkShowcase">
         <description/>
     </jdbc-resource>
@@ -14,5 +13,4 @@
         <property name="Password" value="postgres"></property>
         <property name="ServerName" value="localhost"></property>
     </jdbc-connection-pool>
-    -->
 </resources>

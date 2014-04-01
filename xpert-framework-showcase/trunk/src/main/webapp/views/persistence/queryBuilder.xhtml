@@ -1,0 +1,178 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Query Builder" />
+    <ui:define name="body">
+
+
+        <div class="description">
+            QueryBuilder is a easy way to create JPQL. It can be created with a EntityManager
+        </div>
+
+
+        <h3>Create a QueryBuilder from a EntityManager</h3>
+        <pre name="code" class="java">
+            QueryBuilder queryBuilder = new QueryBuilder(entityManager);
+        </pre>
+        <h3>Create a QueryBuilder from a BaseDAO</h3>
+        QueryBuilder can be created from a BaseDAO:
+        <pre name="code" class="java">
+            QueryBuilder queryBuilder = someDAO.getQueryBuilder();
+        </pre>
+        Example:
+        <p:tabView>
+            <p:tab title="QueryBuilderMB.java">
+                <pre name="code" class="java">
+                public class QueryBuilderMB {
+
+                    @EJB
+                    private PersonDAO personDAO;
+
+                    @PostConstruct
+                    public void init(){
+
+                        QueryBuilder queryBuilder = personDAO.getQueryBuilder();    
+
+                    }  
+
+                }
+                </pre>
+            </p:tab>
+            <p:tab title="PersonDAO.java">
+                <ui:include src="/views/common/java/personDAO.xhtml"/>
+            </p:tab>
+        </p:tabView>
+
+        <br/>
+        <h3>Examples:</h3>
+        <table class="ui-panelgrid ui-widget">
+            <tr class="ui-widget-header">
+                <td class="ui-widget-header" style="text-align: center;" >Query Builder</td>
+                <td class="ui-widget-header" style="text-align: center;" >Result Query</td>
+                <td class="ui-widget-header" style="text-align: center;" >Result</td>
+            </tr>
+            <tr>
+                <td>
+                    <pre name="code" class="java">
+                        queryBuilder
+                                 .from(Person.class)
+                                 .like(&quot;name&quot;, &quot;Maria&quot;)
+                                 .orderBy(&quot;name&quot;).getResultList();
+                    </pre>
+
+                </td>
+                <td>
+                    <pre>
+FROM Person.class 
+WHERE 
+name LIKE '%Maria%' 
+ORDER BY name
+                    </pre>
+                </td>
+                <td>
+                    <p:dataTable var="person" value="#{queryBuilderMB.example1}">
+                        <p:column headerText="ID">
+                            <h:outputText value="#{person.id}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.name']}">
+                            <h:outputText value="#{person.name}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.code']}">
+                            <h:outputText value="#{person.code}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.status']}">
+                            <h:outputText value="#{person.status.description}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.salary']}">
+                            <h:outputText value="#{person.salary}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre name="code" class="java">
+                        queryBuilder
+                                 .from(Person.class)
+                                 .equals(&quot;status&quot;, Status.ACTIVE)
+                                 .greaterEqualsThan(&quot;salary&quot;, new BigDecimal(1000))
+                                 .orderBy(&quot;code&quot;).getResultList();
+                    </pre>
+
+                </td>
+                <td>
+                    <pre>
+FROM Person.class 
+WHERE 
+status = 'ACTIVE' 
+AND salary >= 1000
+ORDER BY code
+                    </pre>
+                </td>
+                <td>
+                    <p:dataTable var="person" value="#{queryBuilderMB.example2}">
+                        <p:column headerText="ID">
+                            <h:outputText value="#{person.id}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.name']}">
+                            <h:outputText value="#{person.name}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.code']}">
+                            <h:outputText value="#{person.code}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.status']}">
+                            <h:outputText value="#{person.status.description}"/>
+                        </p:column>
+                        <p:column headerText="#{msg['person.salary']}">
+                            <h:outputText value="#{person.salary}">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre name="code" class="java">
+                        queryBuilder.from(Person.class).count();
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+SELECT COUNT(*) FROM Person.class 
+                    </pre>
+                </td>
+                <td>
+                    #{queryBuilderMB.countPerson}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre name="code" class="java">
+                        (BigDecimal) queryBuilder.from(Person.class).sum(&quot;salary&quot;);
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+SELECT SUM(salary) FROM Person.class 
+                    </pre>
+                </td>
+                <td>
+                    #{queryBuilderMB.sumSalary}
+                </td>
+            </tr>
+
+        </table>
+
+
+
+
+    </ui:define>
+</ui:composition>
