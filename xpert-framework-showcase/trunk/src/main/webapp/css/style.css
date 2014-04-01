@@ -25,3 +25,4 @@ h1 a{text-decoration: none;}
 .ui-toolbar{margin: 2px 0;}
 .ui-datatable th input.ui-column-filter{width: 90%;}
 .ui-panel{margin-top: 6px;}
+.panel-detail-auditing-delete .ui-datatable-data td{white-space: normal !important;}
