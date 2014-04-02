@@ -17,8 +17,8 @@
                 <xe:entitySearchField propertyName="#{msg['person.rg']}" property="rg" options="eq" />
                 <xe:entitySearchField propertyName="#{msg['person.status']}" property="status" options="eq" 
                                       filterOptions="#{findAllBean.get(classMB.status)}" filterOptionsLabel="description" />
-                <xe:entitySearchOrder value="name ASC"/>
-                <xe:entitySearchOrder value="code DESC"/>
+                <xe:entitySearchOrder value="name ASC" propertyName="#{msg['person.name']}" />
+                <xe:entitySearchOrder value="code DESC" propertyName="#{msg['person.code']}"/>
             </xe:entitySearch>
 
 

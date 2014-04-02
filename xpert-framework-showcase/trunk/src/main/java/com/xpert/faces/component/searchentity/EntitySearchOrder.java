@@ -22,6 +22,7 @@ public class EntitySearchOrder implements Serializable {
         this.propertyName = propertyName;
     }
     
+
     public String getOrderBy() {
         return orderBy;
     }

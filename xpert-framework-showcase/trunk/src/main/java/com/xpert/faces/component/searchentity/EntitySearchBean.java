@@ -24,7 +24,6 @@ public class EntitySearchBean implements Serializable {
 
     private EntitySearch entitySearch = new EntitySearch();
     private List<EntitySearchField> fields = new ArrayList<EntitySearchField>();
-    private String order;
     private List<EntitySearchOrder> orderList;
 
     public void search() {
@@ -94,14 +93,6 @@ public class EntitySearchBean implements Serializable {
 
     public void setOrderList(List<EntitySearchOrder> orderList) {
         this.orderList = orderList;
-    }
-
-    public String getOrder() {
-        return order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
     }
     
     

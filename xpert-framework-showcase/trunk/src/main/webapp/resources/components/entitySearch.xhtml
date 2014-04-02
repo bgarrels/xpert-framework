@@ -23,7 +23,7 @@
 
         <cc:insertChildren/>
 
-        <table>
+        <table class="grid-form">
             <ui:repeat var="field" value="#{entitySearchBean.fields}">
                 <tr>
                     <td>
@@ -54,7 +54,7 @@
                         <h:outputLabel value="Order:"/>
                     </td> 
                     <td>
-                        <h:selectOneMenu value="#{entitySearchBean.order}"  >
+                        <h:selectOneMenu value="#{entitySearchBean.entitySearch.orderBy}"  >
                             <f:selectItems value="#{entitySearchBean.orderList}"
                                            var="order"
                                            itemValue="#{order.orderBy}"
