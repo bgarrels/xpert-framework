@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xpert.showcase.mb;
+package com.xpert.faces.component.searchentity;
 
 import com.xpert.persistence.query.QueryBuilder;
 import com.xpert.persistence.query.RestrictionType;
@@ -25,7 +25,7 @@ public class EntitySearchBean implements Serializable {
     private EntitySearch entitySearch = new EntitySearch();
     private List<EntitySearchField> fields = new ArrayList<EntitySearchField>();
     private String order;
-    private List<String> orderList;
+    private List<EntitySearchOrder> orderList;
 
     public void search() {
 
@@ -36,7 +36,7 @@ public class EntitySearchBean implements Serializable {
                 queryBuilder.add(entitySearchField.getProperty(), entitySearchField.getRestrictionType(), entitySearchField.getValue());
             }
         }
-        queryBuilder.orderBy(orderList);
+        queryBuilder.orderBy(entitySearch.getOrderBy());
         entitySearch.setValue(queryBuilder.getResultList());
     }
 
@@ -56,12 +56,19 @@ public class EntitySearchBean implements Serializable {
         }
     }
 
-    public void addOrder(String order) {
+    public void addOrder(String orderBy, String propertyName) {
         if(orderList == null){
-            orderList = new ArrayList<String>();
+            orderList = new ArrayList<EntitySearchOrder>();
         }
-        if (!orderList.contains(order)) {
-            this.orderList.add(order);
+         boolean contains = false;
+        for (EntitySearchOrder entitySearchOrder : orderList) {
+            if (entitySearchOrder.getOrderBy().equals(orderBy)) {
+                contains = true;
+                break;
+            }
+        }
+        if(contains == false){
+            orderList.add(new EntitySearchOrder(orderBy, propertyName));
         }
     }
 
@@ -81,11 +88,11 @@ public class EntitySearchBean implements Serializable {
         this.fields = fields;
     }
 
-    public List<String> getOrderList() {
+    public List<EntitySearchOrder> getOrderList() {
         return orderList;
     }
 
-    public void setOrderList(List<String> orderList) {
+    public void setOrderList(List<EntitySearchOrder> orderList) {
         this.orderList = orderList;
     }
 

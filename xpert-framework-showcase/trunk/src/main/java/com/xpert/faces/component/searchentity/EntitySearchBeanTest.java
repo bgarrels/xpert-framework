@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xpert.showcase.mb;
+package com.xpert.faces.component.searchentity;
 
 import com.xpert.showcase.dao.PersonDAO;
 import com.xpert.showcase.model.Person;

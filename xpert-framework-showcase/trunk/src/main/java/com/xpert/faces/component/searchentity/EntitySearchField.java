@@ -1,4 +1,4 @@
-package com.xpert.showcase.mb;
+package com.xpert.faces.component.searchentity;
 
 import com.xpert.persistence.query.RestrictionType;
 import java.io.Serializable;

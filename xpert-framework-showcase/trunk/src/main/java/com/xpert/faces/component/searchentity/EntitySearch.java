@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.xpert.showcase.mb;
+package com.xpert.faces.component.searchentity;
 
 import com.xpert.persistence.dao.BaseDAO;
 import com.xpert.persistence.query.Restriction;
@@ -15,8 +15,17 @@ public class EntitySearch implements Serializable {
     private List<Restriction> restrictions;
     private Class forClass;
     private BaseDAO baseDAO;
+    private String orderBy;
     private List value;
 
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+    
     public List<Restriction> getRestrictions() {
         return restrictions;
     }

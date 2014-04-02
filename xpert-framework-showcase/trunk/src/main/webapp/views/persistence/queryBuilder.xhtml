@@ -60,13 +60,26 @@
                         queryBuilder.from(Person.class).getResultList();
         </pre>
 
+        <h3>Ordering a Result</h3>
+        The method "orderBy()" define the order in result
+        <pre name="code" class="java">
+                           queryBuilder
+                                 .from(Person.class)
+                                 .orderBy(&quot;name&quot;).getResultList();
+        </pre>
+        Multiple order (ASC and DESC can be defined): 
+        <pre name="code" class="java">
+                           queryBuilder
+                                 .from(Person.class)
+                                 .orderBy(&quot;name, code DESC&quot;).getResultList();
+        </pre>
+        
         <h3>Get a Single Result</h3>
         The method "getSingleResult()" calls JPA Query "getSingleResult()"
         <pre name="code" class="java">
                            queryBuilder
                                  .from(Person.class)
-                                 .equals(&quot;code&quot;, &quot;123&quot;)
-                                 .orderBy(&quot;name&quot;).getSingleResult();
+                                 .getSingleResult();
         </pre>
 
         <h3>Using Retrictions</h3>
@@ -98,7 +111,7 @@
         </pre>
 
         <h3>Joins</h3>
-        The methods "innerJoin()", "innerJoinFetch()", "leftJoin()" and "leftJoinFetch()" can be used to define joins
+        The methods "innerJoin()", "innerJoinFetch()", "rightJoin()", "rightJoinFetch()", "leftJoin()" and "leftJoinFetch()" can be used to define joins
         <pre name="code" class="java">
         queryBuilder.select(&quot;p&quot;)
                     .from(Person.class, &quot;p&quot;)
