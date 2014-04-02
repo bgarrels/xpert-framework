@@ -68,8 +68,8 @@
                                  .equals(&quot;code&quot;, &quot;123&quot;)
                                  .orderBy(&quot;name&quot;).getSingleResult();
         </pre>
-        
-         <h3>Using Retrictions</h3>
+
+        <h3>Using Retrictions</h3>
         JPQL:
         <pre name="code" class="java">
         FROM Person.class WHERE name LIKE '%Maria%' ORDER BY name
@@ -81,13 +81,13 @@
                                  .like(&quot;name&quot;, &quot;Maria&quot;)
                                  .orderBy(&quot;name&quot;).getResultList();
         </pre>
-        
+
         <h3>Alias</h3>
         The alias can be defined in "from" method
         <pre name="code" class="java">
             queryBuilder.select("p").from(Person.class, "p");
         </pre>
-        
+
         Restrictions and ordering can be used with the "path" defined with the alias
         <pre name="code" class="java">
             queryBuilder.select("p")
@@ -96,7 +96,7 @@
                        .orderBy(&quot;p.name&quot;)
                        .getResultList();
         </pre>
-        
+
         <h3>Joins</h3>
         The methods "innerJoin()", "innerJoinFetch()", "leftJoin()" and "leftJoinFetch()" can be used to define joins
         <pre name="code" class="java">
@@ -106,7 +106,7 @@
                     .orderBy(&quot;g.description&quot;)
                     .getResultList();
         </pre>
-        
+
         <h3>Select Distinct</h3>
         use "selectDistinct" method to Distinct que select clausule
         <pre name="code" class="java">
@@ -127,7 +127,7 @@
                                  .getResultList();
         </pre>
 
-        
+
         <h3>Set First and Max Results</h3>
         Setting first 0 and max of 10 results:
         <pre name="code" class="java">
@@ -145,6 +145,25 @@
                                  .orderBy(&quot;name&quot;)
                                  .setFirstResult(10)
                                  .getResultList();
+        </pre>
+
+        <h3>Debug Query</h3>
+        To show generated query (and the parameters) just call the method "debug()"
+        <pre name="code" class="java">
+                           queryBuilder
+                                 .from(Person.class)
+                                 .orderBy(&quot;name&quot;)
+                                 .debug()
+                                 .getResultList();
+        </pre>
+
+        <h3>Define attributes in query</h3>
+        To Define attributes in query the expected type must be defined in "getResultList()".
+        <pre name="code" class="java">
+        queryBuilder.select(&quot;name,code,id&quot;)
+                    .from(Person.class)
+                    .orderBy(&quot;name&quot;)
+                    .getResultList(Person.class);
         </pre>
 
         <h3>Count rows</h3>
@@ -167,7 +186,10 @@
         <pre name="code" class="java">
                         (BigDecimal) queryBuilder.from(Person.class).sum(&quot;salary&quot;);
         </pre>
-
+        Return "BigDecimal.ZERO" wher result is null:
+        <pre name="code" class="java">
+                        (BigDecimal) queryBuilder.from(Person.class).sum(&quot;salary&quot;, BigDecimal.ZERO);
+        </pre>
         <h3>Max</h3>
         JPQL:
         <pre name="code" class="java">

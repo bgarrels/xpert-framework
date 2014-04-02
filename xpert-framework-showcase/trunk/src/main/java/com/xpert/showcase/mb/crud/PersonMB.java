@@ -29,5 +29,14 @@ public class PersonMB extends AbstractBaseBean<Person> {
     public String getDataModelOrder() {
         return "name";
     }
+
+    @Override
+    public JoinBuilder getDataModelJoinBuilder() {
+    //    return null;
+        return new JoinBuilder("p")
+                            .innerJoinFetch("p.group", "g")
+                            .innerJoinFetch("g.statusGroup", "s");
+    }
+    
     
 }
