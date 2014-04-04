@@ -15,12 +15,9 @@ import javax.faces.bean.ManagedBean;
 public class DownloadMB {
     
     public void download() throws IOException, InterruptedException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream));
-        writer.write("xpert-framework");
+        String fileContent = "This is xpert-framework";
         //wait 5s
         Thread.sleep(5000);
-        writer.close();
-        FacesUtils.download(byteArrayOutputStream.toByteArray(), "text/plain", "file.txt");
+        FacesUtils.download(fileContent.getBytes(), "text/plain", "file.txt");
     }
 }
