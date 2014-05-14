@@ -21,6 +21,9 @@
         <validator-class>com.xpert.core.validation.BeanValidator</validator-class>
         <validator-id>javax.faces.Bean</validator-id>
     </validator>
+     <lifecycle>
+        <phase-listener>com.xpert.faces.listener.MultiPageMessagesSupport</phase-listener>
+    </lifecycle>
         
 
 </faces-config>
