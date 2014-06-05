@@ -26,3 +26,6 @@ h1 a{text-decoration: none;}
 .ui-datatable th input.ui-column-filter{width: 90%;}
 .ui-panel{margin-top: 6px;}
 .panel-detail-auditing-delete .ui-datatable-data td{white-space: normal !important;}
+.panel-calendar-filter > table {table-layout: auto;}
+.panel-calendar-filter .ui-inputfield {width: 55px;}
+.panel-calendar-filter .calendar-filter{white-space: nowrap;}
