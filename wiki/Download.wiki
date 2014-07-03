@@ -1,3 +1,7 @@
 Xpert-framework jar and documentation is located on google drive: 
 
 https://drive.google.com/folderview?id=0B7aA_qvVNF77S2dIc082cWdBVzg&usp=sharing#list
+
+Documentation (PDF):
+
+https://drive.google.com/folderview?id=0B7aA_qvVNF77REdpNldhUnRRY28&usp=sharing&tid=0B7aA_qvVNF77S2dIc082cWdBVzg#list
