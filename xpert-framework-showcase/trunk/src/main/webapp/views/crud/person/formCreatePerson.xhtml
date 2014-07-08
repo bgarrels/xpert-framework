@@ -5,7 +5,7 @@
                  xmlns:p="http://primefaces.org/ui"
                  xmlns:x="http://xpert.com/faces"
                  xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
-   <h:form>
+   <h:form>mudou
        <xc:modalMessages/>
        <h:panelGrid columns="2">
 
@@ -19,7 +19,7 @@
            <p:inputText value="#{personMB.entity.email}" maxlength="255"  />
 
            <h:outputLabel value="#{msg['person.salary']}:" />
-           <xc:inputNumber value="#{personMB.entity.salary}" />
+           <x:inputNumber value="#{personMB.entity.salary}" />
 
            <h:outputLabel value="* #{msg['person.cpf']}:" />
            <p:inputText value="#{personMB.entity.cpf}" maxlength="255"  />
@@ -60,7 +60,7 @@
        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
        <div style="text-align: center;">
            <p:commandButton process="@form" update="@form" action="#{personMB.save}" value="#{msg['save']}" />
-            <xc:audit for="#{personMB.entity}"/>
+            <x:audit for="#{personMB.entity}"/>
         </div>
    </h:form>
 </ui:composition>
