@@ -39,8 +39,8 @@
                     </x:securityArea>
                     <x:securityArea rolesAllowed="country.delete">
                         <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
-                                         action="#{countryMB.delete}" >
-                            <f:setPropertyActionListener value="#{country.id}" target="#{countryMB.id}" />
+                                         action="#{countryMB.remove}" >
+                            <f:setPropertyActionListener value="#{country}" target="#{countryMB.entity}" />
                             <x:confirmation message="#{xmsg['confirmDelete']} - #{country}" />
                         </p:commandButton>
                     </x:securityArea>
