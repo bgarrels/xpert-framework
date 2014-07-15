@@ -41,6 +41,9 @@ public class PersonBO extends AbstractBusinessObject<Person> {
         return true;
     }
 
+    
+    
+
     @Override
     public void validate(Person person) throws BusinessException {
     }

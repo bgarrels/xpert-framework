@@ -10,6 +10,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import com.xpert.showcase.model.Country;
+import com.xpert.showcase.model.Person;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -35,6 +38,22 @@ public class CountryBO extends AbstractBusinessObject<Country> {
     public void validate(Country country) throws BusinessException {
     }
 
+    
+    @Override
+    public void save(Country country) throws BusinessException {
+        //salvar
+        super.save(country); 
+        countryDAO.getEntityManager().flush();
+        country = countryDAO.find(country.getId());
+        
+        //alterar
+        country.setName("ALTERADO "+new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date()));
+        countryDAO.merge(country);
+        
+        
+        
+    }
+    
     @Override
     public boolean isAudit() {
         return true;
