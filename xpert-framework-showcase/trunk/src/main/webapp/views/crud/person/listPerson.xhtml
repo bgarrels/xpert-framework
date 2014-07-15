@@ -37,7 +37,7 @@
                     </h:outputText>
                 </p:column>
                 <p:column style="text-align: center;">
-                    <p:commandButton oncomplete="PF('widgetPersonDetail').show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailPerson" >
+                    <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":formDetailPerson" >
                         <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}" />
                     </p:commandButton>
                     <p:button icon="ui-icon-pencil" outcome="createPerson" >
@@ -54,7 +54,7 @@
 
         </h:form>
 
-        <p:dialog widgetVar="widgetPersonDetail" header="#{msg['person.detail']}" appendTo="@(body)" modal="true" height="500" width="800">
+        <p:dialog widgetVar="widgetPersonDetail" header="#{msg['person.detail']}" styleClass="modal-dialog" appendToBody="true" modal="true" height="500" width="800">
             <ui:include src="detailPerson.xhtml" />
         </p:dialog>
 

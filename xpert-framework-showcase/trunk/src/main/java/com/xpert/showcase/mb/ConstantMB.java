@@ -14,7 +14,7 @@ public class ConstantMB {
         return Constants.VERSION;
     }
     public String getPrimefacesVersion(){
-        return "4.0";
+        return "3.4";
     }
     
 }
