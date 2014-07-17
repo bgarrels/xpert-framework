@@ -13,7 +13,7 @@
         </h:panelGrid>
         <p:separator/>
         <div style="text-align: center;">
-            <p:commandButton type="button" value="#{xmsg['close']}" onclick="widgetCarDetail.hide()" />
+            <p:commandButton type="button" value="#{xmsg['close']}" onclick="PF('widgetCarDetail').hide()" />
             <x:securityArea rolesAllowed="car.audit">
                 <x:audit for="#{carMB.entity}"/>
             </x:securityArea>
