@@ -64,6 +64,11 @@ public class UserSession {
         roles.add(new UserRole("person.list"));
         roles.add(new UserRole("person.delete"));
         roles.add(new UserRole("person.audit"));
+        
+        roles.add(new UserRole("car.create"));
+        roles.add(new UserRole("car.list"));
+        roles.add(new UserRole("car.delete"));
+        roles.add(new UserRole("car.audit"));
 
         SecuritySessionManager.putRoles(roles);
 
