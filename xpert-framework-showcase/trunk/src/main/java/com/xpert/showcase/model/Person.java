@@ -61,10 +61,21 @@ public class Person implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Group group2;
     
+    private Boolean active;
+    
     @ManyToMany(targetEntity = Permission.class, fetch = FetchType.LAZY)
     @JoinTable(name = "person_permission", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions;
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    
     public Long getCode() {
         return code;
     }
