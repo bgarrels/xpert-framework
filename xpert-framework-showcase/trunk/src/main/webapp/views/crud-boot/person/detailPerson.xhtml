@@ -4,82 +4,82 @@
                  xmlns:ui="http://java.sun.com/jsf/facelets"
                  xmlns:p="http://primefaces.org/ui"
                  xmlns:x="http://xpert.com/faces">
-    <h:form id="formDetailPerson">
+    <h:form id="formDetailPerson" styleClass="uix-form-detail">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.code']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.code']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.code}"/>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.name']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.name']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.name}"/>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.email']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.email']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.email}"/>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.salary']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.salary']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.salary}">
                             <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
                         </h:outputText>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.cpf']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.cpf']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.cpf}"/>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.birthday']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.birthday']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.birthday}">
                             <f:convertDateTime />
                         </h:outputText>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.rg']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.rg']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.rg}"/>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.status']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.status']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.status}"/>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.group']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.group']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.group}">
                             <x:initializer/>
                         </h:outputText>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.group2']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.group2']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.group2}">
                             <x:initializer/>
                         </h:outputText>
-                    </span>
+                    </p>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="#{msg['person.active']}:" styleClass="bold" /><br/>
-                    <span class="uix-content-detail">
+                    <h:outputLabel value="#{msg['person.active']}:" styleClass="control-label" />
+                    <p class="form-control-static">
                         <h:outputText value="#{personMB.entity.active}" converter ="yesNoConverter" />
-                    </span>
+                    </p>
                 </div>
            </div>
          </div>
@@ -92,4 +92,3 @@
         </div>
     </h:form>
 </ui:composition>
-                                            

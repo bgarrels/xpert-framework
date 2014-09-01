@@ -32,16 +32,4 @@ h1 a{text-decoration: none;}
 .ui-fieldset{margin: 3px 0;}
 .ui-fieldset-legend{width: auto;font-size: 13px;height: auto;padding: 0px 15px;margin: 5px 0 5px 5px;}
 select.form-control{height: 34px !important;}
-/*
-.ui-dialog.dialog-fluid {
-    width: 85% !important;
-    height: 85% !important;
-    left: 7.5% !important;
-}
-.ui-dialog.dialog-fluid .ui-resizable-handle{
-   display: none !important;
-}
-.ui-dialog.dialog-fluid .ui-dialog-content {
-    max-height: 80% !important;
-}*/
-.empty::after {content: "\00a0"}
+
