@@ -80,7 +80,7 @@
                 </p:column>
                 <p:column styleClass="uix-datatable-actions" exportable="false">
                     <f:facet name="header">
-                        <x:legends detail="true" edit="true" delete="true"/>
+                       <h:outputText value="#{xmsg['actions']}"/>
                     </f:facet>
                     <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" 
                                      process="@form" update=":formDetailPerson" title="#{xmsg['detail']}" >
