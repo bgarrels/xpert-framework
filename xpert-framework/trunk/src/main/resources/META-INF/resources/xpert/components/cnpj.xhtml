@@ -16,11 +16,12 @@
         <cc:attribute name="requiredMessage"/>
         <cc:attribute name="style"/>
         <cc:attribute name="styleClass"/>
+        <cc:attribute name="placeHolder" default=""/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
-        <p:inputMask mask="#{formatMB.format.cnpj}" validator="cnpjValidator" 
+        <p:inputMask mask="#{formatMB.format.cnpj}" validator="cnpjValidator"  placeHolder="#{cc.attrs.placeHolder}"
                      style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}"
                      value="#{cc.attrs.value}" converter="cnpjConverter" size="#{cc.attrs.size}" 
                      required="#{cc.attrs.required}" requiredMessage="#{cc.attrs.requiredMessage}"
