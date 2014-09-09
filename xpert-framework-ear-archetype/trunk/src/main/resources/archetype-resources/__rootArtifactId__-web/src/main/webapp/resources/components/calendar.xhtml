@@ -1,0 +1,54 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="value" />
+        <cc:attribute name="size"/>
+        <cc:attribute name="readOnly" default="false" />
+        <cc:attribute name="required" default="false" />
+        <cc:attribute name="requiredMessage" />
+        <cc:attribute name="readOnlyInputText" default="false" />
+        <cc:attribute name="showOn" default="button"/>
+        <cc:attribute name="navigator" default="true" />
+        <cc:attribute name="style" />
+        <cc:attribute name="styleClass" />
+        <cc:attribute name="dataHora" default="false" />
+        <cc:attribute name="exibirFormato" default="true" />
+        <cc:attribute name="disabled" />
+        <cc:clientBehavior name="dateSelect" event="dateSelect"  targets="calendar"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <p:calendar id="calendar" value="${symbol_pound}{cc.attrs.value}" 
+                    required="${symbol_pound}{cc.attrs.required}" requiredMessage="${symbol_pound}{cc.attrs.requiredMessage}"
+                    size="${symbol_pound}{not empty cc.attrs.size ? cc.attrs.size : cc.attrs.dataHora ? '16' : '13'}" style="${symbol_pound}{cc.attrs.style}" styleClass="${symbol_pound}{cc.attrs.styleClass}"
+                    readonlyInput="${symbol_pound}{cc.attrs.readOnlyInputText}" showOn="${symbol_pound}{cc.attrs.showOn}"
+                    disabled="${symbol_pound}{cc.attrs.disabled}"
+                    pattern="${symbol_pound}{cc.attrs.dataHora ? formatMB.format.dataHora : formatMB.format.data}" navigator="${symbol_pound}{cc.attrs.navigator}"/>
+
+        <h:outputText rendered="${symbol_pound}{cc.attrs.exibirFormato}" style="font-size: 10px;"
+                      value=" (${symbol_pound}{cc.attrs.dataHora ? formatMB.format.dataHoraTradizida : formatMB.format.dataTraduzida})" />
+
+        <h:panelGroup rendered="${symbol_pound}{not cc.attrs.readOnly and not cc.attrs.disabled}">
+            <script type="text/javascript">
+             /*<![CDATA[*/
+             ${symbol_dollar}(document).ready(function() {
+                 var ${symbol_dollar}calendarElement =   ${symbol_dollar}('${symbol_pound}'+'${symbol_pound}{cc.attrs.clientId}'.replace(/:/g,'${symbol_escape}${symbol_escape}:')+'${symbol_escape}${symbol_escape}:calendar_input');
+                 ${symbol_dollar}calendarElement.mask('${symbol_pound}{cc.attrs.dataHora ? formatMB.format.mascaraDataHora : formatMB.format.mascaraData}',{placeholder:''});
+             });
+             /*]]>*/
+            </script>
+        </h:panelGroup>
+
+    </cc:implementation>
+</html>

@@ -1,0 +1,42 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="value" />
+        <cc:attribute name="size" default="5"/>
+        <cc:attribute name="readOnly" default="false" />
+        <cc:attribute name="required" default="false" />
+        <cc:attribute name="requiredMessage" />
+        <cc:attribute name="showOn" default="button"/>
+        <cc:attribute name="navigator" default="true" />
+        <cc:attribute name="style" />
+        <cc:attribute name="styleClass" />
+        <cc:attribute name="disabled" />
+        <cc:attribute name="readonly" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <p:inputMask mask="${symbol_pound}{formatMB.format.mascaraHoraMinuto}"  
+                     value="${symbol_pound}{cc.attrs.value}"
+                     required="${symbol_pound}{cc.attrs.required}" requiredMessage="${symbol_pound}{cc.attrs.requiredMessage}"
+                     readonly="${symbol_pound}{cc.attrs.readonly}" size="${symbol_pound}{cc.attrs.size}" 
+                     style="${symbol_pound}{cc.attrs.style}" 
+                     styleClass="${symbol_pound}{cc.attrs.styleClass}"
+                     converterMessage="${symbol_pound}{msg['business.horaInvalida']}"
+                     disabled="${symbol_pound}{cc.attrs.disabled}">
+            <f:convertDateTime pattern="${symbol_pound}{formatMB.format.horaMinuto}"/>
+        </p:inputMask>
+
+    </cc:implementation>
+</html>

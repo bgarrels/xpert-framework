@@ -1,0 +1,13 @@
+
+<xpert-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <auditing>
+        <auditing-impl>it.pkg.modelo.audit.Auditing</auditing-impl>
+        <metadata-impl>it.pkg.modelo.audit.Metadata</metadata-impl>
+        <auditing-listener>it.pkg.application.AuditingListenerImpl</auditing-listener>
+    </auditing>
+    
+    <entity-manager-factory>it.pkg.application.EntityManagerFactoryImpl</entity-manager-factory>
+    <resource-bundle>bundles.messages</resource-bundle>
+
+</xpert-config>

@@ -1,0 +1,72 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 >
+    <h:form id="formDetailConfiguracaoEmail">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.nome']}:" styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.nome}"/>
+                    </span>
+                </div>
+                
+                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.hostName']}:"  styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.hostName}"/>
+                    </span>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.email']}:"  styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.email}"/>
+                    </span>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.senha']}:"  styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.senha}"/>
+                    </span>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.smptPort']}:"  styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.smptPort}"/>
+                    </span>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.tls']}:"  styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.tls}" converter ="yesNoConverter" />
+                    </span>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.ssl']}:"  styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.ssl}" converter ="yesNoConverter" />
+                    </span>
+                </div>
+               
+            </div>
+        </div>
+        <p:separator/>
+        <div class="text-center">
+            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="widgetConfiguracaoEmailDetail.hide()" />
+            <x:securityArea rolesAllowed="configuracaoEmail.audit">
+                <x:audit for="${symbol_pound}{configuracaoEmailMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>

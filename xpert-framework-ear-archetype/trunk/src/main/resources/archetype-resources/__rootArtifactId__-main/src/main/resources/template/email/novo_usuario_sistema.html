@@ -1,0 +1,12 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+Olá <b>${symbol_dollar}{solicitacaoRecuperacaoSenha.usuario.nome}</b>,
+<br/><br/>
+Seu usuario foi criado com sucesso.
+<br/>
+Seu login: <b>${symbol_dollar}{solicitacaoRecuperacaoSenha.usuario.userLogin}</b>
+<br/><br/>
+Clique no link abaixo para cadastrar uma senha no sistema:
+<br/><br/>
+<a href="${symbol_dollar}{solicitacaoRecuperacaoSenha.urlRecuperacaoSenha}">${symbol_dollar}{solicitacaoRecuperacaoSenha.urlRecuperacaoSenha}</a>
