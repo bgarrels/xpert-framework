@@ -1,0 +1,14 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+Olá <b>${symbol_dollar}{solicitacaoRecuperacaoSenha.usuario.nome}</b>,
+<br/>
+Clique no link abaixo para recuperar sua senha no sistema:
+<br/>
+<br/>
+<a href="${symbol_dollar}{solicitacaoRecuperacaoSenha.urlRecuperacaoSenha}">${symbol_dollar}{solicitacaoRecuperacaoSenha.urlRecuperacaoSenha}</a>
+<br/>
+<br/>
+Lembrando que esta solicitacao tem validade ate ${symbol_dollar}{solicitacaoRecuperacaoSenha.dataValidadeFormatada}.
+<br/>
+Caso nao tenha solicitado a recuperacao da senha, desconsidere esse email.

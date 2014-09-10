@@ -1,0 +1,85 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces"
+                 >
+    <ui:param name="title" value="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuSolicitacaoRecuperacaoSenha.xhtml" />
+        <h:form id="formListSolicitacaoRecuperacaoSenha">
+            <x:modalMessages/>
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
+                         var="solicitacaoRecuperacaoSenha" rowIndexVar="index" widgetVar="dataTableSolicitacaoRecuperacaoSenhaWidget"
+                         currentPageReportTemplate="${symbol_pound}{solicitacaoRecuperacaoSenhaMB.dataModel.currentPageReportTemplate}"
+                         styleClass="table-responsive"
+                         paginatorTemplate="${symbol_pound}{solicitacaoRecuperacaoSenhaMB.dataModel.paginatorTemplate}"
+                         value="${symbol_pound}{solicitacaoRecuperacaoSenhaMB.dataModel}" lazy="true" >
+                <p:column styleClass="uix-datatable-index">
+                    <h:outputText value="${symbol_pound}{index+1}"/>
+                </p:column>
+                <p:column headerText="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.email']}" sortBy="${symbol_pound}{solicitacaoRecuperacaoSenha.email}"
+                          filterBy="${symbol_pound}{solicitacaoRecuperacaoSenha.email}"   >
+                        <h:outputText value="${symbol_pound}{solicitacaoRecuperacaoSenha.email}"/>
+                </p:column>
+                <p:column headerText="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.ativo']}" sortBy="${symbol_pound}{solicitacaoRecuperacaoSenha.ativo}"
+                          filterBy="${symbol_pound}{solicitacaoRecuperacaoSenha.ativo}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}"  style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{solicitacaoRecuperacaoSenha.ativo}" converter ="yesNoConverter" />
+                </p:column>
+                <p:column headerText="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.dataCadastro']}" sortBy="${symbol_pound}{solicitacaoRecuperacaoSenha.dataCadastro}"
+                          filterBy="${symbol_pound}{solicitacaoRecuperacaoSenha.dataCadastro}"   style="text-align: center;">
+                        <f:facet name="header">
+                            ${symbol_pound}{msg['solicitacaoRecuperacaoSenha.dataCadastro']}
+                            <x:dateFilter/>
+                        </f:facet>
+                        <h:outputText value="${symbol_pound}{solicitacaoRecuperacaoSenha.dataCadastro}">
+                             <f:convertDateTime pattern="${symbol_pound}{formatMB.format.dataHoraMinutoSegundo}" />
+                        </h:outputText>
+                </p:column>
+                <p:column headerText="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.dataValidade']}" sortBy="${symbol_pound}{solicitacaoRecuperacaoSenha.dataValidade}"
+                          style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{solicitacaoRecuperacaoSenha.dataValidade}">
+                             <f:convertDateTime pattern="${symbol_pound}{formatMB.format.dataHoraMinutoSegundo}" />
+                        </h:outputText>
+                </p:column>
+                <p:column headerText="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.dataAlteracaoSenha']}" sortBy="${symbol_pound}{solicitacaoRecuperacaoSenha.dataAlteracaoSenha}"
+                          filterBy="${symbol_pound}{solicitacaoRecuperacaoSenha.dataAlteracaoSenha}"   style="text-align: center;">
+                        <f:facet name="header">
+                            ${symbol_pound}{msg['solicitacaoRecuperacaoSenha.dataAlteracaoSenha']}
+                            <x:dateFilter/>
+                        </f:facet>
+                        <h:outputText value="${symbol_pound}{solicitacaoRecuperacaoSenha.dataAlteracaoSenha}">
+                            <f:convertDateTime pattern="${symbol_pound}{formatMB.format.dataHoraMinutoSegundo}" />
+                        </h:outputText>
+                </p:column>
+                <p:column headerText="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.usuario']}" sortBy="${symbol_pound}{solicitacaoRecuperacaoSenha.usuario.nome}"
+                          filterBy="${symbol_pound}{solicitacaoRecuperacaoSenha.usuario.nome}"   >
+                        <h:outputText value="${symbol_pound}{solicitacaoRecuperacaoSenha.usuario.nome}"/>
+                </p:column>
+                <p:column headerText="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.tipoRecuperacaoSenha']}"
+                          filterBy="${symbol_pound}{solicitacaoRecuperacaoSenha.tipoRecuperacaoSenha}"  
+                          filterOptions="${symbol_pound}{findAllBean.getSelect(classMB.tipoRecuperacaoSenha)}">
+                        <h:outputText value="${symbol_pound}{solicitacaoRecuperacaoSenha.tipoRecuperacaoSenha.descricao}"/>
+                </p:column>
+                <p:column styleClass="uix-datatable-actions">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="widgetSolicitacaoRecuperacaoSenhaDetail.show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailSolicitacaoRecuperacaoSenha" title="${symbol_pound}{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="${symbol_pound}{solicitacaoRecuperacaoSenha}" target="${symbol_pound}{solicitacaoRecuperacaoSenhaMB.entity}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog widgetVar="widgetSolicitacaoRecuperacaoSenhaDetail" header="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.detail']}" appendToBody="true" modal="true" styleClass="uix-dialog-fluid">
+            <ui:include src="detailSolicitacaoRecuperacaoSenha.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,126 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:custom="http://java.sun.com/jsf/composite/components"
+                 >
+    <h:form>
+        <x:modalMessages/>
+
+        <p:tabView>
+            <p:tab title="${symbol_pound}{msg['dadosGerais']}">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="form-group col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <h:outputLabel value="* ${symbol_pound}{msg['usuario.nome']}:" />
+                            <p:inputText value="${symbol_pound}{usuarioMB.entity.nome}" maxlength="255" styleClass="form-control"/>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="* ${symbol_pound}{msg['usuario.cpf']}:" />
+                            <x:cpf value="${symbol_pound}{usuarioMB.entity.cpf}" styleClass="form-control" />
+                        </div>
+
+                        <div class="form-group col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.rg']}:" />
+                            <p:inputText value="${symbol_pound}{usuarioMB.entity.rg}" maxlength="255"  size="20" styleClass="form-control" />
+                        </div>
+
+                        <div class="form-group col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="* ${symbol_pound}{msg['usuario.userLogin']}:" />
+                            <p:inputText value="${symbol_pound}{usuarioMB.entity.userLogin}" maxlength="255"  size="20"  styleClass="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <h:outputLabel value="* ${symbol_pound}{msg['usuario.email']}:" />
+                            <p:inputText value="${symbol_pound}{usuarioMB.entity.email}" maxlength="255"  size="70"  styleClass="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <h:outputLabel value=" ${symbol_pound}{msg['usuario.situacaoUsuario']}:" />
+                            <h:selectOneRadio value="${symbol_pound}{usuarioMB.entity.situacaoUsuario}"  >
+                                <f:selectItems value="${symbol_pound}{findAllBean.get(classMB.situacaoUsuario)}" 
+                                               var="situacaoUsuario"
+                                               itemLabel="${symbol_pound}{situacaoUsuario.descricao}"/>
+                            </h:selectOneRadio>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <h:panelGroup rendered="${symbol_pound}{sessaoUsuarioMB.user.superUsuario}" >
+                            <div class="form-group col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <h:selectBooleanCheckbox value="${symbol_pound}{usuarioMB.entity.superUsuario}" />
+                                        ${symbol_pound}{msg['usuario.superUsuario']}
+                                    </label>
+                                </div>
+                            </div>
+                        </h:panelGroup>                        
+
+                    </div>
+                </div>
+            </p:tab>
+            <p:tab title="${symbol_pound}{msg['usuario.perfisAcesso']}">
+                <h:selectManyCheckbox value="${symbol_pound}{usuarioMB.entity.perfis}" converter="entityConverter" styleClass="checkbox-list">
+                    <x:initializer/>
+                    <x:spread columns="3"/>
+                    <f:selectItems value="${symbol_pound}{findAllBean.get(classMB.perfil)}" 
+                                   var="perfil" itemDisabled="${symbol_pound}{not sessaoUsuarioMB.user.superUsuario and not sessaoUsuarioMB.user.perfis.contains(perfil)}"
+                                   itemLabel="${symbol_pound}{perfil}"/>
+                </h:selectManyCheckbox>
+            </p:tab>
+            <p:tab title="${symbol_pound}{msg['usuario.historicosSituacao']}">
+
+                <p:dataTable value="${symbol_pound}{usuarioMB.entity.historicosSituacao}" var="historicoSituacao"
+                             emptyMessage="${symbol_pound}{xmsg['noRecordFound']}" rowIndexVar="index" styleClass="table-responsive">
+                    <x:initializer/>
+                    <p:column styleClass="uix-datatable-index">
+                        <h:outputText value="${symbol_pound}{index+1}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['historicoSituacaoUsuario.dataSituacao']}" style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{historicoSituacao.dataSituacao}">
+                            <f:convertDateTime pattern="${symbol_pound}{formatMB.format.dataHoraMinutoSegundo}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['historicoSituacaoUsuario.situacaoUsuario']}" style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{historicoSituacao.situacaoUsuario.descricao}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['historicoSituacaoUsuario.usuarioAlteracao']}">
+                        <h:outputText value="${symbol_pound}{historicoSituacao.usuarioAlteracao.nome}">
+                            <x:initializer/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+            </p:tab>
+        </p:tabView>
+        <h:outputText value="${symbol_pound}{xmsg['requiredFieldsForm']}"/>
+        <div style="text-align: center;">
+            <x:securityArea rolesAllowed="usuario.create">
+                <p:commandButton process="@form" update="@form" action="${symbol_pound}{usuarioMB.save}" value="${symbol_pound}{xmsg['save']}" />
+                <p:commandButton process="@this" update="@form" 
+                                 rendered="${symbol_pound}{not empty usuarioMB.entity.id}"
+                                 action="${symbol_pound}{usuarioMB.enviarEmailRecuperacaoSenha}" value="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.enviarEmailRecuperacaoSenha']}" >
+                    <x:confirmation message="${symbol_pound}{msg['solicitacaoRecuperacaoSenha.confirmaEnviarEmailRecuperacaoSenha']}"/>
+                </p:commandButton>
+            </x:securityArea>
+            <x:securityArea rolesAllowed="usuario.audit">
+                <x:audit for="${symbol_pound}{usuarioMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>

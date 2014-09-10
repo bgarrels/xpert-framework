@@ -1,0 +1,105 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:custom="http://java.sun.com/jsf/composite/components"
+                 >
+    <h:form id="formDetailPerfil">
+        <p:tabView>
+            <p:tab title="${symbol_pound}{msg['dadosGerais']}">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['perfil.descricao']}:" styleClass="control-label" /><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{perfilMB.entity.descricao}"/>
+                            </span>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                            <h:outputLabel value="${symbol_pound}{msg['perfil.ativo']}:" styleClass="control-label"/><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{perfilMB.entity.ativo}" converter ="yesNoConverter" />
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </p:tab>
+            <p:tab title="${symbol_pound}{msg['acessosDoPerfil']}">
+                <div style="height: 380px; overflow: scroll;">
+                    <p:tree value="${symbol_pound}{perfilMB.permissoes}" var="permissao"
+                            selectionMode="checkbox" 
+                            styleClass="disable-tree"
+                            selection="${symbol_pound}{perfilMB.permissoesSelecionadas}">  
+                        <p:treeNode>  
+                            <h:outputText value="${symbol_pound}{permissao.descricao}" />  
+                        </p:treeNode>  
+                    </p:tree>  
+                </div>
+            </p:tab>
+            <p:tab title="${symbol_pound}{msg['perfil.permissoesMenu']}">
+                <div style="height: 380px; overflow: scroll;">
+                    <p:tree value="${symbol_pound}{perfilMB.permissoesMenu}" var="permissao"
+                            selectionMode="checkbox" 
+                            styleClass="disable-tree"
+                            selection="${symbol_pound}{perfilMB.permissoesSelecionadasMenu}">  
+                        <p:treeNode>  
+                            <h:outputText value="${symbol_pound}{permissao.descricao}" />  
+                        </p:treeNode>  
+                    </p:tree>  
+                </div>
+            </p:tab>
+            <p:tab title="${symbol_pound}{msg['perfil.usuarios']}">
+                <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
+                             var="usuario" rowIndexVar="index" styleClass="font-11 table-responsive"
+                             value="${symbol_pound}{perfilMB.entity.usuarios}" >
+                    <x:initializer/>
+                    <p:column styleClass="uix-datatable-index">
+                        <h:outputText value="${symbol_pound}{index+1}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['usuario.nome']}" sortBy="${symbol_pound}{usuario.nome}"
+                              >
+                        <h:outputText value="${symbol_pound}{usuario.nome}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['usuario.userLogin']}" sortBy="${symbol_pound}{usuario.userLogin}"
+                              >
+                        <h:outputText value="${symbol_pound}{usuario.userLogin}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['usuario.email']}" sortBy="${symbol_pound}{usuario.email}" >
+                        <h:outputText value="${symbol_pound}{usuario.email}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['usuario.situacaoUsuario']}" sortBy="${symbol_pound}{usuario.situacaoUsuario}"
+                              style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{usuario.situacaoUsuario.descricao}" />
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['usuario.senhaCadastrada']}" sortBy="${symbol_pound}{usuario.senhaCadastrada}"
+                              style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{usuario.senhaCadastrada}" converter ="yesNoConverter" />
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+        </p:tabView>
+        <script>
+            /*<![CDATA[*/
+            ${symbol_dollar}(function() {
+                ${symbol_dollar}(".disable-tree .ui-chkbox-box").addClass("ui-state-disabled").click(function() {
+                    return false;
+                });
+            });
+            /*]]>*/
+        </script>
+        <div style="text-align: center;">
+            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="widgetPerfilDetail.hide()" />
+            <x:securityArea rolesAllowed="perfil.audit">
+                <x:audit for="${symbol_pound}{perfilMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>

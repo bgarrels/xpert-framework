@@ -1,0 +1,57 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces">
+    <h:form id="formDetailPessoaExemplo" styleClass="uix-form-detail">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['pessoaExemplo.nome']}:" styleClass="control-label" /><br/>
+                    <h:outputText value="${symbol_pound}{pessoaExemploMB.entity.nome}" styleClass="uix-content-detail"/>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['pessoaExemplo.email']}:" styleClass="control-label" /><br/>
+                    <h:outputText value="${symbol_pound}{pessoaExemploMB.entity.email}" styleClass="uix-content-detail"/>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['pessoaExemplo.salary']}:" styleClass="control-label" /><br/>
+                    <h:outputText value="${symbol_pound}{pessoaExemploMB.entity.salary}" styleClass="uix-content-detail">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                    </h:outputText>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['pessoaExemplo.dataNascimento']}:" styleClass="control-label" /><br/>
+                    <h:outputText value="${symbol_pound}{pessoaExemploMB.entity.dataNascimento}" styleClass="uix-content-detail">
+                        <f:convertDateTime />
+                    </h:outputText>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['pessoaExemplo.horario']}:" styleClass="control-label" /><br/>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.horario}" styleClass="uix-content-detail">
+                        <f:convertDateTime pattern="HH:mm"/>
+                    </h:outputText>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['pessoaExemplo.rg']}:" styleClass="control-label" /><br/>
+                    <h:outputText value="${symbol_pound}{pessoaExemploMB.entity.rg}" styleClass="uix-content-detail"/>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['pessoaExemplo.active']}:" styleClass="control-label" /><br/>
+                    <h:outputText value="${symbol_pound}{pessoaExemploMB.entity.active}" converter ="yesNoConverter"  styleClass="uix-content-detail"/>
+                </div>
+           </div>
+         </div>
+        <p:separator/>
+        <div class="uix-center">
+            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="widgetPessoaExemploDetail.hide()" />
+            <x:securityArea rolesAllowed="pessoaExemplo.audit">
+                <x:audit for="${symbol_pound}{pessoaExemploMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>

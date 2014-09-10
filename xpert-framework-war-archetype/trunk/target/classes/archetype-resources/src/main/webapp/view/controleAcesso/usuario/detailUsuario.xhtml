@@ -1,0 +1,115 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+                 xmlns:custom="http://java.sun.com/jsf/composite/components"
+                 >
+    <h:form id="formDetailUsuario">
+
+        <p:accordionPanel multiple="true" activeIndex="0,1,2">
+            <p:tab title="${symbol_pound}{msg['dadosGerais']}">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.nome']}:" styleClass="control-label" /><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{usuarioMB.entity.nome}"/>
+                            </span>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.cpf']}:" styleClass="control-label" /><br/>
+                            <span class="uix-content-detail">
+                                 <h:outputText converter="cpfConverter" value="${symbol_pound}{usuarioMB.entity.cpf}"/>
+                            </span>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.email']}:" styleClass="control-label" /><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{usuarioMB.entity.email}"/>
+                            </span>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.userLogin']}:" styleClass="control-label" /><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{usuarioMB.entity.userLogin}"/>
+                            </span>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.situacaoUsuario']}:" styleClass="control-label"/><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{usuarioMB.entity.situacaoUsuario.descricao}"/>
+                            </span>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.emailCadastroEnviado']}:" styleClass="control-label"/><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{usuarioMB.entity.emailCadastroEnviado}" converter ="yesNoConverter" />
+                            </span>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.senhaCadastrada']}:" styleClass="control-label"/><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{usuarioMB.entity.senhaCadastrada}" converter ="yesNoConverter" />
+                            </span>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="${symbol_pound}{msg['usuario.superUsuario']}:" styleClass="control-label"/><br/>
+                            <span class="uix-content-detail">
+                                <h:outputText value="${symbol_pound}{usuarioMB.entity.superUsuario}" converter ="yesNoConverter" />
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </p:tab>
+            <p:tab title="${symbol_pound}{msg['usuario.perfisAcesso']}">
+                <p:dataTable rowIndexVar="index" var="perfil" value="${symbol_pound}{usuarioMB.entity.perfis}"
+                             emptyMessage="${symbol_pound}{xmsg['noRecordFound']}">
+                    <x:initializer/>
+                    <p:column styleClass="uix-datatable-index">
+                        <h:outputText value="${symbol_pound}{index+1}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['perfil.descricao']}">
+                        <h:outputText value="${symbol_pound}{perfil.descricao}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+            <p:tab title="${symbol_pound}{msg['usuario.historicosSituacao']}">
+
+                <p:dataTable value="${symbol_pound}{usuarioMB.entity.historicosSituacao}" var="historicoSituacao"
+                             emptyMessage="${symbol_pound}{xmsg['noRecordFound']}" rowIndexVar="index">
+                    <x:initializer/>
+                     <p:column styleClass="uix-datatable-index">
+                        <h:outputText value="${symbol_pound}{index+1}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['historicoSituacaoUsuario.dataSituacao']}" style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{historicoSituacao.dataSituacao}">
+                            <f:convertDateTime pattern="${symbol_pound}{formatMB.format.dataHoraMinutoSegundo}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['historicoSituacaoUsuario.situacaoUsuario']}" style="text-align: center;">
+                        <h:outputText value="${symbol_pound}{historicoSituacao.situacaoUsuario.descricao}"/>
+                    </p:column>
+                    <p:column headerText="${symbol_pound}{msg['historicoSituacaoUsuario.usuarioAlteracao']}">
+                        <h:outputText value="${symbol_pound}{historicoSituacao.usuarioAlteracao.nome}">
+                            <x:initializer/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+            </p:tab>
+        </p:accordionPanel>
+        <div style="text-align: center;">
+            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="widgetUsuarioDetail.hide()" />
+            <x:securityArea rolesAllowed="usuario.audit">
+                <x:audit for="${symbol_pound}{usuarioMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
+</ui:composition>
