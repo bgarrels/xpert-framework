@@ -6,7 +6,7 @@ O xpert-framework importa o primefaces apenas para compilação do código, a ve
 ==Não consigo compilar o meu projeto maven, pois ele não consegue baixar o xpert-framework, o que há de errado?==
 Até a presente versão, o framework ainda não está no maven central, assim talvez seja necessário instalar manualmente o xpert-framework.jar no seu repositório.
 ==Encontrei um bug no framework, como corrigir?==
-Cadastre o bug no google codes através do link https://code.google.com/p/xpert-framework/issues/list, é interessante que seja expliacado o que aconteceu, e se possível, com  trechos de código.
+Cadastre o bug no google codes através do link https://code.google.com/p/xpert-framework/issues/list, é interessante que seja explicado o que aconteceu, e se possível, com  trechos de código, assim facilita as correções.
 ==MySQL, SQL Sever, Oracle, PostgreSQL, qual é suportado pelo xpert-framework?==
 Qualquer banco é suportado, desde que ele possua um driver JDBC, e seja compatível a especificação do JTA. O projeto criado do arquétipo é voltado para o postgres, mas nada impede que sea configurado para outro banco.
 ==É possível utilizar o eclipse link no lugar do hibernate?==
