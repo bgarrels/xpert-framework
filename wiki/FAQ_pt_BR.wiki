@@ -1,4 +1,4 @@
-23. FAQ
+=FAQ (Perguntas frequentes)=
 ==Qual versão do primefaces usar?==
 Essa é uma decisão do próprio desenvolvedor, o xpert-framework suporta as versões 3, 4 e 5 do primefaces.
 ==A dependência do xpert-framework do primefaces é diferente da que eu quero usar, como fazer?==
