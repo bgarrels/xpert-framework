@@ -5,5 +5,5 @@
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
   <packaging>pom</packaging>
-  <name>${rootArtifactId}</name>
+  <name>xpert-framework-base</name>
 </project>

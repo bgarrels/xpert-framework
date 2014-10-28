@@ -9,6 +9,10 @@ import ${package}.modelo.controleacesso.Permissao;
 import java.io.Serializable;
 import com.xpert.core.crud.AbstractBaseBean;
 import com.xpert.core.crud.AbstractBusinessObject;
+import com.xpert.faces.utils.FacesMessageUtils;
+import com.xpert.faces.utils.FacesUtils;
+import com.xpert.i18n.XpertResourceBundle;
+import com.xpert.persistence.exception.DeleteException;
 import com.xpert.persistence.query.Restriction;
 import java.util.List;
 import javax.ejb.EJB;
@@ -34,6 +38,22 @@ public class PermissaoMB extends AbstractBaseBean<Permissao> implements Serializ
     @Override
     public String getDataModelOrder() {
         return "descricao";
+    }
+    
+    public void deleteArvore(){
+         try {
+            Object id = getId();
+            if (getId() != null) {
+                getBO().delete(id);
+                FacesMessageUtils.sucess();
+                id = null;
+                //recarregar tree
+                PerfilMB perfilMB = FacesUtils.getBeanByEl("${symbol_pound}{perfilMB}");
+                perfilMB.carregarTree();
+            }
+        } catch (DeleteException ex) {
+            FacesMessageUtils.error(XpertResourceBundle.get("objectCannotBeDeleted"));
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@
       <directory></directory>
       <includes>
         <include>nb-configuration.xml</include>
+        <include>nbactions.xml</include>
       </includes>
     </fileSet>
   </fileSets>
@@ -66,6 +67,12 @@
             <include>nb-configuration.xml</include>
           </includes>
         </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory></directory>
+          <includes>
+            <include>faces-config.NavData</include>
+          </includes>
+        </fileSet>
       </fileSets>
     </module>
     <module id="${rootArtifactId}-ejb" dir="__rootArtifactId__-ejb" name="${rootArtifactId}-ejb">
@@ -110,6 +117,12 @@
           <directory>src/main/resources</directory>
           <includes>
             <include>**/*.MF</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory></directory>
+          <includes>
+            <include>faces-config.NavData</include>
           </includes>
         </fileSet>
       </fileSets>
