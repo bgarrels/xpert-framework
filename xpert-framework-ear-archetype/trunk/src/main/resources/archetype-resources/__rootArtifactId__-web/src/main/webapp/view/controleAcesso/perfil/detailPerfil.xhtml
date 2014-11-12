@@ -48,7 +48,7 @@
                 <div style="height: 380px; overflow: scroll;">
                     <p:tree value="${symbol_pound}{perfilMB.permissoesMenu}" var="permissao"
                             selectionMode="checkbox" 
-                            styleClass="disable-tree"
+                            styleClass="disable-tree" 
                             selection="${symbol_pound}{perfilMB.permissoesSelecionadasMenu}">  
                         <p:treeNode>  
                             <h:outputText value="${symbol_pound}{permissao.descricao}" />  
@@ -86,17 +86,23 @@
                 </p:dataTable>
             </p:tab>
         </p:tabView>
+        
         <script>
             /*<![CDATA[*/
             ${symbol_dollar}(function() {
+                ${symbol_dollar}(".disable-tree .ui-treenode-label").removeClass("ui-state-highlight");
+                ${symbol_dollar}(".disable-tree .ui-tree-selectable *:not(.ui-tree-toggler)").click(function() {
+                    return false;
+                });
                 ${symbol_dollar}(".disable-tree .ui-chkbox-box").addClass("ui-state-disabled").click(function() {
                     return false;
                 });
             });
             /*]]>*/
+
         </script>
         <div style="text-align: center;">
-            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="widgetPerfilDetail.hide()" />
+            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="PF('widgetPerfilDetail').hide()" />
             <x:securityArea rolesAllowed="perfil.audit">
                 <x:audit for="${symbol_pound}{perfilMB.entity}"/>
             </x:securityArea>
