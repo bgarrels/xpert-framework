@@ -53,7 +53,7 @@
                     <f:facet name="header">
                          <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                     </f:facet>
-                    <p:commandButton oncomplete="widgetErroSistemaDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailErroSistema" >
+                    <p:commandButton oncomplete="PF('widgetErroSistemaDetail').show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailErroSistema" >
                         <f:setPropertyActionListener value="${symbol_pound}{erroSistema}" target="${symbol_pound}{erroSistemaMB.entity}" />
                     </p:commandButton>
                     <x:securityArea rolesAllowed="erroSistema.create">
@@ -71,7 +71,7 @@
             </p:dataTable>
         </h:form>
 
-        <p:dialog widgetVar="widgetErroSistemaDetail" header="${symbol_pound}{msg['erroSistema.detail']}" appendToBody="true" modal="true" styleClass="uix-dialog-fluid">
+        <p:dialog widgetVar="widgetErroSistemaDetail" header="${symbol_pound}{msg['erroSistema.detail']}" appendTo="@(body)" modal="true" styleClass="uix-dialog-fluid">
             <ui:include src="detailErroSistema.xhtml" />
         </p:dialog>
     </ui:define>

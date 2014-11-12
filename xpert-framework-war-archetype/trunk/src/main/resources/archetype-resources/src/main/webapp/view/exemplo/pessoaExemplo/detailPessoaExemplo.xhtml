@@ -48,7 +48,7 @@
          </div>
         <p:separator/>
         <div class="uix-center">
-            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="widgetPessoaExemploDetail.hide()" />
+            <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="PF('widgetPessoaExemploDetail').hide()" />
             <x:securityArea rolesAllowed="pessoaExemplo.audit">
                 <x:audit for="${symbol_pound}{pessoaExemploMB.entity}"/>
             </x:securityArea>

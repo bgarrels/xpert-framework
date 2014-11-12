@@ -47,7 +47,7 @@
                     <f:facet name="header">
                          <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                     </f:facet>
-                    <p:commandButton oncomplete="widgetAcessoSistemaDetail.show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailAcessoSistema" >
+                    <p:commandButton oncomplete="PF('widgetAcessoSistemaDetail').show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailAcessoSistema" >
                         <f:setPropertyActionListener value="${symbol_pound}{acessoSistema}" target="${symbol_pound}{acessoSistemaMB.entity}" />
                     </p:commandButton>
                     <x:securityArea rolesAllowed="acessoSistema.create">
@@ -59,7 +59,7 @@
             </p:dataTable>
         </h:form>
 
-        <p:dialog widgetVar="widgetAcessoSistemaDetail" header="${symbol_pound}{msg['acessoSistema.detail']}" appendToBody="true" modal="true" styleClass="uix-dialog-fluid">
+        <p:dialog widgetVar="widgetAcessoSistemaDetail" header="${symbol_pound}{msg['acessoSistema.detail']}" appendTo="@(body)" modal="true" styleClass="uix-dialog-fluid">
             <ui:include src="detailAcessoSistema.xhtml" />
         </p:dialog>
     </ui:define>

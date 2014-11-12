@@ -22,7 +22,7 @@
                          value="${symbol_pound}{configuracaoEmailMB.dataModel}" lazy="true" >
                 <p:column styleClass="uix-datatable-index">
                     <f:facet name="header">
-                        <p:commandButton onclick="dataTableConfiguracaoEmailWidget.filter()" type="button" icon="ui-icon-refresh" />
+                        <p:commandButton onclick="PF('dataTableConfiguracaoEmailWidget').filter()" type="button" icon="ui-icon-refresh" />
                     </f:facet>
                     <h:outputText value="${symbol_pound}{index+1}"/>
                 </p:column>
@@ -58,7 +58,7 @@
                     <f:facet name="header">
                          <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                     </f:facet>
-                    <p:commandButton oncomplete="widgetConfiguracaoEmailDetail.show();"  icon="ui-icon-zoomin" 
+                    <p:commandButton oncomplete="PF('widgetConfiguracaoEmailDetail').show();"  icon="ui-icon-zoomin" 
                                      process="@form" update=":formDetailConfiguracaoEmail" title="${symbol_pound}{xmsg['detail']}" >
                         <f:setPropertyActionListener value="${symbol_pound}{configuracaoEmail}" target="${symbol_pound}{configuracaoEmailMB.entity}" />
                     </p:commandButton>
@@ -83,7 +83,7 @@
             </p:dataTable>
         </h:form>
 
-        <p:dialog widgetVar="widgetConfiguracaoEmailDetail" header="${symbol_pound}{msg['configuracaoEmail.detail']}" appendToBody="true" modal="true" styleClass="uix-dialog-fluid">
+        <p:dialog widgetVar="widgetConfiguracaoEmailDetail" header="${symbol_pound}{msg['configuracaoEmail.detail']}" appendTo="@(body)" modal="true" styleClass="uix-dialog-fluid">
             <ui:include src="detailConfiguracaoEmail.xhtml" />
         </p:dialog>
     </ui:define>

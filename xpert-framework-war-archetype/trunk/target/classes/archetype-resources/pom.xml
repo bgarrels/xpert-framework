@@ -8,7 +8,7 @@
     <version>${version}</version>
     <packaging>war</packaging>
 
-    <name>${rootArtifactId}</name>
+    <name>${rootArtifactId}-base</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>org.primefaces.extensions</groupId>
             <artifactId>primefaces-extensions</artifactId>
-            <version>0.7.1</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>3.5</version>
+            <version>5.1</version>
         </dependency>
         <dependency>
             <groupId>freemarker</groupId>

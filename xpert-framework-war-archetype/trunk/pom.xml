@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.xpert.base</groupId>
-  <artifactId>xpert-framework-war-archetype</artifactId>
-  <version>1.0</version>
+  <name>xpert-framework-war-archetype</name>
+  <version>1.1</version>
   <packaging>maven-archetype</packaging>
 
-  <name>xpert-framework-war-archetype</name>
+  <artifactId>xpert-framework-war-archetype</artifactId>
 
   <build>
     <extensions>
