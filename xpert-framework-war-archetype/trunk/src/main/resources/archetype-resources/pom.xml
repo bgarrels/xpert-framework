@@ -8,7 +8,7 @@
     <version>${version}</version>
     <packaging>war</packaging>
 
-    <name>${rootArtifactId}-base</name>
+    <name>${artifactId}</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
