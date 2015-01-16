@@ -67,6 +67,26 @@ public class Person implements Serializable {
     @JoinTable(name = "person_permission", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions;
 
+    @Transient
+    private City city;
+
+    public Person() {
+    }
+
+    public Person(String name, String email, City city) {
+        this.name = name;
+        this.email = email;
+        this.city = city;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+    
     public Boolean getActive() {
         return active;
     }

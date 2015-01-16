@@ -1,0 +1,182 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="File Download" />
+    <ui:define name="body">
+
+        <div class="description">
+            dsa dsad sa
+            <br/>
+        </div>
+        <p:separator/>
+
+        <h:form id="formGroup">
+
+
+            <h2>List with no group</h2>
+
+            <p:dataTable value="#{groupComponentMB.people}" var="person" rowIndexVar="indexPerson" >
+                <p:column>
+                    <h:outputText value="#{indexPerson+1}"/>
+                </p:column>
+                <p:column headerText="Name" >
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="Email" >
+                    <h:outputText value="#{person.email}"/>
+                </p:column>
+                <p:column headerText="City" >
+                    <h:outputText value="#{person.city.name}"/>
+                </p:column>
+                <p:column headerText="State" >
+                    <h:outputText value="#{person.city.state.name}"/>
+                </p:column>
+                <p:column headerText="Country" >
+                    <h:outputText value="#{person.city.state.country.name}"/>
+                </p:column>
+                <p:column headerText="Status" >
+                    <h:outputText value="#{person.status}"/>
+                </p:column>
+
+            </p:dataTable>
+
+            <ui:remove>
+                <h2>Group by "city"</h2>
+
+                <x:group value="#{groupComponentMB.people}" var="personGroup" 
+                         groupBy="city" rowIndexVar="index" 
+                         itemSortField="name" itemSortOrder="desc" >
+
+                    <h:outputText style="font-weight: bold" value="#{index+1} - #{personGroup.key.name}"/>
+                    <p:separator/>
+
+                    <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
+                        <p:column>
+                            <h:outputText value="#{indexPerson+1}"/>
+                        </p:column>
+                        <p:column headerText="Name" >
+                            <h:outputText value="#{person.name}"/>
+                        </p:column>
+                        <p:column headerText="Email" >
+                            <h:outputText value="#{person.email}"/>
+                        </p:column>
+                        <p:column headerText="City" >
+                            <h:outputText value="#{person.city.name}"/>
+                        </p:column>
+                        <p:column headerText="State" >
+                            <h:outputText value="#{person.city.state.name}"/>
+                        </p:column>
+                        <p:column headerText="Country" >
+                            <h:outputText value="#{person.city.state.country.name}"/>
+                        </p:column>
+                        <p:column headerText="Status" >
+                            <h:outputText value="#{person.status}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <br/>
+
+                </x:group>
+
+                <h2>Group by "status"</h2>
+
+                <x:group value="#{groupComponentMB.people}" var="personGroup" 
+                         groupBy="status" rowIndexVar="index" 
+                         itemSortField="name" >
+
+                    <h:outputText style="font-weight: bold" value="#{index+1} - #{personGroup.key}"/>
+                    <p:separator/>
+
+                    <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
+                        <p:column>
+                            <h:outputText value="#{indexPerson+1}"/>
+                        </p:column>
+                        <p:column headerText="Name" >
+                            <h:outputText value="#{person.name}"/>
+                        </p:column>
+                        <p:column headerText="Email" >
+                            <h:outputText value="#{person.email}"/>
+                        </p:column>
+                        <p:column headerText="City" >
+                            <h:outputText value="#{person.city.name}"/>
+                        </p:column>
+                        <p:column headerText="State" >
+                            <h:outputText value="#{person.city.state.name}"/>
+                        </p:column>
+                        <p:column headerText="Country" >
+                            <h:outputText value="#{person.city.state.country.name}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <br/>
+
+                </x:group>
+            </ui:remove>
+
+            <h2>Group by "country" and "state"</h2>
+
+            <x:group value="#{groupComponentMB.people}" var="personGroupCountry" id="group1"
+                     groupBy="city.state.country" rowIndexVar="indexCountry" 
+                     itemSortField="name" >
+
+                <h:outputText style="font-weight: bold;font-size: 18px;" value="Country #{indexCountry+1} - #{personGroupCountry.key}"/>
+                <p:separator/>
+
+                <ui:repeat value="#{personGroupCountry.value}" var="personTest" varStatus="varStatus">
+                    <h:outputText value="#{varStatus.index+1} - #{personTest.name} - #{personTest.city.name} - #{personTest.city.state.name}"/> 
+                    <br/>
+                </ui:repeat>
+
+                <x:group value="#{personGroupCountry.value}" var="personGroupState" 
+                         groupBy="city.state" rowIndexVar="indexState" 
+                         itemSortField="name" id="group2" >
+
+                    <h:outputText style="font-style: italic;" value="State #{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
+                    <p:separator/>
+                    <ui:repeat value="#{personGroupState.value}" var="personTestState" varStatus="varStatusState">
+                        <h:outputText value="#{varStatusState.index+1} - #{personTestState.name} - #{personTestState.city.name} - #{personTestState.city.state.name}"/> 
+                        <br/>
+                    </ui:repeat>
+
+                    <p:dataTable value="#{personGroupState.value}" var="person" rowIndexVar="indexPerson" >
+
+                        <p:column>
+                            <h:outputText value="#{indexPerson+1}"/>
+                        </p:column>
+                        <p:column headerText="Name" >
+                            <h:outputText value="#{person.name}"/>
+                        </p:column>
+                        <p:column headerText="Email" >
+                            <h:outputText value="#{person.email}"/>
+                        </p:column>
+                        <p:column headerText="City" >
+                            <h:outputText value="#{person.city.name}"/>
+                        </p:column>
+                        <p:column headerText="State" >
+                            <h:outputText value="#{person.city.state.name}"/>
+                        </p:column>
+                        <p:column headerText="Country" >
+                            <h:outputText value="#{person.city.state.country.name}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <br/>
+                </x:group>
+                <br/>
+
+            </x:group>
+
+
+        </h:form>
+
+
+
+
+    </ui:define>
+</ui:composition>

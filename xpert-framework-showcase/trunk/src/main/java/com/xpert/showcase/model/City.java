@@ -21,6 +21,17 @@ public class City implements Serializable {
     @NotBlank
     private String name;
 
+    public City() {
+    }
+
+    public City(Long id, String name, State state) {
+        this.id = id;
+        this.state = state;
+        this.name = name;
+    }
+    
+    
+
     public Long getId() {
         return id;
     }

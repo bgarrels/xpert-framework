@@ -24,6 +24,14 @@ public class Country implements Serializable {
     @OneToMany(mappedBy = "country")
     private List<State> states;
 
+    public Country() {
+    }
+
+    public Country(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
     public List<State> getStates() {
         return states;
     }
