@@ -57,7 +57,7 @@
 
                 <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
                     <p:column>
-                        <h:outputText value="#{indexPerson+1}"/>
+                        <h:outputText value="#{index+1}.#{indexPerson+1}"/>
                     </p:column>
                     <p:column headerText="Name" >
                         <h:outputText value="#{person.name}"/>
@@ -65,19 +65,6 @@
                     <p:column headerText="Email" >
                         <h:outputText value="#{person.email}"/>
                     </p:column>
-                    <p:column headerText="City" >
-                        <h:outputText value="#{person.city.name}"/>
-                    </p:column>
-                    <p:column headerText="State" >
-                        <h:outputText value="#{person.city.state.name}"/>
-                    </p:column>
-                    <p:column headerText="Country" >
-                        <h:outputText value="#{person.city.state.country.name}"/>
-                    </p:column>
-                    <p:column headerText="Status" >
-                        <h:outputText value="#{person.status}"/>
-                    </p:column>
-
                 </p:dataTable>
                 <br/>
 
@@ -94,7 +81,7 @@
 
                 <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
                     <p:column>
-                        <h:outputText value="#{indexPerson+1}"/>
+                        <h:outputText value="#{index+1}.#{indexPerson+1}"/>
                     </p:column>
                     <p:column headerText="Name" >
                         <h:outputText value="#{person.name}"/>
@@ -123,20 +110,20 @@
                      groupBy="city.state.country" rowIndexVar="indexCountry" 
                      itemSortField="name" >
 
-                <h:outputText style="font-weight: bold;font-size: 18px;" value="Country #{indexCountry+1} - #{personGroupCountry.key}"/>
+                <h:outputText style="font-weight: bold;font-size: 18px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
                 <p:separator/>
 
                 <x:group value="#{personGroupCountry.value}" var="personGroupState" 
                          groupBy="city.state" rowIndexVar="indexState" 
                          itemSortField="name" id="group2" >
 
-                    <h:outputText style="font-style: italic;" value="State #{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
+                    <h:outputText style="font-style: italic;" value="#{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
                     <p:separator/>
 
                     <p:dataTable value="#{personGroupState.value}" var="person" rowIndexVar="indexPerson" >
 
                         <p:column>
-                            <h:outputText value="#{indexPerson+1}"/>
+                            <h:outputText value="#{indexCountry+1}.#{indexState+1}.#{indexPerson+1}"/>
                         </p:column>
                         <p:column headerText="Name" >
                             <h:outputText value="#{person.name}"/>
@@ -146,12 +133,6 @@
                         </p:column>
                         <p:column headerText="City" >
                             <h:outputText value="#{person.city.name}"/>
-                        </p:column>
-                        <p:column headerText="State" >
-                            <h:outputText value="#{person.city.state.name}"/>
-                        </p:column>
-                        <p:column headerText="Country" >
-                            <h:outputText value="#{person.city.state.country.name}"/>
                         </p:column>
 
                     </p:dataTable>

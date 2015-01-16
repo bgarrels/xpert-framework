@@ -55,7 +55,7 @@ public class GroupComponentMB {
     }
 
     public void addPerson(City city) {
-        int randomSize = new Random().nextInt(3);
+        int randomSize = new Random().nextInt(4);
         if (randomSize == 0) {
             randomSize = 1;
         }
