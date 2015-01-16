@@ -15,12 +15,14 @@ import java.util.List;
 import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author ayslan
  */
 @ManagedBean
+@ViewScoped
 public class GroupComponentMB {
 
     private List<Person> people = new ArrayList<Person>();
@@ -42,8 +44,9 @@ public class GroupComponentMB {
         City city5 = new City(5l, "BERTIOGA", state2);
 
         //COUNTRY 2
-        State state3 = new State(3L, "FORMOSA", country2);
-        City city6 = new City(6l, "FORMOSA", state3);
+        State state3 = new State(3L, "BUENOS AIRES", country2);
+        City city6 = new City(6l, "MAR DEL PLATA", state3);
+        City city7 = new City(7l, "LA PLATA", state3);
 
         addPerson(city1);
         addPerson(city2);
@@ -51,6 +54,7 @@ public class GroupComponentMB {
         addPerson(city4);
         addPerson(city5);
         addPerson(city6);
+        addPerson(city7);
 
     }
 
@@ -60,7 +64,8 @@ public class GroupComponentMB {
             randomSize = 1;
         }
         for (int i = 0; i < randomSize; i++) {
-            Person person = new Person("PERSON " + city.getName() + " " + (i + 1), "person" + city.getName() + (i + 1) + "@gmail.com", city);
+            Person person = new Person("PERSON " + city.getName() + " " + (i + 1),
+                    "person." + city.getName().replace(" ", ".").toLowerCase() + (i + 1) + "@gmail.com", city);
             if (i % 2 == 0) {
                 person.setStatus(Status.ACTIVE);
             } else {

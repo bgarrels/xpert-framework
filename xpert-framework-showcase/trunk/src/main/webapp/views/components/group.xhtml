@@ -43,6 +43,13 @@
                 <p:column headerText="Status" >
                     <h:outputText value="#{person.status}"/>
                 </p:column>
+                <p:column  >
+                    <p:commandButton process="@this" 
+                                     update=":formPersonDetail" icon="ui-icon-check"
+                                     oncomplete="dialogPersonDetail.show()">
+                        <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
+                    </p:commandButton>
+                </p:column>
 
             </p:dataTable>
 
@@ -64,6 +71,13 @@
                     </p:column>
                     <p:column headerText="Email" >
                         <h:outputText value="#{person.email}"/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton process="@this" 
+                                         update=":formPersonDetail" icon="ui-icon-check"
+                                         oncomplete="dialogPersonDetail.show()">
+                            <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
                 <br/>
@@ -110,7 +124,7 @@
                      groupBy="city.state.country" rowIndexVar="indexCountry" 
                      itemSortField="name" >
 
-                <h:outputText style="font-weight: bold;font-size: 18px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
+                <h:outputText style="font-weight: bold;font-size: 18px;font-size: 15px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
                 <p:separator/>
 
                 <x:group value="#{personGroupCountry.value}" var="personGroupState" 
@@ -142,8 +156,73 @@
 
             </x:group>
 
+            <h2>Group by "country", "state" and "city"</h2>
+
+            <x:group value="#{groupComponentMB.people}" var="personGroupCountry"
+                     groupBy="city.state.country" rowIndexVar="indexCountry" 
+                     itemSortField="name" >
+
+                <h:outputText style="font-weight: bold; font-size: 18px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
+                <p:separator/>
+
+                <x:group value="#{personGroupCountry.value}" var="personGroupState" 
+                         groupBy="city.state" rowIndexVar="indexState" 
+                         itemSortField="name" >
+
+                    <h:outputText style="font-style: italic; font-size: 15px;" value="#{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
+                    <p:separator/>
+
+                    <x:group value="#{personGroupState.value}" var="personGroupCity" 
+                             groupBy="city" rowIndexVar="indexCity" 
+                             itemSortField="name"  >
+
+                        <h:outputText style="font-weight: bold;" value="#{indexCountry+1}.#{indexState+1}.#{indexState+1} - #{personGroupCity.key}"/>
+
+                        <p:dataTable value="#{personGroupCity.value}" var="person" rowIndexVar="indexPerson" >
+
+                            <p:column>
+                                <h:outputText value="#{indexCountry+1}.#{indexState+1}.#{indexCity+1}.#{indexPerson+1}"/>
+                            </p:column>
+                            <p:column headerText="Name" >
+                                <h:outputText value="#{person.name}"/>
+                            </p:column>
+                            <p:column headerText="Email" >
+                                <h:outputText value="#{person.email}"/>
+                            </p:column>
+                            <p:column  >
+                                <p:commandButton process="@form" 
+                                                 update=":formPersonDetail" icon="ui-icon-check"
+                                                 oncomplete="dialogPersonDetail.show()">
+                                    <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                        <br/>
+                    </x:group>
+                    <br/>
+                </x:group>
+                <br/>
+
+            </x:group>
+
 
         </h:form>
+
+        <p:dialog widgetVar="dialogPersonDetail">
+            <h:form id="formPersonDetail">
+                <h:panelGrid columns="2" styleClass="xpert-grid-detail">
+
+
+                    <h:outputLabel value="#{msg['person.name']}:" />
+                    <h:outputText value="#{personMB.entity.name}"/>
+
+                    <h:outputLabel value="#{msg['person.email']}:" />
+                    <h:outputText value="#{personMB.entity.email}"/>
+
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
 
 
 
