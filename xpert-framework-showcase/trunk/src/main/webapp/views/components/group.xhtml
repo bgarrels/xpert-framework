@@ -10,8 +10,8 @@
     <ui:param name="title" value="Group" />
     <ui:define name="body">
 
-        <div class="description">
-            #{msg['groupComponent.description']}
+        <div class="descendingription">
+            #{msg['groupComponent.descendingription']}
             <br/>
         </div>
 
@@ -19,7 +19,7 @@
 
             <p:accordionPanel multiple="true" activeIndex="0">
                 <p:tab title="List with NO group">
-                    <p:dataTable value="#{groupComponentMB.people}" var="person" rowIndexVar="indexPerson" >
+                    <p:dataTable value="#{groupComponentMB.people}" var="person" rowIndexVar="indexPerson" sortBy="#{person.name}" >
                         <p:column>
                             <h:outputText value="#{indexPerson+1}"/>
                         </p:column>
@@ -72,13 +72,13 @@
                 </p:tab>
                 <p:tab title="Example 1 - Group by 'city'">
                     <x:group value="#{groupComponentMB.people}" var="personGroup" 
-                             groupBy="city" rowIndexVar="index"  sortField="name"
-                             itemSortField="name" itemSortOrder="desc" >
+                             groupBy="city" rowIndexVar="index"  sortField="name" 
+                             itemSortField="name" itemSortOrder="descending" >
 
                         <h:outputText style="font-weight: bold" value="#{index+1} - #{personGroup.key.name}"/>
                         <p:separator/>
 
-                        <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
+                        <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson"   >
                             <p:column>
                                 <h:outputText value="#{index+1}.#{indexPerson+1}"/>
                             </p:column>
@@ -104,7 +104,7 @@
                     <pre name="code" class="xml">
                     &lt;x:group value=&quot;\#{groupComponentMB.people}&quot; var=&quot;personGroup&quot; 
                              groupBy=&quot;city&quot; rowIndexVar=&quot;index&quot;  sortField=&quot;name&quot;
-                             itemSortField=&quot;name&quot; itemSortOrder=&quot;desc&quot; &gt;
+                             itemSortField=&quot;name&quot; itemSortOrder=&quot;descending&quot; &gt;
 
                         &lt;h:outputText style=&quot;font-weight: bold&quot; value=&quot;\#{index+1} - \#{personGroup.key.name}&quot;/&gt;
                         &lt;p:separator/&gt;
