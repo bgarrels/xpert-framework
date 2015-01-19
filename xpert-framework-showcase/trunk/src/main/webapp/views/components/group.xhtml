@@ -11,137 +11,17 @@
     <ui:define name="body">
 
         <div class="description">
-            dsa dsad sa
+            #{msg['groupComponent.description']}
             <br/>
         </div>
-        <p:separator/>
 
         <h:form id="formGroup">
 
-
-            <h2>List with no group</h2>
-
-            <p:dataTable value="#{groupComponentMB.people}" var="person" rowIndexVar="indexPerson" >
-                <p:column>
-                    <h:outputText value="#{indexPerson+1}"/>
-                </p:column>
-                <p:column headerText="Name" >
-                    <h:outputText value="#{person.name}"/>
-                </p:column>
-                <p:column headerText="Email" >
-                    <h:outputText value="#{person.email}"/>
-                </p:column>
-                <p:column headerText="City" >
-                    <h:outputText value="#{person.city.name}"/>
-                </p:column>
-                <p:column headerText="State" >
-                    <h:outputText value="#{person.city.state.name}"/>
-                </p:column>
-                <p:column headerText="Country" >
-                    <h:outputText value="#{person.city.state.country.name}"/>
-                </p:column>
-                <p:column headerText="Status" >
-                    <h:outputText value="#{person.status}"/>
-                </p:column>
-                <p:column  >
-                    <ui:remove>
-                        <p:commandButton process="@this" 
-                                         update=":formPersonDetail" icon="ui-icon-check"
-                                         oncomplete="dialogPersonDetail.show()">
-                            <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
-                        </p:commandButton>
-                    </ui:remove>
-                </p:column>
-
-            </p:dataTable>
-
-            <h2>Group by "city"</h2>
-
-            <x:group value="#{groupComponentMB.people}" var="personGroup" 
-                     groupBy="city" rowIndexVar="index" 
-                     itemSortField="name" itemSortOrder="desc" >
-
-                <h:outputText style="font-weight: bold" value="#{index+1} - #{personGroup.key.name}"/>
-                <p:separator/>
-
-                <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
-                    <p:column>
-                        <h:outputText value="#{index+1}.#{indexPerson+1}"/>
-                    </p:column>
-                    <p:column headerText="Name" >
-                        <h:outputText value="#{person.name}"/>
-                    </p:column>
-                    <p:column headerText="Email" >
-                        <h:outputText value="#{person.email}"/>
-                    </p:column>
-                    <ui:remove>
+            <p:accordionPanel multiple="true" activeIndex="0">
+                <p:tab title="List with NO group">
+                    <p:dataTable value="#{groupComponentMB.people}" var="person" rowIndexVar="indexPerson" >
                         <p:column>
-                            <p:commandButton process="@this" 
-                                             update=":formPersonDetail" icon="ui-icon-check"
-                                             oncomplete="dialogPersonDetail.show()">
-                                <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
-                            </p:commandButton>
-                        </p:column>
-                    </ui:remove>
-                </p:dataTable>
-                <br/>
-
-            </x:group>
-
-            <h2>Group by "status"</h2>
-
-            <x:group value="#{groupComponentMB.people}" var="personGroup" 
-                     groupBy="status" rowIndexVar="index" 
-                     itemSortField="name" >
-
-                <h:outputText style="font-weight: bold" value="#{index+1} - #{personGroup.key}"/>
-                <p:separator/>
-
-                <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
-                    <p:column>
-                        <h:outputText value="#{index+1}.#{indexPerson+1}"/>
-                    </p:column>
-                    <p:column headerText="Name" >
-                        <h:outputText value="#{person.name}"/>
-                    </p:column>
-                    <p:column headerText="Email" >
-                        <h:outputText value="#{person.email}"/>
-                    </p:column>
-                    <p:column headerText="City" >
-                        <h:outputText value="#{person.city.name}"/>
-                    </p:column>
-                    <p:column headerText="State" >
-                        <h:outputText value="#{person.city.state.name}"/>
-                    </p:column>
-                    <p:column headerText="Country" >
-                        <h:outputText value="#{person.city.state.country.name}"/>
-                    </p:column>
-
-                </p:dataTable>
-                <br/>
-
-            </x:group>
-
-            <h2>Group by "country" and "state"</h2>
-
-            <x:group value="#{groupComponentMB.people}" var="personGroupCountry" id="group1"
-                     groupBy="city.state.country" rowIndexVar="indexCountry" 
-                     itemSortField="name" >
-
-                <h:outputText style="font-weight: bold;font-size: 18px;font-size: 15px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
-                <p:separator/>
-
-                <x:group value="#{personGroupCountry.value}" var="personGroupState" 
-                         groupBy="city.state" rowIndexVar="indexState" 
-                         itemSortField="name" id="group2" >
-
-                    <h:outputText style="font-style: italic;" value="#{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
-                    <p:separator/>
-
-                    <p:dataTable value="#{personGroupState.value}" var="person" rowIndexVar="indexPerson" >
-
-                        <p:column>
-                            <h:outputText value="#{indexCountry+1}.#{indexState+1}.#{indexPerson+1}"/>
+                            <h:outputText value="#{indexPerson+1}"/>
                         </p:column>
                         <p:column headerText="Name" >
                             <h:outputText value="#{person.name}"/>
@@ -152,40 +32,55 @@
                         <p:column headerText="City" >
                             <h:outputText value="#{person.city.name}"/>
                         </p:column>
-
+                        <p:column headerText="State" >
+                            <h:outputText value="#{person.city.state.name}"/>
+                        </p:column>
+                        <p:column headerText="Country" >
+                            <h:outputText value="#{person.city.state.country.name}"/>
+                        </p:column>
+                        <p:column headerText="Status" >
+                            <h:outputText value="#{person.status}"/>
+                        </p:column>
                     </p:dataTable>
-                    <br/>
-                </x:group>
-                <br/>
+                    <pre name="code" class="xml">
+                     &lt;p:dataTable value=&quot;\#{groupComponentMB.people}&quot; var=&quot;person&quot; rowIndexVar=&quot;indexPerson&quot; &gt;
+                        &lt;p:column&gt;
+                            &lt;h:outputText value=&quot;\#{indexPerson+1}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;Name&quot; &gt;
+                            &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;Email&quot; &gt;
+                            &lt;h:outputText value=&quot;\#{person.email}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;City&quot; &gt;
+                            &lt;h:outputText value=&quot;\#{person.city.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;State&quot; &gt;
+                            &lt;h:outputText value=&quot;\#{person.city.state.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;Country&quot; &gt;
+                            &lt;h:outputText value=&quot;\#{person.city.state.country.name}&quot;/&gt;
+                        &lt;/p:column&gt;
+                        &lt;p:column headerText=&quot;Status&quot; &gt;
+                            &lt;h:outputText value=&quot;\#{person.status}&quot;/&gt;
+                        &lt;/p:column&gt;
+                    &lt;/p:dataTable&gt;   
 
-            </x:group>
+                    </pre>
 
-            <h2>Group by "country", "state" and "city"</h2>
+                </p:tab>
+                <p:tab title="Example 1 - Group by 'city'">
+                    <x:group value="#{groupComponentMB.people}" var="personGroup" 
+                             groupBy="city" rowIndexVar="index"  sortField="name"
+                             itemSortField="name" itemSortOrder="desc" >
 
-            <x:group value="#{groupComponentMB.people}" var="personGroupCountry"
-                     groupBy="city.state.country" rowIndexVar="indexCountry" 
-                     itemSortField="name" >
+                        <h:outputText style="font-weight: bold" value="#{index+1} - #{personGroup.key.name}"/>
+                        <p:separator/>
 
-                <h:outputText style="font-weight: bold; font-size: 18px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
-                <p:separator/>
-
-                <x:group value="#{personGroupCountry.value}" var="personGroupState" 
-                         groupBy="city.state" rowIndexVar="indexState" 
-                         itemSortField="name" >
-
-                    <h:outputText style="font-style: italic; font-size: 15px;" value="#{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
-                    <p:separator/>
-
-                    <x:group value="#{personGroupState.value}" var="personGroupCity" 
-                             groupBy="city" rowIndexVar="indexCity" 
-                             itemSortField="name"  >
-
-                        <h:outputText style="font-weight: bold;" value="#{indexCountry+1}.#{indexState+1}.#{indexState+1} - #{personGroupCity.key}"/>
-
-                        <p:dataTable value="#{personGroupCity.value}" var="person" rowIndexVar="indexPerson" >
-
+                        <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
                             <p:column>
-                                <h:outputText value="#{indexCountry+1}.#{indexState+1}.#{indexCity+1}.#{indexPerson+1}"/>
+                                <h:outputText value="#{index+1}.#{indexPerson+1}"/>
                             </p:column>
                             <p:column headerText="Name" >
                                 <h:outputText value="#{person.name}"/>
@@ -195,23 +90,285 @@
                             </p:column>
                             <ui:remove>
                                 <p:column>
-                                    <p:commandButton process="@form" 
+                                    <p:commandButton process="@this" 
                                                      update=":formPersonDetail" icon="ui-icon-check"
                                                      oncomplete="dialogPersonDetail.show()">
                                         <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
                                     </p:commandButton>
                                 </p:column>
                             </ui:remove>
+                        </p:dataTable>
+                        <br/>
+
+                    </x:group>
+                    <pre name="code" class="xml">
+                    &lt;x:group value=&quot;\#{groupComponentMB.people}&quot; var=&quot;personGroup&quot; 
+                             groupBy=&quot;city&quot; rowIndexVar=&quot;index&quot;  sortField=&quot;name&quot;
+                             itemSortField=&quot;name&quot; itemSortOrder=&quot;desc&quot; &gt;
+
+                        &lt;h:outputText style=&quot;font-weight: bold&quot; value=&quot;\#{index+1} - \#{personGroup.key.name}&quot;/&gt;
+                        &lt;p:separator/&gt;
+
+                        &lt;p:dataTable value=&quot;\#{personGroup.value}&quot; var=&quot;person&quot; rowIndexVar=&quot;indexPerson&quot; &gt;
+                            &lt;p:column&gt;
+                                &lt;h:outputText value=&quot;\#{index+1}.\#{indexPerson+1}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;Name&quot; &gt;
+                                &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;Email&quot; &gt;
+                                &lt;h:outputText value=&quot;\#{person.email}&quot;/&gt;
+                            &lt;/p:column&gt;
+                        &lt;/p:dataTable&gt;
+                        &lt;br/&gt;
+
+                    &lt;/x:group&gt;                        
+
+                    </pre>
+
+                </p:tab>
+
+                <p:tab title="Example 2 - Group by 'status'">
+                    <x:group value="#{groupComponentMB.people}" var="personGroup" 
+                             groupBy="status" rowIndexVar="index" 
+                             itemSortField="name" >
+
+                        <h:outputText style="font-weight: bold" value="#{index+1} - #{personGroup.key}"/>
+                        <p:separator/>
+
+                        <p:dataTable value="#{personGroup.value}" var="person" rowIndexVar="indexPerson" >
+                            <p:column>
+                                <h:outputText value="#{index+1}.#{indexPerson+1}"/>
+                            </p:column>
+                            <p:column headerText="Name" >
+                                <h:outputText value="#{person.name}"/>
+                            </p:column>
+                            <p:column headerText="Email" >
+                                <h:outputText value="#{person.email}"/>
+                            </p:column>
+                            <p:column headerText="City" >
+                                <h:outputText value="#{person.city.name}"/>
+                            </p:column>
+                            <p:column headerText="State" >
+                                <h:outputText value="#{person.city.state.name}"/>
+                            </p:column>
+                            <p:column headerText="Country" >
+                                <h:outputText value="#{person.city.state.country.name}"/>
+                            </p:column>
 
                         </p:dataTable>
                         <br/>
+
                     </x:group>
-                    <br/>
-                </x:group>
-                <br/>
 
-            </x:group>
+                    <pre name="code" class="xml">
+                        &lt;x:group value=&quot;\#{groupComponentMB.people}&quot; var=&quot;personGroup&quot; 
+                                groupBy=&quot;status&quot; rowIndexVar=&quot;index&quot; 
+                                itemSortField=&quot;name&quot; &gt;
 
+                               &lt;h:outputText style=&quot;font-weight: bold&quot; value=&quot;\#{index+1} - \#{personGroup.key}&quot;/&gt;
+                               &lt;p:separator/&gt;
+
+                               &lt;p:dataTable value=&quot;\#{personGroup.value}&quot; var=&quot;person&quot; rowIndexVar=&quot;indexPerson&quot; &gt;
+                                       &lt;p:column&gt;
+                                               &lt;h:outputText value=&quot;\#{index+1}.\#{indexPerson+1}&quot;/&gt;
+                                       &lt;/p:column&gt;
+                                       &lt;p:column headerText=&quot;Name&quot; &gt;
+                                               &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                                       &lt;/p:column&gt;
+                                       &lt;p:column headerText=&quot;Email&quot; &gt;
+                                               &lt;h:outputText value=&quot;\#{person.email}&quot;/&gt;
+                                       &lt;/p:column&gt;
+                                       &lt;p:column headerText=&quot;City&quot; &gt;
+                                               &lt;h:outputText value=&quot;\#{person.city.name}&quot;/&gt;
+                                       &lt;/p:column&gt;
+                                       &lt;p:column headerText=&quot;State&quot; &gt;
+                                               &lt;h:outputText value=&quot;\#{person.city.state.name}&quot;/&gt;
+                                       &lt;/p:column&gt;
+                                       &lt;p:column headerText=&quot;Country&quot; &gt;
+                                               &lt;h:outputText value=&quot;\#{person.city.state.country.name}&quot;/&gt;
+                                       &lt;/p:column&gt;
+
+                               &lt;/p:dataTable&gt;
+                               &lt;br/&gt;
+
+                       &lt;/x:group&gt;
+                    </pre>
+
+
+
+                </p:tab>
+                <p:tab title="Example 3 - Group by 'country' and 'state'">
+                    <x:group value="#{groupComponentMB.people}" var="personGroupCountry" id="group1"
+                             groupBy="city.state.country" rowIndexVar="indexCountry" 
+                             itemSortField="name" >
+
+                        <h:outputText style="font-weight: bold;font-size: 18px;font-size: 15px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
+                        <p:separator/>
+
+                        <x:group value="#{personGroupCountry.value}" var="personGroupState" 
+                                 groupBy="city.state" rowIndexVar="indexState" 
+                                 itemSortField="name" id="group2" >
+
+                            <h:outputText style="font-style: italic;" value="#{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
+                            <p:separator/>
+
+                            <p:dataTable value="#{personGroupState.value}" var="person" rowIndexVar="indexPerson" >
+
+                                <p:column>
+                                    <h:outputText value="#{indexCountry+1}.#{indexState+1}.#{indexPerson+1}"/>
+                                </p:column>
+                                <p:column headerText="Name" >
+                                    <h:outputText value="#{person.name}"/>
+                                </p:column>
+                                <p:column headerText="Email" >
+                                    <h:outputText value="#{person.email}"/>
+                                </p:column>
+                                <p:column headerText="City" >
+                                    <h:outputText value="#{person.city.name}"/>
+                                </p:column>
+
+                            </p:dataTable>
+                            <br/>
+                        </x:group>
+                        <br/>
+
+                    </x:group>
+
+                    <pre name="code" class="xml">
+                    &lt;x:group value=&quot;\#{groupComponentMB.people}&quot; var=&quot;personGroupCountry&quot; id=&quot;group1&quot;
+                             groupBy=&quot;city.state.country&quot; rowIndexVar=&quot;indexCountry&quot; 
+                             itemSortField=&quot;name&quot; &gt;
+
+                        &lt;h:outputText style=&quot;font-weight: bold;font-size: 18px;font-size: 15px;&quot; value=&quot;\#{indexCountry+1} - \#{personGroupCountry.key}&quot;/&gt;
+                        &lt;p:separator/&gt;
+
+                        &lt;x:group value=&quot;\#{personGroupCountry.value}&quot; var=&quot;personGroupState&quot; 
+                                 groupBy=&quot;city.state&quot; rowIndexVar=&quot;indexState&quot; 
+                                 itemSortField=&quot;name&quot; id=&quot;group2&quot; &gt;
+
+                            &lt;h:outputText style=&quot;font-style: italic;&quot; value=&quot;\#{indexCountry+1}.\#{indexState+1} - \#{personGroupState.key}&quot;/&gt;
+                            &lt;p:separator/&gt;
+
+                            &lt;p:dataTable value=&quot;\#{personGroupState.value}&quot; var=&quot;person&quot; rowIndexVar=&quot;indexPerson&quot; &gt;
+
+                                &lt;p:column&gt;
+                                    &lt;h:outputText value=&quot;\#{indexCountry+1}.\#{indexState+1}.\#{indexPerson+1}&quot;/&gt;
+                                &lt;/p:column&gt;
+                                &lt;p:column headerText=&quot;Name&quot; &gt;
+                                    &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                                &lt;/p:column&gt;
+                                &lt;p:column headerText=&quot;Email&quot; &gt;
+                                    &lt;h:outputText value=&quot;\#{person.email}&quot;/&gt;
+                                &lt;/p:column&gt;
+                                &lt;p:column headerText=&quot;City&quot; &gt;
+                                    &lt;h:outputText value=&quot;\#{person.city.name}&quot;/&gt;
+                                &lt;/p:column&gt;
+
+                            &lt;/p:dataTable&gt;
+                            &lt;br/&gt;
+                        &lt;/x:group&gt;
+                        &lt;br/&gt;
+
+                    &lt;/x:group&gt;
+                    </pre>
+
+                </p:tab>
+                <p:tab title="Example 4 - Group by 'country', 'state' and 'city'">
+                    <x:group value="#{groupComponentMB.people}" var="personGroupCountry"
+                             groupBy="city.state.country" rowIndexVar="indexCountry" 
+                             sortField="name" >
+
+                        <h:outputText style="font-weight: bold; font-size: 18px;" value="#{indexCountry+1} - #{personGroupCountry.key}"/>
+                        <p:separator/>
+
+                        <x:group value="#{personGroupCountry.value}" var="personGroupState" 
+                                 groupBy="city.state" rowIndexVar="indexState" 
+                                 sortField="name" >
+
+                            <h:outputText style="font-style: italic; font-size: 15px;" value="#{indexCountry+1}.#{indexState+1} - #{personGroupState.key}"/>
+                            <p:separator/>
+
+                            <x:group value="#{personGroupState.value}" var="personGroupCity" 
+                                     groupBy="city" rowIndexVar="indexCity" 
+                                     sortField="name" >
+
+                                <h:outputText style="font-weight: bold;" value="#{indexCountry+1}.#{indexState+1}.#{indexState+1} - #{personGroupCity.key}"/>
+
+                                <p:dataTable value="#{personGroupCity.value}" var="person" rowIndexVar="indexPerson" >
+
+                                    <p:column>
+                                        <h:outputText value="#{indexCountry+1}.#{indexState+1}.#{indexCity+1}.#{indexPerson+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Name" >
+                                        <h:outputText value="#{person.name}"/>
+                                    </p:column>
+                                    <p:column headerText="Email" >
+                                        <h:outputText value="#{person.email}"/>
+                                    </p:column>
+
+                                    <ui:remove>
+                                        <p:column>
+                                            <p:commandButton process="@form" 
+                                                             update="@form :formPersonDetail" icon="ui-icon-check"
+                                                             oncomplete="dialogPersonDetail.show()">
+                                                <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </ui:remove>
+
+                                </p:dataTable>
+                                <br/>
+                            </x:group>
+                            <br/>
+                        </x:group>
+                        <br/>
+
+                    </x:group>
+
+                    <pre name="code" class="xml">
+                    &lt;x:group value=&quot;\#{groupComponentMB.people}&quot; var=&quot;personGroupCountry&quot;
+                             groupBy=&quot;city.state.country&quot; rowIndexVar=&quot;indexCountry&quot; 
+                             sortField=&quot;name&quot; &gt;
+
+                        &lt;h:outputText style=&quot;font-weight: bold; font-size: 18px;&quot; value=&quot;\#{indexCountry+1} - \#{personGroupCountry.key}&quot;/&gt;
+                        &lt;p:separator/&gt;
+
+                        &lt;x:group value=&quot;\#{personGroupCountry.value}&quot; var=&quot;personGroupState&quot; 
+                                 groupBy=&quot;city.state&quot; rowIndexVar=&quot;indexState&quot; 
+                                 sortField=&quot;name&quot; &gt;
+
+                            &lt;h:outputText style=&quot;font-style: italic; font-size: 15px;&quot; value=&quot;\#{indexCountry+1}.\#{indexState+1} - \#{personGroupState.key}&quot;/&gt;
+                            &lt;p:separator/&gt;
+
+                            &lt;x:group value=&quot;\#{personGroupState.value}&quot; var=&quot;personGroupCity&quot; 
+                                     groupBy=&quot;city&quot; rowIndexVar=&quot;indexCity&quot; 
+                                     sortField=&quot;name&quot; &gt;
+
+                                &lt;h:outputText style=&quot;font-weight: bold;&quot; value=&quot;\#{indexCountry+1}.\#{indexState+1}.\#{indexState+1} - \#{personGroupCity.key}&quot;/&gt;
+
+                                &lt;p:dataTable value=&quot;\#{personGroupCity.value}&quot; var=&quot;person&quot; rowIndexVar=&quot;indexPerson&quot; &gt;
+                                    &lt;p:column&gt;
+                                        &lt;h:outputText value=&quot;\#{indexCountry+1}.\#{indexState+1}.\#{indexCity+1}.\#{indexPerson+1}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;Name&quot; &gt;
+                                        &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                    &lt;p:column headerText=&quot;Email&quot; &gt;
+                                        &lt;h:outputText value=&quot;\#{person.email}&quot;/&gt;
+                                    &lt;/p:column&gt;
+                                &lt;/p:dataTable&gt;
+                                &lt;br/&gt;
+                            &lt;/x:group&gt;
+                            &lt;br/&gt;
+                        &lt;/x:group&gt;
+                        &lt;br/&gt;
+
+                    &lt;/x:group&gt;
+                    </pre>
+
+                </p:tab>
+            </p:accordionPanel>
 
         </h:form>
 

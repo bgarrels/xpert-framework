@@ -10,7 +10,9 @@ import com.xpert.showcase.model.Country;
 import com.xpert.showcase.model.Person;
 import com.xpert.showcase.model.State;
 import com.xpert.showcase.model.Status;
+import com.xpert.utils.CollectionsUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.PostConstruct;
@@ -36,25 +38,21 @@ public class GroupComponentMB {
         //COUNTRY 1
         State state1 = new State(1L, "AMAZONAS", country1);
         City city1 = new City(1l, "MANAUS", state1);
-        City city2 = new City(2l, "COARI", state1);
 
         State state2 = new State(2L, "SAO PAULO", country1);
-        City city3 = new City(3l, "SAO PAULO", state2);
-        City city4 = new City(4l, "CAMPINAS", state2);
-        City city5 = new City(5l, "BERTIOGA", state2);
+        City city2 = new City(2l, "SAO PAULO", state2);
+        City city3 = new City(3l, "CAMPINAS", state2);
 
         //COUNTRY 2
         State state3 = new State(3L, "BUENOS AIRES", country2);
-        City city6 = new City(6l, "MAR DEL PLATA", state3);
-        City city7 = new City(7l, "LA PLATA", state3);
+        City city4 = new City(4l, "MAR DEL PLATA", state3);
+        City city5 = new City(5l, "LA PLATA", state3);
 
         addPerson(city1);
         addPerson(city2);
         addPerson(city3);
         addPerson(city4);
         addPerson(city5);
-        addPerson(city6);
-        addPerson(city7);
 
     }
 
@@ -73,6 +71,9 @@ public class GroupComponentMB {
             }
             people.add(person);
         }
+        
+        Collections.shuffle(people);
+        
     }
 
     public List<Person> getPeople() {
