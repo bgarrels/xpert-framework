@@ -69,6 +69,9 @@ public class Person implements Serializable {
 
     @Transient
     private City city;
+    
+    @Transient
+    private int count;
 
     public Person() {
     }
@@ -79,6 +82,23 @@ public class Person implements Serializable {
         this.city = city;
     }
 
+    public Person(String name, Long code, BigDecimal salary, int count) {
+        this.code = code;
+        this.name = name;
+        this.salary = salary;
+        this.count = count;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    
+    
     public City getCity() {
         return city;
     }
