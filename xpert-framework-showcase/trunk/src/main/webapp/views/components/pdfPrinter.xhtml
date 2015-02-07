@@ -109,10 +109,20 @@
                     <br/>
                     <br/>
 
-                    <h:panelGroup id="panelTab3" >
+                    <h:panelGroup id="panelTab3" layout="block" >
 
+                        Pie Chart example: <br/>
+                        
                         <pe:gChart  
-                            value="#{pDFPrinterMB.chartModel}"  
+                            value="#{pDFPrinterMB.pieChart}"  
+                            title="Company Performance"/>  
+                        
+                        <hr/>
+                        
+                        
+                        Column Chart example: <br/>
+                        <pe:gChart  
+                            value="#{pDFPrinterMB.columnChart}"  
                             title="Company Performance"/>  
 
                     </h:panelGroup>
