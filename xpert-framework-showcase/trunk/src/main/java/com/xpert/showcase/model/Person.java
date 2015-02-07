@@ -76,6 +76,10 @@ public class Person implements Serializable {
     public Person() {
     }
 
+    public Person(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
     public Person(String name, String email, City city) {
         this.name = name;
         this.email = email;

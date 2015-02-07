@@ -1,0 +1,138 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:pe="http://primefaces.org/ui/extensions"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="PDF Printer" />
+    <ui:define name="body">
+
+        <div class="description">
+            #{msg['download.description']}<br/>
+            #{msg['download.description2']}
+            <br/>
+            <br/>
+        </div>
+        <p:separator/>
+        <h3>Examples</h3>
+        <h:form >
+
+
+
+            <p:tabView>
+                <p:tab title="1 - Simple HTML">
+
+                    <p:commandButton title="Export PDF" immediate="true" ajax="false"
+                                     value="Export PDF">
+                        <x:pdfPrinter target="panelTab1" fileName="Simple HTML" />
+                    </p:commandButton>
+
+                    <br/>
+                    <br/>
+
+                    <h:panelGroup id="panelTab1" layout="block" style="border: 1px solid black; padding: 10px;">
+
+
+                        <h1>Title</h1>
+                        <h2>Subtitle</h2>
+                        <p>
+                            Lorem ipsum dolor sit amet, <span style="color: red;">consectetur adipiscing elit</span>. Cras at accumsan mauris. Nulla a accumsan nisl. Nam dapibus a velit quis consequat. 
+                            Mauris a volutpat sem. Suspendisse semper enim in enim gravida, quis maximus ante lobortis. Fusce pharetra, dui in dignissim rutrum, nunc nisl tempor ante, eu pellentesque quam metus in metus. Aliquam malesuada urna non urna molestie, sed convallis dolor condimentum. 
+                            Vestibulum imperdiet tristique lacus at fringilla. Nunc tempus metus a arcu vehicula, in scelerisque ante commodo. 
+                        </p>
+                        <hr/>
+                        <h2>Content with image</h2>
+
+                        Xpert-Framework logo:<br/>
+                        <img src="#{request.contextPath}/images/framework-logo.png" alt="Logo" />
+
+                        <br/>
+                        <br/>
+                        External Image (Google): <br/>
+                        <img src="https://www.google.com.br/images/srpr/logo11w.png" alt="Logo" style="width: 200px;" />
+
+                        <hr/>
+                        <h2>Content with link</h2>
+                        Link example: <a target="_blank" href="http://google.com">Google.com</a> 
+                        (generates a link in PDF)
+
+                        <h2>Table (with CSS)</h2>
+
+                        <style type="text/css">
+                            .tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
+                            .tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
+                            .tftable tr {background-color:#d4e3e5;}
+                            .tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+                        </style>
+
+                        <table class="tftable" border="1">
+                            <tr>
+                                <th>Header 1</th><th>Header 2</th><th>Header 3</th><th>Header 4</th><th>Header 5</th>
+                            </tr>
+                            <tr>
+                                <td>Row:1 Cell:1</td><td>Row:1 Cell:2</td><td>Row:1 Cell:3</td><td>Row:1 Cell:4</td><td>Row:1 Cell:5</td>
+                            </tr>
+                            <tr>
+                                <td>Row:2 Cell:1</td><td>Row:2 Cell:2</td><td>Row:2 Cell:3</td><td>Row:2 Cell:4</td><td>Row:2 Cell:5</td>
+                            </tr>
+                            <tr>
+                                <td>Row:3 Cell:1</td><td>Row:3 Cell:2</td><td>Row:3 Cell:3</td><td>Row:3 Cell:4</td><td>Row:3 Cell:5</td>
+                            </tr>
+                            <tr>
+                                <td>Row:4 Cell:1</td><td>Row:4 Cell:2</td><td>Row:4 Cell:3</td><td>Row:4 Cell:4</td><td>Row:4 Cell:5</td>
+                            </tr>
+                        </table>
+
+                        <br/>
+                        <br/>
+
+
+                    </h:panelGroup>
+
+
+
+                </p:tab>
+                <p:tab title="2 - HTML from Primefaces Components">
+
+                </p:tab>
+                <p:tab title="3 - HTML with SVG (exporting charts)">
+
+                    <p:commandButton title="Export PDF" immediate="true" ajax="false"
+                                     value="Export PDF">
+                        <x:pdfPrinter target="panelTab3" fileName="With SVG Charts" />
+                    </p:commandButton>
+
+                    <br/>
+                    <br/>
+
+                    <h:panelGroup id="panelTab3" >
+
+                        <pe:gChart  
+                            value="#{pDFPrinterMB.chartModel}"  
+                            title="Company Performance"/>  
+
+                    </h:panelGroup>
+                    
+                    <pre name="code" class="java">
+                   public class DownloadMB {
+
+                        public void download() throws IOException, InterruptedException {
+                            String fileContent = &quot;This is xpert-framework&quot;;
+                            //wait 5s
+                            Thread.sleep(5000);
+                            FacesUtils.download(fileContent.getBytes(), &quot;text/plain&quot;, &quot;file.txt&quot;);
+                        }
+                    }
+
+                    </pre>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+
+
+    </ui:define>
+</ui:composition>
