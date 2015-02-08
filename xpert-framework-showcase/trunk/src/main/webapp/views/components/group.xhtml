@@ -98,15 +98,6 @@
                             <p:column headerText="Email" >
                                 <h:outputText value="#{person.email}"/>
                             </p:column>
-                            <ui:remove>
-                                <p:column>
-                                    <p:commandButton process="@this" 
-                                                     update=":formPersonDetail" icon="ui-icon-check"
-                                                     oncomplete="dialogPersonDetail.show()">
-                                        <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </ui:remove>
                         </p:dataTable>
                         <br/>
 
@@ -316,17 +307,6 @@
                                     <p:column headerText="Email" >
                                         <h:outputText value="#{person.email}"/>
                                     </p:column>
-
-                                    <ui:remove>
-                                        <p:column>
-                                            <p:commandButton process="@form" 
-                                                             update="@form :formPersonDetail" icon="ui-icon-check"
-                                                             oncomplete="dialogPersonDetail.show()">
-                                                <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}"/>
-                                            </p:commandButton>
-                                        </p:column>
-                                    </ui:remove>
-
                                 </p:dataTable>
                                 <br/>
                             </x:group>

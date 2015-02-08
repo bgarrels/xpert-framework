@@ -127,7 +127,7 @@
         <h:panelGroup id="panelFormPerson">
             <h:form>
 
-                <p:dataTable id="dataTablePerson" 
+                <p:dataTable id="dataTablePerson" lazy="true"
                              paginator="true" rows="5" paginatorPosition="bottom"
                              var="person" value="#{personMB.dataModel}">
                     <p:column headerText="#{msg['person.name']}" >
@@ -145,7 +145,7 @@
                         </h:outputText>
                     </p:column>
                     <p:column style="text-align: center;">
-                        <p:commandButton oncomplete="widgetPersonDetail.show();"  icon="ui-icon-zoomin" process="@this" update=":panelPersonDetail" >
+                        <p:commandButton oncomplete="PF('widgetPersonDetail').show();"  icon="ui-icon-zoomin" process="@this" update=":panelPersonDetail" >
                             <f:setPropertyActionListener value="#{person}" target="#{personMB.entity}" />
                         </p:commandButton>
                     </p:column>
@@ -213,7 +213,7 @@
                                     &lt;/h:outputText&gt;
                                 &lt;/p:column&gt;
                                 &lt;p:column style=&quot;text-align: center;&quot;&gt;
-                                    &lt;p:commandButton oncomplete=&quot;widgetPersonDetail.show();&quot;  icon=&quot;ui-icon-zoomin&quot; process=&quot;@this&quot; update=&quot;:panelPersonDetail&quot; &gt;
+                                    &lt;p:commandButton oncomplete=&quot;PF('widgetPersonDetail');&quot;  icon=&quot;ui-icon-zoomin&quot; process=&quot;@this&quot; update=&quot;:panelPersonDetail&quot; &gt;
                                         &lt;f:setPropertyActionListener value=&quot;\#{person}&quot; target=&quot;\#{personMB.entity}&quot; /&gt;
                                     &lt;/p:commandButton&gt;
                                 &lt;/p:column&gt;

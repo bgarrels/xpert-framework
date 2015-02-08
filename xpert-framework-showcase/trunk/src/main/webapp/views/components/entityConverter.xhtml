@@ -25,7 +25,7 @@
                         <f:selectItems value="#{findAllBean.get(classMB.group)}" var="group" itemLabel="#{group.description}" />
                     </h:selectOneMenu>
                 </h:panelGrid>
-                <p:commandButton value="Submit" process="@form" update=":panelDetail" oncomplete="dialogEntityConverter.show()" />
+                <p:commandButton value="Submit" process="@form" update=":panelDetail" oncomplete="PF('dialogEntityConverter').show()" />
             </h:form>
         </p:panel>
         <br/>
@@ -47,7 +47,7 @@
             </h:form>
         </p:panel>
 
-        <p:dialog widgetVar="dialogEntityConverter" header="Detail" width="500" appendToBody="true" modal="true">
+        <p:dialog widgetVar="dialogEntityConverter" header="Detail" width="500" modal="true">
             <h:panelGroup id="panelDetail">
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{msg['person.group']}:" />
@@ -56,7 +56,7 @@
                     <h:outputText value="#{requestScope.group.id}"/>
                 </h:panelGrid>
                 <div align="center" >
-                    <p:commandButton type="button" value="Ok" onclick="dialogEntityConverter.hide()"/>
+                    <p:commandButton type="button" value="Ok" onclick="PF('dialogEntityConverter').hide()"/>
                 </div>
             </h:panelGroup>
         </p:dialog>
@@ -71,7 +71,7 @@
                             &lt;f:selectItems value=&quot;\#{findAllBean.get(classMB.group)}&quot; var=&quot;group&quot; itemLabel=&quot;\#{group.description}&quot; /&gt;
                         &lt;/h:selectOneMenu&gt;
                     &lt;/h:panelGrid&gt;
-                    &lt;p:commandButton value=&quot;Submit&quot; process=&quot;@form&quot; update=&quot;:panelDetail&quot; oncomplete=&quot;dialogEntityConverter.show()&quot; /&gt;
+                    &lt;p:commandButton value=&quot;Submit&quot; process=&quot;@form&quot; update=&quot;:panelDetail&quot; oncomplete=&quot;PF('dialogEntityConverter').show()&quot; /&gt;
                 &lt;/h:form&gt;
             &lt;/p:panel&gt;
             &lt;br/&gt;
@@ -93,7 +93,7 @@
                 &lt;/h:form&gt;
             &lt;/p:panel&gt;
 
-            &lt;p:dialog widgetVar=&quot;dialogEntityConverter&quot; width=&quot;500&quot; appendToBody=&quot;true&quot; modal=&quot;true&quot;&gt;
+            &lt;p:dialog widgetVar=&quot;dialogEntityConverter&quot; width=&quot;500&quot; modal=&quot;true&quot;&gt;
                 &lt;h:panelGroup id=&quot;panelDetail&quot;&gt;
                     &lt;h:panelGrid columns=&quot;2&quot;&gt;
                         &lt;h:outputLabel value=&quot;\#{msg['Person.grupo']}:&quot; /&gt;
@@ -102,7 +102,7 @@
                         &lt;h:outputText value=&quot;\#{requestScope.group.id}&quot;/&gt;
                     &lt;/h:panelGrid&gt;
                     &lt;div align=&quot;center&quot; &gt;
-                        &lt;p:commandButton type=&quot;button&quot; value=&quot;Ok&quot; onclick=&quot;dialogEntityConverter.hide()&quot;/&gt;
+                        &lt;p:commandButton type=&quot;button&quot; value=&quot;Ok&quot; onclick=&quot;PF('dialogEntityConverter').hide()&quot;/&gt;
                     &lt;/div&gt;
                 &lt;/h:panelGroup&gt;
             &lt;/p:dialog&gt;
