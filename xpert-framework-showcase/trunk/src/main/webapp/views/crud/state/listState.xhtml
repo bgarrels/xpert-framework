@@ -1,0 +1,73 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces">
+    <ui:param name="title" value="#{msg['state.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuState.xhtml" />
+        <h:form id="formListState">
+            <x:modalMessages/>
+
+            <x:dataTableActions fileName="state_export" target=":formListState:dataTableState"
+                                     widgetVar="dataTableStateWidget"  />
+
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="state" rowIndexVar="index" id="dataTableState" widgetVar="dataTableStateWidget" styleClass="table-responsive"
+                         currentPageReportTemplate="#{stateMB.dataModel.currentPageReportTemplate}"
+                         paginatorTemplate="#{stateMB.dataModel.paginatorTemplate}"
+                         value="#{stateMB.dataModel}" lazy="true" >
+                <p:column styleClass="uix-datatable-index">
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['state.name']}" sortBy="#{state.name}"
+                    filterBy="#{state.name}"   >
+                    <f:facet name="header">
+                        <h:outputText value="#{msg['state.name']}" />
+                    </f:facet>
+                    <h:outputText value="#{state.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['state.country']}" sortBy="#{state.country}"
+                       >
+                    <f:facet name="header">
+                        <h:outputText value="#{msg['state.country']}" />
+                    </f:facet>
+                    <h:outputText value="#{state.country}"/>
+                </p:column>
+                <p:column styleClass="uix-datatable-actions" exportable="false" headerText="#{xmsg['actions']}">
+                    <f:facet name="header">
+                        <h:outputText value="#{xmsg['actions']}"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="PF('widgetStateDetail').show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailState" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{state}" target="#{stateMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="state.create">
+                        <p:button icon="ui-icon-pencil" outcome="createState" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{state.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="state.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{stateMB.delete}" >
+                            <f:setPropertyActionListener value="#{state.id}" target="#{stateMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{state}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+            </p:dataTable>
+            <div class="uix-audit-delete">
+                <x:securityArea rolesAllowed="state.audit">
+                    <x:auditDelete for="#{stateMB.entityClass}"/>
+                </x:securityArea>
+            </div>  
+        </h:form>
+
+        <p:dialog widgetVar="widgetStateDetail" header="#{msg['state.detail']}" appendTo="@(body)" 
+                  modal="true" height="500" width="800" >
+                  <ui:include src="detailState.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

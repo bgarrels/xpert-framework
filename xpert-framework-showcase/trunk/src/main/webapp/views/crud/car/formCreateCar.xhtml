@@ -1,0 +1,31 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces">
+    
+  
+    <h:form id="formCreateCar">
+        <p:fieldset legend="#{xmsg['generalData']}">
+            <x:modalMessages/>
+
+            <h:panelGrid columns="2" styleClass="grid-form">
+
+                <h:outputLabel for="name" value="* #{msg['car.name']}:" />
+                <p:inputText id="name" value="#{carMB.entity.name}" maxlength="255"  size="70"  />
+
+            </h:panelGrid>
+        </p:fieldset>
+        <h:outputText value="#{xmsg['requiredFieldsForm']}"/>
+        <div class="uix-center">
+            <x:securityArea rolesAllowed="car.create">
+                 <p:commandButton process="@form" update="@form" action="#{carMB.save}" value="#{xmsg['save']}" />
+            </x:securityArea>
+            <x:securityArea rolesAllowed="car.audit">
+                 <x:audit for="#{carMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
+
+</ui:composition>

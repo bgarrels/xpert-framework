@@ -1,0 +1,66 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 template="/template/mainTemplate.xhtml"
+                 xmlns:x="http://xpert.com/faces">
+    <ui:param name="title" value="#{msg['statusGroup.list']}" />
+    <ui:define name="body">
+        <ui:include src="menuStatusGroup.xhtml" />
+        <h:form id="formListStatusGroup">
+            <x:modalMessages/>
+
+            <x:dataTableActions fileName="statusGroup_export" target=":formListStatusGroup:dataTableStatusGroup"
+                                     widgetVar="dataTableStatusGroupWidget"  />
+
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="#{xmsg['noRecordFound']}"
+                         var="statusGroup" rowIndexVar="index" id="dataTableStatusGroup" widgetVar="dataTableStatusGroupWidget" styleClass="table-responsive"
+                         currentPageReportTemplate="#{statusGroupMB.dataModel.currentPageReportTemplate}"
+                         paginatorTemplate="#{statusGroupMB.dataModel.paginatorTemplate}"
+                         value="#{statusGroupMB.dataModel}" lazy="true" >
+                <p:column styleClass="uix-datatable-index">
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="#{msg['statusGroup.description']}" sortBy="#{statusGroup.description}"
+                    filterBy="#{statusGroup.description}"   >
+                    <f:facet name="header">
+                        <h:outputText value="#{msg['statusGroup.description']}" />
+                    </f:facet>
+                    <h:outputText value="#{statusGroup.description}"/>
+                </p:column>
+                <p:column styleClass="uix-datatable-actions" exportable="false" headerText="#{xmsg['actions']}">
+                    <f:facet name="header">
+                        <h:outputText value="#{xmsg['actions']}"/>
+                    </f:facet>
+                    <p:commandButton oncomplete="PF('widgetStatusGroupDetail').show();"  icon="ui-icon-zoomin" 
+                                     process="@form" update=":formDetailStatusGroup" title="#{xmsg['detail']}" >
+                        <f:setPropertyActionListener value="#{statusGroup}" target="#{statusGroupMB.entity}" />
+                    </p:commandButton>
+                    <x:securityArea rolesAllowed="statusGroup.create">
+                        <p:button icon="ui-icon-pencil" outcome="createStatusGroup" title="#{xmsg['edit']}">
+                            <f:param name="id" value="#{statusGroup.id}" />
+                        </p:button>
+                    </x:securityArea>
+                    <x:securityArea rolesAllowed="statusGroup.delete">
+                        <p:commandButton icon="ui-icon-trash" title="#{xmsg['delete']}" process="@form" update="@form" 
+                                         action="#{statusGroupMB.delete}" >
+                            <f:setPropertyActionListener value="#{statusGroup.id}" target="#{statusGroupMB.id}" />
+                            <x:confirmation message="#{xmsg['confirmDelete']} - #{statusGroup}" />
+                        </p:commandButton>
+                    </x:securityArea>
+                </p:column>
+            </p:dataTable>
+            <div class="uix-audit-delete">
+                <x:securityArea rolesAllowed="statusGroup.audit">
+                    <x:auditDelete for="#{statusGroupMB.entityClass}"/>
+                </x:securityArea>
+            </div>  
+        </h:form>
+
+        <p:dialog widgetVar="widgetStatusGroupDetail" header="#{msg['statusGroup.detail']}" appendTo="@(body)" 
+                  modal="true" height="500" width="800" >
+                  <ui:include src="detailStatusGroup.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>
