@@ -42,7 +42,7 @@ public class Maker extends MakerSwingFrame {
 
     @Override
     public PrimeFacesVersion getPrimeFacesVersion() {
-        return PrimeFacesVersion.VERSION_3;
+        return PrimeFacesVersion.VERSION_5;
     }
 
     public static void main(String args[]) {

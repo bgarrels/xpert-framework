@@ -41,17 +41,7 @@ public class CountryBO extends AbstractBusinessObject<Country> {
     
     @Override
     public void save(Country country) throws BusinessException {
-        //salvar
         super.save(country); 
-        countryDAO.getEntityManager().flush();
-        country = countryDAO.find(country.getId());
-        
-        //alterar
-        country.setName("ALTERADO "+new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date()));
-        countryDAO.merge(country);
-        
-        
-        
     }
     
     @Override
