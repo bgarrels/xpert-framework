@@ -1,0 +1,147 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:x="http://xpert.com/faces"
+
+                 template="/template/mainTemplate.xhtml">
+
+    <ui:param name="title" value="Sum" />
+    <ui:define name="body">
+
+        <div class="description">
+            <h:outputText value="#{msg['sum.description']}" escape="false"/> 
+            <br/>
+        </div>
+        
+        <h3>Usage</h3>
+        Simple:
+        <pre name="code" class="xml">
+        \#{x:sum(someList, 'fieldName')}  
+        </pre>
+        With <b>f:convertNumber</b>:
+        <pre name="code" class="xml">
+        &lt;h:outputText value=&quot;\#{x:sum(someList, 'fieldName')}&quot;&gt;
+            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+        &lt;/h:outputText&gt;
+        </pre>
+        <h3>Examples</h3>
+        <h:form>
+            <p:dataTable paginator="true" rows="5" rowsPerPageTemplate="10,20,30"
+                         lazy="true" paginatorPosition="bottom"
+                         var="person" value="#{sumMB.personLazy}">
+                <p:column headerText="#{msg['person.name']}" sortBy="#{person.name}">
+                    <h:outputText value="#{person.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person.salary']}" sortBy="#{person.salary}" style="text-align: right;">
+                    <h:outputText value="#{person.salary}"/>
+                </p:column>
+            </p:dataTable>
+
+            <br/>
+            <p:outputPanel autoUpdate="true">
+
+                <p:panelGrid columns="2">
+
+                    <h:outputText value="Sum All (all records from lazy):"/>
+                    <h:outputText value="#{x:sum(sumMB.personLazy, 'salary')}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                    </h:outputText>
+
+                    <h:outputText value="Sum (current page):"/>
+                    <h:outputText value="#{x:sum(sumMB.personLazy.wrappedData, 'salary')}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                    </h:outputText>
+
+                </p:panelGrid>
+            </p:outputPanel>
+
+        </h:form>
+         <h3>Source</h3>
+         <p:tabView>
+             <p:tab title="XHTML">
+                 <pre name="code" class="xml">
+        &lt;h:form&gt;
+            &lt;p:dataTable paginator=&quot;true&quot; rows=&quot;5&quot; rowsPerPageTemplate=&quot;10,20,30&quot;
+                         lazy=&quot;true&quot; paginatorPosition=&quot;bottom&quot;
+                         var=&quot;person&quot; value=&quot;\#{sumMB.personLazy}&quot;&gt;
+                &lt;p:column headerText=&quot;#{msg['person.name']}&quot; sortBy=&quot;\#{person.name}&quot;&gt;
+                    &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                &lt;/p:column&gt;
+                &lt;p:column headerText=&quot;#{msg['person.salary']}&quot; sortBy=&quot;\#{person.salary}&quot; style=&quot;text-align: right;&quot;&gt;
+                    &lt;h:outputText value=&quot;\#{person.salary}&quot;/&gt;
+                &lt;/p:column&gt;
+            &lt;/p:dataTable&gt;
+
+            &lt;br/&gt;
+            &lt;p:outputPanel autoUpdate=&quot;true&quot;&gt;
+
+                &lt;p:panelGrid columns=&quot;2&quot;&gt;
+
+                    &lt;h:outputText value=&quot;Sum All (all records from lazy):&quot;/&gt;
+                    &lt;h:outputText value=&quot;\#{x:sum(sumMB.personLazy, 'salary')}&quot;&gt;
+                        &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                    &lt;/h:outputText&gt;
+
+                    &lt;h:outputText value=&quot;Sum (current page):&quot;/&gt;
+                    &lt;h:outputText value=&quot;\#{x:sum(sumMB.personLazy.wrappedData, 'salary')}&quot;&gt;
+                        &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                    &lt;/h:outputText&gt;
+
+                &lt;/p:panelGrid&gt;
+            &lt;/p:outputPanel&gt;
+
+        &lt;/h:form&gt;
+                 </pre>
+             </p:tab>
+             <p:tab title="SumMB.java">
+                 <pre name="code" class="java">
+                     
+import com.xpert.faces.primefaces.LazyDataModelImpl;
+import com.xpert.showcase.dao.PersonDAO;
+import com.xpert.showcase.model.Person;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+
+@ManagedBean
+@ViewScoped
+public class SumMB {
+    
+    @EJB
+    private PersonDAO personDAO;
+
+    private LazyDataModelImpl&lt;Person&gt; personLazy;
+    private List&lt;Person&gt; personList;
+
+    @PostConstruct
+    public void init() {
+        //create list
+        personList = new ArrayList&lt;Person&gt;();
+        personList.add(new Person(&quot;Person 1&quot;, new BigDecimal(&quot;1000.80&quot;)));
+        personList.add(new Person(&quot;Person 2&quot;, new BigDecimal(&quot;6000.00&quot;)));
+        personList.add(new Person(&quot;Person 3&quot;, (BigDecimal) null));
+        personList.add(new Person(&quot;Person 4&quot;, new BigDecimal(&quot;7000.1&quot;)));
+        personList.add(new Person(&quot;Person 5&quot;, new BigDecimal(&quot;9999.80&quot;)));
+        
+        //create LazyDataModel
+        personLazy = new LazyDataModelImpl&lt;Person&gt;(&quot;name&quot;, personDAO);
+    }
+
+   //getters and setters
+    
+}
+
+                 </pre>
+             </p:tab>
+         </p:tabView>
+
+
+
+    </ui:define>
+</ui:composition>

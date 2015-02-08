@@ -5,7 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       dir="ltr" lang="en-US" xml:lang="en"
-      xmlns:xc="http://java.sun.com/jsf/composite/xpert/components">
+      xmlns:x="http://xpert.com/faces">
 
     <f:view locale="#{localeBean.locale}">
         <h:head>
@@ -44,7 +44,7 @@
                                 </h:panelGroup>
                             </div>
                             <h:form>
-                                <xc:localeSwitcher/>
+                                <x:localeSwitcher/>
                             </h:form>
                         </td>
                     </tr>
@@ -78,6 +78,7 @@
                                 <h:link outcome="/views/components/dateFilter.jsf" value="Date Filter" />
                                 <h:link outcome="/views/components/group.jsf" value="Group" />
                                 <h:link outcome="/views/components/pdfPrinter.jsf" value="PDF Printer" />
+                                <h:link outcome="/views/components/sum.jsf" value="Sum" />
                             </h:panelGrid>
                         </p:panel>
                         <p:panel header="Xpert-Core" style="border: 0;">
@@ -126,8 +127,8 @@
             </h:panelGrid>
 
             <script type="text/javascript">
-                $(function() {
-                    $('.sidebar a').hover(function() {
+                $(function () {
+                    $('.sidebar a').hover(function () {
                         $(this).toggleClass('ui-state-hover');
                     })
                 });
@@ -141,7 +142,7 @@
                 _gaq.push(['_setAccount', 'UA-31152587-2']);
                 _gaq.push(['_trackPageview']);
 
-                (function() {
+                (function () {
                     var ga = document.createElement('script');
                     ga.type = 'text/javascript';
                     ga.async = true;

@@ -155,7 +155,7 @@
             </h:form>
         </h:panelGroup>
 
-        <p:dialog widgetVar="widgetPersonDetail" header="#{msg['person.detail']}" appendToBody="true" modal="true" width="600">
+        <p:dialog widgetVar="widgetPersonDetail" header="#{msg['person.detail']}" appendTo="@(body)" modal="true" width="600">
             <h:panelGroup id="panelPersonDetail">
                 <h:form>
                     <h:panelGrid columns="2" style="width: 450px;" >
@@ -259,7 +259,7 @@
                 </pre>
             </p:tab>
             <p:tab title="Configuration">
-                <xc:info value="#{msg['initializer.noConfigurationAlert']}"/>
+                <x:info value="#{msg['initializer.noConfigurationAlert']}"/>
                 <ui:include src="/views/common/java/entityManagerFactory.xhtml"/>
             </p:tab>
             <ui:include src="/views/common/java/person.xhtml"/>

@@ -12,12 +12,73 @@
     <ui:define name="body">
 
         <div class="description">
-            #{msg['download.description']}<br/>
-            #{msg['download.description2']}
-            <br/>
+            <h:outputText escape="false" value="#{msg['pdfPrinter.description']}"/>
             <br/>
         </div>
-        <p:separator/>
+        <h3>Dependency</h3>
+        <table class="ui-panelgrid ui-widget" id="j_idt94">
+            <tbody>
+                <tr class="ui-widget-content">
+                    <td class="ui-panelgrid-cell">
+                        Flying Saucer
+                    </td>
+                    <td class="ui-panelgrid-cell">
+                        <a href="https://code.google.com/p/flying-saucer/" target="_blank">
+                            https://code.google.com/p/flying-saucer/
+                        </a>
+                    </td>
+                </tr>
+                <tr class="ui-widget-content">
+                    <td class="ui-panelgrid-cell">
+                        iText
+                    </td>
+                    <td class="ui-panelgrid-cell">
+                        <a href="http://itextpdf.com/" target="_blank">
+                            http://itextpdf.com/
+                        </a>
+                    </td>
+                </tr>
+                <tr class="ui-widget-content">
+                    <td class="ui-panelgrid-cell">
+                        Jsoup
+                    </td>
+                    <td class="ui-panelgrid-cell">
+                        <a href="http://jsoup.org/" target="_blank">
+                            http://jsoup.org/
+                        </a>
+                    </td>
+                </tr>
+                <tr class="ui-widget-content">
+                    <td class="ui-panelgrid-cell">
+                        HTML Cleaner
+                    </td>
+                    <td class="ui-panelgrid-cell">
+                        <a href="http://htmlcleaner.sourceforge.net/" target="_blank">
+                            http://htmlcleaner.sourceforge.net/
+                        </a>
+                    </td>
+                </tr>
+                <tr class="ui-widget-content">
+                    <td class="ui-panelgrid-cell">
+                        Apache Batik (for SVG)
+                    </td>
+                    <td class="ui-panelgrid-cell">
+                        <a href="http://xmlgraphics.apache.org/batik/" target="_blank">
+                            http://xmlgraphics.apache.org/batik/
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Usage</h3>
+        <pre name="code" class="xml">
+        &lt;p:commandButton title=&quot;Export PDF&quot; immediate=&quot;true&quot; ajax=&quot;false&quot; value=&quot;Export PDF&quot;&gt;
+            &lt;x:pdfPrinter target=&quot;exportTargetId&quot; fileName=&quot;File Name&quot; /&gt;
+        &lt;/p:commandButton&gt;
+        </pre>
+
+
         <h3>Examples</h3>
         <h:form >
 
@@ -27,9 +88,17 @@
                 <p:tab title="1 - Simple HTML">
 
                     <p:commandButton title="Export PDF" immediate="true" ajax="false"
-                                     value="Export PDF">
+                                     value="Export PDF (p:commandButton)">
+                        <x:download/>
                         <x:pdfPrinter target="panelTab1" fileName="Simple HTML" />
                     </p:commandButton>
+                    <h:commandButton title="Export PDF" immediate="true"
+                                     value="Export PDF (h:commandButton)">
+                        <x:pdfPrinter target="panelTab1" fileName="Simple HTML" />
+                    </h:commandButton>
+                    <h:commandLink title="Export PDF" immediate="true" value="Export PDF (h:commandLink)">
+                        <x:pdfPrinter target="panelTab1" fileName="Simple HTML" />
+                    </h:commandLink>
 
                     <br/>
                     <br/>
@@ -64,8 +133,7 @@
 
                         <style type="text/css">
                             .tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
-                            .tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
-                            .tftable tr {background-color:#d4e3e5;}
+                            .tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid; border-color: #729ea5;text-align:left;}
                             .tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
                         </style>
 
@@ -92,53 +160,379 @@
 
 
                     </h:panelGroup>
+                    <h3>Source</h3>
+                    <pre name="code" class="xml">
+                    &lt;p:commandButton title=&quot;Export PDF&quot; immediate=&quot;true&quot; ajax=&quot;false&quot;
+                               value=&quot;Export PDF (p:commandButton)&quot;&gt;
+                         &lt;x:download /&gt;
+                         &lt;x:pdfPrinter target=&quot;panelTab1&quot; fileName=&quot;Simple HTML&quot; /&gt;
+                    &lt;/p:commandButton&gt;
+                    &lt;h:commandButton title=&quot;Export PDF&quot; immediate=&quot;true&quot;
+                                     value=&quot;Export PDF (h:commandButton)&quot;&gt;
+                        &lt;x:pdfPrinter target=&quot;panelTab1&quot; fileName=&quot;Simple HTML&quot; /&gt;
+                    &lt;/h:commandButton&gt;
+                    &lt;h:commandLink title=&quot;Export PDF&quot; immediate=&quot;true&quot; value=&quot;Export PDF (h:commandLink)&quot;&gt;
+                        &lt;x:pdfPrinter target=&quot;panelTab1&quot; fileName=&quot;Simple HTML&quot; /&gt;
+                    &lt;/h:commandLink&gt;
+
+                    &lt;br/&gt;
+                    &lt;br/&gt;
+
+                    &lt;h:panelGroup id=&quot;panelTab1&quot; layout=&quot;block&quot; style=&quot;border: 1px solid black; padding: 10px;&quot;&gt;
+
+
+                        &lt;h1&gt;Title&lt;/h1&gt;
+                        &lt;h2&gt;Subtitle&lt;/h2&gt;
+                        &lt;p&gt;
+                            Lorem ipsum dolor sit amet, &lt;span style=&quot;color: red;&quot;&gt;consectetur adipiscing elit&lt;/span&gt;. 
+                            Cras at accumsan mauris. Nulla a accumsan nisl. Nam dapibus a velit quis consequat. 
+                            Mauris a volutpat sem. Suspendisse semper enim in enim gravida, quis maximus ante lobortis. Fusce pharetra,
+                            dui in dignissim rutrum, nunc nisl tempor ante, eu pellentesque quam metus in metus. 
+                            Aliquam malesuada urna non urna molestie, sed convallis dolor condimentum. 
+                            Vestibulum imperdiet tristique lacus at fringilla. Nunc tempus metus a arcu vehicula, in scelerisque ante commodo. 
+                        &lt;/p&gt;
+                        &lt;hr/&gt;
+                        &lt;h2&gt;Content with image&lt;/h2&gt;
+
+                        Xpert-Framework logo:&lt;br/&gt;
+                        &lt;img src=&quot;#{request.contextPath}/images/framework-logo.png&quot; alt=&quot;Logo&quot; /&gt;
+
+                        &lt;br/&gt;
+                        &lt;br/&gt;
+                        External Image (Google): &lt;br/&gt;
+                        &lt;img src=&quot;https://www.google.com.br/images/srpr/logo11w.png&quot; alt=&quot;Logo&quot; style=&quot;width: 200px;&quot; /&gt;
+
+                        &lt;hr/&gt;
+                        &lt;h2&gt;Content with link&lt;/h2&gt;
+                        Link example: &lt;a target=&quot;_blank&quot; href=&quot;http://google.com&quot;&gt;Google.com&lt;/a&gt; 
+                        (generates a link in PDF)
+
+                        &lt;h2&gt;Table (with CSS)&lt;/h2&gt;
+
+                        &lt;style type=&quot;text/css&quot;&gt;
+                            .tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
+                            .tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
+                            .tftable tr {background-color:#d4e3e5;}
+                            .tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+                        &lt;/style&gt;
+
+                        &lt;table class=&quot;tftable&quot; border=&quot;1&quot;&gt;
+                            &lt;tr&gt;
+                                &lt;th&gt;Header 1&lt;/th&gt;&lt;th&gt;Header 2&lt;/th&gt;&lt;th&gt;Header 3&lt;/th&gt;&lt;th&gt;Header 4&lt;/th&gt;&lt;th&gt;Header 5&lt;/th&gt;
+                            &lt;/tr&gt;
+                            &lt;tr&gt;
+                                &lt;td&gt;Row:1 Cell:1&lt;/td&gt;&lt;td&gt;Row:1 Cell:2&lt;/td&gt;&lt;td&gt;Row:1 Cell:3&lt;/td&gt;&lt;td&gt;Row:1 Cell:4&lt;/td&gt;&lt;td&gt;Row:1 Cell:5&lt;/td&gt;
+                            &lt;/tr&gt;
+                            &lt;tr&gt;
+                                &lt;td&gt;Row:2 Cell:1&lt;/td&gt;&lt;td&gt;Row:2 Cell:2&lt;/td&gt;&lt;td&gt;Row:2 Cell:3&lt;/td&gt;&lt;td&gt;Row:2 Cell:4&lt;/td&gt;&lt;td&gt;Row:2 Cell:5&lt;/td&gt;
+                            &lt;/tr&gt;
+                            &lt;tr&gt;
+                                &lt;td&gt;Row:3 Cell:1&lt;/td&gt;&lt;td&gt;Row:3 Cell:2&lt;/td&gt;&lt;td&gt;Row:3 Cell:3&lt;/td&gt;&lt;td&gt;Row:3 Cell:4&lt;/td&gt;&lt;td&gt;Row:3 Cell:5&lt;/td&gt;
+                            &lt;/tr&gt;
+                            &lt;tr&gt;
+                                &lt;td&gt;Row:4 Cell:1&lt;/td&gt;&lt;td&gt;Row:4 Cell:2&lt;/td&gt;&lt;td&gt;Row:4 Cell:3&lt;/td&gt;&lt;td&gt;Row:4 Cell:4&lt;/td&gt;&lt;td&gt;Row:4 Cell:5&lt;/td&gt;
+                            &lt;/tr&gt;
+                        &lt;/table&gt;
+
+                        &lt;br/&gt;
+                        &lt;br/&gt;
+
+
+                    &lt;/h:panelGroup&gt;
+                    </pre>
 
 
 
                 </p:tab>
                 <p:tab title="2 - HTML from Primefaces Components">
-
-                </p:tab>
-                <p:tab title="3 - HTML with SVG (exporting charts)">
-
                     <p:commandButton title="Export PDF" immediate="true" ajax="false"
                                      value="Export PDF">
-                        <x:pdfPrinter target="panelTab3" fileName="With SVG Charts" />
+                        <x:download/>
+                        <x:pdfPrinter target="panelTab2" fileName="HTML from Primefaces Components" />
                     </p:commandButton>
 
                     <br/>
                     <br/>
 
-                    <h:panelGroup id="panelTab3" layout="block" >
+                    <h:panelGroup id="panelTab2" layout="block" >
 
+                        <h2>DataTable</h2>
+                        <p:dataTable value="#{pDFPrinterMB.people}" var="person" rowIndexVar="index" >
+                            <p:column>
+                                <h:outputText value="#{index+1}"/>
+                            </p:column>
+                            <p:column headerText="Name" >
+                                <h:outputText value="#{person.name}"/>
+                            </p:column>
+                            <p:column headerText="Email" >
+                                <h:outputText value="#{person.email}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <h2>DataList</h2>
+
+                        <p:dataList value="#{pDFPrinterMB.people}" var="person" rowIndexVar="index" >
+                            <p:column headerText="Name" >
+                                #{person.name} - <strong>#{person.email}</strong>
+                            </p:column>
+                        </p:dataList>
+                        <br/>
+
+                        <h2>Panel</h2>
+
+                        <p:panel header="Lorem Ipsum">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at accumsan mauris. Nulla a accumsan nisl. Nam dapibus a velit quis consequat. 
+                            Mauris a volutpat sem. Suspendisse semper enim in enim gravida, quis maximus ante lobortis. Fusce pharetra, dui in dignissim rutrum, nunc nisl tempor ante, eu pellentesque quam metus in metus. Aliquam malesuada urna non urna molestie, sed convallis dolor condimentum. 
+                            Vestibulum imperdiet tristique lacus at fringilla. Nunc tempus metus a arcu vehicula, in scelerisque ante commodo. 
+                        </p:panel>
+
+                    </h:panelGroup>
+                    <h3>Source</h3>
+                    <pre name="code" class="xml">
+                    &lt;p:commandButton title=&quot;Export PDF&quot; immediate=&quot;true&quot; ajax=&quot;false&quot;
+                                 value=&quot;Export PDF&quot;&gt;
+                         &lt;x:download /&gt;
+                         &lt;x:pdfPrinter target=&quot;panelTab2&quot; fileName=&quot;HTML from Primefaces Components&quot; /&gt;
+                    &lt;/p:commandButton&gt;
+
+                    &lt;br/&gt;
+                    &lt;br/&gt;
+
+                    &lt;h:panelGroup id=&quot;panelTab2&quot; layout=&quot;block&quot; &gt;
+
+                        &lt;h2&gt;DataTable&lt;/h2&gt;
+                        &lt;p:dataTable value=&quot;\#{pDFPrinterMB.people}&quot; var=&quot;person&quot; rowIndexVar=&quot;index&quot; &gt;
+                            &lt;p:column&gt;
+                                &lt;h:outputText value=&quot;\#{index+1}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;Name&quot; &gt;
+                                &lt;h:outputText value=&quot;\#{person.name}&quot;/&gt;
+                            &lt;/p:column&gt;
+                            &lt;p:column headerText=&quot;Email&quot; &gt;
+                                &lt;h:outputText value=&quot;\#{person.email}&quot;/&gt;
+                            &lt;/p:column&gt;
+
+                        &lt;/p:dataTable&gt;
+
+                        &lt;h2&gt;DataList&lt;/h2&gt;
+
+                        &lt;p:dataList value=&quot;\#{pDFPrinterMB.people}&quot; var=&quot;person&quot; rowIndexVar=&quot;index&quot; &gt;
+                            &lt;p:column headerText=&quot;Name&quot; &gt;
+                                \#{person.name} - &lt;strong&gt;\#{person.email}&lt;/strong&gt;
+                            &lt;/p:column&gt;
+                        &lt;/p:dataList&gt;
+                        &lt;br/&gt;
+
+                        &lt;h2&gt;Panel&lt;/h2&gt;
+
+                        &lt;p:panel header=&quot;Lorem Ipsum&quot;&gt;
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at accumsan mauris. Nulla a accumsan nisl. 
+                            Nam dapibus a velit quis consequat. 
+                            Mauris a volutpat sem. Suspendisse semper enim in enim gravida, quis maximus ante lobortis. 
+                            Fusce pharetra, dui in dignissim rutrum, nunc nisl tempor ante, eu pellentesque quam metus in metus. 
+                            Aliquam malesuada urna non urna molestie, sed convallis dolor condimentum. 
+                            Vestibulum imperdiet tristique lacus at fringilla. Nunc tempus metus a arcu vehicula, in scelerisque ante commodo. 
+                        &lt;/p:panel&gt;
+
+                    &lt;/h:panelGroup&gt;
+                    </pre>
+                </p:tab>
+                <p:tab title="3 - HTML with SVG (exporting charts)">
+
+                    <p:commandButton title="Export PDF" immediate="true" ajax="false"
+                                     value="Export PDF">
+                        <x:download/>
+                        <x:pdfPrinter target="panelTab3" fileName="With SVG Charts" />
+                    </p:commandButton>
+                    <br/>
+                    <br/>
+                    <h:panelGroup id="panelTab3" layout="block" >
                         Pie Chart example: <br/>
-                        
                         <pe:gChart  
                             value="#{pDFPrinterMB.pieChart}"  
                             title="Company Performance"/>  
-                        
                         <hr/>
-                        
-                        
                         Column Chart example: <br/>
                         <pe:gChart  
                             value="#{pDFPrinterMB.columnChart}"  
                             title="Company Performance"/>  
+                        <hr/>
+                        Bar Chart example: <br/>
+                        <pe:gChart  
+                            value="#{pDFPrinterMB.barChart}"  
+                            title="Company Performance"/>  
 
                     </h:panelGroup>
-                    
-                    <pre name="code" class="java">
-                   public class DownloadMB {
+                    <h3>Source</h3>
+                    <p:tabView>
+                        <p:tab title="XHTML">
+                            <pre name="code" class="xml">
+                    &lt;p:commandButton title=&quot;Export PDF&quot; immediate=&quot;true&quot; ajax=&quot;false&quot;
+                                     value=&quot;Export PDF&quot;&gt;
+                        &lt;x:download /&gt;
+                        &lt;x:pdfPrinter target=&quot;panelTab3&quot; fileName=&quot;With SVG Charts&quot; /&gt;
+                    &lt;/p:commandButton&gt;
+                    &lt;br/&gt;
+                    &lt;br/&gt;
+                    &lt;h:panelGroup id=&quot;panelTab3&quot; layout=&quot;block&quot; &gt;
+                        Pie Chart example: &lt;br/&gt;
+                        &lt;pe:gChart  
+                            value=&quot;\#{pDFPrinterMB.pieChart}&quot;  
+                            title=&quot;Company Performance&quot;/&gt;  
+                        &lt;hr/&gt;
+                        Column Chart example: &lt;br/&gt;
+                        &lt;pe:gChart  
+                            value=&quot;\#{pDFPrinterMB.columnChart}&quot;  
+                            title=&quot;Company Performance&quot;/&gt;  
+                        &lt;hr/&gt;
+                        Bar Chart example: &lt;br/&gt;
+                        &lt;pe:gChart  
+                            value=&quot;\#{pDFPrinterMB.barChart}&quot;  
+                            title=&quot;Company Performance&quot;/&gt;  
 
-                        public void download() throws IOException, InterruptedException {
-                            String fileContent = &quot;This is xpert-framework&quot;;
-                            //wait 5s
-                            Thread.sleep(5000);
-                            FacesUtils.download(fileContent.getBytes(), &quot;text/plain&quot;, &quot;file.txt&quot;);
-                        }
-                    }
+                    &lt;/h:panelGroup&gt;
+                            </pre>
+                        </p:tab>
+                        <p:tab title="PDFPrinterMB.java">
+                            <pre name="code" class="java">
+import com.xpert.showcase.model.Person;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import org.primefaces.extensions.component.gchart.model.GChartModel;
+import org.primefaces.extensions.component.gchart.model.GChartModelBuilder;
+import org.primefaces.extensions.component.gchart.model.GChartType;
 
+@ManagedBean
+public class PDFPrinterMB {
+
+    private List&lt;Person&gt; people = new ArrayList&lt;Person&gt;();
+    private GChartModel pieChart = null;
+    private GChartModel columnChart = null;
+    private GChartModel barChart = null;
+
+    @PostConstruct
+    public void init() {
+        for (int i = 0; i &lt; 10; i++) {
+            Person person = new Person(&quot;PERSON &quot; + (i + 1), &quot;person.&quot; + (i + 1) + &quot;@gmail.com&quot;);
+            people.add(person);
+        }
+        generateModelGChart();
+    }
+
+    public void generateModelGChart() {
+        //from primefaces-extension 
+        //http://www.primefaces.org/showcase-ext/sections/gchart/multiple.jsf
+        columnChart = buildChartData(GChartType.COLUMN);
+        pieChart = buildChartData(GChartType.PIE);
+        barChart = buildChartData(GChartType.BAR);
+    }
+
+    public GChartModel buildChartData(GChartType type) {
+        return new GChartModelBuilder().setChartType(type)
+                .addColumns(&quot;Year&quot;, &quot;Salves&quot;, &quot;Expenses&quot;)
+                .addRow(&quot;2010&quot;, 1000, 400)
+                .addRow(&quot;2011&quot;, 1200, 800)
+                .addRow(&quot;2012&quot;, 2000, 1800)
+                .addRow(&quot;2013&quot;, 1500, 1800)
+                .addRow(&quot;2014&quot;, 1300, 1000)
+                .build();
+    }
+
+    //getter and setters
+
+}
+                            </pre>
+                        </p:tab>
+                    </p:tabView>
+                </p:tab>
+                <p:tab title="4 - HTML with SVG (Custom SVG)">
+
+                    <p:commandButton title="Export PDF" immediate="true" ajax="false"
+                                     value="Export PDF">
+                        <x:download/>
+                        <x:pdfPrinter target="panelTab4" fileName="Custom SVG" />
+                    </p:commandButton>
+
+                    <br/>
+                    <br/>
+
+                    <h:panelGroup id="panelTab4" layout="block" >
+
+                        SVG example 1: <br/>
+
+                        <svg height="400" width="450">
+                            <path id="lineAB" d="M 100 350 l 150 -300" stroke="red" stroke-width="3" fill="none" />
+                            <path id="lineBC" d="M 250 50 l 150 300" stroke="red" stroke-width="3" fill="none" />
+                            <path d="M 175 200 l 150 0" stroke="green" stroke-width="3" fill="none" />
+                            <path d="M 100 350 q 150 -300 300 0" stroke="blue" stroke-width="5" fill="none" />
+                            <!-- Mark relevant points -->
+                            <g stroke="black" stroke-width="3" fill="black">
+                                <circle id="pointA" cx="100" cy="350" r="3" />
+                                <circle id="pointB" cx="250" cy="50" r="3" />
+                                <circle id="pointC" cx="400" cy="350" r="3" />
+                            </g>
+                            <!-- Label the points -->
+                            <g font-size="30" fill="black" stroke="none" text-anchor="middle">
+                                <text x="100" y="350" dx="-30">A</text>
+                                <text x="250" y="50" dy="-10">B</text>
+                                <text x="400" y="350" dx="30">C</text>
+                            </g>
+                        </svg>
+                        <br/>
+
+                        SVG example 2: <br/>
+
+                        <svg height="250" width="500">
+                            <polygon points="220,10 300,210 170,250 123,234" style="fill:lime;stroke:purple;stroke-width:1" />
+                        </svg>
+                    </h:panelGroup>
+                    <h3>Source</h3>
+                    <pre name="code" class="xml">
+                    &lt;p:commandButton title=&quot;Export PDF&quot; immediate=&quot;true&quot; ajax=&quot;false&quot;
+                                value=&quot;Export PDF&quot;&gt;
+                        &lt;x:download /&gt;
+                        &lt;x:pdfPrinter target=&quot;panelTab4&quot; fileName=&quot;Custom SVG&quot; /&gt;
+                    &lt;/p:commandButton&gt;
+
+                    &lt;br/&gt;
+                    &lt;br/&gt;
+
+                    &lt;h:panelGroup id=&quot;panelTab4&quot; layout=&quot;block&quot; &gt;
+
+                        SVG example 1: &lt;br/&gt;
+
+                        &lt;svg height=&quot;400&quot; width=&quot;450&quot;&gt;
+                            &lt;path id=&quot;lineAB&quot; d=&quot;M 100 350 l 150 -300&quot; stroke=&quot;red&quot; stroke-width=&quot;3&quot; fill=&quot;none&quot; /&gt;
+                            &lt;path id=&quot;lineBC&quot; d=&quot;M 250 50 l 150 300&quot; stroke=&quot;red&quot; stroke-width=&quot;3&quot; fill=&quot;none&quot; /&gt;
+                            &lt;path d=&quot;M 175 200 l 150 0&quot; stroke=&quot;green&quot; stroke-width=&quot;3&quot; fill=&quot;none&quot; /&gt;
+                            &lt;path d=&quot;M 100 350 q 150 -300 300 0&quot; stroke=&quot;blue&quot; stroke-width=&quot;5&quot; fill=&quot;none&quot; /&gt;
+                            &lt;!-- Mark relevant points --&gt;
+                            &lt;g stroke=&quot;black&quot; stroke-width=&quot;3&quot; fill=&quot;black&quot;&gt;
+                                &lt;circle id=&quot;pointA&quot; cx=&quot;100&quot; cy=&quot;350&quot; r=&quot;3&quot; /&gt;
+                                &lt;circle id=&quot;pointB&quot; cx=&quot;250&quot; cy=&quot;50&quot; r=&quot;3&quot; /&gt;
+                                &lt;circle id=&quot;pointC&quot; cx=&quot;400&quot; cy=&quot;350&quot; r=&quot;3&quot; /&gt;
+                            &lt;/g&gt;
+                            &lt;!-- Label the points --&gt;
+                            &lt;g font-size=&quot;30&quot; fill=&quot;black&quot; stroke=&quot;none&quot; text-anchor=&quot;middle&quot;&gt;
+                                &lt;text x=&quot;100&quot; y=&quot;350&quot; dx=&quot;-30&quot;&gt;A&lt;/text&gt;
+                                &lt;text x=&quot;250&quot; y=&quot;50&quot; dy=&quot;-10&quot;&gt;B&lt;/text&gt;
+                                &lt;text x=&quot;400&quot; y=&quot;350&quot; dx=&quot;30&quot;&gt;C&lt;/text&gt;
+                            &lt;/g&gt;
+                        &lt;/svg&gt;
+                        &lt;br/&gt;
+
+                        SVG example 2: &lt;br/&gt;
+
+                        &lt;svg height=&quot;250&quot; width=&quot;500&quot;&gt;
+                            &lt;polygon points=&quot;220,10 300,210 170,250 123,234&quot; style=&quot;fill:lime;stroke:purple;stroke-width:1&quot; /&gt;
+                        &lt;/svg&gt;
+                    &lt;/h:panelGroup&gt;
                     </pre>
+
+
                 </p:tab>
             </p:tabView>
         </h:form>

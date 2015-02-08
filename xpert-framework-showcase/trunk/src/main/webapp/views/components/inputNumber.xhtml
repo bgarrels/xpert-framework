@@ -14,19 +14,19 @@
             <h:panelGrid columns="2">
 
                 <h:outputText value="Default:" />
-                <xc:inputNumber/>
+                <x:inputNumber/>
 
                 <h:outputText value="Allow Negative (Press '-'):" />
-                <xc:inputNumber allowNegative="true"/>
+                <x:inputNumber allowNegative="true"/>
 
                 <h:outputText value="Limited:" />
-                <xc:inputNumber limit="7"/>
+                <x:inputNumber limit="7"/>
 
                 <h:outputText value="With Ajax:" />
                 <h:panelGroup>
-                    <xc:inputNumber value="#{requestScope.inputNumber}">
+                    <x:inputNumber value="#{requestScope.inputNumber}">
                         <p:ajax event="blur" global="false" update=":formInputNumber:numberValue" process="@this"/>
-                    </xc:inputNumber>
+                    </x:inputNumber>
                     <h:outputText id="numberValue" value="#{requestScope.inputNumber}" />
                 </h:panelGroup>
 
@@ -39,19 +39,19 @@
             &lt;h:panelGrid columns=&quot;2&quot;&gt;
 
                 &lt;h:outputText value=&quot;Default:&quot; /&gt;
-                &lt;xc:inputNumber/&gt;
+                &lt;x:inputNumber/&gt;
 
                 &lt;h:outputText value=&quot;Allow Negative (Press '-'):&quot; /&gt;
-                &lt;xc:inputNumber allowNegative=&quot;true&quot;/&gt;
+                &lt;x:inputNumber allowNegative=&quot;true&quot;/&gt;
 
                 &lt;h:outputText value=&quot;Limited:&quot; /&gt;
-                &lt;xc:inputNumber limit=&quot;7&quot;/&gt;
+                &lt;x:inputNumber limit=&quot;7&quot;/&gt;
 
                 &lt;h:outputText value=&quot;With Ajax:&quot; /&gt;
                 &lt;h:panelGroup&gt;
-                    &lt;xc:inputNumber value=&quot;\#{requestScope.inputNumber}&quot;&gt;
+                    &lt;x:inputNumber value=&quot;\#{requestScope.inputNumber}&quot;&gt;
                         &lt;p:ajax event=&quot;blur&quot; global=&quot;false&quot; update=&quot;:formInputNumber:numberValue&quot; process=&quot;@this&quot;/&gt;
-                    &lt;/xc:inputNumber&gt;
+                    &lt;/x:inputNumber&gt;
                     &lt;h:outputText id=&quot;numberValue&quot; value=&quot;\#{requestScope.inputNumber}&quot; /&gt;
                 &lt;/h:panelGroup&gt;
                 

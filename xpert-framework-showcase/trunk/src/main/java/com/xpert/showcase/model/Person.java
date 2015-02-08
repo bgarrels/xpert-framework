@@ -76,6 +76,12 @@ public class Person implements Serializable {
     public Person() {
     }
 
+    public Person(String name, BigDecimal salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+    
+
     public Person(String name, String email) {
         this.name = name;
         this.email = email;

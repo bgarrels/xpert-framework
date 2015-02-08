@@ -11,7 +11,7 @@
     <ui:define name="body">
 
         <h:form prependId="false">
-            <xc:modalMessages/>
+            <x:modalMessages/>
             <h:panelGrid columns="5">
                 <p:commandButton process="@this" update="@form" value="Info" action="#{messagesMB.info}"/>
                 <p:commandButton process="@this" update="@form" value="Warning" action="#{messagesMB.warn}"/>
@@ -23,7 +23,7 @@
         <h3>Source</h3>
         <pre name="code" class="xml">
         &lt;h:form prependId=&quot;false&quot;&gt;
-            &lt;xc:modalMessages/&gt;
+            &lt;x:modalMessages/&gt;
             &lt;h:panelGrid columns=&quot;5&quot;&gt;
                 &lt;p:commandButton process=&quot;@this&quot; update=&quot;@form&quot; value=&quot;Info&quot; action=&quot;\#{messagesMB.info}&quot;/&gt;
                 &lt;p:commandButton process=&quot;@this&quot; update=&quot;@form&quot; value=&quot;Warning&quot; action=&quot;\#{messagesMB.warn}&quot;/&gt;

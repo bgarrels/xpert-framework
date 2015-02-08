@@ -32,4 +32,7 @@ h1 a{text-decoration: none;}
 .ui-fieldset{margin: 3px 0;}
 .ui-fieldset-legend{width: auto;font-size: 13px;height: auto;padding: 0px 15px;margin: 5px 0 5px 5px;}
 select.form-control{height: 34px !important;}
+.ui-datatable table{ table-layout: auto; }
+.ui-datatable .ui-datatable-tablewrapper tbody > tr > td {padding: 3px; white-space: normal;}
+.ui-datatable thead > tr > th {white-space: normal !important;}
 

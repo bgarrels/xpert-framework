@@ -10,10 +10,20 @@
     <ui:param name="title" value="Group" />
     <ui:define name="body">
 
-        <div class="descendingription">
-            #{msg['groupComponent.descendingription']}
+        <div class="description">
+            #{msg['groupComponent.description']}
             <br/>
         </div>
+        
+        <h3>Usage</h3>
+        <pre name="code" class="xml">
+        &lt;x:group value=&quot;\#{groupComponentMB.people}&quot; var=&quot;personGroup&quot; groupBy=&quot;city&quot;  &gt;
+        ...
+        &lt;/x:group&gt;       
+        </pre>
+
+
+        <h3>Examples</h3>
 
         <h:form id="formGroup">
 
