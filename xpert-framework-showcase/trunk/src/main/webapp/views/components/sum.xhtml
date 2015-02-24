@@ -11,10 +11,16 @@
     <ui:define name="body">
 
         <div class="description">
-            <h:outputText value="#{msg['sum.description']}" escape="false"/> 
+            <h:outputText value="#{msg['numberFunctions.description']}" escape="false"/> 
             <br/>
+            <ul>
+                <li>#{msg['sum.description']}</li>
+                <li>#{msg['avg.description']}</li>
+                <li>#{msg['max.description']}</li>
+                <li>#{msg['min.description']}</li>
+            </ul>
         </div>
-        
+
         <h3>Usage</h3>
         Simple:
         <pre name="code" class="xml">
@@ -40,28 +46,78 @@
             </p:dataTable>
 
             <br/>
+
+
+
+
             <p:outputPanel autoUpdate="true">
 
-                <p:panelGrid columns="2">
+                <h:panelGrid columns="2">
 
-                    <h:outputText value="Sum All (all records from lazy):"/>
-                    <h:outputText value="#{x:sum(sumMB.personLazy, 'salary')}">
-                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                    </h:outputText>
+                    <p:panelGrid columns="2">
 
-                    <h:outputText value="Sum (current page):"/>
-                    <h:outputText value="#{x:sum(sumMB.personLazy.wrappedData, 'salary')}">
-                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                    </h:outputText>
+                        <f:facet name="header">
+                            Result from All records
+                        </f:facet>
 
-                </p:panelGrid>
+                        <h:outputText value="Sum:"/>
+                        <h:outputText value="#{x:sum(sumMB.personLazy, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                        <h:outputText value="Avg (average):"/>
+                        <h:outputText value="#{x:avg(sumMB.personLazy, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                        <h:outputText value="Max:"/>
+                        <h:outputText value="#{x:max(sumMB.personLazy, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                        <h:outputText value="Min:"/>
+                        <h:outputText value="#{x:min(sumMB.personLazy, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2">
+
+                        <f:facet name="header">
+                            Result from Current page
+                        </f:facet>
+
+                        <h:outputText value="Sum:"/>
+                        <h:outputText value="#{x:sum(sumMB.personLazy.wrappedData, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                        <h:outputText value="Avg (average):"/>
+                        <h:outputText value="#{x:avg(sumMB.personLazy.wrappedData, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                        <h:outputText value="Max:"/>
+                        <h:outputText value="#{x:max(sumMB.personLazy.wrappedData, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                        <h:outputText value="Min:"/>
+                        <h:outputText value="#{x:min(sumMB.personLazy.wrappedData, 'salary')}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+
+                    </p:panelGrid>
+                </h:panelGrid>
+
             </p:outputPanel>
 
         </h:form>
-         <h3>Source</h3>
-         <p:tabView>
-             <p:tab title="XHTML">
-                 <pre name="code" class="xml">
+        <h3>Source</h3>
+        <p:tabView>
+            <p:tab title="XHTML">
+                <pre name="code" class="xml">
         &lt;h:form&gt;
             &lt;p:dataTable paginator=&quot;true&quot; rows=&quot;5&quot; rowsPerPageTemplate=&quot;10,20,30&quot;
                          lazy=&quot;true&quot; paginatorPosition=&quot;bottom&quot;
@@ -75,28 +131,74 @@
             &lt;/p:dataTable&gt;
 
             &lt;br/&gt;
-            &lt;p:outputPanel autoUpdate=&quot;true&quot;&gt;
+           &lt;p:outputPanel autoUpdate=&quot;true&quot;&gt;
 
-                &lt;p:panelGrid columns=&quot;2&quot;&gt;
+                &lt;h:panelGrid columns=&quot;2&quot;&gt;
 
-                    &lt;h:outputText value=&quot;Sum All (all records from lazy):&quot;/&gt;
-                    &lt;h:outputText value=&quot;\#{x:sum(sumMB.personLazy, 'salary')}&quot;&gt;
-                        &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
-                    &lt;/h:outputText&gt;
+                    &lt;p:panelGrid columns=&quot;2&quot;&gt;
 
-                    &lt;h:outputText value=&quot;Sum (current page):&quot;/&gt;
-                    &lt;h:outputText value=&quot;\#{x:sum(sumMB.personLazy.wrappedData, 'salary')}&quot;&gt;
-                        &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
-                    &lt;/h:outputText&gt;
+                        &lt;f:facet name=&quot;header&quot;&gt;
+                            Result from All records
+                        &lt;/f:facet&gt;
 
-                &lt;/p:panelGrid&gt;
+                        &lt;h:outputText value=&quot;Sum:&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:sum(sumMB.personLazy, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                        &lt;h:outputText value=&quot;Avg (average):&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:avg(sumMB.personLazy, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                        &lt;h:outputText value=&quot;Max:&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:max(sumMB.personLazy, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                        &lt;h:outputText value=&quot;Min:&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:min(sumMB.personLazy, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                    &lt;/p:panelGrid&gt;
+
+                    &lt;p:panelGrid columns=&quot;2&quot;&gt;
+
+                        &lt;f:facet name=&quot;header&quot;&gt;
+                            Result from Current page
+                        &lt;/f:facet&gt;
+
+                        &lt;h:outputText value=&quot;Sum:&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:sum(sumMB.personLazy.wrappedData, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                        &lt;h:outputText value=&quot;Avg (average):&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:avg(sumMB.personLazy.wrappedData, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                        &lt;h:outputText value=&quot;Max:&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:max(sumMB.personLazy.wrappedData, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                        &lt;h:outputText value=&quot;Min:&quot;/&gt;
+                        &lt;h:outputText value=&quot;\#{x:min(sumMB.personLazy.wrappedData, 'salary')}&quot;&gt;
+                            &lt;f:convertNumber minFractionDigits=&quot;2&quot; maxFractionDigits=&quot;2&quot; /&gt;
+                        &lt;/h:outputText&gt;
+
+                    &lt;/p:panelGrid&gt;
+                &lt;/h:panelGrid&gt;
+
             &lt;/p:outputPanel&gt;
 
         &lt;/h:form&gt;
-                 </pre>
-             </p:tab>
-             <p:tab title="SumMB.java">
-                 <pre name="code" class="java">
+                </pre>
+            </p:tab>
+            <p:tab title="SumMB.java">
+                <pre name="code" class="java">
                      
 import com.xpert.faces.primefaces.LazyDataModelImpl;
 import com.xpert.showcase.dao.PersonDAO;
@@ -137,9 +239,9 @@ public class SumMB {
     
 }
 
-                 </pre>
-             </p:tab>
-         </p:tabView>
+                </pre>
+            </p:tab>
+        </p:tabView>
 
 
 
