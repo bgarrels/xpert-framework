@@ -32,19 +32,20 @@
 
                         <div class="form-group col-lg-2 col-md-6 col-sm-6 col-xs-12">
                             <h:outputLabel value="${symbol_pound}{msg['usuario.rg']}:" />
-                            <p:inputText value="${symbol_pound}{usuarioMB.entity.rg}" maxlength="255"  size="20" styleClass="form-control" />
+                            <p:inputText value="${symbol_pound}{usuarioMB.entity.rg}" maxlength="255" styleClass="form-control" />
                         </div>
 
                         <div class="form-group col-lg-2 col-md-6 col-sm-6 col-xs-12">
                             <h:outputLabel value="* ${symbol_pound}{msg['usuario.userLogin']}:" />
-                            <p:inputText value="${symbol_pound}{usuarioMB.entity.userLogin}" maxlength="255"  size="20"  styleClass="form-control"/>
+                            <p:inputText value="${symbol_pound}{usuarioMB.entity.userLogin}" maxlength="255" styleClass="form-control"/>
                         </div>
                     </div>
                     <div class="row">
 
                         <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <h:outputLabel value="* ${symbol_pound}{msg['usuario.email']}:" />
-                            <p:inputText value="${symbol_pound}{usuarioMB.entity.email}" maxlength="255"  size="70"  styleClass="form-control"/>
+                            <p:inputText value="${symbol_pound}{usuarioMB.entity.email}" maxlength="255" styleClass="form-control"/>
+                            <h:outputText value="${symbol_pound}{msg['usuario.emailInfo']}" styleClass="help-block"/>
                         </div>
                     </div>
                     <div class="row">
@@ -68,6 +69,7 @@
                                         ${symbol_pound}{msg['usuario.superUsuario']}
                                     </label>
                                 </div>
+                                <h:outputText value="${symbol_pound}{msg['usuario.superUsuarioInfo']}" styleClass="help-block"/>
                             </div>
                         </h:panelGroup>                        
 
@@ -75,13 +77,14 @@
                 </div>
             </p:tab>
             <p:tab title="${symbol_pound}{msg['usuario.perfisAcesso']}">
-                <h:selectManyCheckbox value="${symbol_pound}{usuarioMB.entity.perfis}" converter="entityConverter" styleClass="checkbox-list">
+                <h:selectManyCheckbox value="${symbol_pound}{usuarioMB.entity.perfis}" converter="entityConverter" styleClass="checkbox">
                     <x:initializer/>
                     <x:spread columns="3"/>
                     <f:selectItems value="${symbol_pound}{findAllBean.get(classMB.perfil)}" 
                                    var="perfil" itemDisabled="${symbol_pound}{not sessaoUsuarioMB.user.superUsuario and not sessaoUsuarioMB.user.perfis.contains(perfil)}"
                                    itemLabel="${symbol_pound}{perfil}"/>
                 </h:selectManyCheckbox>
+                <h:outputText value="${symbol_pound}{msg['usuario.perfisUsuarioInfo']}" styleClass="help-block"/>
             </p:tab>
             <p:tab title="${symbol_pound}{msg['usuario.historicosSituacao']}">
 

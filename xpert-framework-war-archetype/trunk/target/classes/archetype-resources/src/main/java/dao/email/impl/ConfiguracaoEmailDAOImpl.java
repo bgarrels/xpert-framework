@@ -14,4 +14,9 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class ConfiguracaoEmailDAOImpl extends BaseDAOImpl<ConfiguracaoEmail> implements ConfiguracaoEmailDAO {
+
+    @Override
+    public Class getEntityClass() {
+        return ConfiguracaoEmail.class;
+    }
 }

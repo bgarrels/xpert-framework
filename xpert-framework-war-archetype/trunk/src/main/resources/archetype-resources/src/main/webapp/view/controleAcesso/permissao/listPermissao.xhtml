@@ -20,7 +20,7 @@
                 <p:tab title="${symbol_pound}{msg['permissao.verNaTabela']}">
                     <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
                                  var="permissao" value="${symbol_pound}{permissaoMB.dataModel}" lazy="true"
-                                 styleClass="table-responsive"
+                                 styleClass="table-responsive" 
                                  currentPageReportTemplate="${symbol_pound}{permissaoMB.dataModel.currentPageReportTemplate}"
                                  paginatorTemplate="${symbol_pound}{permissaoMB.dataModel.paginatorTemplate}"
                                  rowIndexVar="index" widgetVar="widgetDataTablePerfil">
@@ -44,17 +44,17 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="${symbol_pound}{msg['permissao.possuiMenu']}" sortBy="${symbol_pound}{permissao.possuiMenu}" 
-                                   filterBy="${symbol_pound}{permissao.possuiMenu}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}" style="text-align: center;">
+                                  filterBy="${symbol_pound}{permissao.possuiMenu}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}" styleClass="text-center">
                             <h:outputText value="${symbol_pound}{permissao.possuiMenu}" converter="yesNoConverter"/>
                         </p:column>
                         <p:column headerText="${symbol_pound}{msg['permissao.global']}" sortBy="${symbol_pound}{permissao.global}"
                                   filterBy="${symbol_pound}{permissao.global}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}"
-                                  style="text-align: center;">
+                                  styleClass="text-center">
                             <h:outputText value="${symbol_pound}{permissao.global}" converter="yesNoConverter"/>
                         </p:column>
                         <p:column styleClass="uix-datatable-actions">
                             <f:facet name="header">
-                                  <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
+                                <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                             </f:facet>
                             <p:commandButton oncomplete="PF('widgetPermissaoDetail').show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailPermissao" >
                                 <f:setPropertyActionListener value="${symbol_pound}{permissao}" target="${symbol_pound}{permissaoMB.entity}" />
@@ -71,12 +71,12 @@
                                 </p:commandButton>
                             </x:securityArea>
                         </p:column>
-                        <f:facet name="footer">
-                            <x:securityArea rolesAllowed="permissao.audit">
-                                <x:auditDelete for="${symbol_pound}{classMB.permissao}"/>
-                            </x:securityArea>
-                        </f:facet>
                     </p:dataTable>
+                    <div class="uix-audit-delete">
+                        <x:securityArea rolesAllowed="permissao.audit">
+                            <x:auditDelete for="${symbol_pound}{classMB.permissao}"/>
+                        </x:securityArea>
+                    </div>
                 </p:tab>
                 <p:tab title="${symbol_pound}{msg['permissao.verNaArvore']}">
                     <p:treeTable value="${symbol_pound}{perfilMB.permissoes}" var="permissao">  

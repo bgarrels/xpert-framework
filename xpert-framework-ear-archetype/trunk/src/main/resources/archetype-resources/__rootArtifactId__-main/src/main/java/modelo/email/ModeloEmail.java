@@ -4,14 +4,7 @@
 package ${package}.modelo.email;
 
 import ${package}.constante.Constantes;
-import ${package}.modelo.controleacesso.Perfil;
-import ${package}.modelo.controleacesso.Usuario;
-import ${package}.modelo.exemplo.PessoaExemplo;
-import com.xpert.maker.BeanCreator;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

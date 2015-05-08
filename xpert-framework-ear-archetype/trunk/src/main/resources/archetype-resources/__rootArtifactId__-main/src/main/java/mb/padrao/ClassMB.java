@@ -3,6 +3,7 @@
 #set( $symbol_escape = '\' )
 package ${package}.mb.padrao;
 
+import ${package}.modelo.exemplo.PessoaExemplo;
 import ${package}.modelo.controleacesso.Permissao;
 import ${package}.modelo.controleacesso.Usuario;
 import ${package}.modelo.configuracao.ErroSistema;
@@ -67,4 +68,8 @@ public class ClassMB {
     public Class getConfiguracaoEmail() {
         return ConfiguracaoEmail.class;
     }
+    public Class getPessoaExemplo() {
+        return PessoaExemplo.class;
+    }
+
 }

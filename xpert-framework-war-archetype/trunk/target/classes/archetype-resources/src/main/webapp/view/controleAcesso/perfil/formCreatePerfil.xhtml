@@ -34,10 +34,15 @@
             </p:tab>
             <p:tab title="${symbol_pound}{msg['acessosDoPerfil']}">
                 <p:tree value="${symbol_pound}{perfilMB.permissoes}" var="permissao"
-                        selectionMode="checkbox"  
+                        selectionMode="checkbox" style="max-height: 500px; overflow-y: scroll;"
                         selection="${symbol_pound}{perfilMB.permissoesSelecionadas}">  
-                    <p:treeNode>  
+                    <p:treeNode styleClass="class-check-${symbol_pound}{permissao.id}">  
                         <h:outputText value="${symbol_pound}{permissao.descricao}" />  
+                        <h:panelGroup rendered="${symbol_pound}{not sessaoUsuarioMB.hasRole(permissao.key)}">
+                            <script>
+                                Xpert.disableTreeNode(".class-check-${symbol_pound}{permissao.id}");
+                            </script>
+                        </h:panelGroup>
                     </p:treeNode>  
                 </p:tree>  
             </p:tab>

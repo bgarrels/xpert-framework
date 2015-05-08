@@ -54,6 +54,9 @@
                             <h:outputText value="${symbol_pound}{permissao.descricao}" />  
                         </p:treeNode>  
                     </p:tree>  
+                    <script>
+                        Xpert.disableTree(".disable-tree");
+                    </script>
                 </div>
             </p:tab>
             <p:tab title="${symbol_pound}{msg['perfil.usuarios']}">
@@ -86,21 +89,8 @@
                 </p:dataTable>
             </p:tab>
         </p:tabView>
-        
-        <script>
-            /*<![CDATA[*/
-            ${symbol_dollar}(function() {
-                ${symbol_dollar}(".disable-tree .ui-treenode-label").removeClass("ui-state-highlight");
-                ${symbol_dollar}(".disable-tree .ui-tree-selectable *:not(.ui-tree-toggler)").click(function() {
-                    return false;
-                });
-                ${symbol_dollar}(".disable-tree .ui-chkbox-box").addClass("ui-state-disabled").click(function() {
-                    return false;
-                });
-            });
-            /*]]>*/
 
-        </script>
+
         <div style="text-align: center;">
             <p:commandButton type="button" value="${symbol_pound}{xmsg['close']}" onclick="PF('widgetPerfilDetail').hide()" />
             <x:securityArea rolesAllowed="perfil.audit">

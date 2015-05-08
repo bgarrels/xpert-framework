@@ -14,7 +14,7 @@ import ${package}.modelo.exemplo.PessoaExemplo;
 
 /**
  *
- * @author ayslan
+ * @author Ayslan
  */
 @ManagedBean
 @ViewScoped

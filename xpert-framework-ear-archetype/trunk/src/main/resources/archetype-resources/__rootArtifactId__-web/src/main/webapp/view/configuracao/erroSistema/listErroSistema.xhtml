@@ -14,8 +14,12 @@
     <ui:define name="body">
         <h:form id="formListErroSistema">
             <x:modalMessages/>
+            <x:dataTableActions target=":formListErroSistema:dataTableErroSistema" 
+                                widgetVar="dataTableErroSistemaWidget" fileName="erroSistema_export" />
+
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
-                         var="erroSistema" rowIndexVar="index" styleClass="font-11"
+                         var="erroSistema" rowIndexVar="index" styleClass="font-11" id="dataTableErroSistema"
+                         widgetVar="dataTableErroSistemaWidget"
                          currentPageReportTemplate="${symbol_pound}{erroSistemaMB.dataModel.currentPageReportTemplate}"
                          paginatorTemplate="${symbol_pound}{erroSistemaMB.dataModel.paginatorTemplate}"
                          value="${symbol_pound}{erroSistemaMB.dataModel}" lazy="true" >
@@ -37,21 +41,30 @@
                 <p:column headerText="${symbol_pound}{msg['erroSistema.funcionalidade']}" sortBy="${symbol_pound}{erroSistema.funcionalidade}"
                           filterBy="${symbol_pound}{erroSistema.funcionalidade}"
                           >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['erroSistema.funcionalidade']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{erroSistema.funcionalidade}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['erroSistema.pilhaErro']}" sortBy="${symbol_pound}{erroSistema.pilhaErro}"
                           filterBy="${symbol_pound}{erroSistema.pilhaErro}"
                           >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['erroSistema.pilhaErro']}"/>
+                    </f:facet>
                     <h:outputText styleClass="font-11" value="${symbol_pound}{erroSistema.resumo}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['erroSistema.usuario']}" sortBy="${symbol_pound}{erroSistema.usuario.nome}"
-
+                          filterBy="${symbol_pound}{erroSistema.usuario.nome}"
                           >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['erroSistema.usuario']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{erroSistema.usuario.nome}"/>
                 </p:column>
-                <p:column styleClass="uix-datatable-actions">
+                <p:column styleClass="uix-datatable-actions" exportable="false">
                     <f:facet name="header">
-                         <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
+                        <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                     </f:facet>
                     <p:commandButton oncomplete="PF('widgetErroSistemaDetail').show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailErroSistema" >
                         <f:setPropertyActionListener value="${symbol_pound}{erroSistema}" target="${symbol_pound}{erroSistemaMB.entity}" />
