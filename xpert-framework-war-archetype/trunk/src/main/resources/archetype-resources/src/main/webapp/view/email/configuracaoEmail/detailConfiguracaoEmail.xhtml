@@ -32,6 +32,12 @@
                         <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.email}"/>
                     </span>
                 </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.usuario']}:"  styleClass="control-label"/><br/>
+                    <span class="uix-content-detail">
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.usuario}"/>
+                    </span>
+                </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                     <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.senha']}:"  styleClass="control-label"/><br/>
@@ -41,9 +47,9 @@
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.smptPort']}:"  styleClass="control-label"/><br/>
+                    <h:outputLabel value="${symbol_pound}{msg['configuracaoEmail.smtpPort']}:"  styleClass="control-label"/><br/>
                     <span class="uix-content-detail">
-                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.smptPort}"/>
+                        <h:outputText value="${symbol_pound}{configuracaoEmailMB.entity.smtpPort}"/>
                     </span>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">

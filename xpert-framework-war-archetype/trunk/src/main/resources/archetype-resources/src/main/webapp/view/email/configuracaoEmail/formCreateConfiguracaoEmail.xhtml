@@ -31,6 +31,11 @@
                                 <h:outputLabel value="* ${symbol_pound}{msg['configuracaoEmail.hostName']}:" />
                                 <p:inputText value="${symbol_pound}{configuracaoEmailMB.entity.hostName}" maxlength="255"  styleClass="form-control" />
                             </div>
+                            
+                            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <h:outputLabel value="* ${symbol_pound}{msg['configuracaoEmail.usuario']}:" />
+                                <p:inputText value="${symbol_pound}{configuracaoEmailMB.entity.usuario}" maxlength="255"  styleClass="form-control" />
+                            </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                 <h:outputLabel value="* ${symbol_pound}{msg['configuracaoEmail.senha']}:" />
@@ -38,8 +43,8 @@
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                                <h:outputLabel value="* ${symbol_pound}{msg['configuracaoEmail.smptPort']}:" />
-                                <p:inputMask mask="9?999999999" slotChar="" value="${symbol_pound}{configuracaoEmailMB.entity.smptPort}" styleClass="form-control"  />
+                                <h:outputLabel value="* ${symbol_pound}{msg['configuracaoEmail.smtpPort']}:" />
+                                <p:inputMask mask="9?999999999" slotChar="" value="${symbol_pound}{configuracaoEmailMB.entity.smtpPort}" styleClass="form-control"  />
                             </div>
 
                             <div class="form-group col-lg-12 col-md-12 col-sm-6 col-xs-12">
@@ -81,6 +86,10 @@
 
                             <h:outputLabel value="* ${symbol_pound}{msg['configuracaoEmail.para']}:" />
                             <p:inputText value="${symbol_pound}{configuracaoEmailMB.email}" maxlength="255" styleClass="form-control"  />
+                        </div>
+                        <div class="form-group col-lg-12 col-md-6 col-sm-6 col-xs-12">
+                            <h:outputLabel value="* ${symbol_pound}{msg['configuracaoEmail.tituloMensagem']}:" />
+                            <p:inputText value="${symbol_pound}{configuracaoEmailMB.titulo}" maxlength="255" styleClass="form-control"  />
                         </div>
                         <div class="form-group col-lg-12 col-md-6 col-sm-6 col-xs-12">
 

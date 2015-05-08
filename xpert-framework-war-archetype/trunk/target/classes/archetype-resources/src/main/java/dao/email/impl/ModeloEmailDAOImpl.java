@@ -14,4 +14,10 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class ModeloEmailDAOImpl extends BaseDAOImpl<ModeloEmail> implements ModeloEmailDAO {
+
+    @Override
+    public Class getEntityClass() {
+        return ModeloEmail.class;
+    }
+
 }

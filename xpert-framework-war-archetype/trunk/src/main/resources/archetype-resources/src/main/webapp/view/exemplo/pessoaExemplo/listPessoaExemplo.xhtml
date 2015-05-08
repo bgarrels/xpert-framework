@@ -13,54 +13,73 @@
         <ui:include src="menuPessoaExemplo.xhtml" />
         <h:form id="formListPessoaExemplo">
             <x:modalMessages/>
+
+            <x:dataTableActions fileName="pessoaExemplo_export" target=":formListPessoaExemplo:dataTablePessoaExemplo"
+                                     widgetVar="dataTablePessoaExemploWidget"  />
+
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
                          var="pessoaExemplo" rowIndexVar="index" id="dataTablePessoaExemplo" widgetVar="dataTablePessoaExemploWidget" styleClass="table-responsive"
                          currentPageReportTemplate="${symbol_pound}{pessoaExemploMB.dataModel.currentPageReportTemplate}"
                          paginatorTemplate="${symbol_pound}{pessoaExemploMB.dataModel.paginatorTemplate}"
                          value="${symbol_pound}{pessoaExemploMB.dataModel}" lazy="true" >
                 <p:column styleClass="uix-datatable-index">
-                    <f:facet name="header">
-                        <p:commandButton onclick="PF('dataTablePessoaExemploWidget').filter()" type="button" icon="ui-icon-refresh" />
-                    </f:facet>
                     <h:outputText value="${symbol_pound}{index+1}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['pessoaExemplo.nome']}" sortBy="${symbol_pound}{pessoaExemplo.nome}"
-                          filterBy="${symbol_pound}{pessoaExemplo.nome}"   >
-                        <h:outputText value="${symbol_pound}{pessoaExemplo.nome}"/>
+                    filterBy="${symbol_pound}{pessoaExemplo.nome}"   >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['pessoaExemplo.nome']}" />
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.nome}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['pessoaExemplo.email']}" sortBy="${symbol_pound}{pessoaExemplo.email}"
-                          filterBy="${symbol_pound}{pessoaExemplo.email}"   >
-                        <h:outputText value="${symbol_pound}{pessoaExemplo.email}"/>
+                    filterBy="${symbol_pound}{pessoaExemplo.email}"   >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['pessoaExemplo.email']}" />
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.email}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['pessoaExemplo.salary']}" sortBy="${symbol_pound}{pessoaExemplo.salary}"
-                             style="text-align: right;">
-                        <h:outputText value="${symbol_pound}{pessoaExemplo.salary}">
-                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-                        </h:outputText>
+                       style="text-align: right;">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['pessoaExemplo.salary']}" />
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.salary}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['pessoaExemplo.dataNascimento']}" sortBy="${symbol_pound}{pessoaExemplo.dataNascimento}"
-                          filterBy="${symbol_pound}{pessoaExemplo.dataNascimento}"   style="text-align: center;">
-                        <f:facet name="header">
-                            ${symbol_pound}{msg['pessoaExemplo.dataNascimento']}
-                            <x:dateFilter/>
-                        </f:facet>
-                        <h:outputText value="${symbol_pound}{pessoaExemplo.dataNascimento}">
-                            <f:convertDateTime />
-                        </h:outputText>
+                    filterBy="${symbol_pound}{pessoaExemplo.dataNascimento}"   style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['pessoaExemplo.dataNascimento']}" />
+                        <x:dateFilter/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.dataNascimento}">
+                        <f:convertDateTime />
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['pessoaExemplo.horario']}" sortBy="${symbol_pound}{pessoaExemplo.horario}"
-                             style="text-align: center;">
-                        <h:outputText value="${symbol_pound}{pessoaExemplo.horario}">
-                            <f:convertDateTime pattern="HH:mm"/>
-                        </h:outputText>
+                       style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['pessoaExemplo.horario']}" />
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.horario}">
+                        <f:convertDateTime pattern="HH:mm"/>
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['pessoaExemplo.rg']}" sortBy="${symbol_pound}{pessoaExemplo.rg}"
-                          filterBy="${symbol_pound}{pessoaExemplo.rg}"   >
-                        <h:outputText value="${symbol_pound}{pessoaExemplo.rg}"/>
+                    filterBy="${symbol_pound}{pessoaExemplo.rg}"   >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['pessoaExemplo.rg']}" />
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.rg}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['pessoaExemplo.active']}" sortBy="${symbol_pound}{pessoaExemplo.active}"
-                          filterBy="${symbol_pound}{pessoaExemplo.active}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}"  style="text-align: center;">
-                        <h:outputText value="${symbol_pound}{pessoaExemplo.active}" converter ="yesNoConverter" />
+                    filterBy="${symbol_pound}{pessoaExemplo.active}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}"  style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['pessoaExemplo.active']}" />
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{pessoaExemplo.active}" converter ="yesNoConverter" />
                 </p:column>
                 <p:column styleClass="uix-datatable-actions" exportable="false" headerText="${symbol_pound}{xmsg['actions']}">
                     <f:facet name="header">
@@ -83,17 +102,17 @@
                         </p:commandButton>
                     </x:securityArea>
                 </p:column>
-                <f:facet name="footer">
-                    <x:securityArea rolesAllowed="pessoaExemplo.audit">
-                        <x:auditDelete for="${symbol_pound}{pessoaExemploMB.entityClass}"/>
-                    </x:securityArea>
-                </f:facet>
             </p:dataTable>
+            <div class="uix-audit-delete">
+                <x:securityArea rolesAllowed="pessoaExemplo.audit">
+                    <x:auditDelete for="${symbol_pound}{pessoaExemploMB.entityClass}"/>
+                </x:securityArea>
+            </div>  
         </h:form>
 
-        <p:dialog widgetVar="widgetPessoaExemploDetail" header="${symbol_pound}{msg['pessoaExemplo.detail']}" appendTo="@(body)"
+        <p:dialog widgetVar="widgetPessoaExemploDetail" header="${symbol_pound}{msg['pessoaExemplo.detail']}" appendTo="@(body)" 
                   modal="true" styleClass="uix-dialog-fluid" >
-            <ui:include src="detailPessoaExemplo.xhtml" />
+                  <ui:include src="detailPessoaExemplo.xhtml" />
         </p:dialog>
     </ui:define>
 </ui:composition>

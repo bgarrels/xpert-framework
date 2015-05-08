@@ -37,11 +37,11 @@
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                      <modules>
-                       <webModule>
-							<groupId>${project.groupId}</groupId>
-							<artifactId>${rootArtifactId}-web</artifactId>
-							<contextRoot>/${rootArtifactId}</contextRoot>
-						</webModule>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${rootArtifactId}-web</artifactId>
+                            <contextRoot>/${rootArtifactId}</contextRoot>
+                        </webModule>
                     </modules>
                 </configuration>
             </plugin>

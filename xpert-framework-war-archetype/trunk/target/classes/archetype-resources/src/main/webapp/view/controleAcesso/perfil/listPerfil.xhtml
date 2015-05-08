@@ -15,8 +15,9 @@
         <ui:include src="menuPerfil.xhtml" />
         <h:form id="formListPerfil">
             <x:modalMessages/>
+            <x:dataTableActions target=":formListPerfil:dataTablePerfil" widgetVar="widgetDataTablePerfil" fileName="perfil_export" />
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
-                         var="perfil" value="${symbol_pound}{perfilMB.dataModel}" lazy="true" styleClass="table-responsive"
+                         id="dataTablePerfil" var="perfil" value="${symbol_pound}{perfilMB.dataModel}" lazy="true" styleClass="table-responsive"
                          currentPageReportTemplate="${symbol_pound}{perfilMB.dataModel.currentPageReportTemplate}"
                          paginatorTemplate="${symbol_pound}{perfilMB.dataModel.paginatorTemplate}"
                          rowIndexVar="index" widgetVar="widgetDataTablePerfil">
@@ -27,17 +28,23 @@
 
                 <p:column headerText="${symbol_pound}{msg['perfil.descricao']}" sortBy="${symbol_pound}{perfil.descricao}"
                           filterBy="${symbol_pound}{perfil.descricao}">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['perfil.descricao']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{perfil.descricao}"/>
                 </p:column>
 
                 <p:column headerText="${symbol_pound}{msg['perfil.ativo']}" sortBy="${symbol_pound}{perfil.ativo}"
                           style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['perfil.ativo']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{perfil.ativo}" converter ="yesNoConverter" />
                 </p:column>
 
-                <p:column styleClass="uix-datatable-actions">
+                <p:column styleClass="uix-datatable-actions" exportable="false">
                     <f:facet name="header">
-                         <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
+                        <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                     </f:facet>
                     <p:commandButton oncomplete="PF('widgetPerfilDetail').show();"  
                                      action="${symbol_pound}{perfilMB.detail}"
@@ -56,12 +63,12 @@
                         </p:commandButton>
                     </x:securityArea>
                 </p:column>
-                <f:facet name="footer">
-                    <x:securityArea rolesAllowed="perfil.audit">
-                        <x:auditDelete for="${symbol_pound}{classMB.perfil}"/>
-                    </x:securityArea>
-                </f:facet>
             </p:dataTable>
+            <div class="uix-audit-delete">
+                <x:securityArea rolesAllowed="perfil.audit">
+                    <x:auditDelete for="${symbol_pound}{classMB.perfil}"/>
+                </x:securityArea>
+            </div>
         </h:form>
 
         <p:dialog widgetVar="widgetPerfilDetail" header="${symbol_pound}{msg['perfil.detail']}" appendTo="@(body)" modal="true" styleClass="uix-dialog-fluid">

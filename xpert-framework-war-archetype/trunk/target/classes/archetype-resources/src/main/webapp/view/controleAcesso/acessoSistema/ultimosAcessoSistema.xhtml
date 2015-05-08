@@ -12,8 +12,11 @@
     <ui:define name="body">
         <h:form id="formListAcessoSistema">
             <x:modalMessages/>
+            <x:dataTableActions target=":formListAcessoSistema:dataTableAcessoSistema" 
+                                widgetVar="dataTableAcessoSistemaWidget" fileName="acessoSistema_export" />
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
-                         var="acessoSistema" rowIndexVar="index"
+                         var="acessoSistema" rowIndexVar="index" id="dataTableAcessoSistema"
+                         widgetVar="dataTableAcessoSistemaWidget"
                          currentPageReportTemplate="${symbol_pound}{acessoSistemaUsuarioMB.dataModel.currentPageReportTemplate}"
                          paginatorTemplate="${symbol_pound}{acessoSistemaUsuarioMB.dataModel.paginatorTemplate}"
                          value="${symbol_pound}{acessoSistemaUsuarioMB.dataModel}" lazy="true" >
@@ -22,8 +25,8 @@
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['acessoSistema.dataHora']}" sortBy="${symbol_pound}{acessoSistema.dataHora}"
                           style="text-align: center;" filterBy="${symbol_pound}{acessoSistema.dataHora}">
-                     <f:facet name="header">
-                          ${symbol_pound}{msg['acessoSistema.dataHora']}
+                    <f:facet name="header">
+                        ${symbol_pound}{msg['acessoSistema.dataHora']}
                         <x:dateFilter/>
                     </f:facet>
                     <h:outputText value="${symbol_pound}{acessoSistema.dataHora}">
@@ -33,11 +36,17 @@
                 <p:column headerText="${symbol_pound}{msg['acessoSistema.ip']}" sortBy="${symbol_pound}{acessoSistema.ip}"
                           filterBy="${symbol_pound}{acessoSistema.ip}"
                           >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['acessoSistema.ip']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{acessoSistema.ip}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['acessoSistema.userAgent']}" sortBy="${symbol_pound}{acessoSistema.userAgent}"
                           filterBy="${symbol_pound}{acessoSistema.userAgent}"
                           >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['acessoSistema.userAgent']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{acessoSistema.userAgent}"/>
                 </p:column>
             </p:dataTable>

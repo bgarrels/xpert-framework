@@ -13,50 +13,71 @@
     <ui:define name="body">
         <ui:include src="menuConfiguracaoEmail.xhtml" />
         <h:form id="formListConfiguracaoEmail">
-            <x:modalMessages/>
+            <x:modalMessages/>            
+            <x:dataTableActions target=":formListConfiguracaoEmail:dataTableConfiguracaoEmail" 
+                                widgetVar="dataTableConfiguracaoEmailWidget" fileName="configuracaoEmail_export" />
+
             <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
                          var="configuracaoEmail" rowIndexVar="index" widgetVar="dataTableConfiguracaoEmailWidget"
-                         styleClass="table-responsive"
+                         styleClass="table-responsive" id="dataTableConfiguracaoEmail"
                          currentPageReportTemplate="${symbol_pound}{configuracaoEmailMB.dataModel.currentPageReportTemplate}"
                          paginatorTemplate="${symbol_pound}{configuracaoEmailMB.dataModel.paginatorTemplate}"
                          value="${symbol_pound}{configuracaoEmailMB.dataModel}" lazy="true" >
                 <p:column styleClass="uix-datatable-index">
-                    <f:facet name="header">
-                        <p:commandButton onclick="PF('dataTableConfiguracaoEmailWidget').filter()" type="button" icon="ui-icon-refresh" />
-                    </f:facet>
                     <h:outputText value="${symbol_pound}{index+1}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['configuracaoEmail.nome']}" sortBy="${symbol_pound}{configuracaoEmail.nome}"
                           filterBy="${symbol_pound}{configuracaoEmail.nome}"   >
-                        <h:outputText value="${symbol_pound}{configuracaoEmail.nome}"/>
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['configuracaoEmail.nome']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{configuracaoEmail.nome}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['configuracaoEmail.email']}" sortBy="${symbol_pound}{configuracaoEmail.email}"
                           filterBy="${symbol_pound}{configuracaoEmail.email}"   >
-                        <h:outputText value="${symbol_pound}{configuracaoEmail.email}"/>
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['configuracaoEmail.email']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{configuracaoEmail.email}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['configuracaoEmail.senha']}" sortBy="${symbol_pound}{configuracaoEmail.senha}"
                           filterBy="${symbol_pound}{configuracaoEmail.senha}"   >
-                        <h:outputText value="${symbol_pound}{configuracaoEmail.senha}"/>
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['configuracaoEmail.senha']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{configuracaoEmail.senha}"/>
                 </p:column>
-                <p:column headerText="${symbol_pound}{msg['configuracaoEmail.smptPort']}" sortBy="${symbol_pound}{configuracaoEmail.smptPort}"
-                          filterBy="${symbol_pound}{configuracaoEmail.smptPort}"   >
-                        <h:outputText value="${symbol_pound}{configuracaoEmail.smptPort}"/>
+                <p:column headerText="${symbol_pound}{msg['configuracaoEmail.smtpPort']}" sortBy="${symbol_pound}{configuracaoEmail.smtpPort}"
+                          filterBy="${symbol_pound}{configuracaoEmail.smtpPort}"   >
+                     <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['configuracaoEmail.smtpPort']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{configuracaoEmail.smtpPort}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['configuracaoEmail.tls']}" sortBy="${symbol_pound}{configuracaoEmail.tls}"
                           filterBy="${symbol_pound}{configuracaoEmail.tls}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}"  style="text-align: center;">
-                        <h:outputText value="${symbol_pound}{configuracaoEmail.tls}" converter ="yesNoConverter" />
+                      <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['configuracaoEmail.tls']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{configuracaoEmail.tls}" converter ="yesNoConverter" />
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['configuracaoEmail.ssl']}" sortBy="${symbol_pound}{configuracaoEmail.ssl}"
                           filterBy="${symbol_pound}{configuracaoEmail.ssl}" filterOptions="${symbol_pound}{booleanSelectItensEmptyOption}"  style="text-align: center;">
-                        <h:outputText value="${symbol_pound}{configuracaoEmail.ssl}" converter ="yesNoConverter" />
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['configuracaoEmail.ssl']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{configuracaoEmail.ssl}" converter ="yesNoConverter" />
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['configuracaoEmail.hostName']}" sortBy="${symbol_pound}{configuracaoEmail.hostName}"
                           filterBy="${symbol_pound}{configuracaoEmail.hostName}"   >
-                        <h:outputText value="${symbol_pound}{configuracaoEmail.hostName}"/>
+                     <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['configuracaoEmail.hostName']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{configuracaoEmail.hostName}"/>
                 </p:column>
-                <p:column styleClass="uix-datatable-actions">
+                <p:column styleClass="uix-datatable-actions" exportable="false">
                     <f:facet name="header">
-                         <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
+                        <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                     </f:facet>
                     <p:commandButton oncomplete="PF('widgetConfiguracaoEmailDetail').show();"  icon="ui-icon-zoomin" 
                                      process="@form" update=":formDetailConfiguracaoEmail" title="${symbol_pound}{xmsg['detail']}" >
@@ -75,12 +96,12 @@
                         </p:commandButton>
                     </x:securityArea>
                 </p:column>
-                <f:facet name="footer">
-                    <x:securityArea rolesAllowed="configuracaoEmail.audit">
-                        <x:auditDelete for="${symbol_pound}{configuracaoEmailMB.entityClass}"/>
-                    </x:securityArea>
-                </f:facet>
             </p:dataTable>
+            <div class="uix-audit-delete">
+                <x:securityArea rolesAllowed="configuracaoEmail.audit">
+                    <x:auditDelete for="${symbol_pound}{configuracaoEmailMB.entityClass}"/>
+                </x:securityArea>
+            </div>
         </h:form>
 
         <p:dialog widgetVar="widgetConfiguracaoEmailDetail" header="${symbol_pound}{msg['configuracaoEmail.detail']}" appendTo="@(body)" modal="true" styleClass="uix-dialog-fluid">

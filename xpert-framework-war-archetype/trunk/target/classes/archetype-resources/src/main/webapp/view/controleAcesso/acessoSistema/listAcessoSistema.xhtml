@@ -14,8 +14,13 @@
     <ui:define name="body">
         <h:form id="formListAcessoSistema">
             <x:modalMessages/>
-            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
-                         var="acessoSistema" rowIndexVar="index"
+            <x:dataTableActions target=":formListAcessoSistema:dataTableAcessoSistema" 
+                                widgetVar="dataTableAcessoSistemaWidget" fileName="acessoSistema_export" />
+
+            <p:dataTable paginator="true" rows="10" rowsPerPageTemplate="10,20,30" paginatorPosition="bottom" 
+                         emptyMessage="${symbol_pound}{xmsg['noRecordFound']}"
+                         var="acessoSistema" rowIndexVar="index" id="dataTableAcessoSistema"
+                         widgetVar="dataTableAcessoSistemaWidget"
                          currentPageReportTemplate="${symbol_pound}{acessoSistemaMB.dataModel.currentPageReportTemplate}"
                          paginatorTemplate="${symbol_pound}{acessoSistemaMB.dataModel.paginatorTemplate}"
                          value="${symbol_pound}{acessoSistemaMB.dataModel}" lazy="true" >
@@ -36,16 +41,30 @@
                 <p:column headerText="${symbol_pound}{msg['acessoSistema.ip']}" sortBy="${symbol_pound}{acessoSistema.ip}"
                           filterBy="${symbol_pound}{acessoSistema.ip}"
                           >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['acessoSistema.ip']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{acessoSistema.ip}"/>
                 </p:column>
                 <p:column headerText="${symbol_pound}{msg['acessoSistema.usuario']}" sortBy="${symbol_pound}{acessoSistema.usuario.nome}"
                           filterBy="${symbol_pound}{acessoSistema.usuario.nome}"
                           >
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{msg['acessoSistema.usuario']}"/>
+                    </f:facet>
                     <h:outputText value="${symbol_pound}{acessoSistema.usuario.nome}"/>
                 </p:column>
-                <p:column styleClass="uix-datatable-actions">
+                <p:column headerText="${symbol_pound}{msg['acessoSistema.userAgent']}" sortBy="${symbol_pound}{acessoSistema.userAgent}"
+                          filterBy="${symbol_pound}{acessoSistema.userAgent}"
+                          >
                     <f:facet name="header">
-                         <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
+                        <h:outputText value="${symbol_pound}{msg['acessoSistema.userAgent']}"/>
+                    </f:facet>
+                    <h:outputText value="${symbol_pound}{acessoSistema.userAgent}"/>
+                </p:column>
+                <p:column styleClass="uix-datatable-actions" exportable="false">
+                    <f:facet name="header">
+                        <h:outputText value="${symbol_pound}{xmsg['actions']}"/>
                     </f:facet>
                     <p:commandButton oncomplete="PF('widgetAcessoSistemaDetail').show();"  icon="ui-icon-zoomin" process="@form" update=":formDetailAcessoSistema" >
                         <f:setPropertyActionListener value="${symbol_pound}{acessoSistema}" target="${symbol_pound}{acessoSistemaMB.entity}" />

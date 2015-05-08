@@ -9,63 +9,63 @@
                  xmlns:x="http://xpert.com/faces">
     
   
-    <h:form id="formCreatePessoaExemplo" styleClass="form-detail">
+    <h:form id="formCreatePessoaExemplo" >
         <p:fieldset legend="${symbol_pound}{xmsg['generalData']}">
             <x:modalMessages/>
 
-               <div class="container-fluid">
-                    <div class="row">
-                         <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            <h:outputLabel for="nome" value="* ${symbol_pound}{msg['pessoaExemplo.nome']}:" />
-                            <p:inputText id="nome" value="${symbol_pound}{pessoaExemploMB.entity.nome}" maxlength="200"  styleClass="form-control"  />
-                        </div>
-                         <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            <h:outputLabel for="email" value="${symbol_pound}{msg['pessoaExemplo.email']}:" />
-                            <p:inputText id="email" value="${symbol_pound}{pessoaExemploMB.entity.email}" maxlength="100"  styleClass="form-control"  />
-                        </div>
-                         <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            <h:outputLabel for="salary:input" value="${symbol_pound}{msg['pessoaExemplo.salary']}:" />
-                            <x:inputNumber id="salary" value="${symbol_pound}{pessoaExemploMB.entity.salary}" styleClass="form-control"/>
-                        </div>
-                         <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            <h:outputLabel for="dataNascimento" value="* ${symbol_pound}{msg['pessoaExemplo.dataNascimento']}:" />
-                            <p:calendar id="dataNascimento" value="${symbol_pound}{pessoaExemploMB.entity.dataNascimento}" 
-                                        showOn="button" pattern="dd/MM/yyyy" styleClass="uix-calendar"  >
-                                <x:mask/>
-                            </p:calendar>
-                        </div>
-                         <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            <h:outputLabel for="horario" value="* ${symbol_pound}{msg['pessoaExemplo.horario']}:" />
-                            <p:calendar id="horario" value="${symbol_pound}{pessoaExemploMB.entity.horario}" 
-                                        showOn="button" pattern="HH:mm" timeOnly="true" styleClass="uix-calendar">
-                                <x:mask/>
-                            </p:calendar>
-                        </div>
-                         <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            <h:outputLabel for="rg" value="* ${symbol_pound}{msg['pessoaExemplo.rg']}:" />
-                            <p:inputText id="rg" value="${symbol_pound}{pessoaExemploMB.entity.rg}" maxlength="10"  styleClass="form-control"  />
-                        </div>
-                         <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            <div class="checkbox">
-                                <label>
-                                    <h:selectBooleanCheckbox id="active" value="${symbol_pound}{pessoaExemploMB.entity.active}" />
-                                    ${symbol_pound}{msg['pessoaExemplo.active']}
-                                </label>
-                            </div>
-                        </div>
+            <div class="container-fluid">
+                 <div class="row">
+                      <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                         <h:outputLabel for="nome" value="* ${symbol_pound}{msg['pessoaExemplo.nome']}:" />
+                         <p:inputText id="nome" value="${symbol_pound}{pessoaExemploMB.entity.nome}" maxlength="200"  styleClass="form-control"  />
+                     </div>
+                      <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                         <h:outputLabel for="email" value="${symbol_pound}{msg['pessoaExemplo.email']}:" />
+                         <p:inputText id="email" value="${symbol_pound}{pessoaExemploMB.entity.email}" maxlength="100"  styleClass="form-control"  />
+                     </div>
+                      <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                         <h:outputLabel for="salary:input" value="${symbol_pound}{msg['pessoaExemplo.salary']}:" />
+                         <x:inputNumber id="salary" value="${symbol_pound}{pessoaExemploMB.entity.salary}" styleClass="form-control"/>
+                     </div>
+                      <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                         <h:outputLabel for="dataNascimento" value="* ${symbol_pound}{msg['pessoaExemplo.dataNascimento']}:" />
+                         <p:calendar id="dataNascimento" value="${symbol_pound}{pessoaExemploMB.entity.dataNascimento}" 
+                                     showOn="button" pattern="dd/MM/yyyy" styleClass="uix-calendar"  >
+                             <x:mask/>
+                         </p:calendar>
+                     </div>
+                      <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                         <h:outputLabel for="horario" value="* ${symbol_pound}{msg['pessoaExemplo.horario']}:" />
+                         <p:calendar id="horario" value="${symbol_pound}{pessoaExemploMB.entity.horario}" 
+                                     showOn="button" pattern="HH:mm" timeOnly="true" styleClass="uix-calendar">
+                             <x:mask/>
+                         </p:calendar>
+                     </div>
+                      <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                         <h:outputLabel for="rg" value="* ${symbol_pound}{msg['pessoaExemplo.rg']}:" />
+                         <p:inputText id="rg" value="${symbol_pound}{pessoaExemploMB.entity.rg}" maxlength="10"  styleClass="form-control"  />
+                     </div>
+                      <div class="form-group col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                         <div class="checkbox">
+                             <label>
+                                 <h:selectBooleanCheckbox id="active" value="${symbol_pound}{pessoaExemploMB.entity.active}" />
+                                 ${symbol_pound}{msg['pessoaExemplo.active']}
+                             </label>
+                         </div>
+                     </div>
 
-                    </div>
-                </div>
-          </p:fieldset>
-          <h:outputText value="${symbol_pound}{xmsg['requiredFieldsForm']}"/>
-          <div class="uix-center">
-              <x:securityArea rolesAllowed="pessoaExemplo.create">
-                   <p:commandButton process="@form" update="@form" action="${symbol_pound}{pessoaExemploMB.save}" value="${symbol_pound}{xmsg['save']}" />
-              </x:securityArea>
-              <x:securityArea rolesAllowed="pessoaExemplo.audit">
-                   <x:audit for="${symbol_pound}{pessoaExemploMB.entity}"/>
-              </x:securityArea>
-          </div>
-       </h:form>
+                 </div>
+             </div>
+        </p:fieldset>
+        <h:outputText value="${symbol_pound}{xmsg['requiredFieldsForm']}"/>
+        <div class="uix-center">
+            <x:securityArea rolesAllowed="pessoaExemplo.create">
+                <p:commandButton process="@form" update="@form" action="${symbol_pound}{pessoaExemploMB.save}" value="${symbol_pound}{xmsg['save']}" />
+            </x:securityArea>
+            <x:securityArea rolesAllowed="pessoaExemplo.audit">
+                <x:audit for="${symbol_pound}{pessoaExemploMB.entity}"/>
+            </x:securityArea>
+        </div>
+    </h:form>
 
 </ui:composition>
